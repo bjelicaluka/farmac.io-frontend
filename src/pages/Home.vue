@@ -1,17 +1,16 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Luka svetski megacar." />
+  <div class="wrapper">
+    <sidebar />
   </div>
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld/HelloWorld.vue'
+import Sidebar from '@/components/Sidebar/Sidebar.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    Sidebar
   }
 }
 </script>
