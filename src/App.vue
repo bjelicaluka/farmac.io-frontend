@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="wrapper">
     <sidebar></sidebar>
     <main-wrapper>
       <navbar></navbar>
+      <router-view/>
     </main-wrapper>
-    <router-view/>
   </div>
 </template>
 
@@ -20,6 +20,7 @@ export default {
     MainWrapper
   }
 }
+
 </script>
 
 
