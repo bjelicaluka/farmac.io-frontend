@@ -29,6 +29,26 @@
         </Form>
       </card>
     </div>
+
+    <hr/>
+
+    <Button
+      type="button"
+      className="btn btn-info"
+      :onClick="onClick"
+    >
+      Click me!
+    </Button>
+
+    <ButtonWithIcon
+      type="button"
+      className="btn btn-primary btn-round"
+      iconName="favorite"
+      :onClick="onClick"
+    >
+      Favourite me!
+    </ButtonWithIcon>
+
   </div>
 </template>
 
@@ -37,6 +57,8 @@ import Card from '../components/Card/Card.vue'
 import Form from '../components/Form/Form.vue'
 import FormGroup from '../components/Form/FormGroup.vue';
 import FormRow from '../components/Form/FormRow.vue'
+import Button from '../components/Form/Button.vue'
+import ButtonWithIcon from '../components/Form/ButtonWithIcon.vue'
 
 export default {
   name: 'Home',
@@ -44,11 +66,18 @@ export default {
     Form,
     Card,
     FormRow,
-    FormGroup
-  },
+    FormGroup,
+    Button,
+    ButtonWithIcon
+},
   methods: {
     submitTest(e) {
       console.log(e);
+    },
+
+    onClick(e) {
+      e.preventDefault();
+      console.log('hi');
     }
   }
 }
