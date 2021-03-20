@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  props: ["to", "name"],
+  props: ["to"],
   methods: {
     preventDefaultLink(e) {
       e.preventDefault();

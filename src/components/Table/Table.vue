@@ -1,7 +1,8 @@
+
 <template>
-  <li class="nav-item">    
+  <table class="table">
     <slot />
-  </li>
+  </table>
 </template>
 
 <script>
@@ -9,6 +10,7 @@ export default {
 
 }
 </script>
+
 
 <style>
 

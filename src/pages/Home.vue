@@ -29,6 +29,9 @@
         </Form>
       </card>
     </div>
+    <div class="container-fluid">
+      <example/>
+    </div>
   </div>
 </template>
 
@@ -37,6 +40,7 @@ import Card from '../components/Card/Card.vue'
 import Form from '../components/Form/Form.vue'
 import FormGroup from '../components/Form/FormGroup.vue';
 import FormRow from '../components/Form/FormRow.vue'
+import Example from '../components/Table/Example.vue'
 
 export default {
   name: 'Home',
@@ -44,7 +48,8 @@ export default {
     Form,
     Card,
     FormRow,
-    FormGroup
+    FormGroup,
+    Example
   },
   methods: {
     submitTest(e) {

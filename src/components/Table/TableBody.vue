@@ -1,7 +1,7 @@
 <template>
-  <li class="nav-item">    
-    <slot />
-  </li>
+  <tbody>
+      <slot/>
+  </tbody>
 </template>
 
 <script>
