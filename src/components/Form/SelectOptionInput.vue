@@ -1,5 +1,5 @@
 <template>
-    <div class="col-lg-2 col-md-6 col-sm-3">
+    <div class="col-lg-3 col-md-6 col-sm-3">
         <div class="form-group">
             <label class="form-control-label text-white center">{{label}}</label>
             <select

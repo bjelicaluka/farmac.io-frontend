@@ -1,10 +1,10 @@
 <template>
   <tr>
-        <td v-for="value in values" :key="value">{{ value }}</td>
+        <td v-for="(value, index) in values" :key="index">{{ value }}</td>
         <td>
             <div class="pull-right text-gray">
               <drop-down-menu name="Account" icon="person">
-                <drop-down-item v-for="action in actions" :key="action" :to="action.link">{{ action.text }}</drop-down-item>
+                <drop-down-item v-for="(action, index) in actions" :key="index" :to="action.link">{{ action.text }}</drop-down-item>
               </drop-down-menu>
             </div>
         </td> 
@@ -12,8 +12,10 @@
 </template>
 
 <script>
+
 import DropDownMenu from "../DropdownMenu/DropdownMenu.vue"
 import DropDownItem from "../DropdownMenu/DropdownItem.vue"
+
 export default {
     components: {
       DropDownMenu,
