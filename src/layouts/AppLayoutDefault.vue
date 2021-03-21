@@ -1,10 +1,14 @@
 <template>
   <div>
-    <AppLayout>
-      <router-view />
-    </AppLayout>
+    <slot />
   </div>
 </template>
+
+<script>
+export default {
+
+}
+</script>
 
 <style>
 
