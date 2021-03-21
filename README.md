@@ -1,5 +1,5 @@
 # farmac.io-frontend
-Projekat za ISA + MRS
+Projekat za ISA + MRS.
 
 ## Članovi tima:
 <ul>
