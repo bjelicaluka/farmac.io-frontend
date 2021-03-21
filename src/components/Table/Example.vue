@@ -2,7 +2,13 @@
   <Table>
       <TableHead :columnNames="['Ime', 'Prezime', 'Broj studenta', '']"></TableHead>
       <TableBody>
-      <TableRow v-for="n in list" :key="n.student" :values="[n.ime, n.prezime, n.student]" :actions="actions"></TableRow>
+      <TableRow v-for="n in list" :key="n.student" :values="[n.ime, n.prezime, n.student]">
+        <div class="pull-right text-gray">
+          <drop-down-menu name="Account" icon="person">
+            <drop-down-item v-for="(action, index) in actions" :key="index" :to="action.link">{{ action.text }}</drop-down-item>
+          </drop-down-menu>
+        </div>
+      </TableRow>
       </TableBody>
   </Table>
 </template>
@@ -12,12 +18,16 @@ import Table from './Table'
 import TableHead from './TableHead'
 import TableBody from './TableBody'
 import TableRow from './TableRow'
+import DropDownMenu from '../DropdownMenu/DropdownMenu'
+import DropDownItem from '../DropdownMenu/DropdownItem'
 export default {
   components: {
     Table,
     TableBody,
     TableRow,
-    TableHead
+    TableHead,
+    DropDownItem,
+    DropDownMenu
   },
   data (){
     return{
