@@ -2,7 +2,7 @@
     <button
         :class="className || 'btn btn-primary'"
         :type="type || 'button'"
-        @click="onClick"
+        @click="handleClick"
     >
         <slot />
     </button>
@@ -11,6 +11,13 @@
 <script>
 
 export default {
-    props: ['className', 'type', 'onClick']
+    props: ['className', 'type', 'onClick'],
+    methods: {
+        handleClick(e) {
+            if (this.onClick !== undefined && this.onClick !== null) {
+                this.onClick(e);
+            }
+        }
+    }
 }
 </script>

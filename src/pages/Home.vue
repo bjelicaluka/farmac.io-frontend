@@ -66,7 +66,25 @@
       </Card>
     </div>
 
-  </div>
+    <Modal
+      modalBoxId="exampleModal"
+      title="Example modal"
+    >
+      <div slot="body">
+        <p>Do you want save this?</p>
+      </div>
+
+      <div slot="buttons">
+        <OptionModalButtons :onYes="onYes"/>
+      </div>
+    </Modal>
+
+    <ModalOpener modalBoxId="exampleModal">
+        <Button>Launch Demo Modal</Button>
+    </ModalOpener>
+
+
+    </div>
 </template>
 
 <script>
@@ -78,6 +96,9 @@ import Example from '../components/Table/Example.vue'
 import Button from '../components/Form/Button.vue'
 import ButtonWithIcon from '../components/Form/ButtonWithIcon.vue'
 import SelectOptionInput from '../components/Form/SelectOptionInput.vue'
+import Modal from '../components/Modal/Modal.vue'
+import ModalOpener from '../components/Modal/ModalOpener.vue'
+import OptionModalButtons from '../components/Modal/OptionModalButtons.vue'
 
 let selectOptions = [
   {
@@ -112,7 +133,10 @@ export default {
     Example,
     Button,
     ButtonWithIcon,
-    SelectOptionInput
+    SelectOptionInput,
+    Modal,
+    ModalOpener,
+    OptionModalButtons
   },
   methods: {
     submitTest(e) {
@@ -132,6 +156,10 @@ export default {
     onChange(e) {
       this.value = e.target.value;
       console.log(this.value);
+    },
+
+    onYes(e) {
+      console.log("CAOOO");
     }
   }
 }
