@@ -5,6 +5,18 @@
         <Form @submit="submitTest($event)">
           <form-group :title="'Test form group'">
             <form-row>
+              <div class="col-6">
+                <DateTimePicker
+                  v-model="date"
+                  :isValid="!!date"
+                  :showErrorMessage="showErrorMessage"
+                  label="Date Time Picker Example"
+                  errorMessage="Invalid date time."
+                  type="datetime"
+                />
+              </div>
+            </form-row>
+            <form-row>
               <div class="col-5">
                 <text-input 
                   label="Company"
@@ -105,6 +117,8 @@ import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
 import OptionModalButtons from '../components/Modal/OptionModalButtons.vue'
 import TextInput from '../components/Form/TextInput.vue';
+import DateTimePicker from '../components/Form/DateTimePicker.vue';
+import moment from 'moment';
 
 let selectOptions = [
   {
@@ -128,7 +142,8 @@ export default {
       showErrorMessage: false,
       options: selectOptions,
       value: '',
-      company: ""
+      company: "",
+      date: null
     }
   },
   name: 'Home',
@@ -145,12 +160,14 @@ export default {
     ModalOpener,
     OptionModalButtons,
     TextInput,
+    DateTimePicker
   },
   methods: {
     submitTest(e) {
       console.log(e);
       console.log(this.company)
       this.showErrorMessage = true;
+      console.log("LALA " + this.date.format('lll'))
     },
 
     toggleError(e) {
@@ -170,6 +187,11 @@ export default {
 
     onYes(e) {
       console.log("CAOOO");
+    },
+  },
+  watch: {
+    date(v) {
+      console.log(v.format('lll'));
     }
   }
 }
