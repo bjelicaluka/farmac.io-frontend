@@ -31,15 +31,18 @@
             </div>
             </form-row>
             <form-row>
-              <SelectOptionInput
-                label="Select you favourite food"
-                :isValid="isValid"
-                :onChange="onChange"
-                :options="options"
-                :showErrorMessage="showErrorMessage"
-                errorMessage="That is not food"
-              >
-              </SelectOptionInput>
+              <div class="col-lg-3 col-md-6 col-sm-3">
+                <SelectOptionInput
+                  label="Select you favourite food"
+                  v-model="value"
+                  :isValid="!!value"
+                  :options="options"
+                  :showErrorMessage="showErrorMessage"
+                  errorMessage="NESTOO"
+                >
+                </SelectOptionInput>
+                Current value: {{value}}
+              </div>
             </form-row>
           </form-group>
           <button class="btn btn-primary pull-right" type="submit"> Test </button>
@@ -161,12 +164,7 @@ export default {
       e.preventDefault();
       this.isValid = !this.isValid;
     },
-
-    onChange(e) {
-      this.value = e.target.value;
-      console.log(this.value);
-    },
-
+    
     onYes(e) {
       console.log("CAOOO");
     }
