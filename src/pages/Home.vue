@@ -6,10 +6,14 @@
           <form-group :title="'Test form group'">
             <form-row>
               <div class="col-5">
-                <div class="form-group">
-                  <label class="bmd-label-floating">Company</label>
-                  <input type="text" class="form-control">
-                </div>
+                <text-input 
+                  label="Company"
+                  v-model="company"
+                  :isValid="!!company"
+                  :showErrorMessage="showErrorMessage"
+                  errorMessage="Lalapo error message."
+                  type="text"
+                />
               </div>
               <div class="col-7">
                 <div class="form-group">
@@ -100,6 +104,7 @@ import SelectOptionInput from '../components/Form/SelectOptionInput.vue'
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
 import OptionModalButtons from '../components/Modal/OptionModalButtons.vue'
+import TextInput from '../components/Form/TextInput.vue';
 
 let selectOptions = [
   {
@@ -122,7 +127,8 @@ export default {
       isValid: false,
       showErrorMessage: false,
       options: selectOptions,
-      value: ''
+      value: '',
+      company: ""
     }
   },
   name: 'Home',
@@ -137,11 +143,14 @@ export default {
     SelectOptionInput,
     Modal,
     ModalOpener,
-    OptionModalButtons
+    OptionModalButtons,
+    TextInput,
   },
   methods: {
     submitTest(e) {
       console.log(e);
+      console.log(this.company)
+      this.showErrorMessage = true;
     },
 
     toggleError(e) {
