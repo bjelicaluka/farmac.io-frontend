@@ -2,7 +2,7 @@
     <Button
         :type="type"
         :className="className"
-        :onClick="onClick"
+        @click="emitClick"
     >
         <i class="material-icons">{{iconName}}</i>
         <slot />
@@ -17,6 +17,11 @@ export default {
     components: {
         Button
     },
-    props: ['className', 'type', 'iconName', 'onClick']
+    props: ['className', 'type', 'iconName'],
+    methods: {
+        emitClick(e) {
+            this.$emit('click', e);
+        }
+    }
 }
 </script>

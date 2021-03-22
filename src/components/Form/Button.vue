@@ -1,8 +1,8 @@
 <template>
     <button
-        :class="className || 'btn btn-primary'"
-        :type="type || 'button'"
-        @click="handleClick"
+        :class="className"
+        :type="type"
+        @click="emitClick"
     >
         <slot />
     </button>
@@ -11,12 +11,19 @@
 <script>
 
 export default {
-    props: ['className', 'type', 'onClick'],
+    props: {
+        className: {
+            type: String,
+            default: 'btn btn-primary'
+        },
+        type: {
+            type: String,
+            default: 'button'
+        }
+    },
     methods: {
-        handleClick(e) {
-            if (this.onClick !== undefined && this.onClick !== null) {
-                this.onClick(e);
-            }
+        emitClick(e) {
+            this.$emit('click', e);
         }
     }
 }

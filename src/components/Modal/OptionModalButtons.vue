@@ -7,7 +7,7 @@
         </ModalCloser>
         
         <ModalCloser>
-            <Button :onClick="onYes">
+            <Button @click="emitYes">
                 Yes
             </Button>
         </ModalCloser>
@@ -24,6 +24,10 @@ export default {
         ModalCloser,
         Button
     },
-    props: ['onYes']
+    methods: {
+        emitYes(e) {
+            this.$emit('yes', e);
+        }
+    }
 }
 </script>

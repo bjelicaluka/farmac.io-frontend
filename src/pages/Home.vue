@@ -48,7 +48,7 @@
         <Button
         type="button"
         className="btn btn-info"
-        :onClick="toggleError"
+        @click="toggleError"
         >
           Toggle showErrorMessage! {{showErrorMessage}}
         </Button>
@@ -57,7 +57,7 @@
           type="button"
           className="btn btn-primary btn-round"
           iconName="favorite"
-          :onClick="toggleIsValid"
+          @click="toggleIsValid"
         >
           Toggle isValid! {{isValid}}
         </ButtonWithIcon>
@@ -80,14 +80,13 @@
       </div>
 
       <div slot="buttons">
-        <OptionModalButtons :onYes="onYes"/>
+        <OptionModalButtons @yes="onYes"/>
       </div>
     </Modal>
 
     <ModalOpener modalBoxId="exampleModal">
         <Button>Launch Demo Modal</Button>
     </ModalOpener>
-
 
     </div>
 </template>
