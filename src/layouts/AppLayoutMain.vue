@@ -4,7 +4,7 @@
     <sidebar></sidebar>
     <main-wrapper>
       <navbar></navbar>
-      <router-view/>
+      <slot />
     </main-wrapper>
   </div>
 </template>
