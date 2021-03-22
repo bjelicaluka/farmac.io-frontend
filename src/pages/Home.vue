@@ -72,6 +72,7 @@
     >
       <div slot="body">
         <p>Do you want save this?</p>
+		<img src="https://i.ibb.co/ykn7k1y/New-Project-1.png"/>
       </div>
 
       <div slot="buttons">
