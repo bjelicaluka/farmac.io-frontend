@@ -19,6 +19,14 @@ const routes = [
     path: '/about',
     name: 'About',
     component: () => import('@/pages/About.vue'),
+  },
+  {
+    path: '/auth',
+    name: 'Auth',
+    component: () => import('@/pages/Auth.vue'),
+    meta: {
+      layout: 'AuthLayout'
+    }
   }
 ]
 
