@@ -1,9 +1,7 @@
 <template>
-
     <span data-dismiss="modal">
         <slot />
     </span>
-
 </template>
 
 <script>

@@ -1,17 +1,13 @@
 <template>    
-
-    <!-- Modal -->
     <div class="modal fade" :id="modalBoxId" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{title}}</h5>
-            
-                <ModalCloser>
-                    <span class="close" aria-label="Close" aria-hidden="true">&times;</span>
-                </ModalCloser>
-            
-            </div>
+                <div class="modal-header">
+                    <h5 class="modal-title">{{title}}</h5>
+                    <ModalCloser>
+                        <span class="close" aria-label="Close" aria-hidden="true">&times;</span>
+                    </ModalCloser>
+                </div>
                 <div class="modal-body">
                     <slot name="body" />
                 </div>
@@ -31,7 +27,6 @@ export default {
     components: {
         ModalCloser
     },
-
     props: ['modalBoxId', 'title']
 }
 
