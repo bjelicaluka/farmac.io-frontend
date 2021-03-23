@@ -1,6 +1,13 @@
 <template>
   <div class="content">
     <div class="container-fluid">
+      <card title="Map Test">
+        <Map @click="onMapClick($event)">
+          <div slot="markers">
+            <MapMarker :position="[45.38361, 20.38194]">Hello</MapMarker>
+          </div>
+        </Map>
+      </card>
       <card :title="'Edit profile'" :description="'Uptade profile information'">
         <Form @submit="submitTest($event)">
           <form-group :title="'Test form group'">
@@ -99,10 +106,24 @@
       </div>
     </Modal>
 
-    <ModalOpener modalBoxId="exampleModal">
+    <Modal
+      modalBoxId="addLocationModal"
+      title="Add location modal"
+    >
+      <div slot="body">
+        <p>Do you want add location {{location}}?</p>
+      </div>
+
+      <div slot="buttons">
+        <OptionModalButtons @yes="onYes"/>
+      </div>
+    </Modal>
+
+    <ModalOpener id="modalOpener" modalBoxId="exampleModal">
         <Button>Launch Demo Modal</Button>
     </ModalOpener>
 
+    <ModalOpener id="addLocationModalOpener" class="d-none" modalBoxId="addLocationModal" />
     </div>
 </template>
 
@@ -120,7 +141,8 @@ import ModalOpener from '../components/Modal/ModalOpener.vue'
 import OptionModalButtons from '../components/Modal/OptionModalButtons.vue'
 import TextInput from '../components/Form/TextInput.vue';
 import DateTimePicker from '../components/Form/DateTimePicker.vue';
-import moment from 'moment';
+import Map from '../components/Map/Map.vue';
+import MapMarker from '../components/Map/MapMarker.vue';
 
 let selectOptions = [
   {
@@ -145,7 +167,8 @@ export default {
       options: selectOptions,
       value: '',
       company: "",
-      date: null
+      date: null,
+      location: null
     }
   },
   name: 'Home',
@@ -162,7 +185,9 @@ export default {
     ModalOpener,
     OptionModalButtons,
     TextInput,
-    DateTimePicker
+    DateTimePicker,
+    Map,
+    MapMarker,
   },
   methods: {
     submitTest(e) {
@@ -185,6 +210,12 @@ export default {
     onYes(e) {
       console.log("CAOOO");
     },
+    onMapClick(e) {
+      console.log(`Location coordinates: lat=${e.latlng.lat},lng=${e.latlng.lng}`);
+      this.location = {lat: e.latlng.lat, lng: e.latlng.lng};
+      // toggle modal
+      document.getElementById('addLocationModalOpener').click();
+    }
   },
   watch: {
     date(v) {

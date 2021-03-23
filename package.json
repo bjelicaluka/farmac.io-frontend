@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "leaflet": "^1.7.1",
     "moment": "^2.29.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vue2-leaflet": "^2.6.0",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
@@ -38,7 +40,8 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "no-unused-vars": "off"
+      "no-unused-vars": "off",
+      "no-unused-components": "off"
     }
   },
   "browserslist": [
