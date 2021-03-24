@@ -252,8 +252,6 @@ export default {
       return validatePassword(password);
     },
     validateDateOfBirth() {
-      console.log(this.user.dateOfBirth)
-      console.log(moment().diff(this.user.dateOfBirth, 'years', false))
       return !!this.user.dateOfBirth && moment().diff(this.user.dateOfBirth, 'years', false) >= 13;
     }
   }
