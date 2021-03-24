@@ -28,7 +28,7 @@
             v-model="account.password"
             :isValid="validatePassword(account.password)"
             :showErrorMessage="showErrorMessage"
-            errorMessage="Please insert valid password."
+            errorMessage="Password must have at least 8 characters, special character and a number."
             type="password"
           />
         </div>
@@ -70,7 +70,7 @@
             :isValid="validateDateOfBirth()"
             :showErrorMessage="showErrorMessage"
             label="Date of Birth"
-            errorMessage="Invalid date."
+            errorMessage="You must be at least 13 years old."
             type="date"
             id="pharmacistDateOfBirth"
           />
@@ -81,7 +81,7 @@
           <text-input
             label="PID"
             v-model="user.pid"
-            :isValid="!!user.pid && user.pid.length >= 13"
+            :isValid="!!user.pid && user.pid.length === 13 && !isNaN(user.pid)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid PID."
           />
