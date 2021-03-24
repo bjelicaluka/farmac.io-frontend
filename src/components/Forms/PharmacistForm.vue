@@ -5,8 +5,8 @@
         <div class="col-6">
           <text-input
             label="Username"
-            v-model="username"
-            :isValid="!!username"
+            v-model="account.username"
+            :isValid="validateText(account.username)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid username."
           />
@@ -14,8 +14,8 @@
         <div class="col-6">
           <text-input
             label="Email"
-            v-model="email"
-            :isValid="!!email"
+            v-model="account.email"
+            :isValid="validateEmail(account.email)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid email."
           />
@@ -25,19 +25,21 @@
         <div class="col-6">
           <text-input
             label="Password"
-            v-model="password"
-            :isValid="!!password"
+            v-model="account.password"
+            :isValid="validatePassword(account.password)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid password."
+            type="password"
           />
         </div>
         <div class="col-6">
           <text-input
             label="Confirm Password"
-            v-model="confirmPassword"
-            :isValid="confirmPassword === password"
+            v-model="account.confirmPassword"
+            :isValid="account.confirmPassword === account.password"
             :showErrorMessage="showErrorMessage"
             errorMessage="Passwords don't match."
+            type="password"
           />
         </div>
       </form-row>
@@ -47,8 +49,8 @@
         <div class="col-4">
           <text-input
             label="First Name"
-            v-model="firstName"
-            :isValid="!!firstName"
+            v-model="user.firstName"
+            :isValid="validateText(user.firstName)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid name."
           />
@@ -56,16 +58,16 @@
         <div class="col-4">
           <text-input
             label="Last Name"
-            v-model="lastName"
-            :isValid="!!lastName"
+            v-model="user.lastName"
+            :isValid="validateText(user.lastName)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid surname."
           />
         </div>
         <div class="col-4">
           <date-time-picker
-            v-model="dateOfBirth"
-            :isValid="!!dateOfBirth"
+            v-model="user.dateOfBirth"
+            :isValid="!!user.dateOfBirth"
             :showErrorMessage="showErrorMessage"
             label="Date of Birth"
             errorMessage="Invalid date."
@@ -77,8 +79,8 @@
         <div class="col-7">
           <text-input
             label="PID"
-            v-model="pid"
-            :isValid="!!pid"
+            v-model="user.pid"
+            :isValid="validateText(user.pid)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid PID."
           />
@@ -86,8 +88,8 @@
         <div class="col-5">
           <text-input
             label="Phone Number"
-            v-model="phoneNumber"
-            :isValid="!!phoneNumber"
+            v-model="user.phoneNumber"
+            :isValid="validateText(user.phoneNumber)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid phone number."
           />
@@ -99,8 +101,8 @@
         <div class="col-3">
           <text-input
             label="State"
-            v-model="state"
-            :isValid="!!state"
+            v-model="user.address.state"
+            :isValid="validateText(user.address.state)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid state."
           />
@@ -108,8 +110,8 @@
         <div class="col-3">
           <text-input
             label="City"
-            v-model="city"
-            :isValid="!!city"
+            v-model="user.address.city"
+            :isValid="validateText(user.address.city)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid city."
           />
@@ -117,8 +119,8 @@
         <div class="col-4">
           <text-input
             label="Street Name"
-            v-model="streetName"
-            :isValid="!!streetName"
+            v-model="user.address.streetName"
+            :isValid="validateText(user.address.streetName)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid street name."
           />
@@ -126,8 +128,8 @@
         <div class="col-2">
           <text-input
             label="Number"
-            v-model="streetNumber"
-            :isValid="!!streetNumber"
+            v-model="user.address.streetNumber"
+            :isValid="!!user.address.streetNumber"
             :showErrorMessage="showErrorMessage"
             errorMessage="Invalid street number."
           />
@@ -135,16 +137,21 @@
       </form-row>
       <Map :height="250" @click="onMapClick($event)" :modalBoxId="'pharmacistModal'">
         <div slot="markers">
-          <MapMarker :v-if="lat !== null && lng !== null" :lat="lat" :lng="lng">
+          <MapMarker :v-if="user.address.lat !== null && user.address.lng !== null" :lat="user.address.lat" :lng="user.address.lng">
             <div>
-              <p cl ass="text-dark">{{state}}</p>
-              <p class="text-dark">{{city}}</p>
-              <p class="text-dark">{{streetName}}</p>
-              <p class="text-dark">{{streetNumber}}</p>
+              <p cl ass="text-dark">{{user.address.state}}</p>
+              <p class="text-dark">{{user.address.city}}</p>
+              <p class="text-dark">{{user.address.streetName}}</p>
+              <p class="text-dark">{{user.address.streetNumber}}</p>
             </div>
           </MapMarker>
         </div>
       </Map>
+      <InputErrorMessage
+        :isValid="showErrorMessage ? (!!user.address.lat && !!user.address.lng) : true"
+      >
+        Please pick a location on the map.
+      </InputErrorMessage>
     </form-group>
     <button class="btn btn-primary pull-right" type="submit">Register</button>
   </Form>
@@ -157,26 +164,34 @@ import FormRow from '../Form/FormRow.vue'
 import TextInput from '../Form/TextInput.vue'
 import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
+import { validateText, validateEmail, validatePassword } from '../../utils/validation'
+import InputErrorMessage from '../Form/InputErrorMessage.vue'
 
 export default {
-  components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker },
+  components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage },
   data: () => {
     return {
-      username: null,
-      email: null,
-      password: null,
-      confirmPassword: null,
-      firstName: null,
-      lastName: null,
-      dateOfBirth: null,
-      pid: null,
-      phoneNumber: null,
-      lat: null,
-      lng: null,
-      state: null,
-      city: null,
-      streetName: null,
-      streetNumber: null,
+      account: {
+        username: null,
+        email: null,
+        password: null,
+        confirmPassword: null,
+      },
+      user: {
+        firstName: null,
+        lastName: null,
+        dateOfBirth: null,
+        pid: null,
+        phoneNumber: null,
+        address: {
+          lat: null,
+          lng: null,
+          state: null,
+          city: null,
+          streetName: null,
+          streetNumber: null,
+        }
+      },
       
       showErrorMessage: false,
       mounted: false,
@@ -190,6 +205,15 @@ export default {
     onSubmit(e) {
       e.preventDefault();
       this.showErrorMessage = true;
+    },
+    validateText(text) {
+      return validateText(text);
+    },
+    validateEmail(email) {
+      return validateEmail(email);
+    },
+    validatePassword(password) {
+      return validatePassword(password);
     }
   }
 }
