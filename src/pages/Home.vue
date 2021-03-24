@@ -72,7 +72,7 @@
         className="btn btn-info"
         @click="toggleError"
         >
-          Toggle showErrorMessage! {{showErrorMessage}}
+          Toggle showErrorMessage! .{{showErrorMessage}}
         </Button>
 
         <ButtonWithIcon
@@ -119,12 +119,23 @@
       </div>
     </Modal>
 
+    <Modal
+      modalBoxId="pharmacystModal"
+      title="Register Pharmacyst"
+    >
+      <PharmacistForm />
+    </Modal>
+
     <ModalOpener id="modalOpener" modalBoxId="exampleModal">
         <Button>Launch Demo Modal</Button>
     </ModalOpener>
 
+    <ModalOpener id="modalOpenerPharmacyst" modalBoxId="pharmacystModal">
+        <Button>Register Pharmacyst</Button>
+    </ModalOpener>
+
     <ModalOpener id="addLocationModalOpener" class="d-none" modalBoxId="addLocationModal" />
-    </div>
+  </div>
 </template>
 
 <script>
@@ -143,6 +154,7 @@ import TextInput from '../components/Form/TextInput.vue';
 import DateTimePicker from '../components/Form/DateTimePicker.vue';
 import Map from '../components/Map/Map.vue';
 import MapMarker from '../components/Map/MapMarker.vue';
+import PharmacistForm from '../components/Forms/PharmacistForm.vue';
 
 let selectOptions = [
   {
@@ -188,6 +200,7 @@ export default {
     DateTimePicker,
     Map,
     MapMarker,
+    PharmacistForm,
   },
   methods: {
     submitTest(e) {
