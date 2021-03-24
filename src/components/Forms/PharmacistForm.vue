@@ -9,6 +9,7 @@
             :isValid="validateText(account.username)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid username."
+            :disabled="isEdit"
           />
         </div>
         <div class="col-6">
@@ -18,10 +19,11 @@
             :isValid="validateEmail(account.email)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid email."
+            :disabled="isEdit"
           />
         </div>
       </form-row>
-      <form-row>
+      <form-row v-if="!isEdit">
         <div class="col-6">
           <text-input
             label="Password"
@@ -154,7 +156,7 @@
         Please pick a location on the map.
       </InputErrorMessage>
     </form-group>
-    <button class="btn btn-primary pull-right" type="submit">Register</button>
+    <button class="btn btn-primary pull-right" type="submit">{{isEdit ? 'Update' : 'Register'}}</button>
   </Form>
 </template>
 
@@ -228,14 +230,20 @@ export default {
     onSubmit(e) {
       e.preventDefault();
       this.showErrorMessage = true;
-      this.addPharmacist({
+      const pharmacistObject = {
         account: {
           ...this.account
         },
         user: {
           ...this.user
         }
-      })
+      };
+
+      if(!this.isEdit) {
+        this.addPharmacist(pharmacistObject);
+      } else {
+        this.updatePharmacist({pharmacistObject, id: this.existingAccount.id});
+      }
     },
     onMapClick(e) {
       this.user.address.lat = e.latlng.lat;

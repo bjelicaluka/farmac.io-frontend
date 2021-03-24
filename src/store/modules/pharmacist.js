@@ -42,7 +42,7 @@ const actions = {
             context.commit('setResult', {ok: false, message: err.message});
         });
     },
-    updatePharmacist: (context, pharmacist, id) => {
+    updatePharmacist: (context, {pharmacist, id}) => {
         axios.put(`/pharmacists/${id}`, pharmacist)
         .then(resp => {
             context.commit('setResult', {ok: true});
