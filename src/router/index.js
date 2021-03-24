@@ -27,6 +27,14 @@ const routes = [
     meta: {
       layout: 'AuthLayout'
     }
+  },
+  {
+    path: '/email-verification',
+    name: 'EmailVerification',
+    component: () => import('@/pages/EmailVerification.vue'),
+    meta: {
+      layout: 'AuthLayout'
+    }
   }
 ]
 
