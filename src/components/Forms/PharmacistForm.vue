@@ -67,11 +67,12 @@
         <div class="col-4">
           <date-time-picker
             v-model="user.dateOfBirth"
-            :isValid="!!user.dateOfBirth"
+            :isValid="validateDateOfBirth()"
             :showErrorMessage="showErrorMessage"
             label="Date of Birth"
             errorMessage="Invalid date."
             type="date"
+            id="pharmacistDateOfBirth"
           />
         </div>
       </form-row>
@@ -80,7 +81,7 @@
           <text-input
             label="PID"
             v-model="user.pid"
-            :isValid="validateText(user.pid)"
+            :isValid="!!user.pid && user.pid.length >= 13"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid PID."
           />
@@ -89,7 +90,7 @@
           <text-input
             label="Phone Number"
             v-model="user.phoneNumber"
-            :isValid="validateText(user.phoneNumber)"
+            :isValid="!isNaN(user.phoneNumber)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid phone number."
           />
@@ -158,14 +159,16 @@
 </template>
 
 <script>
+import moment from 'moment';
+import {mapActions} from 'vuex';
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
 import TextInput from '../Form/TextInput.vue'
 import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
-import { validateText, validateEmail, validatePassword } from '../../utils/validation'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
+import { validateText, validateEmail, validatePassword } from '../../utils/validation'
 
 export default {
   components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage },
@@ -213,16 +216,31 @@ export default {
       this.account = this.existingAccount;
       this.account.confirmPassword = this.existingAccount.password;
       this.user = this.existingUser;
+      this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
+      console.log(this.user.dateOfBirth)
     }
   },
   methods: {
-    onMapClick(e) {
-      this.user.address.lat = e.latlng.lat;
-      this.user.address.lng = e.latlng.lng;
-    },
+    ...mapActions({
+      addPharmacist: 'pharmacist/addPharmacist',
+      updatePharmacist: 'pharmacist/updatePharmacist',
+    }),
+
     onSubmit(e) {
       e.preventDefault();
       this.showErrorMessage = true;
+      this.addPharmacist({
+        account: {
+          ...this.account
+        },
+        user: {
+          ...this.user
+        }
+      })
+    },
+    onMapClick(e) {
+      this.user.address.lat = e.latlng.lat;
+      this.user.address.lng = e.latlng.lng;
     },
     validateText(text) {
       return validateText(text);
@@ -232,6 +250,11 @@ export default {
     },
     validatePassword(password) {
       return validatePassword(password);
+    },
+    validateDateOfBirth() {
+      console.log(this.user.dateOfBirth)
+      console.log(moment().diff(this.user.dateOfBirth, 'years', false))
+      return !!this.user.dateOfBirth && moment().diff(this.user.dateOfBirth, 'years', false) >= 13;
     }
   }
 }

@@ -20,6 +20,7 @@
                   label="Date Time Picker Example"
                   errorMessage="Invalid date time."
                   type="datetime"
+                  id="testDatePicker"
                 />
               </div>
             </form-row>

@@ -5,6 +5,7 @@
       <input 
         type="text"
         class="form-control datetimepicker"
+        :id="id"
       />
     </div>
     <InputErrorMessage
@@ -29,6 +30,10 @@ const $ = window.$;
 export default {
   components: { InputErrorMessage },
   props: {
+    id: {
+      type: String,
+      default: 'uniqueid'
+    },
     type: {
       type: String,
       default: ''
@@ -52,7 +57,7 @@ export default {
     },
   },
   mounted() {
-    $('.datetimepicker').datetimepicker({
+    $(`#${this.id}`).datetimepicker({
       icons: {
         time: "fa fa-clock-o",
         date: "fa fa-calendar",
@@ -64,12 +69,13 @@ export default {
         clear: 'fa fa-trash',
         close: 'fa fa-remove'
       },
-      format: pickerTypeFormat[this.type] || 'lll'
+      format: pickerTypeFormat[this.type] || 'lll',
+      date: this.value
     })
     .on('dp.change', (e) => {
       this.$emit('input', e.date);
     });
-  }
+  },
 }
 </script>
 
