@@ -40,7 +40,8 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "strict": "off"
+      "no-unused-vars": "off",
+      "no-unused-components": "off"
     }
   },
   "browserslist": [

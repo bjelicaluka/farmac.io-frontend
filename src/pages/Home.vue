@@ -124,7 +124,29 @@
       title="Register Pharmacist"
     >
       <div slot="body">
-        <PharmacistForm />
+        <PharmacistForm
+          :isEdit="true"
+          :existingAccount="{
+            username: 'lukica',
+            password: 'test123!',
+            email: 'lukica@gmail.com'
+          }"
+          :existingUser="{
+            firstName: 'asd',
+            lastName: 'asd',
+            dateOfBirth: '2021-03-10T23:00:00.000Z',
+            pid: '1231231231231',
+            phoneNumber: '099922311',
+            address: {
+              lat: 45.384827781749635,
+              lng: 20.387363433837894,
+              state: 'Srbija',
+              city: 'Zrenjanin',
+              streetName: 'Komunjare Pariske',
+              streetNumber: '28'
+            }
+          }"
+        />
       </div>
     </Modal>
 

@@ -139,7 +139,7 @@
         <div slot="markers">
           <MapMarker :v-if="user.address.lat !== null && user.address.lng !== null" :lat="user.address.lat" :lng="user.address.lng">
             <div>
-              <p cl ass="text-dark">{{user.address.state}}</p>
+              <p class="text-dark">{{user.address.state}}</p>
               <p class="text-dark">{{user.address.city}}</p>
               <p class="text-dark">{{user.address.streetName}}</p>
               <p class="text-dark">{{user.address.streetNumber}}</p>
@@ -148,7 +148,7 @@
         </div>
       </Map>
       <InputErrorMessage
-        :isValid="showErrorMessage ? (!!user.address.lat && !!user.address.lng) : true"
+        :isValid="showErrorMessage ? !!user.address.lat && !!user.address.lng : true"
       >
         Please pick a location on the map.
       </InputErrorMessage>
@@ -169,6 +169,18 @@ import InputErrorMessage from '../Form/InputErrorMessage.vue'
 
 export default {
   components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
+    existingAccount: {
+      type: Object
+    },
+    existingUser: {
+      type: Object
+    },
+  },
   data: () => {
     return {
       account: {
@@ -194,13 +206,19 @@ export default {
       },
       
       showErrorMessage: false,
-      mounted: false,
+    }
+  },
+  mounted() {
+    if(this.isEdit) {
+      this.account = this.existingAccount;
+      this.account.confirmPassword = this.existingAccount.password;
+      this.user = this.existingUser;
     }
   },
   methods: {
     onMapClick(e) {
-      this.lat = e.latlng.lat;
-      this.lng = e.latlng.lng;
+      this.user.address.lat = e.latlng.lat;
+      this.user.address.lng = e.latlng.lng;
     },
     onSubmit(e) {
       e.preventDefault();
