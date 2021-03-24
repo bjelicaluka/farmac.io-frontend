@@ -120,17 +120,19 @@
     </Modal>
 
     <Modal
-      modalBoxId="pharmacystModal"
-      title="Register Pharmacyst"
+      modalBoxId="pharmacistModal"
+      title="Register Pharmacist"
     >
-      <PharmacistForm />
+      <div slot="body">
+        <PharmacistForm />
+      </div>
     </Modal>
 
     <ModalOpener id="modalOpener" modalBoxId="exampleModal">
         <Button>Launch Demo Modal</Button>
     </ModalOpener>
 
-    <ModalOpener id="modalOpenerPharmacyst" modalBoxId="pharmacystModal">
+    <ModalOpener id="modalOpenerPharmacist" modalBoxId="pharmacistModal">
         <Button>Register Pharmacyst</Button>
     </ModalOpener>
 
