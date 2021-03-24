@@ -135,7 +135,7 @@
           :existingUser="{
             firstName: 'asd',
             lastName: 'asd',
-            dateOfBirth: '2021-03-10T23:00:00.000Z',
+            dateOfBirth: '2021-03-12T23:00:00.000Z',
             pid: '1231231231231',
             phoneNumber: '099922311',
             address: {

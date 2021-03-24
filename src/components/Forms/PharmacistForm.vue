@@ -217,7 +217,6 @@ export default {
       this.account.confirmPassword = this.existingAccount.password;
       this.user = this.existingUser;
       this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
-      console.log(this.user.dateOfBirth)
     }
   },
   methods: {

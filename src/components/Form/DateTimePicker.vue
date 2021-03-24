@@ -76,6 +76,11 @@ export default {
       this.$emit('input', e.date);
     });
   },
+  watch: {
+    value(v) {
+      $(`#${this.id}`).data('DateTimePicker').date(v);
+    }
+  }
 }
 </script>
 

@@ -16,6 +16,7 @@ const actions = {
     getPharmacists: (context) => {
         axios.get(`/pharmacists`)
         .then(resp => {
+            context.commit('setPharmacists', resp.data);
             context.commit('setResult', {ok: true});
         })
         .catch(err => {
