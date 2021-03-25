@@ -1,5 +1,5 @@
 <template>
-  <li class="nav-item active  ">
+  <li :class="`nav-item ${active && 'active'}`">
     <router-link class="nav-link" :to="to">
       <i class="material-icons">{{icon}}</i>
       <p>{{name}}</p>
@@ -9,7 +9,15 @@
 
 <script>
 export default {
-  props: ["name", "icon", "to"]
+  props: ["name", "icon", "to"],
+  data: () => {
+    return {
+      active: false
+    }
+  },
+  mounted() {
+    this.active = this.$route.path === this.to;
+  }
 }
 </script>
 
