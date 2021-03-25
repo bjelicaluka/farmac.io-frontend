@@ -162,7 +162,7 @@
 
 <script>
 import moment from 'moment';
-import {mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
@@ -173,6 +173,7 @@ import MapMarker from '../Map/MapMarker.vue'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
 import { validateText, validateEmail, validatePassword } from '../../utils/validation'
 import Button from '../Form/Button.vue';
+import toastr from 'toastr';
 
 export default {
   components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Form, Button },
@@ -202,6 +203,7 @@ export default {
         dateOfBirth: null,
         pid: null,
         phoneNumber: null,
+        pharmacyId: null,
         address: {
           lat: null,
           lng: null,
@@ -215,12 +217,27 @@ export default {
       showErrorMessage: false,
     }
   },
+  computed: {
+    ...mapGetters({
+      result: 'pharmacist/getResult'
+    })
+  },
+  watch: {
+    result({ok, message}) {
+      if(ok) {
+        toastr.success(message);
+      } else {
+        toastr.error(message);
+      }
+    }
+  },
   mounted() {
     if(this.isEdit) {
       this.account = this.existingAccount;
       this.account.confirmPassword = this.existingAccount.password;
       this.user = this.existingUser;
       this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
+      this.user.pharmacyId = '08d8ef95-ec90-4a19-8bb3-2e37ea275133'
     }
   },
   methods: {
@@ -242,9 +259,11 @@ export default {
       };
 
       if(!this.isEdit) {
+        pharmacistObject.account.id = this.existingAccount.id;
+        pharmacistObject.user.id = this.existingUser.id;
         this.addPharmacist(pharmacistObject);
       } else {
-        this.updatePharmacist({pharmacistObject, id: this.existingAccount.id});
+        this.updatePharmacist(pharmacistObject);
       }
     },
     onMapClick(e) {

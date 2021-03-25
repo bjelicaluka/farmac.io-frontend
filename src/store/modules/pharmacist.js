@@ -17,47 +17,47 @@ const actions = {
         axios.get(`/pharmacists`)
         .then(resp => {
             context.commit('setPharmacists', resp.data);
-            context.commit('setResult', {ok: true});
+            context.commit('setResult', {ok: true, message: "Success"});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.message});
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
     getPharmacistById: (context, id) => {
         axios.get(`/pharmacist/${id}`)
         .then(resp => {
             context.commit('setPharmacist', resp.data);
-            context.commit('setResult', {ok: true});
+            context.commit('setResult', {ok: true, message: "Success"});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.message});
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
     addPharmacist: (context, pharmacist) => {
         axios.post(`/pharmacists`, pharmacist)
         .then(resp => {
-            context.commit('setResult', {ok: true});
+            context.commit('setResult', {ok: true, message: "Successfully registered pharmacist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.message});
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    updatePharmacist: (context, {pharmacist, id}) => {
-        axios.put(`/pharmacists/${id}`, pharmacist)
+    updatePharmacist: (context, pharmacist) => {
+        axios.put(`/pharmacists`, pharmacist)
         .then(resp => {
-            context.commit('setResult', {ok: true});
+            context.commit('setResult', {ok: true, message: "Successfully updated pharmacist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.message});
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
     deletePharmacist: (context, id) => {
         axios.delete(`/pharmacists/${id}`)
         .then(resp => {
-            context.commit('setResult', {ok: true});
+            context.commit('setResult', {ok: true, message: "Successfully deleted pharmacist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.message});
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
 };
