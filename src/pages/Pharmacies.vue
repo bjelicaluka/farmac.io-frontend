@@ -33,7 +33,7 @@
             </Modal>
 
             <ModalOpener modalBoxId="pharmacyModal">
-                <Button class="pull-right">Create Pharmacyst</Button>
+                <Button class="pull-right">Create Pharmacy</Button>
             </ModalOpener>
         </div>
     </div>

@@ -6,7 +6,7 @@
             </div>
             <div class="card-body">
                 <div class="card-actions">
-                    <Button @click="onDeleteSelected" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Change Date">
+                    <Button @click="onDeleteSelected" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Delete">
                         <i class="material-icons">delete</i>
                     </Button>
                 </div>
