@@ -92,7 +92,7 @@
           <text-input
             label="Phone Number"
             v-model="user.phoneNumber"
-            :isValid="!isNaN(user.phoneNumber)"
+            :isValid="!!user.phoneNumber && !isNaN(user.phoneNumber)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid phone number."
           />
@@ -156,7 +156,7 @@
         Please pick a location on the map.
       </InputErrorMessage>
     </form-group>
-    <button class="btn btn-primary pull-right" type="submit">{{isEdit ? 'Update' : 'Register'}}</button>
+    <Button @click="showErrorMessage = true" type="submit">{{isEdit ? 'Update' : 'Register'}}</Button>
   </Form>
 </template>
 
@@ -166,14 +166,16 @@ import {mapActions} from 'vuex';
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
+import Form from '../Form/Form.vue'
 import TextInput from '../Form/TextInput.vue'
 import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
 import { validateText, validateEmail, validatePassword } from '../../utils/validation'
+import Button from '../Form/Button.vue';
 
 export default {
-  components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage },
+  components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Form, Button },
   props: {
     isEdit: {
       type: Boolean,
