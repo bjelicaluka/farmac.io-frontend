@@ -20,6 +20,7 @@
                   label="Date Time Picker Example"
                   errorMessage="Invalid date time."
                   type="datetime"
+                  id="testDatePicker"
                 />
               </div>
             </form-row>
@@ -127,14 +128,15 @@
         <PharmacistForm
           :isEdit="true"
           :existingAccount="{
+            id: '08d8efa0-a7bb-4128-86c3-5ebb2913c76a',
             username: 'lukica',
-            password: 'test123!',
             email: 'lukica@gmail.com'
           }"
           :existingUser="{
+            id: '08d8efa0-a7c5-4f48-8aa5-4ab246e3f751',
             firstName: 'asd',
             lastName: 'asd',
-            dateOfBirth: '2021-03-10T23:00:00.000Z',
+            dateOfBirth: '2001-03-12T23:00:00.000Z',
             pid: '1231231231231',
             phoneNumber: '099922311',
             address: {
