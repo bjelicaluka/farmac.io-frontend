@@ -1,5 +1,8 @@
 <template>
   <div>
+    <ModalOpener class="pull-right" modalBoxId="pharmacistModal">
+        <Button>Register Pharmacyst</Button>
+    </ModalOpener>
     <Table>
         <TableHead :columnNames="['Username', 'Name', 'email', 'PID', 'Phone', 'Address', '']"></TableHead>
         <TableBody>
@@ -23,7 +26,7 @@
     </Table>
 
     <Modal
-      modalBoxId="editPharmacistModal"
+      modalBoxId="pharmacistModal"
       title="Pharmacist"
     >
       <div slot="body">
@@ -61,6 +64,7 @@ import Modal from '../Modal/Modal.vue'
 import PharmacistForm from '../Forms/PharmacistForm.vue'
 import OptionModalButtons from '../Modal/OptionModalButtons.vue'
 import {mapActions} from 'vuex'
+import Button from '../Form/Button.vue'
 
 export default {
   components: {
@@ -73,7 +77,8 @@ export default {
     ModalOpener,
     Modal,
     PharmacistForm,
-    OptionModalButtons
+    OptionModalButtons,
+    Button
   },
   props: ['pharmacists'],
   data() {
