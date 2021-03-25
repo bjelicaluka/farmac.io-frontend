@@ -1,0 +1,49 @@
+<template>
+    <div>
+        <div class="card card-chart">
+            <div class="card-header card-header-rose" data-header-animation="true">
+                <img src="https://i.ibb.co/tb2GmTN/pharmacy-Logo-2.png"/>
+            </div>
+            <div class="card-body">
+                <div class="card-actions">
+                    <Button @click="onDeleteSelected" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Change Date">
+                        <i class="material-icons">delete</i>
+                    </Button>
+                </div>
+                <h4 class="card-title">{{pharmacy.name}}</h4>
+                <p class="card-category">{{pharmacy.description}}</p>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">access_time</i> Last time visited: {{Math.floor(Math.random() * 45) + 1}} minutes ago.
+                </div>
+                <Button @click="changeRoute" class="pull-right">View more</Button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+
+import Button from '../Form/Button'
+
+export default {
+    components: {
+        Button
+    },
+
+    props: ['pharmacy'],
+  
+    methods: {
+        onDeleteSelected: function(e) {
+            e.preventDefault();
+            this.$emit('onDeleteSelected', e, this.pharmacy.id, this.pharmacy.name);
+        },
+
+        changeRoute(e) {
+            e.preventDefault();
+            this.$router.push(`/pharmacies/${this.pharmacy.id}`);
+        }
+    }
+}
+</script>

@@ -1,20 +1,38 @@
 <template>
-  <form @submit="submitted($event)">
+  <form @submit="submitted">
     <slot />
   </form>
 </template>
 
 <script>
+
+
 export default {
   components: {
     
   },
-  props: ['onSubmit'],
+  data: () => {
+    return {
+    }
+  },
   methods: {
     submitted(e) {
       e.preventDefault();
-      this.$emit('submit', e);
-    } 
+      if(this.isValid())
+        this.$emit('submit', e);
+    },
+    isValid() {
+      let result = true;
+      const searchElements = (el) => {
+        if(el.$props?.isValid === false) {
+          result = false;
+        }
+        el.$children.forEach(searchElements);
+      }
+      searchElements(this);
+
+      return result;
+    }
   }
 }
 </script>
