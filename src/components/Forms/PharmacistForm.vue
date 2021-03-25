@@ -229,23 +229,25 @@ export default {
       } else {
         toastr.error(message);
       }
+    },
+    isEdit() {
+      this.setEdit();
+    },
+    existingAccount() {
+      this.setEdit();
+    },
+    existingUser() {
+      this.setEdit();
     }
   },
   mounted() {
-    if(this.isEdit) {
-      this.account = this.existingAccount;
-      this.account.confirmPassword = this.existingAccount.password;
-      this.user = this.existingUser;
-      this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
-      this.user.pharmacyId = '08d8ef95-ec90-4a19-8bb3-2e37ea275133'
-    }
+    this.setEdit();
   },
   methods: {
     ...mapActions({
       addPharmacist: 'pharmacist/addPharmacist',
       updatePharmacist: 'pharmacist/updatePharmacist',
     }),
-
     onSubmit(e) {
       e.preventDefault();
       this.showErrorMessage = true;
@@ -264,6 +266,19 @@ export default {
         this.addPharmacist(pharmacistObject);
       } else {
         this.updatePharmacist(pharmacistObject);
+      }
+    },
+    setEdit() {
+      if(!this.isEdit) return;
+
+      if(this.existingAccount) {
+        this.account = this.existingAccount;
+        this.account.confirmPassword = this.existingAccount.password;
+      }
+      if(this.existingUser) {
+        this.user = this.existingUser;
+        this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
+        this.user.pharmacyId = '08d8ef95-ec90-4a19-8bb3-2e37ea275133'
       }
     },
     onMapClick(e) {

@@ -13,21 +13,19 @@ const getters = {
 };
 
 const actions = {
-    getPharmacists: (context) => {
+    fetchPharmacists: (context) => {
         axios.get(`/pharmacists`)
         .then(resp => {
             context.commit('setPharmacists', resp.data);
-            context.commit('setResult', {ok: true, message: "Success"});
         })
         .catch(err => {
             context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    getPharmacistById: (context, id) => {
+    fetchPharmacistById: (context, id) => {
         axios.get(`/pharmacist/${id}`)
         .then(resp => {
             context.commit('setPharmacist', resp.data);
-            context.commit('setResult', {ok: true, message: "Success"});
         })
         .catch(err => {
             context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});

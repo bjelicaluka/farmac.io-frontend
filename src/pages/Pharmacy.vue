@@ -1,9 +1,9 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <p>luidjiii</p>
-            <p>{{pharmacy.id}}</p>
-            <p>{{pharmacy.name}}</p>
+            <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacists employees.`">
+                <PharmacistsTable :pharmacists="pharmacists" />
+            </Card>
         </div> 
     </div>
 </template>
@@ -11,38 +11,35 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
+import Card from '../components/Card/Card.vue';
+import PharmacistsTable from '../components/Tables/PharmacistsTable.vue';
 
 export default {
-    data: function() {
-        return {
-            pharmacy: {
-                id: '',
-                name: ''
-            },
+  components: { PharmacistsTable, Card },
+    data: () => {
+        return {}
+    },
+    computed: {
+        ...mapGetters({
+            pharmacy: 'pharmacies/getPharmacy',
+            pharmacists: 'pharmacist/getPharmacists'
+        }),
+    },
+    watch: {
+        pharmacists(v) {
+            console.log(v)
         }
     },
-
-   computed: {
-    ...mapGetters({
-        getPharmacy: 'pharmacies/getPharmacy'
-    })
-  },
-
-  watch: {
-      getPharmacy(pharmacy) {
-        this.pharmacy = pharmacy;
-      }
-  },
-
-  methods: {
-    ...mapActions({
-        fetchPharmacy: 'pharmacies/getPharmacyById'
-    })
-  },
-
-  mounted() {
-      const id = this.$route.params.id;
-      this.fetchPharmacy(id);
-  }
+    methods: {
+        ...mapActions({
+            fetchPharmacy: 'pharmacies/getPharmacyById',
+            fetchPharmacists: 'pharmacist/fetchPharmacists'
+        }),
+    },
+    mounted() {
+        const id = this.$route.params.id;
+        this.fetchPharmacy(id);
+        this.fetchPharmacists();
+    }
 }
 </script>
