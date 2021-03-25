@@ -1,7 +1,9 @@
 <template>
-    <card :title="'Sign in'">
-        <LoginForm />
-    </card>
+    <div class="col-md-6 col-lg-6 col-sm-10">
+        <card :title="'Sign in'">
+            <LoginForm />
+        </card>
+    </div>
 </template>
 
 <script>

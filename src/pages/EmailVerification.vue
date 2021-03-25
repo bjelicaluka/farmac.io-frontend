@@ -1,9 +1,9 @@
 <template>
-
-    <card title="Email verification">
-        <EmailValidationForm />
-    </card>
-
+    <div class="col-md-6 col-lg-6 col-sm-10">
+        <card title="Email verification">
+            <EmailValidationForm />
+        </card>
+    </div>
 </template>
 
 <script>
@@ -32,7 +32,7 @@ export default {
     },
 
     watch: {
-        getGetVerificationEmailResponse: ({text, code}) => {
+        getGetVerificationEmailResponse({text, code}) {
             if(code === 200) {
                 toastr.success(text);
             } else {

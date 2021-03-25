@@ -29,6 +29,14 @@ const routes = [
     }
   },
   {
+    path: '/patient-registration',
+    name: 'PatientRegistration',
+    component: () => import('@/pages/PatientRegistration.vue'),
+    meta: {
+      layout: 'AuthLayout'
+    }
+  },
+  {
     path: '/email-verification',
     name: 'EmailVerification',
     component: () => import('@/pages/EmailVerification.vue'),

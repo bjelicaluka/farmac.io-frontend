@@ -12,5 +12,6 @@ export function validatePassword(password) {
 
 // Minimum three characters
 export function validateText(text) {
-  return !!(text && (text.length >= 3));
+  const re = /^[A-Za-z\s]+$/;
+  return !!(text) && re.test(String(text));
 }

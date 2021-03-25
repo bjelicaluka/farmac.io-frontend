@@ -24,12 +24,17 @@
 
         <Button>Sign In</Button>
 
-        <p class="text-right">
-            <router-link to="/forgot-password">Forgot password</router-link>
-        </p>
-        <p class="text-right">
-            <router-link to="/email-verification">Email verification</router-link>
-        </p>
+        <div class="row mt-4">
+            <p class="text-left col-4">
+                <router-link to="/patient-registration">Registration</router-link>
+            </p>
+            <p class="text-center col-4">
+                <router-link to="/forgot-password">Forgot password</router-link>
+            </p>
+            <p class="text-right col-4">
+                <router-link to="/email-verification">Email verification</router-link>
+            </p>
+        </div>
     </Form>
 </template>
 
