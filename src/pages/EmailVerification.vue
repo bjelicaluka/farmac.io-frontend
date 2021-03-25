@@ -1,8 +1,7 @@
 <template>
 
     <card title="Email verification">
-        <EmailValidationForm>
-        </EmailValidationForm>
+        <EmailValidationForm />
     </card>
 
 </template>
@@ -22,14 +21,14 @@ export default {
     },
 
     methods: {
-        ...mapActions({tryToVerifyEmail: 'tryToVerifyEmail'})
+        ...mapActions({tryToVerifyEmail: 'emailVerification/tryToVerifyEmail'})
     },
     
     computed: {
-        ...mapGetters([
-            'getGetVerificationEmailResponse',
-            'getVerifyEmailResponse'
-        ])
+        ...mapGetters({
+            getGetVerificationEmailResponse: 'emailVerification/getGetVerificationEmailResponse',
+            getVerifyEmailResponse: 'emailVerification/getVerifyEmailResponse'
+        })
     },
 
     watch: {

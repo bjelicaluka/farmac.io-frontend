@@ -41,7 +41,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions({getVerificationEmail: 'getVerificationEmail'}),
+        ...mapActions({getVerificationEmail: 'emailVerification/getVerificationEmail'}),
 
         handleGetVerificationEmail: function() {
             this.getVerificationEmail(this.email);
