@@ -9,6 +9,7 @@
             :isValid="validateText(account.username)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid username."
+            :disabled="isEdit"
           />
         </div>
         <div class="col-6">
@@ -18,17 +19,18 @@
             :isValid="validateEmail(account.email)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid email."
+            :disabled="isEdit"
           />
         </div>
       </form-row>
-      <form-row>
+      <form-row v-if="!isEdit">
         <div class="col-6">
           <text-input
             label="Password"
             v-model="account.password"
             :isValid="validatePassword(account.password)"
             :showErrorMessage="showErrorMessage"
-            errorMessage="Please insert valid password."
+            errorMessage="Password must have at least 8 characters, special character and a number."
             type="password"
           />
         </div>
@@ -67,11 +69,12 @@
         <div class="col-4">
           <date-time-picker
             v-model="user.dateOfBirth"
-            :isValid="!!user.dateOfBirth"
+            :isValid="validateDateOfBirth()"
             :showErrorMessage="showErrorMessage"
             label="Date of Birth"
-            errorMessage="Invalid date."
+            errorMessage="You must be at least 13 years old."
             type="date"
+            id="pharmacistDateOfBirth"
           />
         </div>
       </form-row>
@@ -80,7 +83,7 @@
           <text-input
             label="PID"
             v-model="user.pid"
-            :isValid="validateText(user.pid)"
+            :isValid="!!user.pid && user.pid.length === 13 && !isNaN(user.pid)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid PID."
           />
@@ -89,7 +92,7 @@
           <text-input
             label="Phone Number"
             v-model="user.phoneNumber"
-            :isValid="validateText(user.phoneNumber)"
+            :isValid="!!user.phoneNumber && !isNaN(user.phoneNumber)"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid phone number."
           />
@@ -153,22 +156,27 @@
         Please pick a location on the map.
       </InputErrorMessage>
     </form-group>
-    <button class="btn btn-primary pull-right" type="submit">Register</button>
+    <Button @click="showErrorMessage = true" type="submit">{{isEdit ? 'Update' : 'Register'}}</Button>
   </Form>
 </template>
 
 <script>
+import moment from 'moment';
+import {mapActions, mapGetters} from 'vuex';
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
+import Form from '../Form/Form.vue'
 import TextInput from '../Form/TextInput.vue'
 import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
-import { validateText, validateEmail, validatePassword } from '../../utils/validation'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
+import { validateText, validateEmail, validatePassword } from '../../utils/validation'
+import Button from '../Form/Button.vue';
+import toastr from 'toastr';
 
 export default {
-  components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage },
+  components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Form, Button },
   props: {
     isEdit: {
       type: Boolean,
@@ -195,6 +203,7 @@ export default {
         dateOfBirth: null,
         pid: null,
         phoneNumber: null,
+        pharmacyId: null,
         address: {
           lat: null,
           lng: null,
@@ -208,21 +217,58 @@ export default {
       showErrorMessage: false,
     }
   },
+  computed: {
+    ...mapGetters({
+      result: 'pharmacist/getResult'
+    })
+  },
+  watch: {
+    result({ok, message}) {
+      if(ok) {
+        toastr.success(message);
+      } else {
+        toastr.error(message);
+      }
+    }
+  },
   mounted() {
     if(this.isEdit) {
       this.account = this.existingAccount;
       this.account.confirmPassword = this.existingAccount.password;
       this.user = this.existingUser;
+      this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
+      this.user.pharmacyId = '08d8ef95-ec90-4a19-8bb3-2e37ea275133'
     }
   },
   methods: {
-    onMapClick(e) {
-      this.user.address.lat = e.latlng.lat;
-      this.user.address.lng = e.latlng.lng;
-    },
+    ...mapActions({
+      addPharmacist: 'pharmacist/addPharmacist',
+      updatePharmacist: 'pharmacist/updatePharmacist',
+    }),
+
     onSubmit(e) {
       e.preventDefault();
       this.showErrorMessage = true;
+      const pharmacistObject = {
+        account: {
+          ...this.account
+        },
+        user: {
+          ...this.user
+        }
+      };
+
+      if(!this.isEdit) {
+        pharmacistObject.account.id = this.existingAccount.id;
+        pharmacistObject.user.id = this.existingUser.id;
+        this.addPharmacist(pharmacistObject);
+      } else {
+        this.updatePharmacist(pharmacistObject);
+      }
+    },
+    onMapClick(e) {
+      this.user.address.lat = e.latlng.lat;
+      this.user.address.lng = e.latlng.lng;
     },
     validateText(text) {
       return validateText(text);
@@ -232,6 +278,9 @@ export default {
     },
     validatePassword(password) {
       return validatePassword(password);
+    },
+    validateDateOfBirth() {
+      return !!this.user.dateOfBirth && moment().diff(this.user.dateOfBirth, 'years', false) >= 13;
     }
   }
 }

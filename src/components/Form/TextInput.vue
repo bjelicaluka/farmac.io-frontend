@@ -7,6 +7,7 @@
           class="form-control"
           v-bind:value="value"
           v-on:input="$emit('input', $event.target.value)"
+          :disabled="disabled"
         >
     </div>
     <InputErrorMessage
@@ -40,6 +41,10 @@ export default {
     isValid: {
       type: Boolean,
       default: true
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     showErrorMessage: {
       type: Boolean,

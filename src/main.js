@@ -11,7 +11,7 @@ import 'leaflet/dist/leaflet.css';
 
 fixLeafletIcons();
 
-axios.defaults.baseURL = process.env.BASEURL || 'https://localhost:5001/'
+axios.defaults.baseURL = process.env.VUE_APP_BASEURL
 
 Vue.component('AppLayout', AppLayout)
 
