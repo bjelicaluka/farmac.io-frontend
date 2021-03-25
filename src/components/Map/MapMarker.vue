@@ -17,14 +17,23 @@ export default {
     }
   },
   props: {
-    position: {}
+    lat: {
+      type: Number
+    },
+    lng: {
+      type: Number
+    }
   },
   components: {
     LMarker,
     LPopup,
   },
   mounted() {
-    this.latlng = latLng(this.position[0], this.position[1]);
+    this.latlng = latLng(this.lat, this.lng);
+  },
+  updated() {
+    if(this.lat !== this.latlng?.lat || this.lng !== this.latlng?.lng)
+      this.latlng = latLng(this.lat, this.lng);
   }
 }
 </script>
