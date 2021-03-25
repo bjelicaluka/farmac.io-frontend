@@ -4,6 +4,7 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Pharmacies" icon="home" to="/pharmacies"></sidebar-item>
         </ul>
       </div>
     </div>

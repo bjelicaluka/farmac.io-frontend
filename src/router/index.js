@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../pages/Home.vue'
 import About from '../pages/About.vue';
+import Pharmacy from '../pages/Pharmacy.vue'
+import Pharmacies from '../pages/Pharmacies.vue'
 import Example from '../components/Table/Example.vue'
 
 Vue.use(VueRouter)
@@ -43,8 +45,26 @@ const routes = [
     meta: {
       layout: 'AuthLayout'
     }
+  },
+  {
+    path: '/pharmacies',
+    name: 'Pharmacies',
+    component: Pharmacies,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/pharmacies/:id',
+    name: 'Pharmacy',
+    component: Pharmacy,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
   }
 ]
+    
+
 
 const router = new VueRouter({
   mode: 'history',

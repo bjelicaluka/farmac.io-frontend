@@ -5,7 +5,7 @@
                 No
             </Button>
         </ModalCloser>
-        
+
         <ModalCloser>
             <Button @click="emitYes">
                 Yes
@@ -26,6 +26,7 @@ export default {
     },
     methods: {
         emitYes(e) {
+            e.preventDefault();
             this.$emit('yes', e);
         }
     }
