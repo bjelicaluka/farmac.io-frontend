@@ -33,13 +33,13 @@ export default {
     methods: {
         ...mapActions({
             fetchPharmacy: 'pharmacies/getPharmacyById',
-            fetchPharmacists: 'pharmacist/fetchPharmacists'
+            fetchPharmacyPharmacists: 'pharmacist/fetchPharmacyPharmacists'
         }),
     },
     mounted() {
         const id = this.$route.params.id;
         this.fetchPharmacy(id);
-        this.fetchPharmacists();
+        this.fetchPharmacyPharmacists(id);
     }
 }
 </script>

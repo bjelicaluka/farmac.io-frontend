@@ -31,6 +31,24 @@ const actions = {
             context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    fetchPharmacyPharmacists: (context, pharmacyId) => {
+        axios.get(`/pharmacies/${pharmacyId}/pharmacists`)
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchPharmacyPharmacistById: (context, {pharmacyId, pharmacistId}) => {
+        axios.get(`/pharmacies/${pharmacyId}/pharmacist/${pharmacistId}`)
+        .then(resp => {
+            context.commit('setPharmacist', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     addPharmacist: (context, pharmacist) => {
         axios.post(`/pharmacists`, pharmacist)
         .then(resp => {
