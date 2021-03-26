@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacists employees.`">
-                <PharmacistsTable :pharmacists="pharmacists" />
+                <PharmacistsTable @search="handleSearch" :pharmacists="pharmacists" />
             </Card>
         </div> 
     </div>
@@ -25,23 +25,21 @@ export default {
             pharmacists: 'pharmacist/getPharmacists'
         }),
     },
-    watch: {
-        pharmacists(v) {
-            console.log(v)
-        }
-    },
     methods: {
         ...mapActions({
             fetchPharmacy: 'pharmacies/getPharmacyById',
             fetchPharmacyPharmacists: 'pharmacist/fetchPharmacyPharmacists',
             searchPharmacyPharmacists: 'pharmacist/searchPharmacyPharmacistsByName',
         }),
+        handleSearch(name) {
+            const pharmacyId = this.$route.params.id;
+            this.searchPharmacyPharmacists({pharmacyId, name});
+        }
     },
     mounted() {
         const id = this.$route.params.id;
         this.fetchPharmacy(id);
-        // this.fetchPharmacyPharmacists(id);
-        this.searchPharmacyPharmacists({pharmacyId: id, name: 'lu'})
+        this.fetchPharmacyPharmacists(id);
     }
 }
 </script>
