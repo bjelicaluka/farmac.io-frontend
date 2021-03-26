@@ -4,7 +4,7 @@ import emailVerification from './modules/emailVerification';
 import patient from './modules/patient';
 import pharmacies from './modules/pharmacies';
 import pharmacist from './modules/pharmacist';
-
+import medicines from './modules/medicines'
 
 Vue.use(Vuex)
 
@@ -13,6 +13,7 @@ export default new Vuex.Store({
     pharmacies,
     patient,
     emailVerification,
-    pharmacist
+    pharmacist,
+    medicines
   }
 });

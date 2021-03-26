@@ -5,6 +5,7 @@ import About from '../pages/About.vue';
 import Pharmacy from '../pages/Pharmacy.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import Example from '../components/Table/Example.vue'
+import Medicines from '../pages/Medicines.vue'
 
 Vue.use(VueRouter)
 
@@ -58,6 +59,14 @@ const routes = [
     path: '/pharmacies/:id',
     name: 'Pharmacy',
     component: Pharmacy,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/medicines',
+    name: 'Medicines',
+    component: Medicines,
     meta: {
       layout: 'AppLayoutMain'
     }
