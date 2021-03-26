@@ -4,12 +4,12 @@
       <Search @search="handleSearch($event)" />
       <div class="row ml-auto">
         <ModalOpener modalBoxId="pharmacistModal">
-            <Button>Register Pharmacyst</Button>
+            <Button @click="handleRegisterClick">Register Pharmacyst</Button>
         </ModalOpener>
       </div>
     </div>
     <Table>
-        <TableHead :columnNames="['Username', 'Name', 'email', 'PID', 'Phone', 'Address', '']"></TableHead>
+        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Address', '']"></TableHead>
         <TableBody>
         <TableRow 
           v-for="p in pharmacists" 
@@ -105,6 +105,10 @@ export default {
     },
     handleSearch(value) {
       this.$emit('search', value);
+    },
+    handleRegisterClick() {
+      this.isEdit = false;
+      this.selectedPharmacist = null;
     },
     handleEditClick(pharmacist) {
       this.isEdit = true;
