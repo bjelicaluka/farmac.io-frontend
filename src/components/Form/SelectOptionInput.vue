@@ -6,6 +6,7 @@
                 @change="emitChange"
                 class="selectpicker form-control"
                 data-style="btn btn-primary btn-round"
+                :disabled="disabled"
             >
                 <option value='' selected>{{label}}</option>
                 <option v-for="(option, index) in options" :value="option.value" :key="index">{{option.label}}</option>
@@ -51,6 +52,10 @@ export default {
         errorMessage: {
             type: String,
             default: 'You have to select a valid option.'
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
 

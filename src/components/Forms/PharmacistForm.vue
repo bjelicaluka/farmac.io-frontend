@@ -6,9 +6,9 @@
           <text-input
             label="Username"
             v-model="account.username"
-            :isValid="validateText(account.username)"
+            :isValid="validateUsername(account.username)"
             :showErrorMessage="showErrorMessage"
-            errorMessage="Please insert valid username."
+            errorMessage="Username must be alphanumerical word."
             :disabled="isEdit"
           />
         </div>
@@ -171,7 +171,7 @@ import TextInput from '../Form/TextInput.vue'
 import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
-import { validateText, validateEmail, validatePassword } from '../../utils/validation'
+import { validateText, validateEmail, validatePassword, validateUsername } from '../../utils/validation'
 import Button from '../Form/Button.vue';
 import toastr from 'toastr';
 
@@ -296,6 +296,9 @@ export default {
     },
     validateDateOfBirth() {
       return !!this.user.dateOfBirth && moment().diff(this.user.dateOfBirth, 'years', false) >= 13;
+    },
+    validateUsername(username) {
+      return validateUsername(username);
     }
   }
 }

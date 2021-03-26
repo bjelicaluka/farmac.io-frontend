@@ -5,6 +5,7 @@
         <ul class="nav">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="home" to="/pharmacies"></sidebar-item>
+          <sidebar-item name="PharmacyAdmins" icon="home" to="/pharmacy-admins"></sidebar-item>
         </ul>
       </div>
     </div>

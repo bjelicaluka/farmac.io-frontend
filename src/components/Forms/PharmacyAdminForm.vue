@@ -98,6 +98,18 @@
           />
         </div>
       </form-row>
+        <SelectOptionInput 
+          label="Works in"
+          v-model="user.pharmacyId"
+          :options="pharmacies"
+          :isValid="!!user.pharmacyId"
+          :showErrorMessage="showErrorMessage"
+          errorMessage="Please select valid option"
+          :disabled="isEdit"
+        />
+      <form-row>
+
+      </form-row>
     </form-group>
     <form-group :title="'Address'">
       <form-row>
@@ -156,18 +168,14 @@
         Please pick a location on the map.
       </InputErrorMessage>
     </form-group>
-    <Button @click="showErrorMessage = true" type="submit">{{isEdit ? 'Update' : 'Register'}}</Button>
-
-    <p v-if="!isEdit" class="text-right">
-        <router-link to="/auth">Login page</router-link>
-    </p>
+    <Button class="pull-right" @click="showErrorMessage = true" type="submit">{{isEdit ? 'Update' : 'Register'}}</Button>
 
   </Form>
 </template>
 
 <script>
 import moment from 'moment';
-import {mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
@@ -178,9 +186,12 @@ import MapMarker from '../Map/MapMarker.vue'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
 import { validateText, validateEmail, validatePassword, validateUsername } from '../../utils/validation'
 import Button from '../Form/Button.vue';
+import SelectOptionInput from '../Form/SelectOptionInput'
+
+const $ = window.$;
 
 export default {
-  components: { Form, FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Button },
+  components: { Form, FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Button, SelectOptionInput },
   props: {
     isEdit: {
       type: Boolean,
@@ -202,6 +213,7 @@ export default {
         password: null,
         confirmPassword: null,
       },
+      
       user: {
         firstName: null,
         lastName: null,
@@ -215,21 +227,66 @@ export default {
           city: null,
           streetName: null,
           streetNumber: null,
-        }
+        },
+        pharmacyId: null
       },
-      
+
+      pharmacies: [],
+
       showErrorMessage: false,
+    }
+  },
+
+  computed: {
+    ...mapGetters({getPharmacies: 'pharmacies/getPharmacies'}),
+
+  },
+
+  watch: {
+    getPharmacies(pharmacies) {
+      this.pharmacies = [ ...pharmacies.map(p => { return { value: p.id, label: p.name }; } ) ];
+      this.$nextTick(function() { $('.selectpicker').selectpicker('refresh'); })
+    },
+    isEdit() {
+      this.setEdit();
+    },
+    existingAccount() {
+      this.setEdit();
+    },
+    existingUser() {
+      this.setEdit();
     }
   },
 
   methods: {
     ...mapActions({
-      addPatient: 'patient/addPatient',
-      updatePatient: 'patient/updatePatient',
+      fetchPharmacies: 'pharmacies/getPharmacies',
+      addPharmacyAdmin: 'pharmacyAdmins/addPharmacyAdmin',
+      updatePharmacyAdmin: 'pharmacyAdmins/updatePharmacyAdmin',
     }),
+
+    setEdit() {
+      
+      if(!this.isEdit)
+        return;
+      
+      if(this.existingAccount) {
+        this.account = this.existingAccount;
+        this.account.confirmPassword = this.existingAccount.password;
+      }
+      if(this.existingUser) {
+        this.user = this.existingUser;
+        this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
+        this.user.pharmacyId = this.existingUser.pharmacyId;
+        this.$nextTick(function() { $('.selectpicker').val(this.user.pharmacyId) });
+        const pharmacyName = this.pharmacies.filter(p => { return p.value === this.user.pharmacyId })[0].label;
+        this.$nextTick(function() { $('.filter-option-inner-inner').text(pharmacyName) });
+      }
+    },
+
     onSubmit(e) {
       e.preventDefault();
-      const patientObject = {
+      const pharmacyAdminObject = {
         account: {
           ...this.account
         },
@@ -238,9 +295,9 @@ export default {
         }
       };
       if(!this.isEdit) {
-        this.addPatient(patientObject);
+        this.addPharmacyAdmin(pharmacyAdminObject);
       } else {
-        this.updatePatient({patientObject, id: this.existingAccount.id});
+        this.updatePharmacyAdmin(pharmacyAdminObject);
       }
     },
     onMapClick(e) {
@@ -264,13 +321,9 @@ export default {
     }
   },
 
-  mounted() {
-    if(this.isEdit) {
-      this.account = this.existingAccount;
-      this.account.confirmPassword = this.existingAccount.password;
-      this.user = this.existingUser;
-      this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
-    }
+  created() {
+    this.fetchPharmacies();
+    
   }
 }
 </script>

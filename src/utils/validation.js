@@ -15,3 +15,8 @@ export function validateText(text) {
   const re = /^[A-Za-z\s]+$/;
   return !!(text) && re.test(String(text));
 }
+
+export function validateUsername(username) {
+  const re = /^[a-zA-Z0-9]+$/;
+  return !!(username) && re.test(String(username));
+} 

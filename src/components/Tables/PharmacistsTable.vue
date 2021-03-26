@@ -13,7 +13,7 @@
         >
           <div class="pull-right text-gray">
             <drop-down-menu name="Account" icon="person">
-              <modal-opener :modalBoxId="'editPharmacistModal'">
+              <modal-opener :modalBoxId="'pharmacistModal'">
                 <drop-down-item @click="handleEditClick(p)">Edit</drop-down-item>
               </modal-opener>
               <modal-opener :modalBoxId="'deletePharmacistModal'">
