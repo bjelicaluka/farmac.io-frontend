@@ -49,6 +49,24 @@ const actions = {
             context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    searchPharmacistsByName: (context, name) => {
+        axios.get(`/pharmacists/search?name=${name}`)
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    searchPharmacyPharmacistsByName: (context, {pharmacyId, name}) => {
+        axios.get(`/pharmacies/${pharmacyId}/pharmacists/search?name=${name}`)
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     addPharmacist: (context, pharmacist) => {
         axios.post(`/pharmacists`, pharmacist)
         .then(resp => {

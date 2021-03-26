@@ -33,13 +33,15 @@ export default {
     methods: {
         ...mapActions({
             fetchPharmacy: 'pharmacies/getPharmacyById',
-            fetchPharmacyPharmacists: 'pharmacist/fetchPharmacyPharmacists'
+            fetchPharmacyPharmacists: 'pharmacist/fetchPharmacyPharmacists',
+            searchPharmacyPharmacists: 'pharmacist/searchPharmacyPharmacistsByName',
         }),
     },
     mounted() {
         const id = this.$route.params.id;
         this.fetchPharmacy(id);
-        this.fetchPharmacyPharmacists(id);
+        // this.fetchPharmacyPharmacists(id);
+        this.searchPharmacyPharmacists({pharmacyId: id, name: 'lu'})
     }
 }
 </script>
