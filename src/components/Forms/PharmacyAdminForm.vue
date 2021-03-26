@@ -190,6 +190,30 @@ import SelectOptionInput from '../Form/SelectOptionInput'
 
 const $ = window.$;
 
+const initialAccount = {
+  username: null,
+  email: null,
+  password: null,
+  confirmPassword: null,
+}
+
+const initialUser = {
+  firstName: null,
+  lastName: null,
+  dateOfBirth: null,
+  pid: null,
+  phoneNumber: null,
+  address: {
+    lat: null,
+    lng: null,
+    state: null,
+    city: null,
+    streetName: null,
+    streetNumber: null,
+  },
+  pharmacyId: ''
+};
+
 export default {
   components: { Form, FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Button, SelectOptionInput },
   props: {
@@ -207,29 +231,9 @@ export default {
 
   data: () => {
     return {
-      account: {
-        username: null,
-        email: null,
-        password: null,
-        confirmPassword: null,
-      },
+      account: {...initialAccount},
       
-      user: {
-        firstName: null,
-        lastName: null,
-        dateOfBirth: null,
-        pid: null,
-        phoneNumber: null,
-        address: {
-          lat: null,
-          lng: null,
-          state: null,
-          city: null,
-          streetName: null,
-          streetNumber: null,
-        },
-        pharmacyId: null
-      },
+      user: {...initialUser},
 
       pharmacies: [],
 
@@ -267,17 +271,22 @@ export default {
 
     setEdit() {
       
-      if(!this.isEdit)
+      if(!this.isEdit) {
+        $('.filter-option-inner-inner').text($('.selectpicker').find('option')[0].outerText);
+        this.account = {...initialAccount};
+        this.user = {...initialUser};
         return;
+      }
       
       if(this.existingAccount) {
         this.account = this.existingAccount;
         this.account.confirmPassword = this.existingAccount.password;
       }
       if(this.existingUser) {
-        this.user = this.existingUser;
-        this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
-        this.user.pharmacyId = this.existingUser.pharmacyId;
+        this.user = {
+          ...this.existingUser,
+          dateOfBirth: moment(this.existingUser.dateOfBirth).toDate()
+        };
         this.$nextTick(function() { $('.selectpicker').val(this.user.pharmacyId) });
         const pharmacyName = this.pharmacies.filter(p => { return p.value === this.user.pharmacyId })[0].label;
         this.$nextTick(function() { $('.filter-option-inner-inner').text(pharmacyName) });

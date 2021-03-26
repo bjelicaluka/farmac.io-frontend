@@ -41,7 +41,6 @@
                     :isEdit="isEdit"
                     :existingAccount="selectedPharmacyAdmin"
                     :existingUser="selectedPharmacyAdmin && selectedPharmacyAdmin.user"
-
                 />        
             </div>
         </Modal>
