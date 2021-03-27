@@ -39,6 +39,7 @@
           :isEdit="isEdit"
           :existingAccount="selectedPharmacist"
           :existingUser="selectedPharmacist && selectedPharmacist.user"
+          :pharmacyId="pharmacyId"
         />
       </div>
     </Modal>
@@ -87,7 +88,7 @@ export default {
     Button,
     Search,
   },
-  props: ['pharmacists'],
+  props: ['pharmacists', 'pharmacyId'],
   data() {
     return {
       selectedPharmacist: null,

@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacists employees.`">
-                <PharmacistsTable @search="handleSearch" :pharmacists="pharmacists" />
+                <PharmacistsTable @search="handleSearch" :pharmacists="pharmacists" :pharmacyId="$route.params.id" />
             </Card>
         </div> 
     </div>
@@ -22,8 +22,17 @@ export default {
     computed: {
         ...mapGetters({
             pharmacy: 'pharmacies/getPharmacy',
-            pharmacists: 'pharmacist/getPharmacists'
+            pharmacists: 'pharmacist/getPharmacists',
+            pharmacistResult: 'pharmacist/getResult'
         }),
+    },
+    watch: {
+        pharmacistResult({ok}) {
+            const pharmacyId = this.$route.params.id;
+            if(ok) {
+                this.fetchPharmacyPharmacists(pharmacyId);
+            } 
+        },
     },
     methods: {
         ...mapActions({
@@ -37,9 +46,9 @@ export default {
         }
     },
     mounted() {
-        const id = this.$route.params.id;
-        this.fetchPharmacy(id);
-        this.fetchPharmacyPharmacists(id);
+        const pharmacyId = this.$route.params.id;
+        this.fetchPharmacy(pharmacyId);
+        this.fetchPharmacyPharmacists(pharmacyId);
     }
 }
 </script>

@@ -6,7 +6,7 @@
           <text-input
             label="Username"
             v-model="account.username"
-            :isValid="validateText(account.username)"
+            :isValid="true"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid username."
             :disabled="isEdit"
@@ -212,6 +212,9 @@ export default {
     existingUser: {
       type: Object
     },
+    pharmacyId: {
+      type: String
+    }
   },
   data: () => {
     return {
@@ -265,6 +268,7 @@ export default {
       };
 
       if(!this.isEdit) {
+        pharmacistObject.user.pharmacyId = this.pharmacyId;
         this.addPharmacist(pharmacistObject);
       } else {
         this.updatePharmacist(pharmacistObject);
