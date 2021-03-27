@@ -67,6 +67,24 @@ const actions = {
             context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    addDermatologistToPharmacy: (context, {dermatologistId, pharmacyId, workTime}) => {
+        axios.post(`/pharmacy/${pharmacyId}/dermatologists/${dermatologistId}`, workTime)
+        .then(resp => {
+            context.commit('setResult', {ok: true, message: "Successfully added dermatologist to pharmacy."});
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    removeDermatologistFromPharmacy: (context, {dermatologistId, pharmacyId}) => {
+        axios.delete(`/pharmacy/${pharmacyId}/dermatologists/${dermatologistId}`)
+        .then(resp => {
+            context.commit('setResult', {ok: true, message: "Successfully removed dermatologist from pharmacy."});
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     addDermatologist: (context, dermatologist) => {
         axios.post(`/dermatologists`, dermatologist)
         .then(resp => {

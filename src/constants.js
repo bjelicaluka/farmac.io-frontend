@@ -1,7 +1,6 @@
-const Roles = {
+export const Roles = {
     Patient: "Patient",
     Pharmacist: "Pharmacist",
-    Dermatologist: "Dermatologist"
+    Dermatologist: "Dermatologist",
+    PharmacyAdmin: 'PharmacyAdmin'
 }
-
-export default Roles

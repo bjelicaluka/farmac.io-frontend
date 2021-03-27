@@ -22,6 +22,7 @@
         <ul class="nav" v-else>
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="home" to="/pharmacies"></sidebar-item>
+          <sidebar-item name="Dermatologists" icon="accessibility" to="/dermatologists"></sidebar-item>
         </ul>
       </div>
     </div>
@@ -30,7 +31,7 @@
 <script>
 import SidebarItem from './SidebarItem.vue'
 import SidebarLogo from './SidebarLogo.vue'
-import Roles from '../../constants.js'
+import {Roles} from '../../constants.js'
 
 export default {
   data: () => {
