@@ -1,7 +1,7 @@
 <template>
   <div>
     <header/>
-    <sidebar></sidebar>
+    <sidebar role=""></sidebar>
     <main-wrapper>
       <navbar></navbar>
       <slot />
@@ -9,7 +9,6 @@
         <p style="text-align:center;">&#169; 2021 Jole i kompanija(JIK)</p>
       </Footer>
     </main-wrapper>
-   
   </div>
 </template>
 

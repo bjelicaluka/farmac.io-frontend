@@ -21,11 +21,6 @@ const routes = [
     component: () => import('@/pages/About.vue'),
   },
   {
-    path: '/pharmacisthome',
-    name: 'PharmacistHome',
-    component: () => import('@/pages/PharmacistHome.vue'),
-  },
-  {
     path: '/auth',
     name: 'Auth',
     component: () => import('@/pages/Auth.vue'),
