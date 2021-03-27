@@ -13,21 +13,55 @@ const getters = {
 };
 
 const actions = {
-    getPharmacists: (context) => {
+    fetchPharmacists: (context) => {
         axios.get(`/pharmacists`)
         .then(resp => {
             context.commit('setPharmacists', resp.data);
-            context.commit('setResult', {ok: true, message: "Success"});
         })
         .catch(err => {
             context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    getPharmacistById: (context, id) => {
+    fetchPharmacistById: (context, id) => {
         axios.get(`/pharmacist/${id}`)
         .then(resp => {
             context.commit('setPharmacist', resp.data);
-            context.commit('setResult', {ok: true, message: "Success"});
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchPharmacyPharmacists: (context, pharmacyId) => {
+        axios.get(`/pharmacies/${pharmacyId}/pharmacists`)
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchPharmacyPharmacistById: (context, {pharmacyId, pharmacistId}) => {
+        axios.get(`/pharmacies/${pharmacyId}/pharmacist/${pharmacistId}`)
+        .then(resp => {
+            context.commit('setPharmacist', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    searchPharmacistsByName: (context, name) => {
+        axios.get(`/pharmacists/search?name=${name}`)
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    searchPharmacyPharmacistsByName: (context, {pharmacyId, name}) => {
+        axios.get(`/pharmacies/${pharmacyId}/pharmacists/search?name=${name}`)
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});

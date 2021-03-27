@@ -175,6 +175,30 @@ import { validateText, validateEmail, validatePassword } from '../../utils/valid
 import Button from '../Form/Button.vue';
 import toastr from 'toastr';
 
+const initialUser = {
+  firstName: null,
+  lastName: null,
+  dateOfBirth: null,
+  pid: null,
+  phoneNumber: null,
+  pharmacyId: null,
+  address: {
+    lat: null,
+    lng: null,
+    state: null,
+    city: null,
+    streetName: null,
+    streetNumber: null,
+  }
+};
+
+const initialAccount = {
+  username: null,
+  email: null,
+  password: null,
+  confirmPassword: null,
+}
+
 export default {
   components: { FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Form, Button },
   props: {
@@ -191,28 +215,8 @@ export default {
   },
   data: () => {
     return {
-      account: {
-        username: null,
-        email: null,
-        password: null,
-        confirmPassword: null,
-      },
-      user: {
-        firstName: null,
-        lastName: null,
-        dateOfBirth: null,
-        pid: null,
-        phoneNumber: null,
-        pharmacyId: null,
-        address: {
-          lat: null,
-          lng: null,
-          state: null,
-          city: null,
-          streetName: null,
-          streetNumber: null,
-        }
-      },
+      account: {...initialAccount},
+      user: {...initialUser},
       
       showErrorMessage: false,
     }
@@ -229,23 +233,25 @@ export default {
       } else {
         toastr.error(message);
       }
+    },
+    isEdit() {
+      this.setEdit();
+    },
+    existingAccount() {
+      this.setEdit();
+    },
+    existingUser() {
+      this.setEdit();
     }
   },
   mounted() {
-    if(this.isEdit) {
-      this.account = this.existingAccount;
-      this.account.confirmPassword = this.existingAccount.password;
-      this.user = this.existingUser;
-      this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
-      this.user.pharmacyId = '08d8ef95-ec90-4a19-8bb3-2e37ea275133'
-    }
+    this.setEdit();
   },
   methods: {
     ...mapActions({
       addPharmacist: 'pharmacist/addPharmacist',
       updatePharmacist: 'pharmacist/updatePharmacist',
     }),
-
     onSubmit(e) {
       e.preventDefault();
       this.showErrorMessage = true;
@@ -259,11 +265,25 @@ export default {
       };
 
       if(!this.isEdit) {
-        pharmacistObject.account.id = this.existingAccount.id;
-        pharmacistObject.user.id = this.existingUser.id;
         this.addPharmacist(pharmacistObject);
       } else {
         this.updatePharmacist(pharmacistObject);
+      }
+    },
+    setEdit() {
+      if(!this.isEdit) {
+        this.account = {...initialAccount};
+        this.user = {...initialUser};
+        return;
+      }
+
+      if(this.existingAccount) {
+        this.account = this.existingAccount;
+        this.account.confirmPassword = this.existingAccount.password;
+      }
+      if(this.existingUser) {
+        this.user = this.existingUser;
+        this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
       }
     },
     onMapClick(e) {
