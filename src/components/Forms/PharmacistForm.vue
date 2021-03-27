@@ -274,6 +274,7 @@ export default {
       if(!this.isEdit) {
         this.account = {...initialAccount};
         this.user = {...initialUser};
+        return;
       }
 
       if(this.existingAccount) {
@@ -283,7 +284,6 @@ export default {
       if(this.existingUser) {
         this.user = this.existingUser;
         this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
-        this.user.pharmacyId = '08d8ef95-ec90-4a19-8bb3-2e37ea275133'
       }
     },
     onMapClick(e) {
