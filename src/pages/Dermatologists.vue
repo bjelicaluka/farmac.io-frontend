@@ -30,11 +30,12 @@ export default {
     },
     watch: {
         result({label, ok, message}) {
-            if(ok && label === 'removeFromPharmacy' || label === 'addToPharmacy') {
-                toastr.success(message);
-                this.searchName ? this.searchDermatologistsByName(this.searchName) : this.fetchDermatologists();
-            } else if(!ok && label === 'removeFromPharmacy' || label === 'addToPharmacy') {
-                toastr.success(message);
+            if(label === 'removeFromPharmacy' || label === 'addToPharmacy') {
+                if(ok) {
+                    toastr.success(message);
+                } else if(!ok) {
+                    toastr.error(message);
+                }
                 this.searchName ? this.searchDermatologistsByName(this.searchName) : this.fetchDermatologists();
             }
         }
