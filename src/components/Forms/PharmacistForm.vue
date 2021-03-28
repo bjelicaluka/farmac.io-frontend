@@ -212,6 +212,9 @@ export default {
     existingUser: {
       type: Object
     },
+    pharmacyId: {
+      type: String,
+    }
   },
   data: () => {
     return {
@@ -227,11 +230,13 @@ export default {
     })
   },
   watch: {
-    result({ok, message}) {
-      if(ok) {
-        toastr.success(message);
-      } else {
-        toastr.error(message);
+    result({label, ok, message}) {
+      if(label === 'add' || label === 'update') {
+        if(ok) {
+          toastr.success(message);
+        } else {
+          toastr.error(message);
+        }
       }
     },
     isEdit() {
@@ -242,6 +247,9 @@ export default {
     },
     existingUser() {
       this.setEdit();
+    },
+    pharmacyId() {
+      this.user.pharmacyId = this.pharmacyId;
     }
   },
   mounted() {
@@ -273,7 +281,7 @@ export default {
     setEdit() {
       if(!this.isEdit) {
         this.account = {...initialAccount};
-        this.user = {...initialUser};
+        this.user = {...initialUser, pharmacyId: this.pharmacyId};
         return;
       }
 

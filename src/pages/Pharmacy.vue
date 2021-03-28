@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacist employees.`">
-                <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" />
+                <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :pharmacyId="pharmacyId" />
             </Card>
             <Card title='Dermatologists' :description="`${pharmacy && pharmacy.name}'s dermatologist employees.`">
                 <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :pharmacyId="pharmacyId" />
@@ -24,13 +24,15 @@ export default {
     data: () => {
         return {
             pharmacyId: null,
-            dermatologistSearchName: null
+            dermatologistSearchName: null,
+            pharmacistSearchName: null
         }
     },
     computed: {
         ...mapGetters({
             pharmacy: 'pharmacies/getPharmacy',
             pharmacists: 'pharmacist/getPharmacists',
+            pharmacistResult: 'pharmacist/getResult',
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
         }),
@@ -40,15 +42,23 @@ export default {
             if(label === 'removeFromPharmacy') {
                 if(ok) {
                     toastr.success(message);
-                } else if(!ok) {
+                } else {
                     toastr.error(message);
                 }
                 this.dermatologistSearchName ? 
-                    this.searchPharmacyDermatologists({pharmacyId: this.pharmacyId, name: this.dermatologistSearchName})
+                    this.handleSearchDermatologists(this.dermatologistSearchName)
                     :
                     this.fetchPharmacyDermatologists(this.pharmacyId);
             }
-        }
+        },
+        pharmacistResult({label}) {
+            if(label === 'delete' || label === 'add') {
+                this.pharmacistSearchName ? 
+                    this.handleSearchPharmacists(this.pharmacistSearchName)
+                    :
+                    this.fetchPharmacyPharmacists(this.pharmacyId);
+            }
+        },
     },
     methods: {
         ...mapActions({
@@ -59,6 +69,7 @@ export default {
             searchPharmacyDermatologists: 'dermatologist/searchPharmacyDermatologistsByName',
         }),
         handleSearchPharmacists(name) {
+            this.pharmacistSearchName = name;
             this.searchPharmacyPharmacists({pharmacyId: this.pharmacyId, name});
         },
         handleSearchDermatologists(name) {

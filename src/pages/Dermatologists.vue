@@ -33,10 +33,10 @@ export default {
             if(label === 'removeFromPharmacy' || label === 'addToPharmacy') {
                 if(ok) {
                     toastr.success(message);
-                } else if(!ok) {
+                } else {
                     toastr.error(message);
                 }
-                this.searchName ? this.searchDermatologistsByName(this.searchName) : this.fetchDermatologists();
+                this.searchName ? this.handleSearchDermatologists(this.searchName) : this.fetchDermatologists();
             }
         }
     },
