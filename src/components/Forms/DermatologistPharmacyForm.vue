@@ -60,20 +60,6 @@ export default {
       showErrorMessage: false,
     }
   },
-  computed: {
-    ...mapGetters({
-      result: 'dermatologist/getResult'
-    })
-  },
-  watch: {
-    result({ok, message}) {
-      if(ok) {
-        toastr.success(message);
-      } else {
-        toastr.error(message);
-      }
-    },
-  },
   methods: {
     ...mapActions({
       addDermatologistToPharmacy: 'dermatologist/addDermatologistToPharmacy',

@@ -57,7 +57,7 @@
       </div>
 
       <div slot="buttons">
-        <OptionModalButtons @yes="onDeleteSubmit"/>
+        <OptionModalButtons @yes="onRemoveFromPharmacySubmit"/>
       </div>
     </Modal>
   </div>
@@ -73,7 +73,7 @@ import DropDownItem from '../DropdownMenu/DropdownItem'
 import ModalOpener from '../Modal/ModalOpener.vue'
 import Modal from '../Modal/Modal.vue'
 import OptionModalButtons from '../Modal/OptionModalButtons.vue'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import Search from '../Search/Search.vue'
 import DermatologistPharmacyForm from '../Forms/DermatologistPharmacyForm.vue'
 import {Roles} from '../../constants';

@@ -19,7 +19,7 @@ const actions = {
             context.commit('setDermatologists', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     fetchDermatologistById: (context, id) => {
@@ -28,7 +28,7 @@ const actions = {
             context.commit('setDermatologist', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     fetchPharmacyDermatologists: (context, pharmacyId) => {
@@ -37,7 +37,7 @@ const actions = {
             context.commit('setDermatologists', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     fetchPharmacyDermatologistById: (context, {pharmacyId, dermatologistId}) => {
@@ -46,7 +46,7 @@ const actions = {
             context.commit('setDermatologist', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     searchDermatologistsByName: (context, name) => {
@@ -55,7 +55,7 @@ const actions = {
             context.commit('setDermatologists', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     searchPharmacyDermatologistsByName: (context, {pharmacyId, name}) => {
@@ -64,52 +64,53 @@ const actions = {
             context.commit('setDermatologists', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     addDermatologistToPharmacy: (context, {dermatologistId, pharmacyId, workTime}) => {
-        axios.post(`/pharmacy/${pharmacyId}/dermatologists/${dermatologistId}`, workTime)
+        axios.post(`/pharmacies/${pharmacyId}/dermatologists/${dermatologistId}`, workTime)
         .then(resp => {
-            context.commit('setResult', {ok: true, message: "Successfully added dermatologist to pharmacy."});
+            context.commit('setResult', {label: 'addToPharmacy', ok: true, message: "Successfully added dermatologist to pharmacy."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'addToPharmacy', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     removeDermatologistFromPharmacy: (context, {dermatologistId, pharmacyId}) => {
-        axios.delete(`/pharmacy/${pharmacyId}/dermatologists/${dermatologistId}`)
+        axios.delete(`/pharmacies/${pharmacyId}/dermatologists/${dermatologistId}`)
         .then(resp => {
-            context.commit('setResult', {ok: true, message: "Successfully removed dermatologist from pharmacy."});
+            context.commit('setResult', {label: 'removeFromPharmacy', ok: true, message: "Successfully removed dermatologist from pharmacy."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            console.log(err)
+            context.commit('setResult', {label: 'removeFromPharmacy', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     addDermatologist: (context, dermatologist) => {
         axios.post(`/dermatologists`, dermatologist)
         .then(resp => {
-            context.commit('setResult', {ok: true, message: "Successfully registered dermatologist."});
+            context.commit('setResult', {label: 'add', ok: true, message: "Successfully registered dermatologist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'add', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     updateDermatologist: (context, dermatologist) => {
         axios.put(`/dermatologists`, dermatologist)
         .then(resp => {
-            context.commit('setResult', {ok: true, message: "Successfully updated dermatologist."});
+            context.commit('setResult', {label: 'update', ok: true, message: "Successfully updated dermatologist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'update', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     deleteDermatologist: (context, id) => {
         axios.delete(`/dermatologists/${id}`)
         .then(resp => {
-            context.commit('setResult', {ok: true, message: "Successfully deleted dermatologist."});
+            context.commit('setResult', {label: 'delete', ok: true, message: "Successfully deleted dermatologist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'delete', ok: false, message: err.response.data.ErrorMessage});
         });
     },
 };

@@ -13,16 +13,31 @@
 import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
 import DermatologistsTable from '../components/Tables/DermatologistsTable.vue';
+import toastr from 'toastr';
 
 export default {
   components: { Card, DermatologistsTable },
     data: () => {
-        return {}
+        return {
+            searchName: null
+        }
     },
     computed: {
         ...mapGetters({
-            dermatologists: 'dermatologist/getDermatologists'
+            dermatologists: 'dermatologist/getDermatologists',
+            result: 'dermatologist/getResult',
         }),
+    },
+    watch: {
+        result({label, ok, message}) {
+            if(ok && label === 'removeFromPharmacy' || label === 'addToPharmacy') {
+                toastr.success(message);
+                this.searchName ? this.searchDermatologistsByName(this.searchName) : this.fetchDermatologists();
+            } else if(!ok && label === 'removeFromPharmacy' || label === 'addToPharmacy') {
+                toastr.success(message);
+                this.searchName ? this.searchDermatologistsByName(this.searchName) : this.fetchDermatologists();
+            }
+        }
     },
     methods: {
         ...mapActions({
@@ -30,6 +45,7 @@ export default {
             searchDermatologistsByName: 'dermatologist/searchDermatologistsByName',
         }),
         handleSearchDermatologists(name) {
+            this.searchName = name;
             this.searchDermatologistsByName(name);
         }
     },
