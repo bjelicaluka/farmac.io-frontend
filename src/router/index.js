@@ -5,6 +5,7 @@ import About from '../pages/About.vue';
 import Pharmacy from '../pages/Pharmacy.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import Example from '../components/Table/Example.vue'
+import Patients from '../pages/Patients.vue'
 
 Vue.use(VueRouter)
 
@@ -61,7 +62,15 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain'
     }
-  }
+  },
+  {
+    path: '/patients_list',
+    name: 'Patients',
+    component: Patients,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
 ]
     
 
