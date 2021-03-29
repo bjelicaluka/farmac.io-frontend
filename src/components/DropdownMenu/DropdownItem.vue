@@ -1,7 +1,6 @@
 <template>
-  <router-link :to="to || '/'" event @click.native.prevent="preventDefaultLink($event)" class="dropdown-item">
-    <slot />
-  </router-link>
+  <router-link v-if="!!to" :to="to || '/'" class="dropdown-item"><slot /></router-link>
+  <router-link v-else :to="'/'" event @click.native.prevent="preventDefaultLink($event)" class="dropdown-item"><slot /></router-link>
 </template>
 
 <script>
