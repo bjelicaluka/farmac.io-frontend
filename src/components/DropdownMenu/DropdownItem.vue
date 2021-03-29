@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="to || '/'" @click="!!to ? preventDefaultLink($event) : () => {}" class="dropdown-item">
+  <router-link :to="to || '/'" event @click.native.prevent="preventDefaultLink($event)" class="dropdown-item">
     <slot />
   </router-link>
 </template>
@@ -9,7 +9,8 @@ export default {
   props: ["to"],
   methods: {
     preventDefaultLink(e) {
-      e.preventDefault();
+      !this.to && e.preventDefault();
+      this.$emit('click', e);
     }
   }
 }

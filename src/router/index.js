@@ -4,6 +4,7 @@ import Home from '../pages/Home.vue'
 import About from '../pages/About.vue';
 import Pharmacy from '../pages/Pharmacy.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
+import Dermatologists from '../pages/Dermatologists.vue'
 import Example from '../components/Table/Example.vue'
 import Medicines from '../pages/Medicines.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
@@ -76,6 +77,14 @@ const routes = [
     path: '/shoppingCart',
     name: 'ShoppingCart',
     component: ShoppingCart,
+      meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/dermatologists',
+    name: 'Dermatologists',
+    component: Dermatologists,
     meta: {
       layout: 'AppLayoutMain'
     }
