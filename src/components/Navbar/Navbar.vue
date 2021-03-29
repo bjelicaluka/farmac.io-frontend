@@ -25,9 +25,9 @@
           </navbar-item>
           <navbar-item>
             <dropdown-menu name="Account" icon="person">
-              <dropdown-item to="/profile">Profile</dropdown-item>
+              <dropdown-item @click="changeRoute('/auth')">Login</dropdown-item>
               <dropdown-item-divider />
-              <dropdown-item>Log out</dropdown-item>
+              <dropdown-item  @click="changeRoute('/patient-registration')">Register</dropdown-item>
             </dropdown-menu>
           </navbar-item>
         </ul>
@@ -45,6 +45,12 @@ import NavbarItem from './NavbarItem.vue'
 
 export default {
   components: { DropdownMenu, DropdownItem, DropdownItemDivider, NavbarItem, Icon },
+
+  methods: {
+    changeRoute(route) {
+      this.$router.push(route);
+    }
+  }
 }
 </script>
 
