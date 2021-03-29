@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div slot="buttons">
-                            <a href="#pablo" class="btn btn-info btn-just-icon btn-fill btn-round" rel="tooltip" title="Download specification">
+                            <a class="btn btn-info btn-just-icon btn-fill btn-round" rel="tooltip" title="Download specification">
                                 <i class="material-icons">subject</i>
                             </a>
                             <a class="btn btn-success btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Check availability" 
