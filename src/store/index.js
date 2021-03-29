@@ -19,7 +19,6 @@ export default new Vuex.Store({
     pharmacist,
     medicines,
     shoppingCart,
-    dermatologist,
     pharmacyAdmins,
     dermatologist,
   }
