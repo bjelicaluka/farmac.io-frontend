@@ -1,6 +1,6 @@
 <template>
     <div>
-        <i class="material-icons text-gray">{{icon}}</i>
+        <i :class="`material-icons ${textColor}`">{{icon}}</i>
         <p class="d-lg-none d-md-block">
             {{name}}
         </p>
@@ -9,7 +9,13 @@
 
 <script>
 export default {
-    props: ["icon", "name"]
+    props: {
+        icon: {},
+        name: {},
+        textColor: {
+            default: 'text-gray'
+        }
+    }
 }
 </script>
 

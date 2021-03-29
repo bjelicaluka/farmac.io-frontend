@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Pharmacy from '../pages/Pharmacy.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
+import Dermatologists from '../pages/Dermatologists.vue'
+import Example from '../components/Table/Example.vue'
 
 Vue.use(VueRouter)
 
@@ -64,6 +66,14 @@ const routes = [
     path: '/pharmacy-admins',
     name: 'PharmacyAdmins',
     component: PharmacyAdmins,
+    meta: {
+        layout: 'AppLayoutMain'
+      }
+  },
+  {
+    path: '/dermatologists',
+    name: 'Dermatologists',
+    component: Dermatologists,
     meta: {
       layout: 'AppLayoutMain'
     }

@@ -5,6 +5,7 @@ import patient from './modules/patient';
 import pharmacies from './modules/pharmacies';
 import pharmacist from './modules/pharmacist';
 import pharmacyAdmins from './modules/pharmacyAdmins'
+import dermatologist from './modules/dermatologist';
 
 Vue.use(Vuex)
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     patient,
     emailVerification,
     pharmacist,
-    pharmacyAdmins
+    pharmacyAdmins,
+    dermatologist
   }
 });
