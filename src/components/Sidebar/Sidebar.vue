@@ -26,6 +26,7 @@
           <sidebar-item name="Shopping cart" icon="shopping_cart" to="/shoppingCart"></sidebar-item>
           <sidebar-item name="PharmacyAdmins" icon="home" to="/pharmacy-admins"></sidebar-item>
           <sidebar-item name="Dermatologists" icon="accessibility" to="/dermatologists"></sidebar-item>
+          <sidebar-item name="Medicine reservations" icon="medical_services" to="/medicineReservations"></sidebar-item>
         </ul>
 
         <div>
