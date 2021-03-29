@@ -7,6 +7,7 @@ import Dermatologists from '../pages/Dermatologists.vue'
 import Medicines from '../pages/Medicines.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
+import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 
 Vue.use(VueRouter)
 
@@ -100,6 +101,14 @@ const routes = [
     path: '/dermatologists',
     name: 'Dermatologists',
     component: Dermatologists,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/medicineReservations',
+    name: 'FutureMedicineReservations',
+    component: FutureMedicineReservations,
     meta: {
       layout: 'AppLayoutMain'
     }
