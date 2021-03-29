@@ -8,8 +8,10 @@
             <div slot="body">
                 <Card title="Availability of the medicine in pharmacies">
                     <div v-for="(pharmacy,index) in pharmaciesForMedicines" :key="index">
-                        <ShopingCartCard  @addMedicineToCart="addMedicineToCart" :pharmacyName="pharmacy.name" :pharmacyStreet="pharmacy.address.streetName + ' ' + pharmacy.address.streetNumber"
-                        :pharmacyCity="pharmacy.address.city" :price="pharmacy.price" :id="pharmacy.id"></ShopingCartCard>
+                        <FormGroup>
+                            <ShopingCartCard  @addMedicineToCart="addMedicineToCart" :pharmacyName="pharmacy.name" :pharmacyStreet="pharmacy.address.streetName + ' ' + pharmacy.address.streetNumber"
+                            :pharmacyCity="pharmacy.address.city" :price="pharmacy.price" :id="pharmacy.id"></ShopingCartCard>
+                        </FormGroup>
                     </div>
                 </Card>
             </div>
@@ -46,6 +48,7 @@
 </template>
 
 <script>
+import FormGroup from '../components/Form/FormGroup'
 import RotatingCard from '../components/Card/RotatingCard.vue';
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
@@ -56,6 +59,7 @@ import toastr from 'toastr'
 
 export default {
     components: {
+        FormGroup,
         RotatingCard,
         Modal,
         ModalOpener,

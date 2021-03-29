@@ -1,47 +1,56 @@
 <template>
-        <div class="item">
-            <div class="description">
-            <span>{{pharmacyName}}</span>
-            <span>{{pharmacyStreet}}</span>
-            <span>{{pharmacyCity}}</span>
-            </div>
-        
-            <div class="quantity">
-            <button @click="increment" class="plus-btn" type="button" name="button">
-                <i class="material-icons">add</i>
-            </button>
-            <input type="text" name="name" value="0" :id="id">
-            <button @click="decrement" class="minus-btn" type="button" name="button">
-                <i class="material-icons">remove</i>
-            </button>
-            </div>
-            <div class="total-price">{{price}}</div>
-            <div>
-                <a @click="reserveMedicine" href="#pablo" class="btn btn-success btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Add to cart">
-                    <i class="material-icons">add_shopping_cart</i>
-                </a>  
-            </div>
-
-        </div>
+  <div class="item">
+      <div class="description">
+      <span>{{pharmacyName}}</span>
+      <span>{{pharmacyStreet}}</span>
+      <span>{{pharmacyCity}}</span>
+      </div>
+  
+      <div class="quantity">
+        <button @click="increment" class="plus-btn" type="button" name="button">
+            <i class="material-icons">add</i>
+        </button>
+        <input type="text" name="name" :value="amount" :id="id">
+        <button @click="decrement" class="minus-btn" type="button" name="button">
+            <i class="material-icons">remove</i>
+        </button>
+      </div>
+      <div class="total-price">{{amount === 0 ? price : amount * price}} RSD</div>
+      <div class="add-to-card">
+        <button @click="reserveMedicine" class="btn btn-success btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Add to cart">
+            <i class="material-icons">add_shopping_cart</i>
+        </button>  
+      </div>
+  </div>
 </template>
 
 <script>
+
 export default {
   props: ['pharmacyName', 'pharmacyStreet', 'pharmacyCity', 'price', 'id'],
+
   components: {
   },
+
+  data: function() {
+    return {
+      amount: 0
+    }
+  },
+
   methods:{
       increment(){
-          document.getElementById(this.id).value++;
+          this.amount++;
       },
       decrement(){
-          if(document.getElementById(this.id).value > 0){
-              document.getElementById(this.id).value--;
+          if(this.amount > 0){
+              this.amount--;
           }
       },
       reserveMedicine(e){
         e.preventDefault();
-        this.$emit('addMedicineToCart', e, this.id, document.getElementById(this.id).value, this.price, this.pharmacyName, this.pharmacyStreet, this.pharmacyCity);
+        if(this.amount > 0)
+          this.$emit('addMedicineToCart', e, this.id, this.amount, this.price, this.pharmacyName, this.pharmacyStreet, this.pharmacyCity);
       }
   }
 }
@@ -54,24 +63,14 @@ export default {
 }
 
 .item {
-  padding: 20px 30px;
   height: 120px;
   display: flex;
-}
- 
-.item:nth-child(3) {
-  border-top:  1px solid #E1E8EE;
-  border-bottom:  1px solid #E1E8EE;
-}
-
-.image {
-  margin-right: 50px;
 }
 
 .description {
   padding-top: 10px;
   margin-right: 60px;
-  width: 115px;
+  width: 110px;
 }
  
 .description span {
@@ -90,6 +89,10 @@ export default {
   color: #86939E;
 }
 
+.quantity {
+  padding-top: 35px;
+}
+
 .quantity input {
   -webkit-appearance: none;
   border: none;
@@ -101,18 +104,11 @@ export default {
 }
  
 button[class*=btn] {
-  width: 30px;
+  width: 35px;
   height: 30px;
-  background-color: #E1E8EE;
   border-radius: 6px;
   border: none;
   cursor: pointer;
-}
-.minus-btn img {
-  margin-bottom: 3px;
-}
-.plus-btn img {
-  margin-top: 2px;
 }
  
 button:focus,
@@ -122,11 +118,15 @@ input:focus {
 
 .total-price {
   width: 83px;
-  padding-top: 27px;
+  padding-top: 39px;
   text-align: center;
   font-size: 16px;
   color: #43484D;
   font-weight: 300;
+}
+
+.add-to-card {
+    padding-top: 25px;
 }
 
 @media (max-width: 800px) {
@@ -140,10 +140,7 @@ input:focus {
     flex-wrap: wrap;
     justify-content: center;
   }
-  .image img {
-    width: 50%;
-  }
-  .image,
+
   .quantity,
   .description {
     width: 100%;
