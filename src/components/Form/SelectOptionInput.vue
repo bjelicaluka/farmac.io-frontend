@@ -6,6 +6,7 @@
                 @change="emitChange"
                 class="selectpicker form-control"
                 data-style="btn btn-primary btn-round"
+                :disabled="disabled"
             >
                 <option value='' selected>{{label}}</option>
                 <option v-for="(option, index) in options" :value="option.value" :key="index">{{option.label}}</option>
@@ -22,6 +23,8 @@
     
 <script>
 import InputErrorMessage from './InputErrorMessage.vue'
+
+const $ = window.$;
 
 export default {
     components: {
@@ -51,12 +54,35 @@ export default {
         errorMessage: {
             type: String,
             default: 'You have to select a valid option.'
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
 
     methods: {
         emitChange(e) {
             this.$emit('input', e.target.value);
+        }
+    },
+
+    watch: {
+        options(opts) {
+            this.options = opts;
+            this.$nextTick(function() { $('.selectpicker').selectpicker('refresh'); });
+
+        },
+
+        value(val) {
+            if(val) {
+                const optionLabel = this.options.filter(p => { return p.value === val})[0].label;
+                this.$nextTick(function() { $('.filter-option-inner-inner').text(optionLabel) });
+            } else {
+                $('.filter-option-inner-inner').text(this.label);
+            }
+            this.$nextTick(function() { $('.selectpicker').val(val) });
+            this.value = val;
         }
     }
 }
