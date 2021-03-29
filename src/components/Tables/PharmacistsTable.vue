@@ -33,6 +33,7 @@
     <Modal
       modalBoxId="pharmacistModal"
       title="Pharmacist"
+      sizeClass="modal-lg"
     >
       <div slot="body">
         <PharmacistForm
