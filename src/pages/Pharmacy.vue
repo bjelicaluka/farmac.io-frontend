@@ -1,8 +1,11 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacists employees.`">
-                <PharmacistsTable :pharmacists="pharmacists" />
+            <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacist employees.`">
+                <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :pharmacyId="pharmacyId" />
+            </Card>
+            <Card title='Dermatologists' :description="`${pharmacy && pharmacy.name}'s dermatologist employees.`">
+                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :pharmacyId="pharmacyId" />
             </Card>
         </div> 
     </div>
@@ -12,34 +15,73 @@
 
 import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
+import DermatologistsTable from '../components/Tables/DermatologistsTable.vue';
 import PharmacistsTable from '../components/Tables/PharmacistsTable.vue';
+import toastr from 'toastr'
 
 export default {
-  components: { PharmacistsTable, Card },
+  components: { PharmacistsTable, Card, DermatologistsTable },
     data: () => {
-        return {}
+        return {
+            pharmacyId: null,
+            dermatologistSearchName: null,
+            pharmacistSearchName: null
+        }
     },
     computed: {
         ...mapGetters({
             pharmacy: 'pharmacies/getPharmacy',
-            pharmacists: 'pharmacist/getPharmacists'
+            pharmacists: 'pharmacist/getPharmacists',
+            pharmacistResult: 'pharmacist/getResult',
+            dermatologists: 'dermatologist/getDermatologists',
+            dermatologistResult: 'dermatologist/getResult',
         }),
     },
     watch: {
-        pharmacists(v) {
-            console.log(v)
-        }
+        dermatologistResult({label, ok, message}) {
+            if(label === 'removeFromPharmacy') {
+                if(ok) {
+                    toastr.success(message);
+                } else {
+                    toastr.error(message);
+                }
+                this.dermatologistSearchName ? 
+                    this.handleSearchDermatologists(this.dermatologistSearchName)
+                    :
+                    this.fetchPharmacyDermatologists(this.pharmacyId);
+            }
+        },
+        pharmacistResult({label}) {
+            if(label === 'delete' || label === 'add') {
+                this.pharmacistSearchName ? 
+                    this.handleSearchPharmacists(this.pharmacistSearchName)
+                    :
+                    this.fetchPharmacyPharmacists(this.pharmacyId);
+            }
+        },
     },
     methods: {
         ...mapActions({
             fetchPharmacy: 'pharmacies/getPharmacyById',
-            fetchPharmacists: 'pharmacist/fetchPharmacists'
+            fetchPharmacyPharmacists: 'pharmacist/fetchPharmacyPharmacists',
+            searchPharmacyPharmacists: 'pharmacist/searchPharmacyPharmacistsByName',
+            fetchPharmacyDermatologists: 'dermatologist/fetchPharmacyDermatologists',
+            searchPharmacyDermatologists: 'dermatologist/searchPharmacyDermatologistsByName',
         }),
+        handleSearchPharmacists(name) {
+            this.pharmacistSearchName = name;
+            this.searchPharmacyPharmacists({pharmacyId: this.pharmacyId, name});
+        },
+        handleSearchDermatologists(name) {
+            this.dermatologistSearchName = name;
+            this.searchPharmacyDermatologists({pharmacyId: this.pharmacyId, name});
+        }
     },
     mounted() {
-        const id = this.$route.params.id;
-        this.fetchPharmacy(id);
-        this.fetchPharmacists();
+        this.pharmacyId = this.$route.params.id;
+        this.fetchPharmacy(this.pharmacyId);
+        this.fetchPharmacyPharmacists(this.pharmacyId);
+        this.fetchPharmacyDermatologists(this.pharmacyId);
     }
 }
 </script>

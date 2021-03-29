@@ -1,10 +1,15 @@
 <template>
   <div>
-    <ModalOpener class="pull-right" modalBoxId="pharmacistModal">
-        <Button>Register Pharmacyst</Button>
-    </ModalOpener>
+    <div class="row pl-4 pr-4">
+      <Search @search="handleSearch($event)" />
+      <div class="row ml-auto">
+        <ModalOpener modalBoxId="pharmacistModal">
+            <Button @click="handleRegisterClick">Register Pharmacyst</Button>
+        </ModalOpener>
+      </div>
+    </div>
     <Table>
-        <TableHead :columnNames="['Username', 'Name', 'email', 'PID', 'Phone', 'Address', '']"></TableHead>
+        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Address', '']"></TableHead>
         <TableBody>
         <TableRow 
           v-for="p in pharmacists" 
@@ -34,6 +39,7 @@
           :isEdit="isEdit"
           :existingAccount="selectedPharmacist"
           :existingUser="selectedPharmacist && selectedPharmacist.user"
+          :pharmacyId="pharmacyId"
         />
       </div>
     </Modal>
@@ -63,8 +69,10 @@ import ModalOpener from '../Modal/ModalOpener.vue'
 import Modal from '../Modal/Modal.vue'
 import PharmacistForm from '../Forms/PharmacistForm.vue'
 import OptionModalButtons from '../Modal/OptionModalButtons.vue'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import Button from '../Form/Button.vue'
+import Search from '../Search/Search.vue'
+import toastr from 'toastr'
 
 export default {
   components: {
@@ -78,14 +86,32 @@ export default {
     Modal,
     PharmacistForm,
     OptionModalButtons,
-    Button
+    Button,
+    Search,
   },
-  props: ['pharmacists'],
+  props: ['pharmacists', 'pharmacyId'],
   data() {
     return {
       selectedPharmacist: null,
-      isEdit: false
+      isEdit: false,
+      searchName: ''
     }
+  },
+  computed: {
+    ...mapGetters({
+      result: 'pharmacist/getResult'
+    })
+  },
+  watch: {
+    result({label, ok, message}) {
+      if(label === 'delete') {
+        if(ok) {
+          toastr.success(message);
+        } else {
+          toastr.error(message);
+        }
+      }
+    },
   },
   methods: {
     ...mapActions({
@@ -94,6 +120,13 @@ export default {
     formatAddress(address) {
       const {state, city, streetName, streetNumber} = address;
       return `${state}, ${city}, ${streetName} - ${streetNumber}`
+    },
+    handleSearch(value) {
+      this.$emit('search', value);
+    },
+    handleRegisterClick() {
+      this.isEdit = false;
+      this.selectedPharmacist = null;
     },
     handleEditClick(pharmacist) {
       this.isEdit = true;

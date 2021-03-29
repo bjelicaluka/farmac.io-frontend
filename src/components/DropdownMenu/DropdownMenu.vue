@@ -13,7 +13,13 @@
 import Icon from '../Icon/Icon.vue'
 export default {
   components: { Icon },
-  props: ['name', 'icon', 'to'],
+  props: {
+    name: {},
+    to: {},
+    icon: {
+      default: 'keyboard_arrow_down'
+    }
+  },
   methods: {
     preventDefault(e) {
       e.preventDefault();
