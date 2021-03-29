@@ -6,6 +6,7 @@ import pharmacies from './modules/pharmacies';
 import pharmacist from './modules/pharmacist';
 import medicines from './modules/medicines'
 import shoppingCart from './modules/shoppingCart'
+import pharmacyAdmins from './modules/pharmacyAdmins'
 import dermatologist from './modules/dermatologist';
 
 Vue.use(Vuex)
@@ -18,6 +19,8 @@ export default new Vuex.Store({
     pharmacist,
     medicines,
     shoppingCart,
+    dermatologist,
+    pharmacyAdmins,
     dermatologist,
   }
 });

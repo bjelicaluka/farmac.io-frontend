@@ -78,7 +78,11 @@ export default {
   },
   watch: {
     value(v) {
-      $(`#${this.id}`).data('DateTimePicker').date(v);
+      if(v == null || v === false) {
+        $(`#${this.id}`).data('DateTimePicker').clear();
+      } else {
+        $(`#${this.id}`).data('DateTimePicker').date(v);
+      }
     }
   }
 }

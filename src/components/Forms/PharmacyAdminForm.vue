@@ -98,6 +98,18 @@
           />
         </div>
       </form-row>
+        <SelectOptionInput 
+          label="Works in"
+          v-model="user.pharmacyId"
+          :options="pharmacies"
+          :isValid="!!user.pharmacyId"
+          :showErrorMessage="showErrorMessage"
+          errorMessage="Please select valid option"
+          :disabled="isEdit"
+        />
+      <form-row>
+
+      </form-row>
     </form-group>
     <form-group :title="'Address'">
       <form-row>
@@ -156,18 +168,14 @@
         Please pick a location on the map.
       </InputErrorMessage>
     </form-group>
-    <Button @click="showErrorMessage = true" type="submit">{{isEdit ? 'Update' : 'Register'}}</Button>
-
-    <p v-if="!isEdit" class="text-right">
-        <router-link to="/auth">Login page</router-link>
-    </p>
+    <Button class="pull-right" @click="showErrorMessage = true" type="submit">{{isEdit ? 'Update' : 'Register'}}</Button>
 
   </Form>
 </template>
 
 <script>
 import moment from 'moment';
-import {mapActions} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
@@ -178,9 +186,35 @@ import MapMarker from '../Map/MapMarker.vue'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
 import { validateText, validateEmail, validatePassword, validateUsername } from '../../utils/validation'
 import Button from '../Form/Button.vue';
+import SelectOptionInput from '../Form/SelectOptionInput'
+import toastr from 'toastr'
+
+const initialAccount = {
+  username: null,
+  email: null,
+  password: null,
+  confirmPassword: null,
+}
+
+const initialUser = {
+  firstName: null,
+  lastName: null,
+  dateOfBirth: null,
+  pid: null,
+  phoneNumber: null,
+  address: {
+    lat: null,
+    lng: null,
+    state: null,
+    city: null,
+    streetName: null,
+    streetNumber: null,
+  },
+  pharmacyId: ''
+};
 
 export default {
-  components: { Form, FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Button },
+  components: { Form, FormGroup, FormRow, DateTimePicker, TextInput, Map, MapMarker, InputErrorMessage, Button, SelectOptionInput },
   props: {
     isEdit: {
       type: Boolean,
@@ -196,40 +230,79 @@ export default {
 
   data: () => {
     return {
-      account: {
-        username: null,
-        email: null,
-        password: null,
-        confirmPassword: null,
-      },
-      user: {
-        firstName: null,
-        lastName: null,
-        dateOfBirth: null,
-        pid: null,
-        phoneNumber: null,
-        address: {
-          lat: null,
-          lng: null,
-          state: null,
-          city: null,
-          streetName: null,
-          streetNumber: null,
-        }
-      },
+      account: {...initialAccount},
       
+      user: {...initialUser},
+
+      pharmacies: [],
+
       showErrorMessage: false,
+    }
+  },
+
+  computed: {
+    ...mapGetters({
+        getPharmacies: 'pharmacies/getPharmacies',
+        result: 'pharmacyAdmins/getResult'
+      }),
+
+  },
+
+  watch: {
+    getPharmacies(pharmacies) {
+      this.pharmacies = [ ...pharmacies.map(p => { return { value: p.id, label: p.name }; } ) ];
+    },
+    result({text, code, label}) {
+      if(label === 'add' || label === 'update') {
+        if(code === 200) {
+          toastr.success(text);
+          this.fetchPharmacyAdmins();
+        } else {
+          toastr.error(text);
+        }
+      }
+    },
+    isEdit() {
+      this.setEdit();
+    },
+    existingAccount() {
+      this.setEdit();
+    },
+    existingUser() {
+      this.setEdit();
     }
   },
 
   methods: {
     ...mapActions({
-      addPatient: 'patient/addPatient',
-      updatePatient: 'patient/updatePatient',
+      fetchPharmacies: 'pharmacies/getPharmacies',
+      addPharmacyAdmin: 'pharmacyAdmins/addPharmacyAdmin',
+      updatePharmacyAdmin: 'pharmacyAdmins/updatePharmacyAdmin',
+      fetchPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
     }),
+
+    setEdit() {
+      if(!this.isEdit) {
+        this.account = {...initialAccount};
+        this.user = {...initialUser};
+        return;
+      }
+      
+      if(this.existingAccount) {
+        this.account = this.existingAccount;
+        this.account.confirmPassword = this.existingAccount.password;
+      }
+      if(this.existingUser) {
+        this.user = {
+          ...this.existingUser,
+          dateOfBirth: moment(this.existingUser.dateOfBirth).toDate()
+        };
+      }
+    },
+
     onSubmit(e) {
       e.preventDefault();
-      const patientObject = {
+      const pharmacyAdminObject = {
         account: {
           ...this.account
         },
@@ -238,9 +311,9 @@ export default {
         }
       };
       if(!this.isEdit) {
-        this.addPatient(patientObject);
+        this.addPharmacyAdmin(pharmacyAdminObject);
       } else {
-        this.updatePatient({patientObject, id: this.existingAccount.id});
+        this.updatePharmacyAdmin(pharmacyAdminObject);
       }
     },
     onMapClick(e) {
@@ -264,13 +337,9 @@ export default {
     }
   },
 
-  mounted() {
-    if(this.isEdit) {
-      this.account = this.existingAccount;
-      this.account.confirmPassword = this.existingAccount.password;
-      this.user = this.existingUser;
-      this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
-    }
+  created() {
+    this.fetchPharmacies();
+    
   }
 }
 </script>
