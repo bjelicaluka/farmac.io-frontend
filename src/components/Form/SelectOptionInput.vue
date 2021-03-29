@@ -24,6 +24,8 @@
 <script>
 import InputErrorMessage from './InputErrorMessage.vue'
 
+const $ = window.$;
+
 export default {
     components: {
         InputErrorMessage
@@ -62,6 +64,25 @@ export default {
     methods: {
         emitChange(e) {
             this.$emit('input', e.target.value);
+        }
+    },
+
+    watch: {
+        options(opts) {
+            this.options = opts;
+            this.$nextTick(function() { $('.selectpicker').selectpicker('refresh'); });
+
+        },
+
+        value(val) {
+            if(val) {
+                const optionLabel = this.options.filter(p => { return p.value === val})[0].label;
+                this.$nextTick(function() { $('.filter-option-inner-inner').text(optionLabel) });
+            } else {
+                $('.filter-option-inner-inner').text(this.label);
+            }
+            this.$nextTick(function() { $('.selectpicker').val(val) });
+            this.value = val;
         }
     }
 }

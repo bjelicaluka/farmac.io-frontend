@@ -14,7 +14,6 @@
 import Card from '../components/Card/Card'
 import PharmacyAdminsTable from '../components/Tables/PharmacyAdminsTable'
 import {mapGetters, mapActions} from 'vuex'
-import toastr from 'toastr'
 
 export default {
     components: {
@@ -30,37 +29,13 @@ export default {
 
     computed: {
         ...mapGetters({
-            getPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins',
-            getAddResult: 'pharmacyAdmins/getAddResult',
-            getUpdateResult: 'pharmacyAdmins/getUpdateResult',
-            getDeleteResult: 'pharmacyAdmins/getDeleteResult'
+            getPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
         })
     },
 
     watch: {
         getPharmacyAdmins(pharmacyAdmins) {
             this.pharmacyAdmins = pharmacyAdmins;
-        },
-        getAddResult({text, code}) {
-            if(code === 200) {
-                toastr.success(text);
-            } else {
-                toastr.error(text);
-            }
-        },
-        getUpdateResult({text, code}) {
-            if(code === 200) {
-                toastr.success(text);
-            } else {
-                toastr.error(text);
-            }
-        },
-        getDeleteResult({text, code}) {
-            if(code === 200) {
-                toastr.success(text);
-            } else {
-                toastr.error(text);
-            }
         }
     },
 

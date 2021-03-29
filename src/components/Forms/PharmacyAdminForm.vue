@@ -187,8 +187,7 @@ import InputErrorMessage from '../Form/InputErrorMessage.vue'
 import { validateText, validateEmail, validatePassword, validateUsername } from '../../utils/validation'
 import Button from '../Form/Button.vue';
 import SelectOptionInput from '../Form/SelectOptionInput'
-
-const $ = window.$;
+import toastr from 'toastr'
 
 const initialAccount = {
   username: null,
@@ -242,14 +241,26 @@ export default {
   },
 
   computed: {
-    ...mapGetters({getPharmacies: 'pharmacies/getPharmacies'}),
+    ...mapGetters({
+        getPharmacies: 'pharmacies/getPharmacies',
+        result: 'pharmacyAdmins/getResult'
+      }),
 
   },
 
   watch: {
     getPharmacies(pharmacies) {
       this.pharmacies = [ ...pharmacies.map(p => { return { value: p.id, label: p.name }; } ) ];
-      this.$nextTick(function() { $('.selectpicker').selectpicker('refresh'); })
+    },
+    result({text, code, label}) {
+      if(label === 'add' || label === 'update') {
+        if(code === 200) {
+          toastr.success(text);
+          this.fetchPharmacyAdmins();
+        } else {
+          toastr.error(text);
+        }
+      }
     },
     isEdit() {
       this.setEdit();
@@ -267,12 +278,11 @@ export default {
       fetchPharmacies: 'pharmacies/getPharmacies',
       addPharmacyAdmin: 'pharmacyAdmins/addPharmacyAdmin',
       updatePharmacyAdmin: 'pharmacyAdmins/updatePharmacyAdmin',
+      fetchPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
     }),
 
     setEdit() {
-      
       if(!this.isEdit) {
-        $('.filter-option-inner-inner').text($('.selectpicker').find('option')[0].outerText);
         this.account = {...initialAccount};
         this.user = {...initialUser};
         return;
@@ -287,9 +297,6 @@ export default {
           ...this.existingUser,
           dateOfBirth: moment(this.existingUser.dateOfBirth).toDate()
         };
-        this.$nextTick(function() { $('.selectpicker').val(this.user.pharmacyId) });
-        const pharmacyName = this.pharmacies.filter(p => { return p.value === this.user.pharmacyId })[0].label;
-        this.$nextTick(function() { $('.filter-option-inner-inner').text(pharmacyName) });
       }
     },
 

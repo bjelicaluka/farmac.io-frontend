@@ -74,7 +74,8 @@ import ModalOpener from '../Modal/ModalOpener'
 import PharmacyAdminForm from '../Forms/PharmacyAdminForm'
 import OptionModalButtons from '../Modal/OptionModalButtons'
 import Button from '../Form/Button'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
+import toastr from 'toastr'
 
 export default {
     props: ['pharmacyAdmins'],
@@ -100,8 +101,28 @@ export default {
         }
     },
 
+    computed: {
+        ...mapGetters({result: 'pharmacyAdmins/getResult'})
+    },
+
+    watch: {
+        result({text, code, label}) {
+            if(label === 'delete') {
+                if(code === 200) {
+                    toastr.success(text);
+                    this.fetchPharmacyAdmins();
+                } else {
+                    toastr.error(text);
+                }
+            }
+        }
+    },
+
     methods: {
-        ...mapActions({deletePharmacyAdmin: 'pharmacyAdmins/deletePharmacyAdmin'}),
+        ...mapActions({
+            deletePharmacyAdmin: 'pharmacyAdmins/deletePharmacyAdmin',
+            fetchPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
+        }),
 
         handleRegisterClick() {
             this.isEdit = false;
