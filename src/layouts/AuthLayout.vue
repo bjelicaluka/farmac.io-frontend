@@ -4,7 +4,7 @@
             <slot />
         </div>
         <Footer>
-            <p style="text-align:center;">&#169; 2021 Jole i kompanija(JIK)</p>
+            <p style="text-align:center;">&#169; 2021 Jole i kompanija (JIK)</p>
         </Footer>
     </div>
 </template>

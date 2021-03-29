@@ -3,13 +3,17 @@ import axios from "axios";
 const state = {
     dermatologist: null,
     dermatologists: null,
-    result: null
+    result: null,
+    patients: null,
+    sortCrit: "",
+    sortDir: "1"
 };
 
 const getters = {
     getDermatologist: state => state.dermatologist,
     getDermatologists: state => state.dermatologists,
     getResult: state => state.result,
+    getPatients: state => state.patients
 };
 
 const actions = {
@@ -113,6 +117,18 @@ const actions = {
             context.commit('setResult', {label: 'delete', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    fetchDermatologistsPatients: (context, id) => {
+        axios.get(`/dermatologists/${id}/patients`)
+        .then(resp => {
+            context.commit('setPatients', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetchPatients', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    sortPatients: (context, crit) => {
+        context.commit('sortPatients', crit);
+    }
 };
 
 const mutations = {
@@ -124,6 +140,21 @@ const mutations = {
     },
     setResult: (state, result) => {
         state.result = result;
+    },
+    setPatients: (state, patients) => {
+        state.patients = patients;
+    },
+    sortPatients: (state, crit) => {
+        const patients = state.patients;
+        if (crit === state.sortCrit)
+            state.sortDir = state.sortDir === '1' ? '-1' : '1';
+        state.sortCrit = crit;
+        patients.sort((k1 ,k2) => {
+            if(k1[state.sortCrit] < k2[state.sortCrit]) return -1 * parseInt(state.sortDir);
+            if(k1[state.sortCrit] > k2[state.sortCrit]) return 1 * parseInt(state.sortDir);
+            return 0;
+        });
+        state.patients = patients;
     }
 };
 

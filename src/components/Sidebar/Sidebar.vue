@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar" data-color="purple" data-background-color="white" :role="role">
+  <div class="sidebar" data-color="purple" data-background-color="white">
       <sidebar-logo></sidebar-logo>
       <div class="sidebar-wrapper">
         <ul class="nav" v-if="role===Roles.Pharmacist">
@@ -27,6 +27,16 @@
           <sidebar-item name="PharmacyAdmins" icon="home" to="/pharmacy-admins"></sidebar-item>
           <sidebar-item name="Dermatologists" icon="accessibility" to="/dermatologists"></sidebar-item>
         </ul>
+
+        <div>
+          <br>Select for testing:
+          <select v-model="role">
+            <option value="Patient" selected="selected">Patient</option>
+            <option value="Dermatologist">Dermatologist</option>
+            <option value="Pharmacist">Pharmacist</option>
+          </select>
+        </div>
+
       </div>
     </div>
 </template>
@@ -40,17 +50,12 @@ export default {
   data: () => {
     return {
       Roles,
+      role: ''
     }
   },
   components: {
     SidebarLogo,
     SidebarItem
-  },
-  props: {
-    role: {
-        type: String,
-        default: ''
-    }
   }
 }
 </script>

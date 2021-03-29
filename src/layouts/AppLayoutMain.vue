@@ -1,12 +1,12 @@
 <template>
   <div>
     <header/>
-    <sidebar role=""></sidebar>
+    <sidebar></sidebar>
     <main-wrapper>
       <navbar></navbar>
       <slot />
       <Footer>
-        <p style="text-align:center;">&#169; 2021 Jole i kompanija(JIK)</p>
+        <p style="text-align:center;">&#169; 2021 Jole i kompanija (JIK)</p>
       </Footer>
     </main-wrapper>
   </div>
