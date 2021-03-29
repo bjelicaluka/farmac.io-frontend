@@ -19,7 +19,7 @@ const actions = {
             context.commit('setPharmacists', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     fetchPharmacistById: (context, id) => {
@@ -28,7 +28,7 @@ const actions = {
             context.commit('setPharmacist', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     fetchPharmacyPharmacists: (context, pharmacyId) => {
@@ -37,7 +37,7 @@ const actions = {
             context.commit('setPharmacists', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     fetchPharmacyPharmacistById: (context, {pharmacyId, pharmacistId}) => {
@@ -46,7 +46,7 @@ const actions = {
             context.commit('setPharmacist', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     searchPharmacistsByName: (context, name) => {
@@ -55,7 +55,7 @@ const actions = {
             context.commit('setPharmacists', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     searchPharmacyPharmacistsByName: (context, {pharmacyId, name}) => {
@@ -64,34 +64,34 @@ const actions = {
             context.commit('setPharmacists', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     addPharmacist: (context, pharmacist) => {
         axios.post(`/pharmacists`, pharmacist)
         .then(resp => {
-            context.commit('setResult', {ok: true, message: "Successfully registered pharmacist."});
+            context.commit('setResult', {label: 'add', ok: true, message: "Successfully registered pharmacist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'add', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     updatePharmacist: (context, pharmacist) => {
         axios.put(`/pharmacists`, pharmacist)
         .then(resp => {
-            context.commit('setResult', {ok: true, message: "Successfully updated pharmacist."});
+            context.commit('setResult', {label: 'update', ok: true, message: "Successfully updated pharmacist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'update', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     deletePharmacist: (context, id) => {
         axios.delete(`/pharmacists/${id}`)
         .then(resp => {
-            context.commit('setResult', {ok: true, message: "Successfully deleted pharmacist."});
+            context.commit('setResult', {label: 'delete', ok: true, message: "Successfully deleted pharmacist."});
         })
         .catch(err => {
-            context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'delete', ok: false, message: err.response.data.ErrorMessage});
         });
     },
 };

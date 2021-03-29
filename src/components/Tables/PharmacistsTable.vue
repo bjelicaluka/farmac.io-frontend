@@ -69,9 +69,10 @@ import ModalOpener from '../Modal/ModalOpener.vue'
 import Modal from '../Modal/Modal.vue'
 import PharmacistForm from '../Forms/PharmacistForm.vue'
 import OptionModalButtons from '../Modal/OptionModalButtons.vue'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import Button from '../Form/Button.vue'
 import Search from '../Search/Search.vue'
+import toastr from 'toastr'
 
 export default {
   components: {
@@ -95,6 +96,22 @@ export default {
       isEdit: false,
       searchName: ''
     }
+  },
+  computed: {
+    ...mapGetters({
+      result: 'pharmacist/getResult'
+    })
+  },
+  watch: {
+    result({label, ok, message}) {
+      if(label === 'delete') {
+        if(ok) {
+          toastr.success(message);
+        } else {
+          toastr.error(message);
+        }
+      }
+    },
   },
   methods: {
     ...mapActions({
