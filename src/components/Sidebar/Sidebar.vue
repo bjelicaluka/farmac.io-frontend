@@ -22,6 +22,8 @@
         <ul class="nav" v-else>
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="home" to="/pharmacies"></sidebar-item>
+          <sidebar-item name="Medicines" icon="local_pharmacy" to="/medicines"></sidebar-item>
+          <sidebar-item name="Shopping cart" icon="shopping_cart" to="/shoppingCart"></sidebar-item>
           <sidebar-item name="PharmacyAdmins" icon="home" to="/pharmacy-admins"></sidebar-item>
           <sidebar-item name="Dermatologists" icon="accessibility" to="/dermatologists"></sidebar-item>
         </ul>

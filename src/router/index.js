@@ -5,6 +5,8 @@ import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
 import Dermatologists from '../pages/Dermatologists.vue'
 import Example from '../components/Table/Example.vue'
+import Medicines from '../pages/Medicines.vue'
+import ShoppingCart from '../pages/ShoppingCart.vue'
 
 Vue.use(VueRouter)
 
@@ -59,6 +61,22 @@ const routes = [
     name: 'Pharmacy',
     component: Pharmacy,
     meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/medicines',
+    name: 'Medicines',
+    component: Medicines,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/shoppingCart',
+    name: 'ShoppingCart',
+    component: ShoppingCart,
+      meta: {
       layout: 'AppLayoutMain'
     }
   },
