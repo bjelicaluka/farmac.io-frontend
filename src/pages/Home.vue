@@ -120,38 +120,6 @@
       </div>
     </Modal>
 
-    <Modal
-      modalBoxId="pharmacistModal"
-      title="Register Pharmacist"
-    >
-      <div slot="body">
-        <PharmacistForm
-          :isEdit="true"
-          :existingAccount="{
-            id: '08d8efa0-a7bb-4128-86c3-5ebb2913c76a',
-            username: 'lukica',
-            email: 'lukica@gmail.com'
-          }"
-          :existingUser="{
-            id: '08d8efa0-a7c5-4f48-8aa5-4ab246e3f751',
-            firstName: 'asd',
-            lastName: 'asd',
-            dateOfBirth: '2001-03-12T23:00:00.000Z',
-            pid: '1231231231231',
-            phoneNumber: '099922311',
-            address: {
-              lat: 45.384827781749635,
-              lng: 20.387363433837894,
-              state: 'Srbija',
-              city: 'Zrenjanin',
-              streetName: 'Komunjare Pariske',
-              streetNumber: '28'
-            }
-          }"
-        />
-      </div>
-    </Modal>
-
     <ModalOpener id="modalOpener" modalBoxId="exampleModal">
         <Button>Launch Demo Modal</Button>
     </ModalOpener>
@@ -180,7 +148,6 @@ import TextInput from '../components/Form/TextInput.vue';
 import DateTimePicker from '../components/Form/DateTimePicker.vue';
 import Map from '../components/Map/Map.vue';
 import MapMarker from '../components/Map/MapMarker.vue';
-import PharmacistForm from '../components/Forms/PharmacistForm.vue';
 
 let selectOptions = [
   {
@@ -226,7 +193,6 @@ export default {
     DateTimePicker,
     Map,
     MapMarker,
-    PharmacistForm,
   },
   methods: {
     submitTest(e) {

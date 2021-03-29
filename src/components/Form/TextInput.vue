@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="form-group">
-        <label class="bmd-label-floating">{{label}}</label>
+        <label v-if="!!label" class="bmd-label-floating">{{label}}</label>
         <input 
           :type="type" 
           class="form-control"
