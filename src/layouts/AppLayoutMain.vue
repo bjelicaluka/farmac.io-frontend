@@ -1,7 +1,7 @@
 <template>
   <div>
     <header/>
-    <sidebar role="Dermatologist"></sidebar>
+    <sidebar></sidebar>
     <main-wrapper>
       <navbar></navbar>
       <slot />

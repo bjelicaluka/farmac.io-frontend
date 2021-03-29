@@ -12,7 +12,8 @@
                     <TableRow
                         v-for="p in patients" 
                         :key="p.id" 
-                        :values="[p.firstName, p.lastName, p.dateOfBirth, p.phoneNumber, formatAddress(p.address), p.appointmentDate]"
+                        :values="[p.firstName, p.lastName, formatDate(p.dateOfBirth), 
+                                p.phoneNumber, formatAddress(p.address), formatDateTime(p.appointmentDate)]"
                     >
                     </TableRow>
                     </TableBody>
@@ -25,6 +26,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import moment from 'moment'
 import Card from '../components/Card/Card.vue'
 import Search from '../components/Search/Search.vue'
 import Table from '../components/Table/Table.vue'
@@ -63,10 +65,16 @@ export default {
             const {state, city, streetName, streetNumber} = address;
             return `${state}, ${city}, ${streetName} - ${streetNumber}`
         },
+        formatDate(date) {
+            return moment(date).format("DD-MMM-YYYY");
+        },
+        formatDateTime(date) {
+            return moment(date).format("DD-MMM-YYYY HH:mm");
+        }
     },
 
     mounted() {
-        const dermatologistId = "";
+        const dermatologistId = "47e70b60-8d7f-4931-a120-07da93d62085"; // for testing
         this.fetchPatients(dermatologistId);
     }
 }
