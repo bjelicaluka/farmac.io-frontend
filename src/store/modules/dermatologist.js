@@ -4,7 +4,7 @@ const state = {
     dermatologist: null,
     dermatologists: null,
     result: null,
-    patients: null
+    patients: null, sortCrit: "", sortDir: "1"
 };
 
 const getters = {
@@ -104,6 +104,9 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    sortPatients: (context, crit) => {
+        context.commit('sortPatients', crit);
     }
 };
 
@@ -119,6 +122,19 @@ const mutations = {
     },
     setPatients: (state, patients) => {
         state.patients = patients;
+    },
+    sortPatients: (state, crit) => {
+        const patients = state.patients;
+        if (crit === state.sortCrit)
+            state.sortDir = state.sortDir==='1'?'-1':'1';
+            state.sortCrit = crit;
+        patients.sort((k1 ,k2) => {
+            if(k1[state.sortCrit] < k2[state.sortCrit]) return -1 * parseInt(state.sortDir);
+            if(k1[state.sortCrit] > k2[state.sortCrit]) return 1 * parseInt(state.sortDir);
+            return 0;
+        });
+        state.patients = patients;
+        console.log("Sorted")
     }
 };
 

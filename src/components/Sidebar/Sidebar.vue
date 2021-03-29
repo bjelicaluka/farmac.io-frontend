@@ -52,12 +52,6 @@ export default {
   components: {
     SidebarLogo,
     SidebarItem
-  },
-  props: {
-    role: {
-        type: String,
-        default: ''
-    }
   }
 }
 </script>

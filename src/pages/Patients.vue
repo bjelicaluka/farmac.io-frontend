@@ -6,6 +6,12 @@
                 <div class="row pl-4 pr-4">
                     <Search />
                 </div>
+                <div>
+                    Sort by:
+                    <Button type="button" @click="sortPatients('firstName')">First name</Button>
+                    <Button type="button" @click="sortPatients('lastName')">Last name</Button>
+                    <Button type="button" @click="sortPatients('appointmentDate')">Appointment date</Button>
+                </div>
                 <Table>
                     <TableHead :columnNames="['First name', 'Last name', 'Birth date', 'Phone', 'Address', 'Appointment date', '']"></TableHead>
                     <TableBody>
@@ -33,6 +39,7 @@ import Table from '../components/Table/Table.vue'
 import TableBody from '../components/Table/TableBody.vue'
 import TableHead from '../components/Table/TableHead.vue'
 import TableRow from '../components/Table/TableRow.vue'
+import Button from '../components/Form/Button.vue'
 
 export default {
     components: {
@@ -41,7 +48,8 @@ export default {
         TableBody,
         TableRow,
         Search,
-        Card
+        Card,
+        Button
     },
     
     data: function() {
@@ -51,7 +59,7 @@ export default {
     computed: {
         ...mapGetters({
             patients: 'dermatologist/getPatients'
-        }),
+        })
     },
 
     watch: {
@@ -59,7 +67,8 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchPatients: 'dermatologist/fetchDermatologistsPatients'
+            fetchPatients: 'dermatologist/fetchDermatologistsPatients',
+            sortPatients: 'dermatologist/sortPatients'
         }),
         formatAddress(address) {
             const {state, city, streetName, streetNumber} = address;
