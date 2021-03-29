@@ -25,9 +25,9 @@
           </navbar-item>
           <navbar-item>
             <dropdown-menu name="Account" icon="person">
-              <dropdown-item @click="changeRoute('/auth')">Login</dropdown-item>
+              <dropdown-item :to="'/auth'">Login</dropdown-item>
               <dropdown-item-divider />
-              <dropdown-item  @click="changeRoute('/patient-registration')">Register</dropdown-item>
+              <dropdown-item  :to="'/patient-registration'">Register</dropdown-item>
             </dropdown-menu>
           </navbar-item>
         </ul>
