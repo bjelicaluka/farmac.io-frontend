@@ -4,8 +4,7 @@
             <div class="col-12">
                 <text-input 
                     label="Username"
-                    :showErrorMessage="false"
-                    errorMessage="Invalid"
+                    v-model="username"
                     type="text"
                 />
             </div>
@@ -15,14 +14,13 @@
             <div class="col-12">
                 <text-input 
                     label="Password"
-                    :showErrorMessage="false"
-                    errorMessage="Invalid"
+                    v-model="password"
                     type="password"
                 />
             </div>
         </form-row>
 
-        <Button>Sign In</Button>
+        <Button @click="handleLoginClick">Sign In</Button>
 
         <div class="row mt-4">
             <p class="text-left col-4">
@@ -39,11 +37,13 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 
 import Button from '../Form/Button.vue'
 import Form from '../Form/Form.vue'
 import FormRow from '../Form/FormRow.vue'
 import TextInput from '../Form/TextInput.vue'
+import toastr from 'toastr'
 
 export default {
    components: {
@@ -51,6 +51,44 @@ export default {
        FormRow,
        TextInput,
        Button
+    },
+
+    data: function() {
+        return {
+            username: '',
+            password: ''
+        }
+    },
+
+    computed: {
+        ...mapGetters({result: 'authentication/getResult'})
+    },
+
+    watch: {
+        result({ok, message, label}) {
+            if(label !== 'authenticate') 
+                return;
+
+            if(ok) {
+                this.$router.push('/');
+            } else {
+                toastr.error(message)
+            }
+            
+        }
+    },
+
+    methods: {
+        ...mapActions({authenticate: 'authentication/authenticate'}),
+
+        handleLoginClick() {
+            const authenticateObject = {
+                username: this.username,
+                password: this.password
+            };
+
+            this.authenticate(authenticateObject);
+        }
     }
 }
 
