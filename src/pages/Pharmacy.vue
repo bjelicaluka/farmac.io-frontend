@@ -1,6 +1,9 @@
 <template>
     <div class="content">
         <div class="container-fluid">
+            <Card :title="pharmacy && pharmacy.name" :description="pharmacy && pharmacy.description">
+                <PharmacyInfo :pharmacy="pharmacy" />
+            </Card>
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacist employees.`">
                 <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :pharmacyId="pharmacyId" />
             </Card>
@@ -17,10 +20,11 @@ import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
 import DermatologistsTable from '../components/Tables/DermatologistsTable.vue';
 import PharmacistsTable from '../components/Tables/PharmacistsTable.vue';
+import PharmacyInfo from '../components/Shared/PharmacyInfo'
 import toastr from 'toastr'
 
 export default {
-  components: { PharmacistsTable, Card, DermatologistsTable },
+  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo },
     data: () => {
         return {
             pharmacyId: null,

@@ -3,7 +3,7 @@
     <l-map
       ref="map"
       :zoom="zoom"
-      :center="center"
+      :center="latLng(center.lat, center.lng)"
       :options="mapOptions"
       @click="onClickMap($event)"
     >
@@ -29,7 +29,7 @@ export default {
   },
   props: {
     center: {
-      default: () => latLng(45.38361, 20.38194)
+      default: () => { return {lat: 45.38361, lng: 20.38194} }
     },
     height: {
       type: Number,
@@ -61,6 +61,9 @@ export default {
     onClickMap(e) {
       this.$emit('click', e);
       this.$refs.map.mapObject.invalidateSize();
+    },
+    latLng(lat, lng) {
+      return latLng(lat, lng);
     }
   }
 }
