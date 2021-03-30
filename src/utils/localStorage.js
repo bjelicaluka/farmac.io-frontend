@@ -1,5 +1,6 @@
 import jwt_decoder from 'jwt-decode'
 import moment from 'moment'
+import { Roles } from '../constants'
 
 export function setToken(token) {
     localStorage.setItem('token', token);
@@ -10,7 +11,9 @@ export function removeToken() {
 }
 
 export function getRoleFromToken() {
-	return decodeToken()?.role;
+    const roleFromToken = decodeToken()?.role;
+
+	return Object.keys(Roles).find(role => role === roleFromToken);
 }
 
 export function getAccountIdFromToken() {
@@ -19,6 +22,10 @@ export function getAccountIdFromToken() {
 
 export function hasTokenExpired() {
 	return decodeToken()?.exp < moment().unix();
+}
+
+export function isUserLoggedIn() {
+    return getAccountIdFromToken() && !hasTokenExpired();
 }
 
 function decodeToken() {
