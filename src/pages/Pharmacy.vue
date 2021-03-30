@@ -35,6 +35,7 @@ export default {
     computed: {
         ...mapGetters({
             pharmacy: 'pharmacies/getPharmacy',
+            pharmacyResult: 'pharmacies/getResult',
             pharmacists: 'pharmacist/getPharmacists',
             pharmacistResult: 'pharmacist/getResult',
             dermatologists: 'dermatologist/getDermatologists',
@@ -63,6 +64,13 @@ export default {
                     this.fetchPharmacyPharmacists(this.pharmacyId);
             }
         },
+        pharmacyResult({ok, label, message}) {
+            if(label === 'update') {
+                if(ok) {
+                    this.fetchPharmacy(this.pharmacyId);
+                }
+            }
+        }
     },
     methods: {
         ...mapActions({

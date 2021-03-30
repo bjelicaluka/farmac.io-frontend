@@ -57,8 +57,22 @@ const actions = {
             });
         });
     },
-    updatePharmacy: (context, {pharmacy, id}) => {
-        // Bjelica
+    updatePharmacy: (context, pharmacy) => {
+        axios.put(`/pharmacies`, pharmacy)
+        .then(response => {
+            context.commit('setResult', {
+                label: 'update',
+                message: `You have successfully updated the pharmacy.`,
+                ok: true
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'update',
+                message: error.response.data.ErrorMessage,
+                ok: false
+            });
+        });
     },
     deletePharmacy: (context, id) => {
         axios.delete(`/pharmacies/${id}`)
