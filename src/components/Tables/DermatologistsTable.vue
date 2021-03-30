@@ -25,6 +25,12 @@
               >
                 <drop-down-item @click="handleRemoveFromPharmacyClick(d)">Remove from Pharmacy</drop-down-item>
               </modal-opener>
+              <modal-opener
+                v-if="role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
+                :modalBoxId="'defineDermatologistAppointmentModal'"
+              >
+                <drop-down-item @click="handleDefineAppointmentClick(d)">Define Appointment</drop-down-item>
+              </modal-opener>
               <modal-opener :modalBoxId="'dermatologistModal'">
                 <drop-down-item @click="handleEditClick(d)">Edit</drop-down-item>
               </modal-opener>
@@ -44,6 +50,16 @@
     >
       <div slot="body">
         <DermatologistPharmacyForm :dermatologist="selectedDermatologist" :pharmacyId="pharmacyId" />
+      </div>
+    </Modal>
+
+    <Modal
+      v-if="role === Roles.PharmacyAdmin"
+      modalBoxId="defineDermatologistAppointmentModal"
+      title="Define Dermatologist Appointment"
+    >
+      <div slot="body">
+        <DefineAppointmentForm :dermatologistId="selectedDermatologist && selectedDermatologist.id" :pharmacyId="pharmacyId" />
       </div>
     </Modal>
 
@@ -77,6 +93,7 @@ import {mapActions, mapGetters} from 'vuex'
 import Search from '../Search/Search.vue'
 import DermatologistPharmacyForm from '../Forms/DermatologistPharmacyForm.vue'
 import {Roles} from '../../constants';
+import DefineAppointmentForm from '../Forms/DefineAppointmentForm';
 
 export default {
   components: {
@@ -91,6 +108,7 @@ export default {
     OptionModalButtons,
     Search,
     DermatologistPharmacyForm,
+    DefineAppointmentForm
   },
   props: ['dermatologists', 'pharmacyId'],
   data() {
@@ -118,6 +136,9 @@ export default {
       this.selectedDermatologist = dermatologist;
     },
     handleRemoveFromPharmacyClick(dermatologist) {
+      this.selectedDermatologist = dermatologist;
+    },
+    handleDefineAppointmentClick(dermatologist) {
       this.selectedDermatologist = dermatologist;
     },
     handleEditClick(dermatologist) {
