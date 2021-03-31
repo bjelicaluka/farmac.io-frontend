@@ -14,15 +14,15 @@ const actions = {
         .then(response => {
             context.commit('setResult', {
                 label: 'getVerificationEmail',
-                message: `Verification email is successfully sent to ${email}.`,
-                ok: true
+                ok: true,
+                message: `Verification email is successfully sent to ${email}.`             
             });
         })
         .catch(error => {
             context.commit('setResult', {
                 label: 'getVerificationEmail',
-                message: error.response.data.ErrorMessage,
-                ok: false
+                ok: false,
+                message: error.response.data.ErrorMessage
             });
         });
     },
@@ -37,15 +37,15 @@ const actions = {
         .then(response => {
             context.commit('setResult', {
                 label: 'verification',
-                message: `Email is successfully verified.`,
-                ok: true
+                ok: true,
+                message: `Email is successfully verified.`             
             });
         })
         .catch(error => {
             context.commit('setResult', {
                 label: 'verification',
-                message: error.response.data.ErrorMessage,
-                ok: false
+                ok: false,
+                message: error.response.data.ErrorMessage         
             });
         });        
     }

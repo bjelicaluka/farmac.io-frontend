@@ -23,12 +23,15 @@ export default {
     },
 
     watch: {
-        getResult({text, code}) {
-            if(code === 200) {
+        getResult({label, ok, message}) {
+            if(label !== 'add')
+                return;
+
+            if(ok) {
                 this.$router.push('/auth');
-                toastr.success(text);
+                toastr.success(message);
             } else {
-                toastr.error(text);
+                toastr.error(message);
             }
         }
     }

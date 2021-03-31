@@ -231,14 +231,15 @@ export default {
   },
 
   watch: {
-    result({text, code, label}) {
-      if(label === 'add' || label === 'update') {
-        if(code === 200) {
-          toastr.success(text);
-          this.fetchSystemAdmins();
-        } else {
-          toastr.error(text);
-        }
+    result({label, ok, message}) {
+      if(label !== 'add' && label !== 'update')
+        return;
+
+      if(ok) {
+        toastr.success(message);
+        this.fetchSystemAdmins();
+      } else {
+        toastr.error(message);
       }
     },
 

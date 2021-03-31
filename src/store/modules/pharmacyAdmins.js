@@ -17,10 +17,9 @@ const actions = {
         axios.get(`/pharmacy-admins`)
         .then(response => {
             context.commit('setPharmacyAdmins', response.data);
-            context.commit('setResult', { label: 'get', code: response.status });
         })
         .catch(error => {
-            context.commit('setResult', { label: 'get', code: error.response.status });
+            context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
 
@@ -28,10 +27,9 @@ const actions = {
         axios.get(`/pharmacy-admins/${id}`)
         .then(response => {
             context.commit('setPharmacyAdmin', response.data);
-            context.commit('setResult', { label: 'get', code: response.status });
         })
         .catch(error => {
-            context.commit('setResult', { label: 'get', code: error.response.status });
+            context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
 
@@ -40,49 +38,53 @@ const actions = {
         .then(response => {
             context.commit('setResult', {
                 label: 'add',
-                text: `You have successfully added a new pharmacy admin.`,
-                code: response.status
+                ok: true,
+                message: `You have successfully added a new pharmacy admin.`       
             });
         })
         .catch(error => {
             context.commit('setResult', {
                 label: 'add',
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+                ok: false,
+                message: error.response.data.ErrorMessage
+                
             });
         });
     },
+
     updatePharmacyAdmin: (context, pharmacyAdmin) => {
         axios.put(`/pharmacy-admins`, pharmacyAdmin)
         .then(response => {
             context.commit('setResult', {
                 label: 'update',
-                text: `You have successfully updated a pharmacy admin.`,
-                code: response.status
+                ok: true,
+                message: `You have successfully updated a pharmacy admin.`
             });
         })
+
         .catch(error => {
             context.commit('setResult', {
                 label: 'update',
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+                ok: false,
+                message: error.response.data.ErrorMessage       
             });
         });
     },
+
     deletePharmacyAdmin: (context, id) => {
         axios.delete(`/pharmacy-admins/${id}`)
         .then(response => {
             context.commit('setResult', {
                 label: 'delete',
-                text: `You have successfully deleted pharmacy admin.`,
-                code: response.status
+                ok: true,
+                message: `You have successfully deleted pharmacy admin.`
             });
         })
         .catch(error => {
             context.commit('setResult', {
                 label: 'delete',
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+                ok: false, 
+                message: error.response.data.ErrorMessage
             });
         });
     },

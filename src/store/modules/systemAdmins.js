@@ -17,10 +17,9 @@ const actions = {
         axios.get(`/system-admins`)
         .then(response => {
             context.commit('setSystemAdmins', response.data);
-            context.commit('setResult', { label: 'get', code: response.status });
         })
         .catch(error => {
-            context.commit('setResult', { label: 'get', code: error.response.status });
+            context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
 
@@ -28,10 +27,9 @@ const actions = {
         axios.get(`/system-admins/${id}`)
         .then(response => {
             context.commit('setSystemAdmin', response.data);
-            context.commit('setResult', { label: 'get', code: response.status });
         })
         .catch(error => {
-            context.commit('setResult', { label: 'get', code: error.response.status });
+            context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
 
@@ -40,15 +38,15 @@ const actions = {
         .then(response => {
             context.commit('setResult', {
                 label: 'add',
-                text: `You have successfully added a new system administrator.`,
-                code: response.status
+                ok: true,
+                message: `You have successfully added a new system administrator.`
             });
         })
         .catch(error => {
             context.commit('setResult', {
                 label: 'add',
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+                ok: false,
+                message: error.response.data.ErrorMessage
             });
         });
     },
@@ -57,15 +55,16 @@ const actions = {
         .then(response => {
             context.commit('setResult', {
                 label: 'update',
-                text: `You have successfully updated a system administrator.`,
-                code: response.status
+                ok: true,
+                message: `You have successfully updated a system administrator.`
             });
         })
         .catch(error => {
             context.commit('setResult', {
                 label: 'update',
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+                ok: false,
+                message: error.response.data.ErrorMessage
+                
             });
         });
     },
@@ -74,15 +73,16 @@ const actions = {
         .then(response => {
             context.commit('setResult', {
                 label: 'delete',
-                text: `You have successfully deleted system administrator.`,
-                code: response.status
+                ok: true,
+                message: `You have successfully deleted system administrator.`
+                
             });
         })
         .catch(error => {
             context.commit('setResult', {
                 label: 'delete',
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+                ok: false,
+                message: error.response.data.ErrorMessage
             });
         });
     },

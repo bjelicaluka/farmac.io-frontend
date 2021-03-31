@@ -85,14 +85,17 @@ export default {
     },
 
     watch: {
-      result({text, code}) {
-        if(code === 200) {
-            $('#enterDateModal').modal('hide');
-            toastr.success(text);
-        } else {
-            toastr.error(text);
+        result({label, ok, message}) {
+            if(label !== 'reservation')
+                return;
+
+            if(ok) {
+                $('#enterDateModal').modal('hide');
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
         }
-      }
     },
 
     methods: {

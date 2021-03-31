@@ -105,14 +105,15 @@ export default {
     },
 
     watch: {
-        result({text, code, label}) {
-            if(label === 'delete') {
-                if(code === 200) {
-                    toastr.success(text);
-                    this.fetchSystemAdmins();
-                } else {
-                    toastr.error(text);
-                }
+        result({label, ok, message}) {
+            if(label !== 'delete')
+                return;
+
+            if(ok) {
+                toastr.success(message);
+                this.fetchSystemAdmins();
+            } else {
+                toastr.error(message);
             }
         }
     },

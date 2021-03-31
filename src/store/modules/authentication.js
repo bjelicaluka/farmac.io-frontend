@@ -17,16 +17,17 @@ const actions = {
             setAxiosInterceptors();
             
             context.commit('setResult', {
-                message: '',
+                label: 'authenticate',
                 ok: true,
-                label: 'authenticate'
+                message: ''
+                
             });
         })
         .catch(error => {
             context.commit('setResult', {
-                message: error.response.data.ErrorMessage,
+                label: 'authenticate',
                 ok: false,
-                label: 'authenticate'
+                message: error.response.data.ErrorMessage
             });
         });        
     }
