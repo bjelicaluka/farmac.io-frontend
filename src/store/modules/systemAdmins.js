@@ -1,22 +1,22 @@
 import axios from "axios";
 
 const state = {
-    pharmacyAdmin: null,
-    pharmacyAdmins: null,
+    systemAdmin: null,
+    systemAdmins: null,
     result: null
 };
 
 const getters = {
-    getPharmacyAdmin: state => state.pharmacyAdmin,
-    getPharmacyAdmins: state => state.pharmacyAdmins,
+    getSytemAdmin: state => state.systemAdmin,
+    getSystemAdmins: state => state.systemAdmins,
     getResult: state => state.result
 };
 
 const actions = {
-    getPharmacyAdmins: (context) => {
-        axios.get(`/pharmacy-admins`)
+    getSystemAdmins: (context) => {
+        axios.get(`/system-admins`)
         .then(response => {
-            context.commit('setPharmacyAdmins', response.data);
+            context.commit('setSystemAdmins', response.data);
             context.commit('setResult', { label: 'get', code: response.status });
         })
         .catch(error => {
@@ -24,10 +24,10 @@ const actions = {
         });
     },
 
-    getPharmacyAdminById: (context, id) => {
-        axios.get(`/pharmacy-admins/${id}`)
+    getSystemAdminById: (context, id) => {
+        axios.get(`/system-admins/${id}`)
         .then(response => {
-            context.commit('setPharmacyAdmin', response.data);
+            context.commit('setSystemAdmin', response.data);
             context.commit('setResult', { label: 'get', code: response.status });
         })
         .catch(error => {
@@ -35,12 +35,12 @@ const actions = {
         });
     },
 
-    addPharmacyAdmin: (context, pharmacyAdmin) => {
-        axios.post(`/pharmacy-admins`, pharmacyAdmin)
+    addSystemAdmin: (context, systemAdmin) => {
+        axios.post(`/system-admins`, systemAdmin)
         .then(response => {
             context.commit('setResult', {
                 label: 'add',
-                text: `You have successfully added a new pharmacy admin.`,
+                text: `You have successfully added a new system administrator.`,
                 code: response.status
             });
         })
@@ -52,12 +52,12 @@ const actions = {
             });
         });
     },
-    updatePharmacyAdmin: (context, pharmacyAdmin) => {
-        axios.put(`/pharmacy-admins`, pharmacyAdmin)
+    updateSystemAdmin: (context, systemAdmin) => {
+        axios.put(`/system-admins`, systemAdmin)
         .then(response => {
             context.commit('setResult', {
                 label: 'update',
-                text: `You have successfully updated a pharmacy admin.`,
+                text: `You have successfully updated a system administrator.`,
                 code: response.status
             });
         })
@@ -69,12 +69,12 @@ const actions = {
             });
         });
     },
-    deletePharmacyAdmin: (context, id) => {
-        axios.delete(`/pharmacy-admins/${id}`)
+    deleteSystemAdmin: (context, id) => {
+        axios.delete(`/system-admins/${id}`)
         .then(response => {
             context.commit('setResult', {
                 label: 'delete',
-                text: `You have successfully deleted pharmacy admin.`,
+                text: `You have successfully deleted system administrator.`,
                 code: response.status
             });
         })
@@ -89,11 +89,11 @@ const actions = {
 };
 
 const mutations = {
-    setPharmacyAdmin: (state, pharmacyAdmin) => {
-        state.pharmacyAdmin = pharmacyAdmin;
+    setSystemAdmin: (state, systemAdmin) => {
+        state.systemAdmin = systemAdmin;
     },
-    setPharmacyAdmins: (state, pharmacyAdmins) => {
-        state.pharmacyAdmins = pharmacyAdmins;
+    setSystemAdmins: (state, systemAdmins) => {
+        state.systemAdmins = systemAdmins;
     },
     setResult: (state, result) => {
         state.result = result;
