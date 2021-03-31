@@ -4,12 +4,14 @@ const state = {
     futureMedicineReservations: {},
     result: null,
     cancelResult: null,
+    reservedMedicines: []
 }
 
 const getters = {
     getFutureMedicineReservations: state => state.futureMedicineReservations,
     getResult: state => state.result,
-    getCancelResult: state => state.cancelResult
+    getCancelResult: state => state.cancelResult,
+    getReservedMedicines: state => state.reservedMedicines
 };
 
 
@@ -39,6 +41,15 @@ const actions = {
                 code: error.response.data.StatusCode
             });
         });
+    },
+    getReservedMedicines(context, reservationId){
+        axios.get(`/reservations/reservedMedicines/${reservationId}`)
+        .then(response => {
+            context.commit('setReservedMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { code: error.response.status });
+        });
     }
 };
 
@@ -51,6 +62,9 @@ const mutations = {
     },
     setCancelResult: (state, result) => {
         state.cancelResult = result;
+    },
+    setReservedMedicines: (state, reservedMedicines) =>{
+        state.reservedMedicines = reservedMedicines;
     }
 };
 
