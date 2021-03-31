@@ -7,6 +7,9 @@
             <Card title='Dermatologists' :description="`${pharmacy && pharmacy.name}'s dermatologist employees.`">
                 <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :pharmacyId="pharmacyId" />
             </Card>
+            <Card title='Dermatologist Appointments' :description="`${pharmacy && pharmacy.name}'s dermatologist appointments.`">
+                <AppointmentsTable :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />
+            </Card>
         </div> 
     </div>
 </template>
@@ -18,9 +21,10 @@ import Card from '../components/Card/Card.vue';
 import DermatologistsTable from '../components/Tables/DermatologistsTable.vue';
 import PharmacistsTable from '../components/Tables/PharmacistsTable.vue';
 import toastr from 'toastr'
+import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 
 export default {
-  components: { PharmacistsTable, Card, DermatologistsTable },
+  components: { PharmacistsTable, Card, DermatologistsTable, AppointmentsTable },
     data: () => {
         return {
             pharmacyId: null,
@@ -35,6 +39,7 @@ export default {
             pharmacistResult: 'pharmacist/getResult',
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
+            dermatologistAppointments: 'appointments/getDermatologistAppointments'
         }),
     },
     watch: {
@@ -67,6 +72,7 @@ export default {
             searchPharmacyPharmacists: 'pharmacist/searchPharmacyPharmacistsByName',
             fetchPharmacyDermatologists: 'dermatologist/fetchPharmacyDermatologists',
             searchPharmacyDermatologists: 'dermatologist/searchPharmacyDermatologistsByName',
+            fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -82,6 +88,7 @@ export default {
         this.fetchPharmacy(this.pharmacyId);
         this.fetchPharmacyPharmacists(this.pharmacyId);
         this.fetchPharmacyDermatologists(this.pharmacyId);
+        this.fetchDermatologistAppointments(this.pharmacyId);
     }
 }
 </script>

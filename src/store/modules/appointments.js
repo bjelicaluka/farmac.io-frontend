@@ -2,11 +2,13 @@ import axios from "axios";
 
 const state = {
     appointments: null,
+    dermatologistAppointments: null,
     result: null,
 };
 
 const getters = {
     getAppointments: state => state.appointments,
+    getDermatologistAppointments: state => state.dermatologistAppointments,
     getResult: state => state.result,
 };
 
@@ -15,6 +17,15 @@ const actions = {
         axios.get(`/appointments`)
         .then(resp => {
             context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchDermatologistAppointmentsInPharmacy: (context, pharmacyId) => {
+        axios.get(`/pharmacies/${pharmacyId}/dermatologists/appointments`)
+        .then(resp => {
+            context.commit('setDermatologistAppointments', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -34,6 +45,9 @@ const actions = {
 const mutations = {
     setAppointments: (state, appointments) => {
         state.appointments = appointments;
+    },
+    setDermatologistAppointments: (state, appointments) => {
+        state.dermatologistAppointments = appointments;
     },
     setResult: (state, result) => {
         state.result = result;
