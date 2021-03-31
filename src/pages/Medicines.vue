@@ -44,11 +44,27 @@
                 </template>
             </div>
         </div>
+
+        <Modal
+            modalBoxId="medicineModal"
+            title="Create medicine"
+            sizeClass="modal-lg"
+        >
+            <div slot="body">
+                <MedicineForm />
+            </div>
+        </Modal>
+
+        <ModalOpener modalBoxId="medicineModal">
+            <Button class="pull-right">Create Medicine</Button>
+        </ModalOpener>
     </div>
 </template>
 
 <script>
 import FormGroup from '../components/Form/FormGroup'
+import MedicineForm from '../components/Forms/MedicineForm'
+import Button from '../components/Form/Button'
 import RotatingCard from '../components/Card/RotatingCard.vue';
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
@@ -60,6 +76,8 @@ import toastr from 'toastr'
 export default {
     components: {
         FormGroup,
+        MedicineForm,
+        Button,
         RotatingCard,
         Modal,
         ModalOpener,
