@@ -26,7 +26,8 @@ import Button from '../Form/Button.vue'
 import Form from '../Form/Form.vue'
 import FormRow from '../Form/FormRow.vue'
 import TextInput from '../Form/TextInput.vue'
-import {mapActions} from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import toastr from 'toastr'
 
 export default {
    components: {
@@ -35,11 +36,32 @@ export default {
        TextInput,
        Button
     },
+
     data: function() {
         return {
             email: ''
         }
     },
+
+    computed: {
+        ...mapGetters({
+            result: 'emailVerification/getResult',
+        })
+    },
+
+    watch: {
+        result({label, ok, message}) {
+            if(label !== 'getVerificationEmail')
+                return;
+
+            if(ok) {
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
+        }
+    },
+
     methods: {
         ...mapActions({getVerificationEmail: 'emailVerification/getVerificationEmail'}),
 

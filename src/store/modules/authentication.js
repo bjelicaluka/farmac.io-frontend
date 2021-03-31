@@ -1,16 +1,12 @@
 import axios from "axios";
-import {setToken, setAxiosInterceptors} from '../../utils/localStorage'
+import {setToken, setAxiosInterceptors} from '../../utils/token'
 
 const state = {
-    result: {
-        ok: false,
-        message: '',
-        label: ''
-    }
+    result: null
 };
 
 const getters = {
-    getResult: state => { return state.result; }
+    getResult: state => state.result
 };
 
 const actions = {

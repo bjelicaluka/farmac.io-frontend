@@ -129,15 +129,19 @@ export default {
   },
 
   computed: {
-      ...mapGetters({result: 'pharmacies/getAddResult'})
+      ...mapGetters({result: 'pharmacies/getResult'})
   },
 
   watch: {
-    result({text, code}) {
-      if(code === 200) {
-        toastr.success(text);
+    result({label, ok, message}) {
+      if(label !== 'add' && label !== 'update') {
+        return;
+      }
+      
+      if(ok) {
+        toastr.success(message);
       } else {
-        toastr.error(text);
+        toastr.error(message);
       }
     },
     isEdit() {

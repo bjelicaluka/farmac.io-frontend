@@ -9,7 +9,7 @@
                         <TableHead :columnNames="['Medicine name', 'Quantity', 'Price']"></TableHead>
                         <TableBody v-if="reservedMedicines.length > 0">
                             <TableRow v-for="(medicine, index) in reservedMedicines" :key="index" :values="[getMedicineName(medicine.medicineId), 
-                            medicine.quantity, medicine.price*medicine.quantity]"></TableRow>
+                            medicine.quantity, medicine.price*medicine.quantity + ' RSD']"></TableRow>
                         </TableBody>
                     </Table>
                 </Card>
@@ -43,7 +43,7 @@ import TableRow from '../Table/TableRow.vue'
 import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener.vue'
 import Card from '../Card/Card.vue'
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
 
@@ -70,7 +70,7 @@ export default {
     computed: {
         ...mapGetters({
             getFutureMedicineReservations: 'medicineReservations/getFutureMedicineReservations',
-            result: 'medicineReservations/getCancelResult',
+            result: 'medicineReservations/getResult',
             getPharmacies: 'pharmacies/getPharmacies',
             getReservedMedicines: 'medicineReservations/getReservedMedicines',
             getMedicines: 'medicines/getMedicines'
@@ -84,13 +84,16 @@ export default {
             getAllPharmacies: 'pharmacies/getPharmacies',
             fetchReservedMedicines: 'medicineReservations/getReservedMedicines',
             fetchMedicines: 'medicines/getMedicines'
-        }), 
+        }),
+
         handleCancelReservation(reservationId){
             this.cancelReservation(reservationId);
         },
+
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
+
         foundPharmacy(pharmacyId){
             for(let i = 0; i < this.pharmacies.length; i++){
                 if(this.pharmacies[i].id == pharmacyId){
@@ -98,11 +101,13 @@ export default {
                 }
             }
         },
+
         displayReservedMedicines(reservationId){
             this.reservedMedicines = [];
             this.fetchReservedMedicines(reservationId);
             document.getElementById('displayMedicinesModalOpener').click();
         },
+
         getMedicineName(medicineId){
             for(let i = 0; i < this.medicines.length; i++){
                 if(this.medicines[i].id == medicineId){
@@ -113,23 +118,29 @@ export default {
     },
 
     watch: {
-        getFutureMedicineReservations(reservations){
+        getFutureMedicineReservations(reservations) {
             this.futureMedicineReservations = reservations;
-            this.check = true;
         },
-        result({text, code}) {
-            if(code === 200) {
-                toastr.success(text);  
+
+        result({label, ok, message}) {
+            if(label !== 'cancel')
+                return;
+            
+            if(ok) {
+                toastr.success(message);  
             } else {
-                toastr.error(text);
+                toastr.error(message);
             }
         },
+
         getPharmacies(pharmacies){
             this.pharmacies = pharmacies;
         },
+
         getReservedMedicines(reservedMedicines){
             this.reservedMedicines = reservedMedicines;
         },
+
         getMedicines(medicines){
             this.medicines = medicines;
         }

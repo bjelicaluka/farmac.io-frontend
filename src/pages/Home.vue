@@ -137,7 +137,7 @@ import TextInput from '../components/Form/TextInput.vue';
 import DateTimePicker from '../components/Form/DateTimePicker.vue';
 import Map from '../components/Map/Map.vue';
 import MapMarker from '../components/Map/MapMarker.vue';
-import {getRoleFromToken} from '../utils/localStorage'
+import {getRoleFromToken} from '../utils/token'
 import axios from "axios";
 
 let selectOptions = [

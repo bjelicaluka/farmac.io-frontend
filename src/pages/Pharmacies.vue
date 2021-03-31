@@ -69,21 +69,25 @@ export default {
     },
 
    computed: {
-    ...mapGetters({
-        getPharmacies: 'pharmacies/getPharmacies',
-        result: 'pharmacies/getDeleteResult'
-    })
+        ...mapGetters({
+            getPharmacies: 'pharmacies/getPharmacies',
+            result: 'pharmacies/getResult'
+        })
   },
 
   watch: {
       getPharmacies(pharmacies) {
         this.pharmacies = pharmacies;
       },
-      result({text, code}) {
-        if(code === 200) {
-            toastr.success(text);
+
+      result({label, ok, message}) {
+        if(label !== 'delete')
+            return;
+
+        if(ok) {
+            toastr.success(message);
         } else {
-            toastr.error(text);
+            toastr.error(message);
         }
       }
   },

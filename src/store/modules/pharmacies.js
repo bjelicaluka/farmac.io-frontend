@@ -3,17 +3,13 @@ import axios from "axios";
 const state = {
     pharmacy: null,
     pharmacies: null,
-    result: null,
-    addResult: null,
-    deleteResult: null
+    result: null
 };
 
 const getters = {
     getPharmacy: state => state.pharmacy,
     getPharmacies: state => state.pharmacies,
-    getResult: state => state.result,
-    getAddResult: state => state.addResult,
-    getDeleteResult: state => state.deleteResult,
+    getResult: state => state.result
 };
 
 const actions = {
@@ -44,16 +40,18 @@ const actions = {
     addPharmacy: (context, pharmacy) => {
         axios.post(`/pharmacies`, pharmacy)
         .then(response => {
-            context.commit('setAddResult', {
-                text: `You have successfully added a new pharmacy.`,
-                code: response.status
+            context.commit('setResult', {
+                label: 'add',
+                message: `You have successfully added a new pharmacy.`,
+                ok: true
             });
             context.dispatch('getPharmacies');
         })
         .catch(error => {
-            context.commit('setAddResult', {
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+            context.commit('setResult', {
+                label: 'add',
+                message: error.response.data.ErrorMessage,
+                ok: false
             });
         });
     },
@@ -77,16 +75,18 @@ const actions = {
     deletePharmacy: (context, id) => {
         axios.delete(`/pharmacies/${id}`)
         .then(response => {
-            context.commit('setDeleteResult', {
-                text: `You have successfully deleted pharmacy.`,
-                code: response.status
+            context.commit('setResult', {
+                label: 'delete',
+                message: `You have successfully deleted pharmacy.`,
+                ok: true
             });
             context.dispatch('getPharmacies');
         })
         .catch(error => {
-            context.commit('setDeleteResult', {
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+            context.commit('setResult', {
+                label: 'delete',
+                message: error.response.data.ErrorMessage,
+                ok: false
             });
         });
     },
@@ -101,12 +101,6 @@ const mutations = {
     },
     setResult: (state, result) => {
         state.result = result;
-    },
-    setAddResult: (state, result) => {
-        state.addResult = result;
-    },
-    setDeleteResult: (state, result) => {
-        state.deleteResult = result;
     }
 };
 

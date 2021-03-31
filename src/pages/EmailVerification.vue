@@ -10,8 +10,7 @@
 
 import Card from '../components/Card/Card.vue'
 import EmailValidationForm from '../components/Forms/EmailVerificationForm.vue'
-import {mapActions} from 'vuex'
-import {mapGetters} from 'vuex'
+import { mapActions, mapGetters} from 'vuex'
 import toastr from 'toastr'
 
 export default {
@@ -26,26 +25,20 @@ export default {
     
     computed: {
         ...mapGetters({
-            getGetVerificationEmailResponse: 'emailVerification/getGetVerificationEmailResponse',
-            getVerifyEmailResponse: 'emailVerification/getVerifyEmailResponse'
+            result: 'emailVerification/getResult',
         })
     },
 
     watch: {
-        getGetVerificationEmailResponse({text, code}) {
-            if(code === 200) {
-                toastr.success(text);
-            } else {
-                toastr.error(text);
-            }
-        },
+        result({label, ok, message}) {
+            if(label !== 'verification')
+                return;
 
-        getVerifyEmailResponse({text, code}) {
-            if(code === 200) {
+            if(ok) {
+                toastr.success(message);
                 this.$router.push('/auth');
-                toastr.success(text);
             } else {
-                toastr.error(text);
+                toastr.error(message);
             }
         }
     },
