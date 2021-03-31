@@ -28,8 +28,8 @@ import toastr from 'toastr'
 import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 
 export default {
-  components: { PharmacistsTable, Card, DermatologistsTable, AppointmentsTable },
-  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo },
+  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable },
+
     data: () => {
         return {
             pharmacyId: null,
