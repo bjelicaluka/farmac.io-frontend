@@ -3,11 +3,14 @@ import VueRouter from 'vue-router'
 import Pharmacy from '../pages/Pharmacy.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
+import SystemAdmins from '../pages/SystemAdmins.vue'
 import Dermatologists from '../pages/Dermatologists.vue'
 import Medicines from '../pages/Medicines.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
+import { Roles } from '../constants'
+import * as localStorage from '../utils/localStorage'
 
 Vue.use(VueRouter)
 
@@ -98,6 +101,14 @@ const routes = [
       }
   },
   {
+    path: '/system-admins',
+    name: 'SystemAdmins',
+    component: SystemAdmins,
+    meta: {
+        layout: 'AppLayoutMain'
+      }
+  },
+  {
     path: '/dermatologists',
     name: 'Dermatologists',
     component: Dermatologists,
@@ -110,17 +121,35 @@ const routes = [
     name: 'FutureMedicineReservations',
     component: FutureMedicineReservations,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   }
 ]
     
-
-
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const { authorizedRoles } = to.meta;
+  const isUserLoggedIn = localStorage.isUserLoggedIn();
+
+  if (authorizedRoles) {
+      if (!isUserLoggedIn) {
+          return next({ path: '/auth' });
+      }
+
+      const userRole = localStorage.getRoleFromToken();
+      if (authorizedRoles.length && !authorizedRoles.includes(userRole)) {
+          return next({ path: '/' });
+      }
+  }
+
+  next();
+})
+
 
 export default router

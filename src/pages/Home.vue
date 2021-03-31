@@ -93,20 +93,7 @@
       </Card>
     </div>
 
-    <Modal
-      modalBoxId="exampleModal"
-      title="Example modal"
-    >
-      <div slot="body">
-        <p>Do you want save this?</p>
-		<img src="https://i.ibb.co/ykn7k1y/New-Project-1.png"/>
-      </div>
-
-      <div slot="buttons">
-        <OptionModalButtons @yes="onYes"/>
-      </div>
-    </Modal>
-
+    
     <Modal
       modalBoxId="addLocationModal"
       title="Add location modal"
@@ -120,15 +107,17 @@
       </div>
     </Modal>
 
-    <ModalOpener id="modalOpener" modalBoxId="exampleModal">
-        <Button>Launch Demo Modal</Button>
-    </ModalOpener>
-
-    <ModalOpener id="modalOpenerPharmacist" modalBoxId="pharmacistModal">
-        <Button>Register Pharmacyst</Button>
-    </ModalOpener>
-
     <ModalOpener id="addLocationModalOpener" class="d-none" modalBoxId="addLocationModal" />
+
+    <ButtonWithIcon
+      type="button"
+      className="btn btn-primary btn-round"
+      iconName="favorite"
+      @click="testJwt"
+    >
+      Test token
+    </ButtonWithIcon>
+
   </div>
 </template>
 
@@ -148,6 +137,8 @@ import TextInput from '../components/Form/TextInput.vue';
 import DateTimePicker from '../components/Form/DateTimePicker.vue';
 import Map from '../components/Map/Map.vue';
 import MapMarker from '../components/Map/MapMarker.vue';
+import {getRoleFromToken} from '../utils/localStorage'
+import axios from "axios";
 
 let selectOptions = [
   {
@@ -220,6 +211,13 @@ export default {
       this.location = {lat: e.latlng.lat, lng: e.latlng.lng};
       // toggle modal
       document.getElementById('addLocationModalOpener').click();
+    },
+
+    testJwt() {
+      const token = getRoleFromToken();
+      axios.get('/weatherforecast/patientOnly')
+      .then(r => console.log('dobro'))
+      .catch(e => console.log('lose'));
     }
   },
   watch: {

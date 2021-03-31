@@ -1,6 +1,9 @@
 <template>
     <div class="content">
         <div class="container-fluid">
+            <Card :title="pharmacy && pharmacy.name" :description="pharmacy && pharmacy.description">
+                <PharmacyInfo :pharmacy="pharmacy" />
+            </Card>
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacist employees.`">
                 <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :pharmacyId="pharmacyId" />
             </Card>
@@ -20,11 +23,13 @@ import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
 import DermatologistsTable from '../components/Tables/DermatologistsTable.vue';
 import PharmacistsTable from '../components/Tables/PharmacistsTable.vue';
+import PharmacyInfo from '../components/Shared/PharmacyInfo'
 import toastr from 'toastr'
 import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 
 export default {
   components: { PharmacistsTable, Card, DermatologistsTable, AppointmentsTable },
+  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo },
     data: () => {
         return {
             pharmacyId: null,
@@ -35,6 +40,7 @@ export default {
     computed: {
         ...mapGetters({
             pharmacy: 'pharmacies/getPharmacy',
+            pharmacyResult: 'pharmacies/getResult',
             pharmacists: 'pharmacist/getPharmacists',
             pharmacistResult: 'pharmacist/getResult',
             dermatologists: 'dermatologist/getDermatologists',
@@ -64,6 +70,13 @@ export default {
                     this.fetchPharmacyPharmacists(this.pharmacyId);
             }
         },
+        pharmacyResult({ok, label, message}) {
+            if(label === 'update') {
+                if(ok) {
+                    this.fetchPharmacy(this.pharmacyId);
+                }
+            }
+        }
     },
     methods: {
         ...mapActions({
