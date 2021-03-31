@@ -1,5 +1,5 @@
 import axios from "axios";
-import {setToken, getRoleFromToken, getAccountIdFromToken} from '../../utils/localStorage'
+import {setToken, setAxiosInterceptors} from '../../utils/localStorage'
 
 const state = {
     result: {
@@ -18,6 +18,7 @@ const actions = {
         axios.post('/auth', credentials)
         .then(response => {
             setToken(response.data.token);
+            setAxiosInterceptors();
             
             context.commit('setResult', {
                 message: '',

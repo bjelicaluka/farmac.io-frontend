@@ -1,5 +1,6 @@
 import jwt_decoder from 'jwt-decode'
 import moment from 'moment'
+import axios from 'axios'
 import { Roles } from '../constants'
 
 export function setToken(token) {
@@ -8,6 +9,13 @@ export function setToken(token) {
 
 export function removeToken() {
     localStorage.removeItem('token');
+}
+
+export function setAxiosInterceptors() {
+	axios.interceptors.request.use(config => {
+		config.headers.Authorization = localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : '';
+		return config;
+	});
 }
 
 export function getRoleFromToken() {
