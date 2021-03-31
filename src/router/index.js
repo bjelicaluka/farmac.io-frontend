@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Pharmacy from '../pages/Pharmacy.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
+import SystemAdmins from '../pages/SystemAdmins.vue'
 import Dermatologists from '../pages/Dermatologists.vue'
 import Medicines from '../pages/Medicines.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
@@ -95,6 +96,14 @@ const routes = [
     path: '/pharmacy-admins',
     name: 'PharmacyAdmins',
     component: PharmacyAdmins,
+    meta: {
+        layout: 'AppLayoutMain'
+      }
+  },
+  {
+    path: '/system-admins',
+    name: 'SystemAdmins',
+    component: SystemAdmins,
     meta: {
         layout: 'AppLayoutMain'
       }
