@@ -9,6 +9,7 @@ import shoppingCart from './modules/shoppingCart'
 import pharmacyAdmins from './modules/pharmacyAdmins'
 import systemAdmins from './modules/systemAdmins'
 import dermatologist from './modules/dermatologist';
+import appointments from './modules/appointments';
 import medicineReservations from './modules/medicineReservations';
 import authentication from './modules/authentication'
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     systemAdmins,
     dermatologist,
     medicineReservations,
+    appointments,
     authentication
   }
 });
