@@ -10,6 +10,7 @@ import pharmacyAdmins from './modules/pharmacyAdmins'
 import dermatologist from './modules/dermatologist';
 import appointments from './modules/appointments';
 import medicineReservations from './modules/medicineReservations';
+import authentication from './modules/authentication'
 
 Vue.use(Vuex)
 
@@ -25,5 +26,6 @@ export default new Vuex.Store({
     dermatologist,
     medicineReservations,
     appointments,
+    authentication
   }
 });

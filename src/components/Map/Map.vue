@@ -3,7 +3,7 @@
     <l-map
       ref="map"
       :zoom="zoom"
-      :center="center"
+      :center="latLng(center.lat, center.lng)"
       :options="mapOptions"
       @click="onClickMap($event)"
     >
@@ -21,6 +21,7 @@ import { latLng } from "leaflet";
 import { LMap, LTileLayer } from "vue2-leaflet";
 
 const $ = window.$;
+const defaultCenter = {lat: 45.38361, lng: 20.38194};
 
 export default {
   components: {
@@ -29,7 +30,7 @@ export default {
   },
   props: {
     center: {
-      default: () => latLng(45.38361, 20.38194)
+      default: () => defaultCenter
     },
     height: {
       type: Number,
@@ -53,7 +54,7 @@ export default {
     const this_ = this;
     this.modalBoxId && $(`#${this.modalBoxId}`).on('show.bs.modal', function(){
       setTimeout(() => {
-        this_.$refs.map.mapObject.invalidateSize();
+        this_.$refs.map?.mapObject.invalidateSize();
       }, 1000);
     });
   },
@@ -61,6 +62,10 @@ export default {
     onClickMap(e) {
       this.$emit('click', e);
       this.$refs.map.mapObject.invalidateSize();
+    },
+    latLng() {
+      const c = (!!this.center.lat && !!this.center.lng) ? this.center : {...defaultCenter};
+      return latLng(c.lat, c.lng);
     }
   }
 }
