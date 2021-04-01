@@ -18,7 +18,7 @@ const getters = {
 
 const actions = {
     fetchDermatologists: (context) => {
-        axios.get(`/dermatologists`)
+        axios.get(`/dermatologists/with-work-places`)
         .then(resp => {
             context.commit('setDermatologists', resp.data);
         })
@@ -36,7 +36,7 @@ const actions = {
         });
     },
     fetchPharmacyDermatologists: (context, pharmacyId) => {
-        axios.get(`/pharmacies/${pharmacyId}/dermatologists`)
+        axios.get(`/pharmacies/${pharmacyId}/dermatologists/with-work-places`)
         .then(resp => {
             context.commit('setDermatologists', resp.data);
         })
@@ -54,7 +54,7 @@ const actions = {
         });
     },
     searchDermatologistsByName: (context, name) => {
-        axios.get(`/dermatologists/search?name=${name}`)
+        axios.get(`/dermatologists/with-work-places/search?name=${name}`)
         .then(resp => {
             context.commit('setDermatologists', resp.data);
         })
@@ -63,7 +63,7 @@ const actions = {
         });
     },
     searchPharmacyDermatologistsByName: (context, {pharmacyId, name}) => {
-        axios.get(`/pharmacies/${pharmacyId}/dermatologists/search?name=${name}`)
+        axios.get(`/pharmacies/${pharmacyId}/dermatologists/with-work-places/search?name=${name}`)
         .then(resp => {
             context.commit('setDermatologists', resp.data);
         })
