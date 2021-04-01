@@ -76,12 +76,19 @@ export default {
 
     watch: {
       result({label, ok, message}) {
+        const crudLabels = [
+            'add',
+            'update',
+            'delete'
+        ];
+        if(crudLabels.indexOf(label) !== -1 && ok)
+            this.fetchPharmacies();
+
         if(label !== 'delete')
             return;
 
         if(ok) {
             toastr.success(message);
-            this.fetchPharmacies();
         } else {
             toastr.error(message);
         }

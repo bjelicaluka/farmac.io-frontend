@@ -165,7 +165,6 @@ export default {
       if(label === 'delete') {
         if(ok) {
           toastr.success(message);
-          this.fetchDermatologists();
         } else {
           toastr.error(message);
         }
@@ -177,7 +176,6 @@ export default {
     ...mapActions({
       deleteDermatologist: 'dermatologist/deleteDermatologist',
       removeDermatologistFromPharmacy: 'dermatologist/removeDermatologistFromPharmacy',
-      fetchDermatologists: 'dermatologist/fetchDermatologists'
     }),
     handleRegisterClick() {
       this.isEdit = false;

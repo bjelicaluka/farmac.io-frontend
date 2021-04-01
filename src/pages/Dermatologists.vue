@@ -30,6 +30,15 @@ export default {
     },
     watch: {
         result({label, ok, message}) {
+            const crudLabels = [
+                'add',
+                'update',
+                'delete'
+            ];
+            if(crudLabels.indexOf(label) !== -1 && ok)
+                this.fetchDermatologists();
+
+
             if(label !== 'removeFromPharmacy' && label !== 'addToPharmacy')
                 return;
 

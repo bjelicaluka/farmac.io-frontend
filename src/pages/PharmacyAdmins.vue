@@ -23,8 +23,21 @@ export default {
 
     computed: {
         ...mapGetters({
-            pharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
+            pharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins',
+            result: 'pharmacyAdmins/getResult'
         })
+    },
+
+    watch: {
+        result({label, ok}) {
+            const crudLabels = [
+                'add',
+                'update',
+                'delete'
+            ];
+            if(crudLabels.indexOf(label) !== -1 && ok)
+                this.fetchPharmacyAdmins();
+        }
     },
 
     methods: {

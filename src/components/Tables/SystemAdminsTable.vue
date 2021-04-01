@@ -111,7 +111,6 @@ export default {
 
             if(ok) {
                 toastr.success(message);
-                this.fetchSystemAdmins();
             } else {
                 toastr.error(message);
             }
@@ -120,8 +119,7 @@ export default {
 
     methods: {
         ...mapActions({
-            deleteSystemAdmin: 'systemAdmins/deleteSystemAdmin',
-            fetchSystemAdmins: 'systemAdmins/fetchSystemAdmins'
+            deleteSystemAdmin: 'systemAdmins/deleteSystemAdmin'
         }),
 
         handleRegisterClick() {

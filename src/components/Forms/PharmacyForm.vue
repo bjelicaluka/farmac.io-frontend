@@ -140,7 +140,6 @@ export default {
       
       if(ok) {
         toastr.success(message);
-        this.fetchPharmacies();
       } else {
         toastr.error(message);
       }
@@ -156,8 +155,7 @@ export default {
   methods: {
     ...mapActions({
       addPharmacy: 'pharmacies/addPharmacy',
-      updatePharmacy: 'pharmacies/updatePharmacy',
-      fetchPharmacies: 'pharmacies/fetchPharmacies'
+      updatePharmacy: 'pharmacies/updatePharmacy'
     }),
 
     onMapClick(e) {

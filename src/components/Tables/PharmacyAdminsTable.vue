@@ -112,7 +112,6 @@ export default {
 
             if(ok) {
                 toastr.success(message);
-                this.fetchPharmacyAdmins();
             } else {
                 toastr.error(message);
             }
@@ -121,8 +120,7 @@ export default {
 
     methods: {
         ...mapActions({
-            deletePharmacyAdmin: 'pharmacyAdmins/deletePharmacyAdmin',
-            fetchPharmacyAdmins: 'pharmacyAdmins/fetchPharmacyAdmins'
+            deletePharmacyAdmin: 'pharmacyAdmins/deletePharmacyAdmin'
         }),
 
         handleRegisterClick() {
