@@ -4,7 +4,7 @@
         <Modal
             modalBoxId="displayPharmaciesModal"
             title="Choose pharmacy"
-            >
+        >
             <div slot="body">
                 <Card title="Availability of the medicine in pharmacies">
                     <div v-for="(pharmacy,index) in pharmaciesForMedicines" :key="index">
@@ -85,8 +85,8 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchMedicines: 'medicines/getMedicines',
-            fetchPharmaciesForMedicine: 'medicines/getPharmaciesForMedicineById',
+            fetchMedicines: 'medicines/fetchMedicines',
+            fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
             reserveMedicine: 'shoppingCart/addReservation'
         }), 
 
@@ -99,6 +99,7 @@ export default {
             }
             document.getElementById('displayPharmaciesModalOpener').click();
         },
+        
         addMedicineToCart(e, pharmacyId, quantity, price, pharmacyName, pharmacyStreet, pharmacyCity){
             let reservation = {};
             reservation['pharmacyId'] = pharmacyId;

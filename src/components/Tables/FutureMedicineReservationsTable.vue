@@ -79,11 +79,11 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchMedicineReservations: 'medicineReservations/getFutureMedicineReservations',
+            fetchMedicineReservations: 'medicineReservations/fetchFutureMedicineReservations',
             cancelReservation: 'medicineReservations/cancelReservation',
-            getAllPharmacies: 'pharmacies/getPharmacies',
-            fetchReservedMedicines: 'medicineReservations/getReservedMedicines',
-            fetchMedicines: 'medicines/getMedicines'
+            getAllPharmacies: 'pharmacies/fetchPharmacies',
+            fetchReservedMedicines: 'medicineReservations/fetchReservedMedicines',
+            fetchMedicines: 'medicines/fetchMedicines'
         }),
 
         handleCancelReservation(reservationId){
@@ -127,7 +127,8 @@ export default {
                 return;
             
             if(ok) {
-                toastr.success(message);  
+                toastr.success(message);
+                this.fetchMedicineReservations("2133bc63-1505-4835-9a40-124993d53be2");
             } else {
                 toastr.error(message);
             }

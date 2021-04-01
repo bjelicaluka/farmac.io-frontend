@@ -19,11 +19,11 @@ export default {
     },
 
     computed: {
-        ...mapGetters({ getResult: 'patient/getResult' }),
+        ...mapGetters({ result: 'patient/getResult' }),
     },
 
     watch: {
-        getResult({label, ok, message}) {
+        result({label, ok, message}) {
             if(label !== 'add')
                 return;
 

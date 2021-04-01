@@ -122,7 +122,7 @@ export default {
     methods: {
         ...mapActions({
             deletePharmacyAdmin: 'pharmacyAdmins/deletePharmacyAdmin',
-            fetchPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
+            fetchPharmacyAdmins: 'pharmacyAdmins/fetchPharmacyAdmins'
         }),
 
         handleRegisterClick() {

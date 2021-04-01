@@ -14,7 +14,7 @@ const getters = {
 
 
 const actions = {
-    getFutureMedicineReservations(context, patientId){
+    fetchFutureMedicineReservations(context, patientId){
         axios.get(`/reservations/futureReservations/${patientId}`)
         .then(response => {
             context.commit('setFutureMedicineReservations', response.data);
@@ -32,7 +32,6 @@ const actions = {
                 message: `You have successfully cancel reservation.`,
                 ok: true
             });
-            context.dispatch('getFutureMedicineReservations', '2133bc63-1505-4835-9a40-124993d53be2');
         })
         .catch(error => {
             context.commit('setResult', {
@@ -42,7 +41,8 @@ const actions = {
             });
         });
     },
-    getReservedMedicines(context, reservationId){
+    
+    fetchReservedMedicines(context, reservationId){
         axios.get(`/reservations/reservedMedicines/${reservationId}`)
         .then(response => {
             context.commit('setReservedMedicines', response.data);

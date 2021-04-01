@@ -12,7 +12,7 @@ const getters = {
 }
 
 const actions = {
-    getMedicines: (context) => {
+    fetchMedicines: (context) => {
         axios.get(`/medicines/home`)
         .then(response => {
             context.commit('setMedicines', response.data);
@@ -21,15 +21,15 @@ const actions = {
             context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
-    getPharmaciesForMedicineById: (context, id) => {
+    fetchPharmaciesForMedicineById: (context, id) => {
         axios.get(`medicines/${id}/pharmacies`)
-            .then(response => {
-                context.commit('setPharmaciesForMedicine', response.data);
-            })
-            .catch(error => {
-                context.commit('setResult', { label: 'fetch', ok: false });
-            });
-}
+        .then(response => {
+            context.commit('setPharmaciesForMedicine', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    }
 }
 
 const mutations = {

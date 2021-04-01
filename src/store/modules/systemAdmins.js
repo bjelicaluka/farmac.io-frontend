@@ -13,7 +13,7 @@ const getters = {
 };
 
 const actions = {
-    getSystemAdmins: (context) => {
+    fetchSystemAdmins: (context) => {
         axios.get(`/system-admins`)
         .then(response => {
             context.commit('setSystemAdmins', response.data);
@@ -23,7 +23,7 @@ const actions = {
         });
     },
 
-    getSystemAdminById: (context, id) => {
+    fetchSystemAdminById: (context, id) => {
         axios.get(`/system-admins/${id}`)
         .then(response => {
             context.commit('setSystemAdmin', response.data);

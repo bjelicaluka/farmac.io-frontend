@@ -62,7 +62,6 @@ export default {
     
    data: function() {
         return {
-            pharmacies: [],
             selectedPharmacyName: '',
             selectedPharmacyId: null
         }
@@ -70,22 +69,19 @@ export default {
 
    computed: {
         ...mapGetters({
-            getPharmacies: 'pharmacies/getPharmacies',
+            pharmacies: 'pharmacies/getPharmacies',
             result: 'pharmacies/getResult'
         })
-  },
+    },
 
-  watch: {
-      getPharmacies(pharmacies) {
-        this.pharmacies = pharmacies;
-      },
-
+    watch: {
       result({label, ok, message}) {
         if(label !== 'delete')
             return;
 
         if(ok) {
             toastr.success(message);
+            this.fetchPharmacies();
         } else {
             toastr.error(message);
         }
@@ -94,7 +90,7 @@ export default {
 
   methods: {
     ...mapActions({
-        fetchPharmacies: 'pharmacies/getPharmacies',
+        fetchPharmacies: 'pharmacies/fetchPharmacies',
         deletePharmacy: 'pharmacies/deletePharmacy'
     }),
 

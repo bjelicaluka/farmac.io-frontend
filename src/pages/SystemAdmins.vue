@@ -29,7 +29,7 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchSystemAdmins: 'systemAdmins/getSystemAdmins'
+            fetchSystemAdmins: 'systemAdmins/fetchSystemAdmins'
         })
     },
 

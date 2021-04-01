@@ -121,7 +121,7 @@ export default {
     methods: {
         ...mapActions({
             deleteSystemAdmin: 'systemAdmins/deleteSystemAdmin',
-            fetchSystemAdmins: 'systemAdmins/getSystemAdmins'
+            fetchSystemAdmins: 'systemAdmins/fetchSystemAdmins'
         }),
 
         handleRegisterClick() {

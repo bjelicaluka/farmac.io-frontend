@@ -276,10 +276,10 @@ export default {
 
   methods: {
     ...mapActions({
-      fetchPharmacies: 'pharmacies/getPharmacies',
+      fetchPharmacies: 'pharmacies/fetchPharmacies',
       addPharmacyAdmin: 'pharmacyAdmins/addPharmacyAdmin',
       updatePharmacyAdmin: 'pharmacyAdmins/updatePharmacyAdmin',
-      fetchPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
+      fetchPharmacyAdmins: 'pharmacyAdmins/fetchPharmacyAdmins'
     }),
 
     setEdit() {

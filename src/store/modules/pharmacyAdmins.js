@@ -13,7 +13,7 @@ const getters = {
 };
 
 const actions = {
-    getPharmacyAdmins: (context) => {
+    fetchPharmacyAdmins: (context) => {
         axios.get(`/pharmacy-admins`)
         .then(response => {
             context.commit('setPharmacyAdmins', response.data);
@@ -23,7 +23,7 @@ const actions = {
         });
     },
 
-    getPharmacyAdminById: (context, id) => {
+    fetchPharmacyAdminById: (context, id) => {
         axios.get(`/pharmacy-admins/${id}`)
         .then(response => {
             context.commit('setPharmacyAdmin', response.data);

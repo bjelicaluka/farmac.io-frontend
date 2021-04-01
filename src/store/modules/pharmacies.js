@@ -13,7 +13,7 @@ const getters = {
 };
 
 const actions = {
-    getPharmacies: (context) => {
+    fetchPharmacies: (context) => {
         axios.get(`/pharmacies/home`)
         .then(response => {
             context.commit('setPharmacies', response.data);
@@ -23,7 +23,7 @@ const actions = {
         });
     },
 
-    getPharmacyById: (context, id) => {
+    fetchPharmacyById: (context, id) => {
         axios.get(`/pharmacies/${id}`)
         .then(response => {
             context.commit('setPharmacy', response.data);
@@ -41,7 +41,6 @@ const actions = {
                 message: `You have successfully added a new pharmacy.`,
                 ok: true
             });
-            context.dispatch('getPharmacies');
         })
         .catch(error => {
             context.commit('setResult', {
@@ -51,6 +50,7 @@ const actions = {
             });
         });
     },
+
     updatePharmacy: (context, pharmacy) => {
         axios.put(`/pharmacies`, pharmacy)
         .then(response => {
@@ -68,6 +68,7 @@ const actions = {
             });
         });
     },
+
     deletePharmacy: (context, id) => {
         axios.delete(`/pharmacies/${id}`)
         .then(response => {
@@ -76,7 +77,6 @@ const actions = {
                 message: `You have successfully deleted pharmacy.`,
                 ok: true
             });
-            context.dispatch('getPharmacies');
         })
         .catch(error => {
             context.commit('setResult', {

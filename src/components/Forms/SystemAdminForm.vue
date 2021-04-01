@@ -258,7 +258,7 @@ export default {
     ...mapActions({
       addSystemAdmin: 'systemAdmins/addSystemAdmin',
       updateSystemAdmin: 'systemAdmins/updateSystemAdmin',
-      fetchSystemAdmins: 'systemAdmins/getSystemAdmins'
+      fetchSystemAdmins: 'systemAdmins/fetchSystemAdmins'
     }),
 
     setEdit() {
