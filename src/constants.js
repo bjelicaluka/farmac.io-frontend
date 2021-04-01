@@ -1,6 +1,8 @@
 export const Roles = {
     Patient: "Patient",
+    Supplier: "Supplier",
     Pharmacist: "Pharmacist",
     Dermatologist: "Dermatologist",
-    PharmacyAdmin: 'PharmacyAdmin'
+    PharmacyAdmin: "PharmacyAdmin",
+    SystemAdmin: "SystemAdmin"
 }

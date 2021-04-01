@@ -63,7 +63,7 @@
           />
         </div>
       </form-row>
-      <Map :height="250" @click="onMapClick($event)" :modalBoxId="'pharmacyModal'">
+      <Map :height="250" @click="onMapClick($event)" :center="pharmacy.address || null" :modalBoxId="'pharmacyModal'">
         <div slot="markers">
           <MapMarker :v-if="pharmacy.address.lat !== null && pharmacy.address.lng !== null" :lat="pharmacy.address.lat" :lng="pharmacy.address.lng">
             <div>
@@ -81,7 +81,7 @@
         Please pick a location on the map.
       </InputErrorMessage>
     </form-group>
-    <Button @click="showErrorMessage = true" class="btn btn-primary pull-right" type="submit">Create</button>
+    <Button @click="showErrorMessage = true" class="btn btn-primary pull-right" type="submit">{{isEdit ? 'Update' : 'Create'}}</button>
   </Form>
 </template>
 
@@ -97,6 +97,19 @@ import InputErrorMessage from '../Form/InputErrorMessage.vue'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 
+const initialPharmacy = {
+  name: null,
+  description: null,
+  address: {
+    lat: null,
+    lng: null,
+    state: null,
+    city: null,
+    streetName: null,
+    streetNumber: null,
+  }
+}
+
 export default {
   components: { Form, FormGroup, FormRow, TextInput, Map, MapMarker, InputErrorMessage },
   props: {
@@ -110,38 +123,40 @@ export default {
   },
   data: () => {
     return {
-      pharmacy: {
-        name: null,
-        description: null,
-        address: {
-          lat: null,
-          lng: null,
-          state: null,
-          city: null,
-          streetName: null,
-          streetNumber: null,
-        }
-      },
+      pharmacy: {...initialPharmacy},
       showErrorMessage: false
     }
   },
 
   computed: {
-      ...mapGetters({result: 'pharmacies/getAddResult'})
+      ...mapGetters({result: 'pharmacies/getResult'})
   },
 
   watch: {
-      result({text, code}) {
-        if(code === 200) {
-            toastr.success(text);
-        } else {
-            toastr.error(text);
-        }
+    result({label, ok, message}) {
+      if(label !== 'add' && label !== 'update') {
+        return;
       }
+      
+      if(ok) {
+        toastr.success(message);
+      } else {
+        toastr.error(message);
+      }
+    },
+    isEdit() {
+      this.setEdit();
+    },
+    existingPharmacy() {
+      this.setEdit();
+    }
   },
 
   methods: {
-    ...mapActions({addPharmacy: 'pharmacies/addPharmacy'}),
+    ...mapActions({
+      addPharmacy: 'pharmacies/addPharmacy',
+      updatePharmacy: 'pharmacies/updatePharmacy'
+    }),
 
     onMapClick(e) {
       this.pharmacy.address.lat = e.latlng.lat;
@@ -150,18 +165,28 @@ export default {
 
     onSubmit(e) {
       e.preventDefault();
-      this.addPharmacy(this.pharmacy);
+      this.isEdit ? this.updatePharmacy(this.pharmacy) : this.addPharmacy(this.pharmacy);
     },
 
     validateText(text) {
       return validateText(text);
     },
+    setEdit() {
+      if(!this.isEdit) {
+        this.pharmacy = {...initialPharmacy};
+        this.pharmacy.address = {...initialPharmacy.address}
+        return;
+      }
+
+      if(this.existingPharmacy) {
+        this.pharmacy = {...this.existingPharmacy};
+        this.pharmacy.address = {...this.existingPharmacy.address}
+      }
+    },
   },
 
   mounted() {
-    if(this.isEdit) {
-      this.pharmcy = this.existingPharmacy;
-    }
+    this.setEdit();
   },
   
 }

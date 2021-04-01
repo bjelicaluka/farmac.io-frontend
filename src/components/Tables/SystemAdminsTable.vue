@@ -1,29 +1,28 @@
 <template>
     <div>
-        <ModalOpener modalBoxId="pharmacyAdminModal">
-            <Button @click="handleRegisterClick" class="pull-right">Register pharmacy admin</Button>
+        <ModalOpener modalBoxId="systemAdminModal">
+            <Button @click="handleRegisterClick" class="pull-right">Register system admin</Button>
         </ModalOpener>
 
         <Table>
-            <TableHead :columnNames="['Name', 'Username', 'Email', 'Phone Number', 'Employed At', '']" />
+            <TableHead :columnNames="['Name', 'Username', 'Email', 'Phone Number', '']" />
             <TableBody>
                 <TableRow
-                    v-for="(pharmacyAdmin, index) in pharmacyAdmins"
+                    v-for="(systemAdmin, index) in systemAdmins"
                     :key="index"
                     :values="[
-                            pharmacyAdmin.user.firstName + ' ' + pharmacyAdmin.user.lastName,
-                            pharmacyAdmin.username,
-                            pharmacyAdmin.email,
-                            pharmacyAdmin.user.phoneNumber,
-                            pharmacyAdmin.user.pharmacy.name
+                            systemAdmin.user.firstName + ' ' + systemAdmin.user.lastName,
+                            systemAdmin.username,
+                            systemAdmin.email,
+                            systemAdmin.user.phoneNumber
                 ]">
                             <div class="pull-right text-gray">
-                                <DropdownMenu name="Account" icon="person">
-                                    <ModalOpener modalBoxId="pharmacyAdminModal">
-                                        <DropdownItem @click="handleEditClick(pharmacyAdmin)">Edit</DropdownItem>
+                                <DropdownMenu name="Account">
+                                    <ModalOpener modalBoxId="systemAdminModal">
+                                        <DropdownItem @click="handleEditClick(systemAdmin)">Edit</DropdownItem>
                                     </ModalOpener>
-                                    <ModalOpener modalBoxId="deletePharmacyAdminModal">
-                                        <DropdownItem @click="handleDeleteClick(pharmacyAdmin)">Delete</DropdownItem>
+                                    <ModalOpener modalBoxId="deleteSystemAdminModal">
+                                        <DropdownItem @click="handleDeleteClick(systemAdmin)">Delete</DropdownItem>
                                     </ModalOpener>
                                 </DropdownMenu>
                             </div>
@@ -32,26 +31,26 @@
         </Table>
 
         <Modal
-            title="Pharmacy Admin"
-            modalBoxId="pharmacyAdminModal"
+            title="System Admin"
+            modalBoxId="systemAdminModal"
             sizeClass="modal-lg"
         >
             <div slot="body">
-                <PharmacyAdminForm
+                <SystemAdminForm
                     :isEdit="isEdit"
-                    :existingAccount="selectedPharmacyAdmin"
-                    :existingUser="selectedPharmacyAdmin && selectedPharmacyAdmin.user"
-                />        
+                    :existingAccount="selectedSystemAdmin"
+                    :existingUser="selectedSystemAdmin && selectedSystemAdmin.user"
+                />
             </div>
         </Modal>
 
 
         <Modal
-            modalBoxId="deletePharmacyAdminModal"
-            title="Delete Pharmacy Admin"
+            modalBoxId="deleteSystemAdminModal"
+            title="Delete System Admin"
         >
             <div slot="body">
-                <p v-if="selectedPharmacyAdmin">Are you sure that you want to delete pharmacy admin {{selectedPharmacyAdmin.user.firstName}} {{selectedPharmacyAdmin.user.lastName}}?</p>
+                <p v-if="selectedSystemAdmin">Are you sure that you want to delete system admin {{selectedSystemAdmin.user.firstName}} {{selectedSystemAdmin.user.lastName}}?</p>
             </div>
 
             <div slot="buttons">
@@ -71,14 +70,14 @@ import DropdownMenu from '../DropdownMenu/DropdownMenu'
 import DropdownItem from '../DropdownMenu/DropdownItem'
 import Modal from '../Modal/Modal'
 import ModalOpener from '../Modal/ModalOpener'
-import PharmacyAdminForm from '../Forms/PharmacyAdminForm'
 import OptionModalButtons from '../Modal/OptionModalButtons'
+import SystemAdminForm from '../Forms/SystemAdminForm'
 import Button from '../Form/Button'
 import {mapActions, mapGetters} from 'vuex'
 import toastr from 'toastr'
 
 export default {
-    props: ['pharmacyAdmins'],
+    props: ['systemAdmins'],
 
     components: {
         Table,
@@ -89,20 +88,20 @@ export default {
         DropdownItem,
         Modal,
         ModalOpener,
-        PharmacyAdminForm,
         OptionModalButtons,
+        SystemAdminForm,
         Button
     },
 
     data: function() {
         return {
-            selectedPharmacyAdmin: null,
+            selectedSystemAdmin: null,
             isEdit: false
         }
     },
 
     computed: {
-        ...mapGetters({result: 'pharmacyAdmins/getResult'})
+        ...mapGetters({result: 'systemAdmins/getResult'})
     },
 
     watch: {
@@ -120,27 +119,27 @@ export default {
 
     methods: {
         ...mapActions({
-            deletePharmacyAdmin: 'pharmacyAdmins/deletePharmacyAdmin'
+            deleteSystemAdmin: 'systemAdmins/deleteSystemAdmin'
         }),
 
         handleRegisterClick() {
             this.isEdit = false;
-            this.selectedPharmacyAdmin = null;
+            this.selectedSystemAdmin = null;
         },
 
-        handleDeleteClick(p) {
-            this.selectedPharmacyAdmin = p;
+        handleDeleteClick(systemAdmin) {
+            this.selectedSystemAdmin = systemAdmin;
         },
 
         onDeleteSubmit() {
-            if(this.selectedPharmacyAdmin) {
-                this.deletePharmacyAdmin(this.selectedPharmacyAdmin.id);
+            if(this.selectedSystemAdmin) {
+                this.deleteSystemAdmin(this.selectedSystemAdmin.id);
             }
         },
 
-        handleEditClick(p) {
+        handleEditClick(systemAdmin) {
             this.isEdit = true;
-            this.selectedPharmacyAdmin = p;
+            this.selectedSystemAdmin = systemAdmin;
         }
     }
 }

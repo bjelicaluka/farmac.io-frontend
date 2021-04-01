@@ -1,8 +1,8 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <Card title="Pharmacy administrators">
-                <PharmacyAdminsTable :pharmacyAdmins="pharmacyAdmins" />
+            <Card title="System administrators">
+                <SystemAdminsTable :systemAdmins="systemAdmins" />
             </Card>
         </div>
     </div>
@@ -12,19 +12,19 @@
 
 
 import Card from '../components/Card/Card'
-import PharmacyAdminsTable from '../components/Tables/PharmacyAdminsTable'
+import SystemAdminsTable from '../components/Tables/SystemAdminsTable'
 import {mapGetters, mapActions} from 'vuex'
 
 export default {
     components: {
         Card,
-        PharmacyAdminsTable
+        SystemAdminsTable
     },
 
     computed: {
         ...mapGetters({
-            pharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins',
-            result: 'pharmacyAdmins/getResult'
+            systemAdmins: 'systemAdmins/getSystemAdmins',
+            result: 'systemAdmins/getResult'
         })
     },
 
@@ -36,18 +36,18 @@ export default {
                 'delete'
             ];
             if(crudLabels.indexOf(label) !== -1 && ok)
-                this.fetchPharmacyAdmins();
+                this.fetchSystemAdmins();
         }
     },
 
     methods: {
         ...mapActions({
-            fetchPharmacyAdmins: 'pharmacyAdmins/fetchPharmacyAdmins'
+            fetchSystemAdmins: 'systemAdmins/fetchSystemAdmins'
         })
     },
 
     mounted() {
-        this.fetchPharmacyAdmins();
+        this.fetchSystemAdmins();
     }
 
     

@@ -1,6 +1,6 @@
 <template>
   <Form @submit="onSubmit">
-      
+
     <AccountInfoFormGroup
       :account="account"
       :isEdit="isEdit"
@@ -13,27 +13,11 @@
       :showErrorMessage="showErrorMessage"
     />
 
-    <form-group :title="'Work place'">
-      <form-row>
-        <div class="col-12">
-          <SelectOptionInput 
-            label="Works in"
-            v-model="user.pharmacyId"
-            :options="pharmacies"
-            :isValid="!!user.pharmacyId"
-            :showErrorMessage="showErrorMessage"
-            errorMessage="Please select valid option"
-            :disabled="isEdit"
-          />
-        </div>
-      </form-row>
-    </form-group>
-
     <AddressFormGroup
       :address="user.address"
       :isEdit="isEdit"
       :showErrorMessage="showErrorMessage"
-      modalBoxId="pharmacyAdminModal"
+      modalBoxId="dermatologistModal"
     />
 
     <Button class="pull-right" @click="showErrorMessage = true" type="submit">{{isEdit ? 'Update' : 'Register'}}</Button>
@@ -44,9 +28,6 @@
 <script>
 
 import Form from '../Form/Form'
-import FormGroup from '../Form/FormGroup.vue'
-import FormRow from '../Form/FormRow.vue'
-import SelectOptionInput from '../Form/SelectOptionInput'
 import AccountInfoFormGroup from '../FormGroups/AccountInfoFormGroup'
 import PersonalInfoFormGroup from '../FormGroups/PersonalInfoFormGroup'
 import AddressFormGroup from '../FormGroups/AddressFormGroup'
@@ -75,12 +56,12 @@ const initialUser = {
     city: null,
     streetName: null,
     streetNumber: null,
-  },
-  pharmacyId: ''
+  }
 };
 
 export default {
-  components: { Form, FormGroup, FormRow, SelectOptionInput, Button, AccountInfoFormGroup, PersonalInfoFormGroup, AddressFormGroup },
+  components: { Form, Button, AccountInfoFormGroup, PersonalInfoFormGroup, AddressFormGroup },
+
   props: {
     isEdit: {
       type: Boolean,
@@ -91,16 +72,14 @@ export default {
     },
     existingUser: {
       type: Object
-    }
+    },
   },
 
   data: () => {
     return {
       account: {...initialAccount},
-      
-      user: {...initialUser},
 
-      pharmacies: [],
+      user: {...initialUser},
 
       showErrorMessage: false,
     }
@@ -108,18 +87,12 @@ export default {
 
   computed: {
     ...mapGetters({
-        getPharmacies: 'pharmacies/getPharmacies',
-        result: 'pharmacyAdmins/getResult'
-      }),
-
+        result: 'dermatologist/getResult'
+      })
   },
 
   watch: {
-    getPharmacies(pharmacies) {
-      this.pharmacies = [ ...pharmacies.map(p => { return { value: p.id, label: p.name }; } ) ];
-    },
-
-    result({label, ok, message}) {
+    result({message, ok, label}) {
       if(label !== 'add' && label !== 'update')
         return;
 
@@ -143,9 +116,8 @@ export default {
 
   methods: {
     ...mapActions({
-      fetchPharmacies: 'pharmacies/fetchPharmacies',
-      addPharmacyAdmin: 'pharmacyAdmins/addPharmacyAdmin',
-      updatePharmacyAdmin: 'pharmacyAdmins/updatePharmacyAdmin'
+      addDermatologist: 'dermatologist/addDermatologist',
+      updateDermatologist: 'dermatologist/updateDermatologist'
     }),
 
     setEdit() {
@@ -169,7 +141,7 @@ export default {
 
     onSubmit(e) {
       e.preventDefault();
-      const pharmacyAdminObject = {
+      const systemAdminObject = {
         account: {
           ...this.account
         },
@@ -178,19 +150,14 @@ export default {
         }
       };
       if(!this.isEdit) {
-        this.addPharmacyAdmin(pharmacyAdminObject);
+        this.addDermatologist(systemAdminObject);
       } else {
-        this.updatePharmacyAdmin(pharmacyAdminObject);
+        this.updateDermatologist(systemAdminObject);
       }
     }
-  },
-
-  created() {
-    this.fetchPharmacies();
-    
   }
 }
 </script>
 
 <style>
-</style>
+</style> 

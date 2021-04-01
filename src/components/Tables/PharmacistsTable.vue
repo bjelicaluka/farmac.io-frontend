@@ -17,7 +17,7 @@
           :values="[p.username, `${p.user.firstName} ${p.user.lastName}`, p.email, p.user.pid, p.user.phoneNumber, formatAddress(p.user.address)]"
         >
           <div class="pull-right text-gray">
-            <drop-down-menu name="Account" icon="person">
+            <drop-down-menu>
               <modal-opener :modalBoxId="'pharmacistModal'">
                 <drop-down-item @click="handleEditClick(p)">Edit</drop-down-item>
               </modal-opener>

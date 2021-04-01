@@ -52,17 +52,10 @@ export default {
         Button
     },
     
-    data: function() {
-        return { }
-    },
-
     computed: {
         ...mapGetters({
             patients: 'dermatologist/getPatients'
         })
-    },
-
-    watch: {
     },
 
     methods: {

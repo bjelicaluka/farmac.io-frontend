@@ -1,4 +1,5 @@
-import axios from "axios"
+import axios from "axios";
+import {setToken, setAxiosInterceptors} from '../../utils/token'
 
 const state = {
     result: null
@@ -9,31 +10,32 @@ const getters = {
 };
 
 const actions = {
-    addPatient: (context, patient) => {
-        axios.post('/accounts/create-patient', patient)
+    authenticate: (context, credentials) => {
+        axios.post('/auth', credentials)
         .then(response => {
+            setToken(response.data.token);
+            setAxiosInterceptors();
+            
             context.commit('setResult', {
-                label: 'add',
+                label: 'authenticate',
                 ok: true,
-                message: `You have successfully created a new account. Please verify your account on the email.`
+                message: ''
+                
             });
         })
         .catch(error => {
             context.commit('setResult', {
-                label: 'add',
+                label: 'authenticate',
                 ok: false,
                 message: error.response.data.ErrorMessage
             });
-        })
-    },
-    updatePatient: (context, patient) => {
-        console.log(`In next sprints...`);
+        });        
     }
 };
 
 const mutations = {
-    setResult: (state, result) => {
-        state.result = result;
+    setResult: (state, response) => {
+        state.result = response;
     }
 };
 

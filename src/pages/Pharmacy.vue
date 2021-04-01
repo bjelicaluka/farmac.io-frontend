@@ -1,11 +1,17 @@
 <template>
     <div class="content">
         <div class="container-fluid">
+            <Card :title="pharmacy && pharmacy.name" :description="pharmacy && pharmacy.description">
+                <PharmacyInfo :pharmacy="pharmacy" />
+            </Card>
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacist employees.`">
                 <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :pharmacyId="pharmacyId" />
             </Card>
             <Card title='Dermatologists' :description="`${pharmacy && pharmacy.name}'s dermatologist employees.`">
                 <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :pharmacyId="pharmacyId" />
+            </Card>
+            <Card title='Dermatologist Appointments' :description="`${pharmacy && pharmacy.name}'s dermatologist appointments.`">
+                <AppointmentsTable :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />
             </Card>
         </div> 
     </div>
@@ -17,10 +23,13 @@ import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
 import DermatologistsTable from '../components/Tables/DermatologistsTable.vue';
 import PharmacistsTable from '../components/Tables/PharmacistsTable.vue';
+import PharmacyInfo from '../components/Shared/PharmacyInfo'
 import toastr from 'toastr'
+import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 
 export default {
-  components: { PharmacistsTable, Card, DermatologistsTable },
+  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable },
+
     data: () => {
         return {
             pharmacyId: null,
@@ -31,10 +40,12 @@ export default {
     computed: {
         ...mapGetters({
             pharmacy: 'pharmacies/getPharmacy',
+            pharmacyResult: 'pharmacies/getResult',
             pharmacists: 'pharmacist/getPharmacists',
             pharmacistResult: 'pharmacist/getResult',
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
+            dermatologistAppointments: 'appointments/getDermatologistAppointments'
         }),
     },
     watch: {
@@ -59,14 +70,22 @@ export default {
                     this.fetchPharmacyPharmacists(this.pharmacyId);
             }
         },
+        pharmacyResult({ok, label, message}) {
+            if(label === 'update') {
+                if(ok) {
+                    this.fetchPharmacy(this.pharmacyId);
+                }
+            }
+        }
     },
     methods: {
         ...mapActions({
-            fetchPharmacy: 'pharmacies/getPharmacyById',
+            fetchPharmacy: 'pharmacies/fetchPharmacyById',
             fetchPharmacyPharmacists: 'pharmacist/fetchPharmacyPharmacists',
             searchPharmacyPharmacists: 'pharmacist/searchPharmacyPharmacistsByName',
             fetchPharmacyDermatologists: 'dermatologist/fetchPharmacyDermatologists',
             searchPharmacyDermatologists: 'dermatologist/searchPharmacyDermatologistsByName',
+            fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -82,6 +101,7 @@ export default {
         this.fetchPharmacy(this.pharmacyId);
         this.fetchPharmacyPharmacists(this.pharmacyId);
         this.fetchPharmacyDermatologists(this.pharmacyId);
+        this.fetchDermatologistAppointments(this.pharmacyId);
     }
 }
 </script>
