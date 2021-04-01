@@ -97,8 +97,9 @@ export default {
     computed: {
         ...mapGetters({
             getMedicines: 'medicines/getMedicines',
-            getPharmaciesForMedicines: 'medicines/getPharmaciesForMedicine'
-            })
+            getPharmaciesForMedicines: 'medicines/getPharmaciesForMedicine',
+            result: 'medicines/getResult'
+        })
     },
 
     methods: {
@@ -139,6 +140,11 @@ export default {
       },
       getPharmaciesForMedicines(pharmaciesForMedicines){
           this.pharmaciesForMedicines = pharmaciesForMedicines;
+      },
+      result({label, ok}) {
+          if(label === 'add' && ok) {
+              this.fetchMedicines();
+          }
       }
     },
 

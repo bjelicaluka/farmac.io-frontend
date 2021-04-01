@@ -1,5 +1,5 @@
 <template>
-    <Form>
+    <Form @submit="onSubmit($event)">
         <Collapse>
             <CollapseItem
                 label="General informations"
@@ -137,9 +137,6 @@
                                     <TextInput
                                         label="Ingridient name"
                                         v-model="ingridient.name"
-                                        :isValid="!!ingridient.name"
-                                        errorMessage="Name must be provided."
-                                        :showErrorMessage="showIngridientErrorMessage"
                                     />
                                 </div>
 
@@ -147,21 +144,28 @@
                                     <TextInput
                                         label="Mass (mg)"
                                         v-model="ingridient.mass"
-                                        :isValid="!!ingridient.mass && !isNaN(ingridient.mass) && parseFloat(ingridient.mass) > 0"
-                                        errorMessage="Mass must be positive number."
-                                        :showErrorMessage="showIngridientErrorMessage"
-
                                     />
                                 </div>
+                                
                                 <div class='col-2'>
                                 <br/>    
                                     <Button
                                         className="btn btn-primary btn-sm"
                                         type="submit"
-                                        @click="showIngridientErrorMessage = true"
                                     >
                                         Add
                                     </Button>
+                                </div>
+
+                                <div class='col-5'>
+                                    <small class="form-text text-muted">
+                                        Name must be provided.
+                                    </small>
+                                </div>
+                                <div class='col-5'>
+                                    <small class="form-text text-muted">
+                                        Mass must be positive number.
+                                    </small>
                                 </div>
                             </FormRow>
                         </Form>
@@ -223,7 +227,8 @@ import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
 
 import { validateAlphanumericalWord } from '../../utils/validation'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import toastr from 'toastr'
 
 const formOptions = [
     { value: 'Powder', label: 'Powder' },
@@ -283,34 +288,51 @@ export default {
 
             medicines: [],
 
-            showErrorMessage: false,
-
-            showIngridientErrorMessage: false
+            showErrorMessage: false
         }
     },
     
     computed: {
-        ...mapGetters({ getMedicines: 'medicines/getMedicines' })
+        ...mapGetters({
+            getMedicines: 'medicines/getMedicines',
+            result: 'medicines/getResult'
+        })
     },
 
     watch: {
         getMedicines(medicines) {
             this.medicines = medicines.map(m => { return { value: m.id, label: m.name } });
+        },
+
+        result({label, ok, message}) {
+            if(label !== 'add')
+                return;
+
+            if(ok) {
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
         }
     },
 
     methods: {
+        ...mapActions({ addMedicine: 'medicines/addMedicine'}),
 
         validateCode(word) {
             return validateAlphanumericalWord(word) && word.length === 10;
         },
 
         addIngridient() {
+            if(this.ingridient.name.trim().length === 0 || this.ingridient.mass.trim().length === 0 || isNaN(this.ingridient.mass) || parseFloat(this.ingridient.mass) <= 0) {
+                return;
+            }
+
             const existingIngridient = this.medicine.ingridients.filter(i => i.name === this.ingridient.name);
             if(existingIngridient.length !== 0) {
                 existingIngridient[0].mass = parseFloat(existingIngridient[0].mass) + parseFloat(this.ingridient.mass)
             } else {
-                this.medicine.ingridients.push({name: this.ingridient.name, mass: this.ingridient.mass });
+                this.medicine.ingridients.push({name: this.ingridient.name, massInMilligrams: this.ingridient.mass });
             }
             this.ingridient.name = '';
             this.ingridient.mass = '';
@@ -319,6 +341,27 @@ export default {
 
         removeIngridient(name) {
             this.medicine.ingridients = this.medicine.ingridients.filter(i => i.name !== name );
+        },
+
+        onSubmit(e) {
+            e.preventDefault();
+            const medicineObject = {
+                name: this.medicine.name,
+                uniqueId: this.medicine.uniqueId,
+                type: {
+                    typeName: this.medicine.type
+                },
+                form: this.medicine.form,
+                manufacturer: this.medicine.manufacturer,
+                isRecipeOnly: this.medicine.isRecipeOnly,
+                recommendedDose: this.medicine.recommendedDose,
+                contraindications: this.medicine.contraindications,
+                additionalInfo: this.medicine.additionalInfo,
+                medicineIngredients: this.medicine.ingridients,
+                replacements: this.medicine.replacements.map(repId => { return { ReplacementMedicineId: repId } } )
+            };
+
+            this.addMedicine(medicineObject);   
         }
     }
 }

@@ -8,7 +8,8 @@ const state = {
 
 const getters = {
     getMedicines: state => state.medicines,
-    getPharmaciesForMedicine: state => state.pharmaciesForMedicine
+    getPharmaciesForMedicine: state => state.pharmaciesForMedicine,
+    getResult: state => state.result
 }
 
 const actions = {
@@ -29,7 +30,25 @@ const actions = {
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
         });
-    }
+    },
+    addMedicine: (context, medicine) => {
+        axios.post('/medicines', medicine)
+       .then(response => {
+            context.commit('setResult', {
+                label: 'add',
+                ok: true,
+                message: `You have successfully created a new medicine.`
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'add',
+                ok: false,
+                message: error.response.data.ErrorMessage
+            });
+        });
+    },
+
 }
 
 const mutations = {
