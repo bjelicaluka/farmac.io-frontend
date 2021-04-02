@@ -83,7 +83,7 @@ export default {
             cancelReservation: 'medicineReservations/cancelReservation',
             getAllPharmacies: 'pharmacies/fetchPharmacies',
             fetchReservedMedicines: 'medicineReservations/fetchReservedMedicines',
-            fetchMedicines: 'medicines/fetchMedicines'
+            fetchMedicines: 'medicines/fetchMedicinesForHomePage'
         }),
 
         handleCancelReservation(reservationId){

@@ -1,6 +1,22 @@
 <template>
     <div class="content">
         <div class="container-fluid">
+
+        <Modal
+            modalBoxId="deleteMedicineModal"
+            title="Confirmation"
+        >
+            <div slot="body">
+                <p>Are you sure that you want to delete {{this.selectedMedicineName}} medicine?</p>
+            </div>
+            <div slot="buttons">
+                <OptionModalButtons @yes="handleDelete">
+                </OptionModalButtons>
+            </div>
+        </Modal>
+        <ModalOpener id="deleteMedicineModalOpener" class="d-none" modalBoxId="deleteMedicineModal" />
+
+
         <Modal
             modalBoxId="displayPharmaciesModal"
             title="Choose pharmacy"
@@ -38,6 +54,10 @@
                                 @click="onDisplaySelected(medicine.id, medicine.name)">
                                 <i class="material-icons">add_shopping_cart</i>
                             </a>
+                            <a class="btn btn-danger btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Delete medicine" 
+                                @click="onDeleteSelected(medicine.id, medicine.name)">
+                                <i class="material-icons">delete</i>
+                            </a>
 
                         </div>
                     </RotatingCard>
@@ -68,6 +88,7 @@ import Button from '../components/Form/Button'
 import RotatingCard from '../components/Card/RotatingCard.vue';
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
+import OptionModalButtons from '../components/Modal/OptionModalButtons'
 import ShopingCartCard from '../components/Card/ShoppingCartCard.vue'
 import Card from '../components/Card/Card.vue'
 import { mapGetters, mapActions } from 'vuex'
@@ -81,6 +102,7 @@ export default {
         RotatingCard,
         Modal,
         ModalOpener,
+        OptionModalButtons,
         ShopingCartCard,
         Card
     },
@@ -104,9 +126,10 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchMedicines: 'medicines/fetchMedicines',
+            fetchMedicines: 'medicines/fetchMedicinesForHomePage',
             fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
-            reserveMedicine: 'shoppingCart/addReservation'
+            reserveMedicine: 'shoppingCart/addReservation',
+            deleteMedicine: 'medicines/deleteMedicine'
         }), 
 
         onDisplaySelected(id, name){
@@ -131,6 +154,17 @@ export default {
             reservation['street'] = pharmacyStreet;
             this.reserveMedicine(reservation);
             toastr.success("You have successfully added the medicine to the shopping cart.")
+        },
+
+        onDeleteSelected(id, name) {
+            this.selectedMedicineId = id;
+            this.selectedMedicineName = name
+            document.getElementById('deleteMedicineModalOpener').click();
+        },
+
+        handleDelete(e) {
+            e.preventDefault();
+            this.deleteMedicine(this.selectedMedicineId);
         }
     },
 
@@ -141,7 +175,16 @@ export default {
       getPharmaciesForMedicines(pharmaciesForMedicines){
           this.pharmaciesForMedicines = pharmaciesForMedicines;
       },
-      result({label, ok}) {
+      result({label, ok, message}) {
+          if(label === 'delete') {
+            if(ok) {
+                toastr.success(message);
+                this.fetchMedicines();
+            } else {
+                toastr.error(message);
+            }
+          }
+
           if(label === 'add' && ok) {
               this.fetchMedicines();
           }
