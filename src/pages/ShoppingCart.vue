@@ -6,9 +6,7 @@
                     <TableHead :columnNames="['Medicine name', 'Quantity', 'Price', '']"></TableHead>
                         <TableBody>
                             <TableRow v-for="(medicine, index) in medicines" :key="index + medicine.medicineId" :id="medicine.medicineId" :values="[medicine.medicineName, medicine.quantity, medicine.quantity * medicine.price + ' RSD']">
-                                <a class="btn btn-primary btn-sm btn-just-icon btn-round btn" rel="tooltip" title="Remove from cart" @click="removeItemFromCart(pharmacy, medicine.medicineId, medicine.quantity)">
-                                    <i class="material-icons">clear</i>
-                                </a>
+                                <RoundButton title="Remove from cart" @click="removeItemFromCart(pharmacy, medicine.medicineId, medicine.quantity)" :iconName="'clear'"></RoundButton>
                             </TableRow>
                     </TableBody>
                 </Table>
@@ -50,6 +48,7 @@ import Button from '../components/Form/Button.vue'
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
 import DateTimePicker from '../components/Form/DateTimePicker.vue'
+import RoundButton from '../components/Form/RoundButton.vue'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 
@@ -66,7 +65,8 @@ export default {
         Button,
         Modal,
         ModalOpener,
-        DateTimePicker
+        DateTimePicker,
+        RoundButton
     },
 
     data: function(){

@@ -23,12 +23,9 @@
                     :values="[foundPharmacy(reservation.pharmacyId).name, foundPharmacy(reservation.pharmacyId).address.streetName + ' ' + 
                     foundPharmacy(reservation.pharmacyId).address.streetNumber + ', ' + foundPharmacy(reservation.pharmacyId).address.city, 
                     formatDateTime(reservation.pickupDeadline), reservation.price]">
-                    <a class="btn btn-primary btn-sm btn-just-icon btn-round btn" rel="tooltip" title="Cancel reservation" @click="handleCancelReservation(reservation.reservationId)">
-                        <i class="material-icons">clear</i>
-                    </a>
-                    <a class="btn btn-primary btn-sm btn-just-icon btn-round btn" rel="tooltip" title="See reserved medicines" @click="displayReservedMedicines(reservation.reservationId)">
-                        <i class="material-icons">medical_services</i>
-                    </a>
+                    <RoundButton :title="'Cancel reservation'" :iconName="'clear'" @click="handleCancelReservation(reservation.reservationId)"></RoundButton>
+                    <RoundButton title="See reserved medicines" @click="displayReservedMedicines(reservation.reservationId)" :iconName="'medical_services'">
+                    </RoundButton>
                 </TableRow>
             </TableBody>  
         </Table>
@@ -43,6 +40,7 @@ import TableRow from '../Table/TableRow.vue'
 import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener.vue'
 import Card from '../Card/Card.vue'
+import RoundButton from '../Form/RoundButton.vue'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
@@ -55,7 +53,8 @@ export default {
         TableRow,
         Modal,
         ModalOpener,
-        Card
+        Card,
+        RoundButton
     },
 
     data: function() {
