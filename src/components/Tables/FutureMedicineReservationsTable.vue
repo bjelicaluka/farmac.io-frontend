@@ -4,14 +4,8 @@
             modalBoxId="displayMedicinesModal"
             title="Reserved medicines">
             <div slot="body">
-                <Card title="Quantity and price of reserved medicines">
-                    <Table>
-                        <TableHead :columnNames="['Medicine name', 'Quantity', 'Price']"></TableHead>
-                        <TableBody v-if="reservedMedicines.length > 0">
-                            <TableRow v-for="(medicine, index) in reservedMedicines" :key="index" :values="[getMedicineName(medicine.medicineId), 
-                            medicine.quantity, medicine.price*medicine.quantity + ' RSD']"></TableRow>
-                        </TableBody>
-                    </Table>
+                <Card title="Quantity and price of reserved medicines" v-if="reservedMedicines.length > 0">
+                    <ReservedMedicinesTable :reservedMedicines="reservedMedicines"></ReservedMedicinesTable>
                 </Card>
             </div>
         </Modal>
@@ -41,6 +35,7 @@ import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener.vue'
 import Card from '../Card/Card.vue'
 import RoundButton from '../Form/RoundButton.vue'
+import ReservedMedicinesTable from '../Tables/ReservedMedicinesTable.vue'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
@@ -54,7 +49,8 @@ export default {
         Modal,
         ModalOpener,
         Card,
-        RoundButton
+        RoundButton, 
+        ReservedMedicinesTable
     },
 
     data: function() {
@@ -72,7 +68,6 @@ export default {
             result: 'medicineReservations/getResult',
             getPharmacies: 'pharmacies/getPharmacies',
             getReservedMedicines: 'medicineReservations/getReservedMedicines',
-            getMedicines: 'medicines/getMedicines'
         })
     },
 
@@ -82,7 +77,6 @@ export default {
             cancelReservation: 'medicineReservations/cancelReservation',
             getAllPharmacies: 'pharmacies/fetchPharmacies',
             fetchReservedMedicines: 'medicineReservations/fetchReservedMedicines',
-            fetchMedicines: 'medicines/fetchMedicines'
         }),
 
         handleCancelReservation(reservationId){
@@ -106,14 +100,6 @@ export default {
             this.fetchReservedMedicines(reservationId);
             document.getElementById('displayMedicinesModalOpener').click();
         },
-
-        getMedicineName(medicineId){
-            for(let i = 0; i < this.medicines.length; i++){
-                if(this.medicines[i].id == medicineId){
-                    return this.medicines[i].name;
-                }
-            }
-        }
     },
 
     watch: {
@@ -149,7 +135,6 @@ export default {
     mounted() {
         this.fetchMedicineReservations("2133bc63-1505-4835-9a40-124993d53be2");
         this.getAllPharmacies();
-        this.fetchMedicines();
     }
 
 }
