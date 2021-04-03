@@ -80,7 +80,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            fetchPharmacy: 'pharmacies/getPharmacyById',
+            fetchPharmacy: 'pharmacies/fetchPharmacyById',
             fetchPharmacyPharmacists: 'pharmacist/fetchPharmacyPharmacists',
             searchPharmacyPharmacists: 'pharmacist/searchPharmacyPharmacistsByName',
             fetchPharmacyDermatologists: 'dermatologist/fetchPharmacyDermatologists',

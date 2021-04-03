@@ -1,8 +1,8 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <Card :title="'Future medicine reservations'" :description="'You can cancel your reservation 24 hours before pickup.'">
-                <FutureMedicineReservationsTable></FutureMedicineReservationsTable>
+            <Card :title="'Medicine reservations'" :description="'You can cancel your reservation 24 hours before pickup.'">
+                <FutureMedicineReservationsTable />
             </Card>
         </div>
     </div>

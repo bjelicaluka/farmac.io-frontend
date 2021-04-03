@@ -10,7 +10,7 @@ import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import { Roles } from '../constants'
-import * as localStorage from '../utils/localStorage'
+import * as tokenUtils from '../utils/token'
 
 Vue.use(VueRouter)
 
@@ -121,8 +121,7 @@ const routes = [
     name: 'FutureMedicineReservations',
     component: FutureMedicineReservations,
     meta: {
-      layout: 'AppLayoutMain',
-      authorizedRoles: [Roles.Patient]
+      layout: 'AppLayoutMain'
     }
   }
 ]
@@ -135,14 +134,14 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const { authorizedRoles } = to.meta;
-  const isUserLoggedIn = localStorage.isUserLoggedIn();
+  const isUserLoggedIn = tokenUtils.isUserLoggedIn();
 
   if (authorizedRoles) {
       if (!isUserLoggedIn) {
           return next({ path: '/auth' });
       }
 
-      const userRole = localStorage.getRoleFromToken();
+      const userRole = tokenUtils.getRoleFromToken();
       if (authorizedRoles.length && !authorizedRoles.includes(userRole)) {
           return next({ path: '/' });
       }

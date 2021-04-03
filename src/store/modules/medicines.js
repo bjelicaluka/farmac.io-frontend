@@ -12,25 +12,24 @@ const getters = {
 }
 
 const actions = {
-    getMedicines: (context) => {
+    fetchMedicines: (context) => {
         axios.get(`/medicines/home`)
         .then(response => {
             context.commit('setMedicines', response.data);
-            context.commit('setResult', { code: response.status });
         })
         .catch(error => {
-            context.commit('setResult', { code: error.response.status });
+            context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
-    getPharmaciesForMedicineById: (context, id) => {
+    fetchPharmaciesForMedicineById: (context, id) => {
         axios.get(`medicines/${id}/pharmacies`)
-            .then(response => {
-                context.commit('setPharmaciesForMedicine', response.data);
-            })
-            .catch(error => {
-                context.commit('setResult', { code: error.response.status });
-            });
-}
+        .then(response => {
+            context.commit('setPharmaciesForMedicine', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    }
 }
 
 const mutations = {

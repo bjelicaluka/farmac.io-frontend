@@ -21,27 +21,28 @@ export default {
         PharmacyAdminsTable
     },
 
-    data: function() {
-        return {
-            pharmacyAdmins: []
-        }
-    },
-
     computed: {
         ...mapGetters({
-            getPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
+            pharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins',
+            result: 'pharmacyAdmins/getResult'
         })
     },
 
     watch: {
-        getPharmacyAdmins(pharmacyAdmins) {
-            this.pharmacyAdmins = pharmacyAdmins;
+        result({label, ok}) {
+            const crudLabels = [
+                'add',
+                'update',
+                'delete'
+            ];
+            if(crudLabels.indexOf(label) !== -1 && ok)
+                this.fetchPharmacyAdmins();
         }
     },
 
     methods: {
         ...mapActions({
-            fetchPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
+            fetchPharmacyAdmins: 'pharmacyAdmins/fetchPharmacyAdmins'
         })
     },
 
