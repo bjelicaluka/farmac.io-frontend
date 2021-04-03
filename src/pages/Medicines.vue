@@ -54,6 +54,12 @@
                                 @click="onDisplaySelected(medicine.id, medicine.name)">
                                 <i class="material-icons">add_shopping_cart</i>
                             </a>
+                            <ModalOpener modalBoxId="medicineModal">
+                                <a class="btn btn-warning btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Delete medicine" 
+                                    @click="onEditSelected(medicine.id)">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </ModalOpener>
                             <a class="btn btn-danger btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Delete medicine" 
                                 @click="onDeleteSelected(medicine.id, medicine.name)">
                                 <i class="material-icons">delete</i>
@@ -67,16 +73,19 @@
 
         <Modal
             modalBoxId="medicineModal"
-            title="Create medicine"
+            title="Medicine"
             sizeClass="modal-lg"
         >
             <div slot="body">
-                <MedicineForm />
+                <MedicineForm
+                    :isEdit="isEdit"
+                    :existingMedicine="selectedMedicine"
+                />
             </div>
         </Modal>
 
         <ModalOpener modalBoxId="medicineModal">
-            <Button class="pull-right">Create Medicine</Button>
+            <Button @click="handleRegisterClick" class="pull-right">Create Medicine</Button>
         </ModalOpener>
     </div>
 </template>
@@ -108,17 +117,20 @@ export default {
     },
 
     data: function() {
-    return {
+        return {
             medicines: [],
             selectedMedicineId: null,
             selectedMedicineName: null,
-            pharmaciesForMedicines: []
+            selectedMedicine: null,
+            pharmaciesForMedicines: [],
+            isEdit: false
         }
     },
 
     computed: {
         ...mapGetters({
             getMedicines: 'medicines/getMedicines',
+            getMedicine: 'medicines/getMedicine',
             getPharmaciesForMedicines: 'medicines/getPharmaciesForMedicine',
             result: 'medicines/getResult'
         })
@@ -127,6 +139,7 @@ export default {
     methods: {
         ...mapActions({
             fetchMedicines: 'medicines/fetchMedicinesForHomePage',
+            fetchMedicine: 'medicines/fetchMedicineById',
             fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
             reserveMedicine: 'shoppingCart/addReservation',
             deleteMedicine: 'medicines/deleteMedicine'
@@ -165,30 +178,53 @@ export default {
         handleDelete(e) {
             e.preventDefault();
             this.deleteMedicine(this.selectedMedicineId);
+        },
+
+        handleRegisterClick() {
+            this.isEdit = false;
+            this.selectedMedicine = null;
+        },
+
+        onEditSelected(medicineId) {
+            this.isEdit = true;
+            this.fetchMedicine(medicineId);
         }
     },
 
     watch: {
-      getMedicines(medicines) {
-        this.medicines = medicines;
-      },
-      getPharmaciesForMedicines(pharmaciesForMedicines){
-          this.pharmaciesForMedicines = pharmaciesForMedicines;
-      },
-      result({label, ok, message}) {
-          if(label === 'delete') {
+        getMedicines(medicines) {
+            this.medicines = medicines;
+        },
+
+        getMedicine(medicine) {
+            this.selectedMedicine = {
+                ...medicine.medicine,
+                replacements: medicine.replacements.map(r => r.replacementMedicineId),
+                ingridients: medicine.ingredients.map(i => { return { name: i.name, mass: i.massInMilligrams} })
+            }
+        },
+
+        getPharmaciesForMedicines(pharmaciesForMedicines){
+            this.pharmaciesForMedicines = pharmaciesForMedicines;
+        },
+
+        result({label, ok, message}) {
+            if(label === 'delete') {
             if(ok) {
                 toastr.success(message);
                 this.fetchMedicines();
             } else {
                 toastr.error(message);
             }
-          }
+            }
 
-          if(label === 'add' && ok) {
-              this.fetchMedicines();
-          }
-      }
+            if(label === 'add' || label === 'update') {
+                if(ok) {
+                    this.fetchMedicines();
+                }
+            }
+        }
+        
     },
 
     mounted() {

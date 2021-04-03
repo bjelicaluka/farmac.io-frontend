@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="form-group">
+        <div :id="id" class="form-group">
             <label class="bmd-label-floating">{{label}}</label>
             <select
                 multiple data-role="tagsinput"
@@ -21,6 +21,10 @@ const $ = window.$;
 
 export default {
     props: {
+        id: {
+            type: String,
+            default: 'multiple'
+        },
         label: {
             type: String,
             default: ''
@@ -44,12 +48,17 @@ export default {
     watch: {
         options(opts) {
             this.options = opts;
-            this.$nextTick(function() { $('.selectpicker').selectpicker('refresh'); });
+            this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
 
         },
         selectedValues(values) {
             this.$emit('input', values);
+        },
+        value(val) {
+            this.selectedValues = val;
+            this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
         }
+        
     }
 }
 </script>

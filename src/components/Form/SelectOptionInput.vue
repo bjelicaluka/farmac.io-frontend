@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="form-group">
+        <div :id="id" class="form-group">
             <label class="form-control-label text-white center">{{label}}</label>
             <select
-                @change="emitChange"
+                v-model="selectedValue"
                 class="selectpicker form-control"
                 data-style="btn btn-primary btn-round"
                 :disabled="disabled"
@@ -30,13 +30,17 @@ export default {
     components: {
         InputErrorMessage
     },
+
     props: {
+        id: {
+            type: String,
+            default: 'single'
+        },
         label: {
             type: String,
             default: ''
         },
         value: {
-            type: String,
             default: ''
         },
         isValid: {
@@ -61,28 +65,26 @@ export default {
         }
     },
 
-    methods: {
-        emitChange(e) {
-            this.$emit('input', e.target.value);
+    data: function() {
+        return {
+            selectedValue: ''
         }
     },
 
     watch: {
         options(opts) {
             this.options = opts;
-            this.$nextTick(function() { $('.selectpicker').selectpicker('refresh'); });
+            this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
 
         },
 
+        selectedValue(value) {
+            this.$emit('input', value);
+        },
+
         value(val) {
-            if(val) {
-                const optionLabel = this.options.filter(p => { return p.value === val})[0].label;
-                this.$nextTick(function() { $('.filter-option-inner-inner').text(optionLabel) });
-            } else {
-                $('.filter-option-inner-inner').text(this.label);
-            }
-            this.$nextTick(function() { $('.selectpicker').val(val) });
-            this.value = val;
+            this.selectedValue = val;
+            this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
         }
     }
 }

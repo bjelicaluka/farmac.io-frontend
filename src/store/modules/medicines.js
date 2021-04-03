@@ -73,6 +73,25 @@ const actions = {
         });
     },
 
+    updateMedicine: (context, medicine) => {
+        axios.put('/medicines', medicine)
+       .then(response => {
+            context.commit('setResult', {
+                label: 'update',
+                ok: true,
+                message: `You have successfully updated an existing medicine.`
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'update',
+                ok: false,
+                message: error.response.data.ErrorMessage
+            });
+        });
+    },
+
+
     deleteMedicine: (context, id) => {
         axios.delete(`/medicines/${id}`)
         .then(response => {

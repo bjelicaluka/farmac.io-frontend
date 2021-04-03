@@ -24,6 +24,7 @@
                                 :isValid="validateCode(medicine.uniqueId)"
                                 :showErrorMessage="showErrorMessage"
                                 errorMessage="Code must be 10 characters alphanumerical word."
+                                :disabled="isEdit"
                             />
                             </div>
                         </FormRow>
@@ -56,14 +57,14 @@
                             <div class='col-7'>
                             <TextInput
                                 label="Type"
-                                v-model="medicine.type"
+                                v-model="medicine.type.typeName"
                                 :isValid="!!medicine.type"
                                 :showErrorMessage="showErrorMessage"
                                 errorMessage="Type must be provided."
                             />
                             </div>
                             <div class='col-5'>
-                                <SelectOptionInput 
+                                <SelectOptionInput
                                     label="Form"
                                     v-model="medicine.form"
                                     :isValid="!!medicine.form"
@@ -204,7 +205,7 @@
         </Collapse>
         <br/>
         <br/>
-        <Button class="pull-right" @click="showErrorMessage = true" type="submit">Create</Button>
+        <Button class="pull-right" @click="showErrorMessage = true" type="submit">{{ isEdit ? 'Update' : 'Create' }}</Button>
     </Form>
 </template>
 
@@ -231,21 +232,23 @@ import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 
 const formOptions = [
-    { value: 'Powder', label: 'Powder' },
-    { value: 'Capsule', label: 'Capsule' },
-    { value: 'Tablet', label: 'Tablet' },
-    { value: 'Mast', label: 'Mast' },
-    { value: 'Pasta', label: 'Pasta' },
-    { value: 'Gel', label: 'Gel' },
-    { value: 'Syrup', label: 'Syrup' },
-    { value: 'Solution', label: 'Solution' },
-    { value: 'Other', label: 'Other' }
+    { value: 0, label: 'Powder' },
+    { value: 1, label: 'Capsule' },
+    { value: 2, label: 'Tablet' },
+    { value: 3, label: 'Mast' },
+    { value: 4, label: 'Pasta' },
+    { value: 5, label: 'Gel' },
+    { value: 6, label: 'Syrup' },
+    { value: 7, label: 'Solution' },
+    { value: 8, label: 'Other' }
 ]
 
 const initialMedicine = {
     name: '',
     uniqueId: '',
-    type: '',
+    type: {
+        typeName: ''
+    },
     form: '',
     manufacturer: '',
     isRecipeOnly: false,
@@ -274,6 +277,17 @@ export default {
         TableBody,
         TableRow
     },
+
+    props: {
+        isEdit: {
+            type: Boolean,
+            default: false
+        },
+        existingMedicine: {
+            type: Object
+        },
+    },
+
 
     data: function() {
         return {
@@ -305,7 +319,7 @@ export default {
         },
 
         result({label, ok, message}) {
-            if(label !== 'add')
+            if(label !== 'add' && label !== 'update')
                 return;
 
             if(ok) {
@@ -313,11 +327,32 @@ export default {
             } else {
                 toastr.error(message);
             }
+        },
+
+        isEdit() {
+            this.setEdit();
+        },
+        existingMedicine() {
+            this.setEdit();
         }
     },
 
     methods: {
-        ...mapActions({ addMedicine: 'medicines/addMedicine'}),
+        ...mapActions({
+            addMedicine: 'medicines/addMedicine',
+            updateMedicine: 'medicines/updateMedicine'
+        }),
+
+        setEdit() {
+            if(!this.isEdit) {
+                this.medicine = {...initialMedicine};
+                return;
+            }
+            
+            if(this.existingMedicine) {
+                this.medicine = this.existingMedicine;
+            }
+        },
 
         validateCode(word) {
             return validateAlphanumericalWord(word) && word.length === 10;
@@ -332,7 +367,7 @@ export default {
             if(existingIngridient.length !== 0) {
                 existingIngridient[0].mass = parseFloat(existingIngridient[0].mass) + parseFloat(this.ingridient.mass)
             } else {
-                this.medicine.ingridients.push({name: this.ingridient.name, massInMilligrams: this.ingridient.mass });
+                this.medicine.ingridients.push({name: this.ingridient.name, mass: this.ingridient.mass });
             }
             this.ingridient.name = '';
             this.ingridient.mass = '';
@@ -347,21 +382,26 @@ export default {
             e.preventDefault();
             const medicineObject = {
                 name: this.medicine.name,
-                uniqueId: this.medicine.uniqueId,
-                type: {
-                    typeName: this.medicine.type
-                },
+                type: this.medicine.type,
                 form: this.medicine.form,
                 manufacturer: this.medicine.manufacturer,
                 isRecipeOnly: this.medicine.isRecipeOnly,
                 recommendedDose: this.medicine.recommendedDose,
                 contraindications: this.medicine.contraindications,
                 additionalInfo: this.medicine.additionalInfo,
-                medicineIngredients: this.medicine.ingridients,
-                replacements: this.medicine.replacements.map(repId => { return { ReplacementMedicineId: repId } } )
+                replacements: this.medicine.replacements.map(repId => { return { ReplacementMedicineId: repId } } ),
+                medicineIngredients: this.medicine.ingridients.map(ing => { return { name: ing.name, massInMilligrams: ing.mass } })
             };
 
-            this.addMedicine(medicineObject);   
+            if(!this.isEdit) {
+                medicineObject.uniqueId = this.medicine.uniqueId;
+                this.addMedicine(medicineObject); 
+            } else {
+                medicineObject.id = this.existingMedicine.id;
+                this.updateMedicine(medicineObject);
+            }
+
+
         }
     }
 }
