@@ -21,18 +21,18 @@ export default {
     
     computed: {
         ...mapGetters({
-            patients: 'dermatologist/getPatients'
+            patients: 'medicalStaff/getPatients'
         })
     },
 
     methods: {
         ...mapActions({
-            fetchPatients: 'dermatologist/fetchDermatologistsPatients',
+            fetchPatients: 'medicalStaff/fetchPatients',
         }),
     },
 
     mounted() {
-        const dermatologistId = "47e70b60-8d7f-4931-a120-07da93d62085"; // for testing
+        const dermatologistId = "08d8f514-5a07-4f4a-8004-cef3216f73ef"; // for testing
         this.fetchPatients(dermatologistId);
     }
 }
