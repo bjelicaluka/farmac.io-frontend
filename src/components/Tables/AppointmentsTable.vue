@@ -97,7 +97,7 @@ export default {
     }
     ,
     handleMakeAppointmentClick(appointment) {
-      let appointmentRequest = { 'appointmentId' : appointment.id, "patientId" : '08d8f514-58e1-4dec-808c-1e93d97d4d98', "pharmacyId" : appointment.pharmacyId};
+      let appointmentRequest = { 'appointmentId' : appointment.id, "patientId" : '08d8f514-58cc-41e9-810e-0a83d243cd60', "pharmacyId" : appointment.pharmacyId};
       this.makeAppointment(appointmentRequest);
     }
   },

@@ -78,6 +78,9 @@ export default {
 
   watch: {
       result({ok, label, message}) {
+        if(label !== 'addDermatologist'){
+          return;
+        }
         if(ok && label === 'addDermatologist') {
             toastr.success(message);
         } else {
