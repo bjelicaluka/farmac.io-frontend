@@ -47,25 +47,16 @@
                             </div>
                         </div>
                         <div slot="buttons">
-                            <a class="btn btn-info btn-just-icon btn-fill btn-round" rel="tooltip" title="Download specification">
-                                <i class="material-icons">subject</i>
-                            </a>
-                            <a class="btn btn-success btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Check availability" 
-                                @click="onDisplaySelected(medicine.id, medicine.name)">
-                                <i class="material-icons">add_shopping_cart</i>
-                            </a>
+                            <RoundButton title="Download specification" iconName="subject" type="btn-info"></RoundButton>
+                            <RoundButton title="Check availability" iconName="add_shopping_cart" type="btn-success" @click="onDisplaySelected(medicine.id, medicine.name)"></RoundButton>
+                            
                             <ModalOpener modalBoxId="medicineModal">
-                                <a class="btn btn-warning btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Delete medicine" 
-                                    @click="onEditSelected(medicine.id)">
-                                    <i class="material-icons">edit</i>
-                                </a>
+                            <RoundButton title="Delete medicine" iconName="edit" type="btn-warning" @click="onEditSelected(medicine.id)"></RoundButton>
                             </ModalOpener>
-                            <a class="btn btn-danger btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Delete medicine" 
-                                @click="onDeleteSelected(medicine.id, medicine.name)">
-                                <i class="material-icons">delete</i>
-                            </a>
+                            
+                            <RoundButton title="Delete medicine" iconName="delete" type="btn-danger" @click="onDeleteSelected(medicine.id, medicine.name)"></RoundButton>
 
-                        </div>
+                             </div>
                     </RotatingCard>
                 </template>
             </div>
@@ -100,6 +91,7 @@ import ModalOpener from '../components/Modal/ModalOpener.vue'
 import OptionModalButtons from '../components/Modal/OptionModalButtons'
 import ShopingCartCard from '../components/Card/ShoppingCartCard.vue'
 import Card from '../components/Card/Card.vue'
+import RoundButton from '../components/Form/RoundButton.vue'
 import { mapGetters, mapActions } from 'vuex'
 import toastr from 'toastr'
 
@@ -113,7 +105,8 @@ export default {
         ModalOpener,
         OptionModalButtons,
         ShopingCartCard,
-        Card
+        Card,
+        RoundButton
     },
 
     data: function() {
