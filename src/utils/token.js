@@ -21,7 +21,7 @@ export function setAxiosInterceptors() {
 export function getRoleFromToken() {
     const roleFromToken = decodeToken()?.role;
 
-	return Object.keys(Roles).find(role => role === roleFromToken);
+	return Object.keys(Roles).find(role => Roles[role] === roleFromToken);
 }
 
 export function getAccountIdFromToken() {

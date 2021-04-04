@@ -26,15 +26,17 @@ const actions = {
           medicines: items
         }).then(response =>  {
             context.commit('setResult', {
-                text: `You have successfully reserved medicines.`,
-                code: response.status
+                label: 'reservation',
+                ok: true,
+                message: `You have successfully reserved medicines.`
             });
             context.commit('removeMedicinesForPharmacy', pharmacyId);
         }).
         catch(error => {
             context.commit('setResult', {
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+                label: 'reservation',
+                ok: false,
+                message: error.response.data.ErrorMessage
             });
         });
 

@@ -106,22 +106,21 @@ export default {
     },
 
     watch: {
-        result({text, code, label}) {
-            if(label === 'delete') {
-                if(code === 200) {
-                    toastr.success(text);
-                    this.fetchPharmacyAdmins();
-                } else {
-                    toastr.error(text);
-                }
+        result({label, ok, message}) {
+            if(label !== 'delete')
+                return;
+
+            if(ok) {
+                toastr.success(message);
+            } else {
+                toastr.error(message);
             }
         }
     },
 
     methods: {
         ...mapActions({
-            deletePharmacyAdmin: 'pharmacyAdmins/deletePharmacyAdmin',
-            fetchPharmacyAdmins: 'pharmacyAdmins/getPharmacyAdmins'
+            deletePharmacyAdmin: 'pharmacyAdmins/deletePharmacyAdmin'
         }),
 
         handleRegisterClick() {

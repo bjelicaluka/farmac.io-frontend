@@ -1,16 +1,12 @@
 import axios from "axios";
-import {setToken, setAxiosInterceptors} from '../../utils/localStorage'
+import {setToken, setAxiosInterceptors} from '../../utils/token'
 
 const state = {
-    result: {
-        ok: false,
-        message: '',
-        label: ''
-    }
+    result: null
 };
 
 const getters = {
-    getResult: state => { return state.result; }
+    getResult: state => state.result
 };
 
 const actions = {
@@ -21,16 +17,17 @@ const actions = {
             setAxiosInterceptors();
             
             context.commit('setResult', {
-                message: '',
+                label: 'authenticate',
                 ok: true,
-                label: 'authenticate'
+                message: ''
+                
             });
         })
         .catch(error => {
             context.commit('setResult', {
-                message: error.response.data.ErrorMessage,
+                label: 'authenticate',
                 ok: false,
-                label: 'authenticate'
+                message: error.response.data.ErrorMessage
             });
         });        
     }

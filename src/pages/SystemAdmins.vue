@@ -23,13 +23,21 @@ export default {
 
     computed: {
         ...mapGetters({
-            systemAdmins: 'systemAdmins/getSystemAdmins'
+            systemAdmins: 'systemAdmins/getSystemAdmins',
+            result: 'systemAdmins/getResult'
         })
+    },
+
+    watch: {
+        result({label, ok}) {
+            if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
+                this.fetchSystemAdmins();
+        }
     },
 
     methods: {
         ...mapActions({
-            fetchSystemAdmins: 'systemAdmins/getSystemAdmins'
+            fetchSystemAdmins: 'systemAdmins/fetchSystemAdmins'
         })
     },
 

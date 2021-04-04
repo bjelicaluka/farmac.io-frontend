@@ -1,10 +1,7 @@
 import axios from "axios"
 
 const state = {
-    result: {
-        text: '',
-        code: 0
-    }
+    result: null
 };
 
 const getters = {
@@ -16,14 +13,16 @@ const actions = {
         axios.post('/accounts/create-patient', patient)
         .then(response => {
             context.commit('setResult', {
-                text: `You have successfully created a new account. Please verify your account on the email.`,
-                code: response.status
+                label: 'add',
+                ok: true,
+                message: `You have successfully created a new account. Please verify your account on the email.`
             });
         })
         .catch(error => {
             context.commit('setResult', {
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+                label: 'add',
+                ok: false,
+                message: error.response.data.ErrorMessage
             });
         })
     },

@@ -62,35 +62,37 @@ export default {
     
    data: function() {
         return {
-            pharmacies: [],
             selectedPharmacyName: '',
             selectedPharmacyId: null
         }
     },
 
    computed: {
-    ...mapGetters({
-        getPharmacies: 'pharmacies/getPharmacies',
-        result: 'pharmacies/getDeleteResult'
-    })
-  },
+        ...mapGetters({
+            pharmacies: 'pharmacies/getPharmacies',
+            result: 'pharmacies/getResult'
+        })
+    },
 
-  watch: {
-      getPharmacies(pharmacies) {
-        this.pharmacies = pharmacies;
-      },
-      result({text, code}) {
-        if(code === 200) {
-            toastr.success(text);
+    watch: {
+      result({label, ok, message}) {
+        if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
+            this.fetchPharmacies();
+
+        if(label !== 'delete')
+            return;
+
+        if(ok) {
+            toastr.success(message);
         } else {
-            toastr.error(text);
+            toastr.error(message);
         }
       }
   },
 
   methods: {
     ...mapActions({
-        fetchPharmacies: 'pharmacies/getPharmacies',
+        fetchPharmacies: 'pharmacies/fetchPharmacies',
         deletePharmacy: 'pharmacies/deletePharmacy'
     }),
 

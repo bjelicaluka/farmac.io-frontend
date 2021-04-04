@@ -6,7 +6,7 @@
           <TableRow 
             v-for="a in appointments" 
             :key="a.id" 
-            :values="[`${a.medicalStaff.firstName} ${a.medicalStaff.lastName}`, a.isReserved, formatDate(a.dateTime), formatTime(a.dateTime), formatDuration(a.duration)]"
+            :values="[`${a.medicalStaff.firstName} ${a.medicalStaff.lastName}`, a.isReserved ? 'Yes' : 'No', formatDate(a.dateTime), formatTime(a.dateTime), formatDuration(a.duration)]"
           >
             <div class="pull-right text-gray">
               <drop-down-menu>

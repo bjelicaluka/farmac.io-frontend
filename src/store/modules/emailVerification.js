@@ -1,34 +1,28 @@
 import axios from "axios";
 
 const state = {
-    getVerificationEmailResponse: {
-        text: '',
-        code: 0
-    },
-    verifyEmailResponse: {
-        text: '',
-        code: 0
-    }
+    result: null
 };
 
 const getters = {
-    getGetVerificationEmailResponse: state => { return state.getVerificationEmailResponse; },
-    getVerifyEmailResponse: state => { return state.verifyEmailResponse; }
+    getResult: state => state.result,
 };
 
 const actions = {
     getVerificationEmail: (context, email) => {
         axios.get(`/email-verification?email=${email}`)
         .then(response => {
-            context.commit('setGetVerificationEmailResponse', {
-                text: `Verification email is successfully sent to ${email}.`,
-                code: response.status
+            context.commit('setResult', {
+                label: 'getVerificationEmail',
+                ok: true,
+                message: `Verification email is successfully sent to ${email}.`             
             });
         })
         .catch(error => {
-            context.commit('setGetVerificationEmailResponse', {
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+            context.commit('setResult', {
+                label: 'getVerificationEmail',
+                ok: false,
+                message: error.response.data.ErrorMessage
             });
         });
     },
@@ -41,28 +35,27 @@ const actions = {
             }
         })
         .then(response => {
-            context.commit('setVerifyEmailReponse', {
-                text: `Email is successfully verified.`,
-                code: response.status
+            context.commit('setResult', {
+                label: 'verification',
+                ok: true,
+                message: `Email is successfully verified.`             
             });
         })
         .catch(error => {
-            context.commit('setVerifyEmailReponse', {
-                text: error.response.data.ErrorMessage,
-                code: error.response.data.StatusCode
+            context.commit('setResult', {
+                label: 'verification',
+                ok: false,
+                message: error.response.data.ErrorMessage         
             });
         });        
     }
 };
 
 const mutations = {
-    setGetVerificationEmailResponse: (state, response) => {
-        state.getVerificationEmailResponse = response;
+    setResult: (state, response) => {
+        state.result = response;
     },
 
-    setVerifyEmailReponse: (state, response) => {
-        state.verifyEmailResponse = response;
-    }
 };
 
 export default {

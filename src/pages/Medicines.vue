@@ -4,7 +4,7 @@
         <Modal
             modalBoxId="displayPharmaciesModal"
             title="Choose pharmacy"
-            >
+        >
             <div slot="body">
                 <Card title="Availability of the medicine in pharmacies">
                     <div v-for="(pharmacy,index) in pharmaciesForMedicines" :key="index">
@@ -31,14 +31,8 @@
                             </div>
                         </div>
                         <div slot="buttons">
-                            <a class="btn btn-info btn-just-icon btn-fill btn-round" rel="tooltip" title="Download specification">
-                                <i class="material-icons">subject</i>
-                            </a>
-                            <a class="btn btn-success btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Check availability" 
-                                @click="onDisplaySelected(medicine.id, medicine.name)">
-                                <i class="material-icons">add_shopping_cart</i>
-                            </a>
-
+                            <RoundButton title="Download specification" iconName="subject" type="btn-info"></RoundButton>
+                            <RoundButton title="Check availability" iconName="add_shopping_cart" type="btn-success" @click="onDisplaySelected(medicine.id, medicine.name)"></RoundButton>
                         </div>
                     </RotatingCard>
                 </template>
@@ -54,6 +48,7 @@ import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
 import ShopingCartCard from '../components/Card/ShoppingCartCard.vue'
 import Card from '../components/Card/Card.vue'
+import RoundButton from '../components/Form/RoundButton.vue'
 import { mapGetters, mapActions } from 'vuex'
 import toastr from 'toastr'
 
@@ -64,7 +59,8 @@ export default {
         Modal,
         ModalOpener,
         ShopingCartCard,
-        Card
+        Card,
+        RoundButton
     },
 
     data: function() {
@@ -85,8 +81,8 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchMedicines: 'medicines/getMedicines',
-            fetchPharmaciesForMedicine: 'medicines/getPharmaciesForMedicineById',
+            fetchMedicines: 'medicines/fetchMedicines',
+            fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
             reserveMedicine: 'shoppingCart/addReservation'
         }), 
 
@@ -99,6 +95,7 @@ export default {
             }
             document.getElementById('displayPharmaciesModalOpener').click();
         },
+        
         addMedicineToCart(e, pharmacyId, quantity, price, pharmacyName, pharmacyStreet, pharmacyCity){
             let reservation = {};
             reservation['pharmacyId'] = pharmacyId;
