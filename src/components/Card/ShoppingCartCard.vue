@@ -17,8 +17,7 @@
       </div>
       <div class="total-price">{{amount === 0 ? price : amount * price}} RSD</div>
       <div class="add-to-card">
-        <RoundButton @click="reserveMedicine" type="btn-success" iconName="add_shopping_cart" title="Add to cart">
-        </RoundButton>  
+        <RoundButton @click="reserveMedicine" type="btn-success" iconName="add_shopping_cart" title="Add to cart" />
       </div>
   </div>
 </template>

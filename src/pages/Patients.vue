@@ -2,7 +2,7 @@
 <div class="content">
     <div class="container-fluid">
         <Card title='Patients' :description="'my patients'">
-            <PatientsTable :patients="patients"></PatientsTable>
+            <PatientsTable :patients="patients" />
         </Card>
     </div> 
 </div>

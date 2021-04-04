@@ -4,7 +4,7 @@
         <TableHead :columnNames="['Medicine name', 'Quantity', 'Price', '']"></TableHead>
             <TableBody>
                 <TableRow v-for="(medicine, index) in medicines" :key="index" :id="medicine.medicineId" :values="[medicine.medicineName, medicine.quantity, medicine.quantity * medicine.price + ' RSD']">
-                    <RoundButton title="Remove from cart" @click="removeItemFromCart(pharmacy, medicine.medicineId, medicine.quantity)" :iconName="'clear'"></RoundButton>
+                    <RoundButton title="Remove from cart" @click="removeItemFromCart(pharmacyId, medicine.medicineId, medicine.quantity)" :iconName="'clear'"></RoundButton>
                 </TableRow>
         </TableBody>
     </Table>
@@ -44,12 +44,11 @@ import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener'
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import { mapActions, mapGetters } from 'vuex'
-import toastr from 'toastr'
 
 const $ = window.$;
 
 export default {
-    props: ['medicines', 'pharmacy'],
+    props: ['medicines', 'pharmacyId'],
     components: {
         Table,
         TableHead,
@@ -83,15 +82,10 @@ export default {
             reserveMedicines: 'shoppingCart/reserveMedicines'
         }),
         removeItemFromCart(pharmacyId, medicineId, quantity){
-            let removeObject = {
-                'pharmacyId' : pharmacyId,
-                'medicineId' : medicineId,
-                'quantity' : quantity 
-            };
-            this.removeItem(removeObject);
+            this.removeItem({pharmacyId, medicineId, quantity});
         },
         reserveMedicinesForPharmacy() {
-            this.reserveMedicines({pharmacyId: this.pharmacy, pickupDeadline: this.selectedDate})
+            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: this.selectedDate})
         }
     },
 
