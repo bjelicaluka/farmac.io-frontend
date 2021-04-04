@@ -13,6 +13,8 @@
                 <modal-opener :modalBoxId="'appointmentModal'">
                   <drop-down-item @click="handleDeleteClick(a)">Delete</drop-down-item>
                 </modal-opener>
+
+                  <drop-down-item @click="handleMakeAppointmentClick(a)">Make appointment</drop-down-item>
               </drop-down-menu>
             </div>
           </TableRow>
@@ -40,7 +42,7 @@ import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
 import ModalOpener from '../Modal/ModalOpener.vue'
 import Modal from '../Modal/Modal.vue'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
 
@@ -68,7 +70,7 @@ export default {
   },
   watch: {
     result({label, ok, message}) {
-      if(label === 'delete') {
+      if(label === 'delete' || label==='makeAppointment') {
         if(ok) {
           toastr.success(message);
         } else {
@@ -78,6 +80,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+        makeAppointment: 'appointments/makeAppointment'
+    }),
     handleDeleteClick(appointment) {
       this.selectedAppointment = appointment;
     },
@@ -89,6 +94,11 @@ export default {
     },
     formatDuration(min) {
       return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm")
+    }
+    ,
+    handleMakeAppointmentClick(appointment) {
+      let appointmentRequest = { 'appointmentId' : appointment.id, "patientId" : '08d8f514-58e1-4dec-808c-1e93d97d4d98', "pharmacyId" : appointment.pharmacyId};
+      this.makeAppointment(appointmentRequest);
     }
   },
 }

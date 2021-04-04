@@ -45,7 +45,8 @@ export default {
             pharmacistResult: 'pharmacist/getResult',
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
-            dermatologistAppointments: 'appointments/getDermatologistAppointments'
+            dermatologistAppointments: 'appointments/getDermatologistAppointments',
+            appointmentsResult: 'appointments/getResult'
         }),
     },
     watch: {
@@ -75,6 +76,11 @@ export default {
                 if(ok) {
                     this.fetchPharmacy(this.pharmacyId);
                 }
+            }
+        },
+        appointmentsResult({ok, label}){
+            if(label==='makeAppointment' && ok) {
+                this.fetchDermatologistAppointments(this.pharmacyId);
             }
         }
     },
