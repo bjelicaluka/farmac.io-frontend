@@ -1,13 +1,13 @@
 <template>
     <div>
         <div class="row pl-4 pr-4">
-            <Search />
+            <Search @search="handleSearch($event)" />
         </div>
         <div>
             Sort by:
-            <Button type="button" @click="sortPatients('firstName')">First name</Button>
-            <Button type="button" @click="sortPatients('lastName')">Last name</Button>
-            <Button type="button" @click="sortPatients('appointmentDate')">Appointment date</Button>
+            <Button type="button" @click="handleSort('firstName')">First name</Button>
+            <Button type="button" @click="handleSort('lastName')">Last name</Button>
+            <Button type="button" @click="handleSort('appointmentDate')">Appointment date</Button>
         </div>
         <Table>
             <TableHead :columnNames="['First name', 'Last name', 'Birth date', 'Phone', 'Address', 'Appointment date', '']"></TableHead>
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import Search from '../Search/Search.vue'
 import Table from '../Table/Table.vue'
@@ -46,9 +45,6 @@ export default {
     },
 
     methods: {
-        ...mapActions({
-            sortPatients: 'dermatologist/sortPatients'
-        }),
         formatAddress(address) {
             const {state, city, streetName, streetNumber} = address;
             return `${state}, ${city}, ${streetName} - ${streetNumber}`
@@ -58,6 +54,12 @@ export default {
         },
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
+        },
+        handleSort(crit) {
+            this.$emit('sort', crit);
+        },
+        handleSearch(value) {
+            this.$emit('search', value);
         }
     }
 }
