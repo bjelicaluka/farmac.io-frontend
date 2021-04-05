@@ -53,7 +53,7 @@
 import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
 import TextInput from '../Form/TextInput.vue'
-import { validateUsername, validateEmail, validatePassword,  } from '../../utils/validation'
+import { validateAlphanumericalWord, validateEmail, validatePassword,  } from '../../utils/validation'
 
 export default {
     components: {
@@ -90,7 +90,7 @@ export default {
             return validatePassword(password);
         },
         validateUsername(username) {
-            return validateUsername(username);
+            return validateAlphanumericalWord(username);
         }
     }
 }

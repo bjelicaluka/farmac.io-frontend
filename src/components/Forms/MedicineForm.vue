@@ -358,14 +358,21 @@ export default {
             return validateAlphanumericalWord(word) && word.length === 10;
         },
 
+        validateIngridient() {
+            return  this.ingridient.name.trim().length === 0 ||
+                    this.ingridient.mass.trim().length === 0 ||
+                    isNaN(this.ingridient.mass) ||
+                    parseFloat(this.ingridient.mass) <= 0;
+        },
+
         addIngridient() {
-            if(this.ingridient.name.trim().length === 0 || this.ingridient.mass.trim().length === 0 || isNaN(this.ingridient.mass) || parseFloat(this.ingridient.mass) <= 0) {
+            if(this.validateIngridient()) {
                 return;
             }
 
-            const existingIngridient = this.medicine.ingridients.filter(i => i.name === this.ingridient.name);
-            if(existingIngridient.length !== 0) {
-                existingIngridient[0].mass = parseFloat(existingIngridient[0].mass) + parseFloat(this.ingridient.mass)
+            const existingIngridient = this.medicine.ingridients.find(i => i.name === this.ingridient.name);
+            if(existingIngridient) {
+                existingIngridient.mass = parseFloat(existingIngridient.mass) + parseFloat(this.ingridient.mass)
             } else {
                 this.medicine.ingridients.push({name: this.ingridient.name, mass: this.ingridient.mass });
             }

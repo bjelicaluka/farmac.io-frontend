@@ -210,12 +210,12 @@ export default {
 
         result({label, ok, message}) {
             if(label === 'delete') {
-            if(ok) {
-                toastr.success(message);
-                this.fetchMedicines();
-            } else {
-                toastr.error(message);
-            }
+                if(ok) {
+                    toastr.success(message);
+                    this.fetchMedicines();
+                } else {
+                    toastr.error(message);
+                }
             }
 
             if(label === 'add' || label === 'update') {
