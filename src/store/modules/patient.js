@@ -45,7 +45,7 @@ const actions = {
         if (sortCrit === state.sortCrit)
             state.isAsc = !state.isAsc;
         state.sortCrit = sortCrit;
-        axios.get(`/patients/my-patients/${medicalId}/sort?crit=${state.sortCrit}&asc=${state.isAsc}`)
+        axios.get(`/patients/my-patients/${medicalId}/sort?crit=${state.sortCrit}&isAsc=${state.isAsc}`)
         .then(resp => {
             context.commit('setPatients', resp.data);
         })
