@@ -1,91 +1,64 @@
 <template>
     <div>
         <div :id="id" class="form-group">
-            <label class="form-control-label text-white center">{{label}}</label>
+            <label class="bmd-label-floating">{{label}}</label>
             <select
-                v-model="selectedValue"
+                multiple data-role="tagsinput"
+                v-model="selectedValues"
                 class="selectpicker form-control"
                 data-style="btn btn-primary btn-round"
-                :disabled="disabled"
             >
-                <option value='' selected>{{label}}</option>
                 <option v-for="(option, index) in options" :value="option.value" :key="index">{{option.label}}</option>
             </select>
         </div>
-        <InputErrorMessage
-            :isValid="showErrorMessage ? isValid : true"
-        >
-            {{errorMessage}}
-        </InputErrorMessage>
     </div>
 
 </template>
     
 <script>
-import InputErrorMessage from './InputErrorMessage.vue'
 
 const $ = window.$;
 
 export default {
-    components: {
-        InputErrorMessage
-    },
-
     props: {
         id: {
             type: String,
-            default: 'single'
+            default: 'multiple'
         },
         label: {
             type: String,
             default: ''
         },
         value: {
-            default: ''
-        },
-        isValid: {
-            type: Boolean,
-            default: true
+            type: Array,
+            default: () => []
         },
         options: {
             type: Array,
             default: () => []
-        },
-        showErrorMessage: {
-            type: Boolean,
-            default: false
-        },
-        errorMessage: {
-            type: String,
-            default: 'You have to select a valid option.'
-        },
-        disabled: {
-            type: Boolean,
-            default: false
         }
     },
 
     data: function() {
         return {
-            selectedValue: ''
+            selectedValues: []
         }
     },
-
+    
     watch: {
         options(opts) {
             this.options = opts;
             this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
 
         },
-
-        selectedValue(value) {
-            this.$emit('input', value);
+        selectedValues(values) {
+            this.$emit('input', values);
         },
-
         value(val) {
-            this.selectedValue = val;
+            this.selectedValues = val;
             this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
         }
+        
     }
 }
 </script>

@@ -1,6 +1,22 @@
 <template>
     <div class="content">
         <div class="container-fluid">
+
+        <Modal
+            modalBoxId="deleteMedicineModal"
+            title="Confirmation"
+        >
+            <div slot="body">
+                <p>Are you sure that you want to delete {{this.selectedMedicineName}} medicine?</p>
+            </div>
+            <div slot="buttons">
+                <OptionModalButtons @yes="handleDelete">
+                </OptionModalButtons>
+            </div>
+        </Modal>
+        <ModalOpener id="deleteMedicineModalOpener" class="d-none" modalBoxId="deleteMedicineModal" />
+
+
         <Modal
             modalBoxId="displayPharmaciesModal"
             title="Choose pharmacy"
@@ -33,19 +49,46 @@
                         <div slot="buttons">
                             <RoundButton title="Download specification" iconName="subject" type="btn-info"></RoundButton>
                             <RoundButton title="Check availability" iconName="add_shopping_cart" type="btn-success" @click="onDisplaySelected(medicine.id, medicine.name)"></RoundButton>
-                        </div>
+                            
+                            <ModalOpener modalBoxId="medicineModal">
+                            <RoundButton title="Delete medicine" iconName="edit" type="btn-warning" @click="onEditSelected(medicine.id)"></RoundButton>
+                            </ModalOpener>
+                            
+                            <RoundButton title="Delete medicine" iconName="delete" type="btn-danger" @click="onDeleteSelected(medicine.id, medicine.name)"></RoundButton>
+
+                             </div>
                     </RotatingCard>
                 </template>
             </div>
         </div>
+
+        <Modal
+            modalBoxId="medicineModal"
+            title="Medicine"
+            sizeClass="modal-lg"
+        >
+            <div slot="body">
+                <MedicineForm
+                    :isEdit="isEdit"
+                    :existingMedicine="selectedMedicine"
+                />
+            </div>
+        </Modal>
+
+        <ModalOpener modalBoxId="medicineModal">
+            <Button @click="handleRegisterClick" class="pull-right">Create Medicine</Button>
+        </ModalOpener>
     </div>
 </template>
 
 <script>
 import FormGroup from '../components/Form/FormGroup'
+import MedicineForm from '../components/Forms/MedicineForm'
+import Button from '../components/Form/Button'
 import RotatingCard from '../components/Card/RotatingCard.vue';
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
+import OptionModalButtons from '../components/Modal/OptionModalButtons'
 import ShopingCartCard from '../components/Card/ShoppingCartCard.vue'
 import Card from '../components/Card/Card.vue'
 import RoundButton from '../components/Form/RoundButton.vue'
@@ -55,35 +98,44 @@ import toastr from 'toastr'
 export default {
     components: {
         FormGroup,
+        MedicineForm,
+        Button,
         RotatingCard,
         Modal,
         ModalOpener,
+        OptionModalButtons,
         ShopingCartCard,
         Card,
         RoundButton
     },
 
     data: function() {
-    return {
+        return {
             medicines: [],
             selectedMedicineId: null,
             selectedMedicineName: null,
-            pharmaciesForMedicines: []
+            selectedMedicine: null,
+            pharmaciesForMedicines: [],
+            isEdit: false
         }
     },
 
     computed: {
         ...mapGetters({
             getMedicines: 'medicines/getMedicines',
-            getPharmaciesForMedicines: 'medicines/getPharmaciesForMedicine'
-            })
+            getMedicine: 'medicines/getMedicine',
+            getPharmaciesForMedicines: 'medicines/getPharmaciesForMedicine',
+            result: 'medicines/getResult'
+        })
     },
 
     methods: {
         ...mapActions({
-            fetchMedicines: 'medicines/fetchMedicines',
+            fetchMedicines: 'medicines/fetchMedicinesForHomePage',
+            fetchMedicine: 'medicines/fetchMedicineById',
             fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
-            reserveMedicine: 'shoppingCart/addReservation'
+            reserveMedicine: 'shoppingCart/addReservation',
+            deleteMedicine: 'medicines/deleteMedicine'
         }), 
 
         onDisplaySelected(id, name){
@@ -108,16 +160,64 @@ export default {
             reservation['street'] = pharmacyStreet;
             this.reserveMedicine(reservation);
             toastr.success("You have successfully added the medicine to the shopping cart.")
+        },
+
+        onDeleteSelected(id, name) {
+            this.selectedMedicineId = id;
+            this.selectedMedicineName = name
+            document.getElementById('deleteMedicineModalOpener').click();
+        },
+
+        handleDelete(e) {
+            e.preventDefault();
+            this.deleteMedicine(this.selectedMedicineId);
+        },
+
+        handleRegisterClick() {
+            this.isEdit = false;
+            this.selectedMedicine = null;
+        },
+
+        onEditSelected(medicineId) {
+            this.isEdit = true;
+            this.fetchMedicine(medicineId);
         }
     },
 
     watch: {
-      getMedicines(medicines) {
-        this.medicines = medicines;
-      },
-      getPharmaciesForMedicines(pharmaciesForMedicines){
-          this.pharmaciesForMedicines = pharmaciesForMedicines;
-      }
+        getMedicines(medicines) {
+            this.medicines = medicines;
+        },
+
+        getMedicine(medicine) {
+            this.selectedMedicine = {
+                ...medicine.medicine,
+                replacements: medicine.replacements.map(r => r.replacementMedicineId),
+                ingridients: medicine.ingredients.map(i => { return { name: i.name, mass: i.massInMilligrams} })
+            }
+        },
+
+        getPharmaciesForMedicines(pharmaciesForMedicines){
+            this.pharmaciesForMedicines = pharmaciesForMedicines;
+        },
+
+        result({label, ok, message}) {
+            if(label === 'delete') {
+                if(ok) {
+                    toastr.success(message);
+                    this.fetchMedicines();
+                } else {
+                    toastr.error(message);
+                }
+            }
+
+            if(label === 'add' || label === 'update') {
+                if(ok) {
+                    this.fetchMedicines();
+                }
+            }
+        }
+        
     },
 
     mounted() {
