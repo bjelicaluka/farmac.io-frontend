@@ -44,7 +44,7 @@ const actions = {
     reserveAppointment: (context, appointment) => {
         axios.post(`/appointments/make-appointment`, {"appointmentId" : appointment.appointmentId, "patientId" : appointment.patientId})
         .then(resp => {
-            context.commit('setResult', {label: 'reserveAppointment', ok: true, message: "Successfully maked appointment with dermatologist."});
+            context.commit('setResult', {label: 'reserveAppointment', ok: true, message: "Successfully reserved appointment with dermatologist."});
         })
         .catch(err => {
             context.commit('setResult', {label: 'reserveAppointment', ok: false, message: err.response.data.ErrorMessage});
@@ -58,6 +58,15 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         })
+    },
+    fetchPatientsFutureAppointments: (context, patientId) => {
+        axios.get(`/appointments/future-appointments/${patientId}`)
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 

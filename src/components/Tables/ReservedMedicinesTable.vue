@@ -1,6 +1,6 @@
 <template>
     <Table>
-        <TableHead :columnNames="['Medicine name', 'Qunatity', 'Price']"></TableHead>
+        <TableHead :columnNames="['Medicine name', 'Quantity', 'Price']"></TableHead>
         <TableBody>
             <TableRow v-for="(medicine, index) in reservedMedicines" :key="index" :values="[getMedicineName(medicine.medicineId), 
             medicine.quantity, medicine.price*medicine.quantity + ' RSD']"></TableRow>
@@ -36,7 +36,7 @@ export default {
             fetchMedicines: 'medicines/fetchMedicines'
         }),
         getMedicineName(medicineId){
-            return this.medicines.find(m => m.id === medicineId)?.name;
+            return this.medicines?.find(m => m.id === medicineId)?.name;
         }
     },
 

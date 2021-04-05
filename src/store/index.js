@@ -12,6 +12,7 @@ import dermatologist from './modules/dermatologist';
 import appointments from './modules/appointments';
 import medicineReservations from './modules/medicineReservations';
 import authentication from './modules/authentication'
+import medicalStaff from './modules/medicalStaff'
 
 Vue.use(Vuex)
 
@@ -28,6 +29,7 @@ export default new Vuex.Store({
     dermatologist,
     medicineReservations,
     appointments,
-    authentication
+    authentication,
+    medicalStaff
   }
 });

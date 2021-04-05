@@ -114,7 +114,7 @@ export default {
             
             if(ok) {
                 toastr.success(message);
-                this.fetchMedicineReservations("2133bc63-1505-4835-9a40-124993d53be2");
+                this.fetchMedicineReservations("08d8f850-724b-4236-8fd9-6cd7d952f120");
             } else {
                 toastr.error(message);
             }
@@ -134,7 +134,7 @@ export default {
     },
 
     mounted() {
-        this.fetchMedicineReservations("2133bc63-1505-4835-9a40-124993d53be2");
+        this.fetchMedicineReservations("08d8f850-724b-4236-8fd9-6cd7d952f120");
         this.getAllPharmacies();
     }
 

@@ -77,7 +77,7 @@
       title="Define Dermatologist Appointment"
     >
       <div slot="body">
-        <DefineAppointmentForm :dermatologistId="selectedDermatologist && selectedDermatologist.id" :pharmacyId="pharmacyId" />
+        <DefineAppointmentForm :dermatologistId="selectedDermatologist && selectedDermatologist.userId" :pharmacyId="pharmacyId" />
       </div>
     </Modal>
 
