@@ -2,7 +2,9 @@ import axios from 'axios';
 
 const state = {
     medicines: null,
+    smallMedicines: null,
     medicine: null,
+    medicineNames: [],
     pharmaciesForMedicine: null,
     result: null
 }
@@ -10,8 +12,10 @@ const state = {
 const getters = {
     getMedicines: state => state.medicines,
     getMedicine: state => state.medicine,
+    getMedicineNames: state => state.medicineNames,
     getPharmaciesForMedicine: state => state.pharmaciesForMedicine,
-    getResult: state => state.result
+    getResult: state => state.result,
+    getSmallMedicines: state => state.smallMedicines
 }
 
 const actions = {
@@ -54,7 +58,27 @@ const actions = {
             context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
+
+    fetchMedicineNames: (context, pharmacyId) => {
+        axios.get(`medicines/in-pharmacy/${pharmacyId}/names`)
+        .then(response => {
+            context.commit('setMedicineNames', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
     
+    fetchMedicinesOrReplacements: (context, {pharmacyId, name}) => {
+        axios.get(`medicines/in-pharmacy/${pharmacyId}/search?name=${name}`)
+        .then(response => {
+            context.commit('setSmallMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
     addMedicine: (context, medicine) => {
         axios.post('/medicines', medicine)
        .then(response => {
@@ -91,7 +115,6 @@ const actions = {
         });
     },
 
-
     deleteMedicine: (context, id) => {
         axios.delete(`/medicines/${id}`)
         .then(response => {
@@ -119,11 +142,19 @@ const mutations = {
     setMedicine: (state, medicine) => {
         state.medicine = medicine;
     },
+    setMedicineNames: (state, medicineNames) => {
+        let names = [];
+        medicineNames.forEach(mn => names.push({label:mn, value:mn}))
+        state.medicineNames = names;
+    },
     setPharmaciesForMedicine: (state, pharmaciesForMedicine) => {
         state.pharmaciesForMedicine = pharmaciesForMedicine; 
     },
     setResult: (state, result) => {
         state.result = result;
+    },
+    setSmallMedicines: (state, smallMedicines) => {
+        state.smallMedicines = smallMedicines;
     }
 }
 

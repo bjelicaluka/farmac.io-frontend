@@ -8,6 +8,7 @@ import Dermatologists from '../pages/Dermatologists.vue'
 import Medicines from '../pages/Medicines.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
+import Report from '../pages/Report.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
 import { Roles } from '../constants'
@@ -121,6 +122,14 @@ const routes = [
     path: '/medicineReservations',
     name: 'FutureMedicineReservations',
     component: FutureMedicineReservations,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/report',
+    name: 'Report',
+    component: Report,
     meta: {
       layout: 'AppLayoutMain'
     }
