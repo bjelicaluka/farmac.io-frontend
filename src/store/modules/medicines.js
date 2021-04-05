@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const state = {
     medicines: null,
+    smallMedicines: null,
     medicine: null,
     medicineNames: [],
     pharmaciesForMedicine: null,
@@ -13,7 +14,8 @@ const getters = {
     getMedicine: state => state.medicine,
     getMedicineNames: state => state.medicineNames,
     getPharmaciesForMedicine: state => state.pharmaciesForMedicine,
-    getResult: state => state.result
+    getResult: state => state.result,
+    getSmallMedicines: state => state.smallMedicines
 }
 
 const actions = {
@@ -57,8 +59,8 @@ const actions = {
         });
     },
 
-    fetchMedicineNames: (context, id) => {
-        axios.get(`medicines/in-pharmacy/${id}`)
+    fetchMedicineNames: (context, pharmacyId) => {
+        axios.get(`medicines/in-pharmacy/${pharmacyId}/names`)
         .then(response => {
             context.commit('setMedicineNames', response.data);
         })
@@ -67,6 +69,16 @@ const actions = {
         });
     },
     
+    fetchMedicinesOrReplacements: (context, {pharmacyId, name}) => {
+        axios.get(`medicines/in-pharmacy/${pharmacyId}/search?name=${name}`)
+        .then(response => {
+            context.commit('setSmallMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
     addMedicine: (context, medicine) => {
         axios.post('/medicines', medicine)
        .then(response => {
@@ -140,6 +152,9 @@ const mutations = {
     },
     setResult: (state, result) => {
         state.result = result;
+    },
+    setSmallMedicines: (state, smallMedicines) => {
+        state.smallMedicines = smallMedicines;
     }
 }
 
