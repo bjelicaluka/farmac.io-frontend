@@ -2,7 +2,7 @@
 <div class="content">
     <div class="container-fluid">
         <Card title='Patients' :description="'my patients'">
-            <PatientsTable :patients="patients" />
+            <PatientsTable @search="handleSearchPatients" @sort="handleSortPatients" :patients="patients" />
         </Card>
     </div> 
 </div>
@@ -18,22 +18,39 @@ export default {
         Card,
         PatientsTable
     },
-    
+
+    data: () => {
+        return {
+            searchName: null,
+            sortCrit: '',
+            medicalId: "08d8f514-5a07-4f4a-8004-cef3216f73ef" // for testing
+        }
+    },
+
     computed: {
         ...mapGetters({
-            patients: 'dermatologist/getPatients'
+            patients: 'patient/getPatients'
         })
     },
 
     methods: {
         ...mapActions({
-            fetchPatients: 'dermatologist/fetchDermatologistsPatients',
+            fetchPatients: 'patient/fetchMedicalStaffsPatients',
+            sortPatients: 'patient/fetchSortedMedicalStaffsPatients',
+            searchPatients: 'patient/searchPatients'
         }),
+        handleSearchPatients(name) {
+            this.searchName = name;
+            this.searchPatients({medicalId:this.medicalId, name});
+        },
+        handleSortPatients(crit) {
+            this.sortCrit = crit;
+            this.sortPatients({medicalId:this.medicalId, sortCrit:crit});
+        }
     },
 
     mounted() {
-        const dermatologistId = "47e70b60-8d7f-4931-a120-07da93d62085"; // for testing
-        this.fetchPatients(dermatologistId);
+        this.fetchPatients(this.medicalId);
     }
 }
 
