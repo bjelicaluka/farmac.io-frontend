@@ -49,6 +49,15 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'makeAppointment', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    sortAppointments: (context, sortObject) => {
+        axios.get(`/appointments/sort?pharmacyId=${sortObject['pharmacyId']}&criteria=${sortObject['criteria']}&isAsc=${sortObject['isAsc']}`)
+        .then(resp => {
+            context.commit('setDermatologistAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'makeAppointment', ok: false, message: err.response.data.ErrorMessage});
+        })
     }
 };
 
