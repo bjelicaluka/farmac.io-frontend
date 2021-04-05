@@ -81,7 +81,7 @@ export default {
         if(label !== 'addDermatologist'){
           return;
         }
-        if(ok && label === 'addDermatologist') {
+        if(ok) {
             toastr.success(message);
         } else {
             toastr.error(message);

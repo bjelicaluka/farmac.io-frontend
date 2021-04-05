@@ -41,13 +41,13 @@ const actions = {
             context.commit('setResult', {label: 'addDermatologist', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    makeAppointment: (context, appointment) => {
+    reserveAppointment: (context, appointment) => {
         axios.post(`/appointments/make-appointment`, {"appointmentId" : appointment.appointmentId, "patientId" : appointment.patientId})
         .then(resp => {
-            context.commit('setResult', {label: 'makeAppointment', ok: true, message: "Successfully maked appointment with dermatologist."});
+            context.commit('setResult', {label: 'reserveAppointment', ok: true, message: "Successfully maked appointment with dermatologist."});
         })
         .catch(err => {
-            context.commit('setResult', {label: 'makeAppointment', ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'reserveAppointment', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     sortAppointments: (context, sortObject) => {

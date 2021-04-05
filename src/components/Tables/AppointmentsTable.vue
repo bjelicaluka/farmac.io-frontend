@@ -6,7 +6,6 @@
           label="Select sort criteria"
           v-model="selectedValue"
           :options="options"
-          @change="console.log('da')"
         >
         </SelectOptionInput>
       </div>
@@ -120,7 +119,7 @@ export default {
   },
   methods: {
     ...mapActions({
-        makeAppointment: 'appointments/makeAppointment',
+        reserveAppointment: 'appointments/reserveAppointment',
         sortAppointments: 'appointments/sortAppointments'
     }),
     handleDeleteClick(appointment) {
@@ -138,20 +137,19 @@ export default {
     ,
     handleMakeAppointmentClick(appointment) {
       let appointmentRequest = { 'appointmentId' : appointment.id, "patientId" : '08d8f514-58cc-41e9-810e-0a83d243cd60', "pharmacyId" : appointment.pharmacyId};
-      this.makeAppointment(appointmentRequest);
+      this.reserveAppointment(appointmentRequest);
     },
     handleChangeSort(){
       let criteria = this.selectedValue.split("-")[0]
-      let isAsc = false;
+      let isAsc = this.selectedValue.split("-")[1] == 'asc'
       if(this.selectedValue.split("-")[1] == 'asc'){
         isAsc = true;
       }
-      let sortObject = {
+      this.sortAppointments({
         'criteria' : criteria,
         'isAsc' : isAsc,
         'pharmacyId' : this.pharmacyId
-      }
-      this.sortAppointments(sortObject);
+      });
     }
   },
 }
