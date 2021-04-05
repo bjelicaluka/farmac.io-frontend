@@ -58,6 +58,15 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         })
+    },
+    fetchPatientsFutureAppointments: (context, patientId) => {
+        axios.get(`/appointments/future-appointments/${patientId}`)
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
