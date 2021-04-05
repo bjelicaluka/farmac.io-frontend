@@ -13,7 +13,7 @@
         <TableRow 
           v-for="d in dermatologists" 
           :key="d.id" 
-          :values="[d.username, `${d.user.firstName} ${d.user.lastName}`, d.email, d.user.pid, d.user.phoneNumber, formatAddress(d.user.address)]"
+          :values="getTableRow(d)"
         >
           <div class="pull-right text-gray">
             <drop-down-menu>
@@ -21,25 +21,25 @@
                 v-if="role === Roles.PharmacyAdmin && !dermatologistWorksForPharmacy(d)"
                 :modalBoxId="'addDermatologistToPharmacyModal'"
               >
-                <drop-down-item @click="handleAddToPharmacyClick(d)">Add to Pharmacy</drop-down-item>
+                <drop-down-item @click="handleAddToPharmacyClick(d.dermatologistAccount)">Add to Pharmacy</drop-down-item>
               </modal-opener>
               <modal-opener
                 v-if="role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
                 :modalBoxId="'removeDermatologistFromPharmacyModal'"
               >
-                <drop-down-item @click="handleRemoveFromPharmacyClick(d)">Remove from Pharmacy</drop-down-item>
+                <drop-down-item @click="handleRemoveFromPharmacyClick(d.dermatologistAccount)">Remove from Pharmacy</drop-down-item>
               </modal-opener>
               <modal-opener
                 v-if="role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
                 :modalBoxId="'defineDermatologistAppointmentModal'"
               >
-                <drop-down-item @click="handleDefineAppointmentClick(d)">Define Appointment</drop-down-item>
+                <drop-down-item @click="handleDefineAppointmentClick(d.dermatologistAccount)">Define Appointment</drop-down-item>
               </modal-opener>
               <modal-opener :modalBoxId="'dermatologistModal'">
-                <drop-down-item @click="handleEditClick(d)">Edit</drop-down-item>
+                <drop-down-item @click="handleEditClick(d.dermatologistAccount)">Edit</drop-down-item>
               </modal-opener>
               <modal-opener :modalBoxId="'deleteDermatologistModal'">
-                <drop-down-item @click="handleDeleteClick(d)">Delete</drop-down-item>
+                <drop-down-item @click="handleDeleteClick(d.dermatologistAccount)">Delete</drop-down-item>
               </modal-opener>
             </drop-down-menu>
           </div>
@@ -181,6 +181,10 @@ export default {
       this.isEdit = false;
       this.selectedDermatologist = null;
     },
+    getTableRow(dermatologistWorkPlaces) {
+      const d = dermatologistWorkPlaces.dermatologistAccount;
+      return [d.username, `${d.user.firstName} ${d.user.lastName}`, d.email, d.user.pid, d.user.phoneNumber, this.formatAddress(d.user.address)];
+    },
     formatAddress(address) {
       const {state, city, streetName, streetNumber} = address;
       return `${state}, ${city}, ${streetName} - ${streetNumber}`
@@ -214,8 +218,8 @@ export default {
         this.removeDermatologistFromPharmacy({pharmacyId: this.pharmacyId, dermatologistId: this.selectedDermatologist.id});
       }
     },
-    dermatologistWorksForPharmacy(d) {
-      return !!d.user.workPlaces.find(wp => wp.pharmacy.id === this.pharmacyId);
+    dermatologistWorksForPharmacy(dermatologistWorkPlaces) {
+      return !!dermatologistWorkPlaces.workPlaces.find(wp => wp.pharmacy.id === this.pharmacyId);
     }
   },
 }

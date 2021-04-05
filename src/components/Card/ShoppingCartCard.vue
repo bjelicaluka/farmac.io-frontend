@@ -17,19 +17,18 @@
       </div>
       <div class="total-price">{{amount === 0 ? price : amount * price}} RSD</div>
       <div class="add-to-card">
-        <button @click="reserveMedicine" class="btn btn-success btn-just-icon btn-fill btn-round btn-wd" rel="tooltip" title="Add to cart">
-            <i class="material-icons">add_shopping_cart</i>
-        </button>  
+        <RoundButton @click="reserveMedicine" type="btn-success" iconName="add_shopping_cart" title="Add to cart" />
       </div>
   </div>
 </template>
 
 <script>
-
+import RoundButton from '../Form/RoundButton.vue'
 export default {
   props: ['pharmacyName', 'pharmacyStreet', 'pharmacyCity', 'price', 'id'],
 
   components: {
+    RoundButton
   },
 
   data: function() {
