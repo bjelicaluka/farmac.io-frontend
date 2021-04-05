@@ -1,4 +1,5 @@
 import axios from "axios";
+import store from '@/store'
 
 const state = {
     appointments: null,
@@ -40,6 +41,24 @@ const actions = {
             context.commit('setResult', {label: 'addDermatologist', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    reserveAppointment: (context, appointment) => {
+        axios.post(`/appointments/make-appointment`, {"appointmentId" : appointment.appointmentId, "patientId" : appointment.patientId})
+        .then(resp => {
+            context.commit('setResult', {label: 'reserveAppointment', ok: true, message: "Successfully maked appointment with dermatologist."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'reserveAppointment', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    sortAppointments: (context, sortObject) => {
+        axios.get(`/appointments/sort?pharmacyId=${sortObject['pharmacyId']}&criteria=${sortObject['criteria']}&isAsc=${sortObject['isAsc']}`)
+        .then(resp => {
+            context.commit('setDermatologistAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        })
+    }
 };
 
 const mutations = {

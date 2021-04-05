@@ -137,7 +137,6 @@ export default {
       if(label !== 'add' && label !== 'update') {
         return;
       }
-      
       if(ok) {
         toastr.success(message);
       } else {
