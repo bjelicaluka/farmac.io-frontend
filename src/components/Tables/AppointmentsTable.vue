@@ -141,10 +141,7 @@ export default {
     },
     handleChangeSort(){
       let criteria = this.selectedValue.split("-")[0]
-      let isAsc = this.selectedValue.split("-")[1] == 'asc'
-      if(this.selectedValue.split("-")[1] == 'asc'){
-        isAsc = true;
-      }
+      const isAsc = this.selectedValue.split("-")[1] == 'asc';
       this.sortAppointments({
         'criteria' : criteria,
         'isAsc' : isAsc,
