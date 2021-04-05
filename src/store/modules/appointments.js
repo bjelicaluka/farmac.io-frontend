@@ -60,7 +60,7 @@ const actions = {
         })
     },
     fetchPatientsFutureAppointments: (context, patientId) => {
-        axios.get(`/appointments/future-appointmnets/${patientId}`)
+        axios.get(`/appointments/future-appointments/${patientId}`)
         .then(resp => {
             context.commit('setAppointments', resp.data);
         })

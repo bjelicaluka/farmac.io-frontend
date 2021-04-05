@@ -31,18 +31,6 @@ export default {
     TableHead,
   },
   props: ['appointments'],
-  data() {
-    return {
-    }
-  },
-  computed: {
-    ...mapGetters({
-
-    })
-  },
-  watch: {
-
-  },
   methods: {
     ...mapActions({
         

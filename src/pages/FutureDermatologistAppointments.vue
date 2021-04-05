@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <Card title='Appointments in future' :description="`You can cancel your reservation 24 hours before it starts.`">
+            <Card title='Appointments in future' :description="`You cannot cancel an appointment if there are less than 24 left.`">
                 <PatientsFutureAppointmentTable :appointments="patientsAppointments"/>
             </Card>
         </div>
