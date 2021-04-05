@@ -21,7 +21,7 @@ const actions = {
         let items = state.reservations[pharmacyId];
         axios.post('/reservations', {
           pharmacyId: pharmacyId,
-          patientId: 'd1cb8425-c01f-4552-8660-75910e0def59',
+          patientId: '08d8f850-7248-4675-8202-d6a0d260fe40',
           pickupDeadline: pickupDeadline,
           medicines: items
         }).then(response =>  {

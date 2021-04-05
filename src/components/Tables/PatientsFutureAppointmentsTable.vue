@@ -42,7 +42,7 @@ export default {
       return moment(d).format('LT');
     },
     formatDuration(min) {
-      return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm") + ' min';
+      return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm");
     }
   },
 }
