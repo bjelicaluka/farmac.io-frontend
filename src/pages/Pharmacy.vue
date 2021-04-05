@@ -79,7 +79,7 @@ export default {
             }
         },
         appointmentsResult({ok, label}){
-            if(label==='makeAppointment' && ok) {
+            if(label==='reserveAppointment' && ok) {
                 this.fetchDermatologistAppointments(this.pharmacyId);
             }
         }

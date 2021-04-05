@@ -56,7 +56,7 @@ const actions = {
             context.commit('setDermatologistAppointments', resp.data);
         })
         .catch(err => {
-            context.commit('setResult', {label: 'makeAppointment', ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         })
     }
 };

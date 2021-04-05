@@ -16,7 +16,7 @@
           <TableRow 
             v-for="a in appointments" 
             :key="a.id" 
-            :values="[`${a.medicalStaff.firstName} ${a.medicalStaff.lastName} (${a.medicalStaff.averageGrade})`, a.isReserved ? 'Yes' : 'No', formatDate(a.dateTime), formatTime(a.dateTime), formatDuration(a.duration), a.price]"
+            :values="[`${a.medicalStaff.firstName} ${a.medicalStaff.lastName} (${a.medicalStaff.averageGrade})`, a.isReserved ? 'Yes' : 'No', formatDate(a.dateTime), formatTime(a.dateTime), formatDuration(a.duration), a.price + ' RSD']"
           >
             <div class="pull-right text-gray">
               <drop-down-menu>
@@ -105,7 +105,7 @@ export default {
   },
   watch: {
     result({label, ok, message}) {
-      if(label === 'delete' || label==='makeAppointment') {
+      if(label === 'delete' || label==='reserveAppointment') {
         if(ok) {
           toastr.success(message);
         } else {
@@ -132,7 +132,7 @@ export default {
       return moment(d).format('LT');
     },
     formatDuration(min) {
-      return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm")
+      return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm") + ' min';
     }
     ,
     handleMakeAppointmentClick(appointment) {
