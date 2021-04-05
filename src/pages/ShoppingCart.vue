@@ -1,8 +1,8 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <Card v-for="(medicines, pharmacy) in reservations" :key="pharmacy" :title="medicines[0].pharmacyName + ', ' + medicines[0].street + ', ' + medicines[0].city">
-                <ShoppingCartTable :medicines="medicines" :pharmacy="pharmacy"></ShoppingCartTable>
+            <Card v-for="(medicines, pharmacyId) in reservations" :key="pharmacyId" :title="medicines[0].pharmacyName + ', ' + medicines[0].street + ', ' + medicines[0].city">
+                <ShoppingCartTable :medicines="medicines" :pharmacyId="pharmacyId"></ShoppingCartTable>
             </Card>
         </div>
     </div>

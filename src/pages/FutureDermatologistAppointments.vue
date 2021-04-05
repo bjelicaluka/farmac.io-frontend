@@ -1,0 +1,38 @@
+<template>
+    <div class="content">
+        <div class="container-fluid">
+            <Card title='Appointments in future' :description="`You cannot cancel an appointment if there are less than 24 left.`">
+                <PatientsFutureAppointmentTable :appointments="patientsAppointments"/>
+            </Card>
+        </div>
+    </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex'
+import Card from '../components/Card/Card.vue'
+import PatientsFutureAppointmentTable from '../components/Tables/PatientsFutureAppointmentsTable.vue'
+
+export default {
+    components: {
+        Card,
+        PatientsFutureAppointmentTable
+    },
+
+    computed: {
+        ...mapGetters({
+            patientsAppointments: 'appointments/getAppointments'
+        })
+    },
+
+    methods: {
+        ...mapActions({
+            fetchPatientsFutureAppointments: 'appointments/fetchPatientsFutureAppointments'
+        })
+    },
+
+    mounted() {
+        this.fetchPatientsFutureAppointments('08d8f514-58cc-41e9-810e-0a83d243cd60');
+    }
+}
+</script>

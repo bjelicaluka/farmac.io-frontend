@@ -2,7 +2,7 @@
 <div class="content">
     <div class="container-fluid">
         <Card title='Patients' :description="'my patients'">
-            <PatientsTable @search="handleSearchPatients" @sort="handleSortPatients" :patients="patients"></PatientsTable>
+            <PatientsTable @search="handleSearchPatients" @sort="handleSortPatients" :patients="patients" />
         </Card>
     </div> 
 </div>

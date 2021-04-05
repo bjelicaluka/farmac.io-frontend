@@ -28,6 +28,7 @@
           <sidebar-item name="SystemAdmins" icon="accessibility" to="/system-admins"></sidebar-item>
           <sidebar-item name="Dermatologists" icon="accessibility" to="/dermatologists"></sidebar-item>
           <sidebar-item name="Medicine reservations" icon="medical_services" to="/medicineReservations"></sidebar-item>
+          <sidebar-item name="Dermatologist appointments" icon="schedule" to="/dermatologist-appointments"></sidebar-item>
         </ul>
 
         <div>

@@ -25,15 +25,9 @@ export default {
         TableRow
     },
 
-    data: function(){
-        return{
-            medicines: []
-        }
-    },
-
     computed: {
         ...mapGetters({
-            getMedicines: 'medicines/getMedicines'
+            medicines: 'medicines/getMedicines'
         })
     },
 
@@ -42,17 +36,7 @@ export default {
             fetchMedicines: 'medicines/fetchMedicines'
         }),
         getMedicineName(medicineId){
-            for(let i = 0; i < this.medicines.length; i++){
-                if(this.medicines[i].id == medicineId){
-                    return this.medicines[i].name;
-                }
-            }
-        }
-    },
-
-    watch: {
-        getMedicines(medicines){
-            this.medicines = medicines;
+            return this.medicines.find(m => m.id === medicineId)?.name;
         }
     },
 
