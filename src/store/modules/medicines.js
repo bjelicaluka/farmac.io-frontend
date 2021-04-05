@@ -3,6 +3,7 @@ import axios from 'axios';
 const state = {
     medicines: null,
     medicine: null,
+    medicineNames: [],
     pharmaciesForMedicine: null,
     result: null
 }
@@ -10,6 +11,7 @@ const state = {
 const getters = {
     getMedicines: state => state.medicines,
     getMedicine: state => state.medicine,
+    getMedicineNames: state => state.medicineNames,
     getPharmaciesForMedicine: state => state.pharmaciesForMedicine,
     getResult: state => state.result
 }
@@ -54,6 +56,16 @@ const actions = {
             context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
+
+    fetchMedicineNames: (context, id) => {
+        axios.get(`medicines/in-pharmacy/${id}`)
+        .then(response => {
+            context.commit('setMedicineNames', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
     
     addMedicine: (context, medicine) => {
         axios.post('/medicines', medicine)
@@ -91,7 +103,6 @@ const actions = {
         });
     },
 
-
     deleteMedicine: (context, id) => {
         axios.delete(`/medicines/${id}`)
         .then(response => {
@@ -118,6 +129,11 @@ const mutations = {
     },
     setMedicine: (state, medicine) => {
         state.medicine = medicine;
+    },
+    setMedicineNames: (state, medicineNames) => {
+        let names = [];
+        medicineNames.forEach(mn => names.push({label:mn, value:mn}))
+        state.medicineNames = names;
     },
     setPharmaciesForMedicine: (state, pharmaciesForMedicine) => {
         state.pharmaciesForMedicine = pharmaciesForMedicine; 
