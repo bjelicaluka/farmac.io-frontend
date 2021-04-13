@@ -39,13 +39,9 @@ export default {
     
     watch: {
         getResult({label, ok, message}){
-            if(label == 'cancel'){
+            if(label === 'cancel'){
                 if(ok){
-                    toastr.success(message);
                     this.fetchPatientsFutureAppointments('08d8f514-58cc-41e9-810e-0a83d243cd60');
-                }
-                else{
-                    toastr.console.error(message);
                 }
             }
         }

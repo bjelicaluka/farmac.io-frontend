@@ -35,6 +35,11 @@ export default {
     RoundButton
   },
   props: ['appointments'],
+  computed: {
+    ...mapGetters({
+        getResult: 'appointments/getResult'
+    })
+  },
   methods: {
     ...mapActions({
         cancelAppointment : 'appointments/cancelAppointment' 
@@ -52,6 +57,18 @@ export default {
       this.cancelAppointment(appointmentId);
     }
   },
+  watch: {
+    getResult({label, ok, message}){
+      if(label === 'cancel'){
+        if(ok){
+          toastr.success(message);
+        }
+        else{
+          toastr.error(message);
+        }
+      }
+    }
+  }
 }
 </script>
 
