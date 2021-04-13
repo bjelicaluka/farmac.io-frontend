@@ -49,6 +49,16 @@ const actions = {
         });
     },
 
+    fetchMedicinesByName: (context, name) => {
+        axios.get(`/medicines/search?name=${name}`)
+        .then(response => {
+            context.commit('setMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
     fetchPharmaciesForMedicineById: (context, id) => {
         axios.get(`medicines/${id}/pharmacies`)
         .then(response => {
