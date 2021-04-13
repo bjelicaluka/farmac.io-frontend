@@ -12,6 +12,8 @@ import Patients from '../pages/Patients.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
 import Report from '../pages/Report.vue'
+import { Roles } from '../constants'
+import store from '../store/index'
 import * as tokenUtils from '../utils/token'
 
 Vue.use(VueRouter)
@@ -75,7 +77,8 @@ const routes = [
     name: 'Medicines',
     component: Medicines,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient, Roles.Supplier]
     }
   },
   {
@@ -127,10 +130,18 @@ const routes = [
     }
   },
   {
+    path: '/report',
+    name: 'Report',
+    component: Report,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
     path: '/medicineReservations',
     name: 'FutureMedicineReservations',
     component: FutureMedicineReservations,
-    meta: {
+      meta: {
       layout: 'AppLayoutMain'
     }
   },
@@ -164,7 +175,8 @@ router.beforeEach((to, from, next) => {
 
   if (authorizedRoles) {
       if (!isUserLoggedIn) {
-          return next({ path: '/auth' });
+        store.dispatch('authentication/logOut');
+        return next({ path: '/auth' });
       }
 
       const userRole = tokenUtils.getRoleFromToken();

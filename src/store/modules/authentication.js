@@ -1,5 +1,5 @@
 import axios from "axios";
-import {setToken, setAxiosInterceptors} from '../../utils/token'
+import {setToken, removeToken} from '../../utils/token'
 
 const state = {
     result: null
@@ -14,13 +14,11 @@ const actions = {
         axios.post('/auth', credentials)
         .then(response => {
             setToken(response.data.token);
-            setAxiosInterceptors();
             
             context.commit('setResult', {
                 label: 'authenticate',
                 ok: true,
                 message: ''
-                
             });
         })
         .catch(error => {
@@ -30,6 +28,10 @@ const actions = {
                 message: error.response.data.ErrorMessage
             });
         });        
+    },
+
+    logOut: (context) => {
+        removeToken();
     }
 };
 
