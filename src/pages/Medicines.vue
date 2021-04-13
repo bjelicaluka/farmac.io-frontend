@@ -2,9 +2,7 @@
     <div class="content">
         <div class="container-fluid">
 
-        <div>
-            <Search wrapperClass="row justify-content-center align-items-center" @search="handleSearch" />
-        </div>
+        <MedicineSearch />
 
         <Modal
             modalBoxId="deleteMedicineModal"
@@ -42,13 +40,7 @@
                     <RotatingCard :key="index" :category="'©' + medicine.manufacturer" :title="medicine.name" label="Download specification or check availability.">
                         <div slot="description">
                             <p style="font-size: 20px;">Type: {{medicine.type.typeName}}</p>
-                            <div>
-                                <span style="font-size: 15px;" class="fa fa-star checked"></span>
-                                <span style="font-size: 15px;" class="fa fa-star checked"></span>
-                                <span style="font-size: 15px;" class="fa fa-star checked"></span>
-                                <span style="font-size: 15px;" class="fa fa-star"></span>
-                                <span style="font-size: 15px;" class="fa fa-star"></span>
-                            </div>
+                            <Stars :numOfStars="medicine.averageGrade" />
                         </div>
                         <div slot="buttons">
                             <RoundButton title="Download specification" iconName="subject" type="btn-info"></RoundButton>
@@ -86,11 +78,12 @@
 </template>
 
 <script>
-import Search from '../components/Search/Search'
+import MedicineSearch from '../components/Searchs/MedicineSearch'
 import FormGroup from '../components/Form/FormGroup'
 import MedicineForm from '../components/Forms/MedicineForm'
 import Button from '../components/Form/Button'
 import RotatingCard from '../components/Card/RotatingCard.vue';
+import Stars from '../components/Rating/Stars'
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
 import OptionModalButtons from '../components/Modal/OptionModalButtons'
@@ -102,11 +95,12 @@ import toastr from 'toastr'
 
 export default {
     components: {
-        Search,
+        MedicineSearch,
         FormGroup,
         MedicineForm,
         Button,
         RotatingCard,
+        Stars,
         Modal,
         ModalOpener,
         OptionModalButtons,
@@ -234,13 +228,6 @@ export default {
     mounted() {
       this.fetchMedicines();
     }
+};
 
-}
 </script>
-
-<style scoped>
-.checked {
-  color: orange;
-}
-
-</style>
