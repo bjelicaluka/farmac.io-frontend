@@ -4,6 +4,7 @@ import Pharmacy from '../pages/Pharmacy.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
 import SystemAdmins from '../pages/SystemAdmins.vue'
+import Suppliers from '../pages/Suppliers.vue'
 import Dermatologists from '../pages/Dermatologists.vue'
 import Medicines from '../pages/Medicines.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
@@ -113,6 +114,14 @@ const routes = [
       }
   },
   {
+    path: '/suppliers',
+    name: 'Suppliers',
+    component: Suppliers,
+    meta: {
+        layout: 'AppLayoutMain'
+      }
+  },
+  {
     path: '/dermatologists',
     name: 'Dermatologists',
     component: Dermatologists,
@@ -132,6 +141,14 @@ const routes = [
     path: '/medicineReservations',
     name: 'FutureMedicineReservations',
     component: FutureMedicineReservations,
+      meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+   {
+    path: '/report',
+    name: 'Report',
+    component: Report,
     meta: {
       layout: 'AppLayoutMain'
     }
