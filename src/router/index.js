@@ -8,10 +8,11 @@ import Dermatologists from '../pages/Dermatologists.vue'
 import Medicines from '../pages/Medicines.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
-import Report from '../pages/Report.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
+import Report from '../pages/Report.vue'
 import { Roles } from '../constants'
+import store from '../store/index'
 import * as tokenUtils from '../utils/token'
 
 Vue.use(VueRouter)
@@ -75,7 +76,8 @@ const routes = [
     name: 'Medicines',
     component: Medicines,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient, Roles.Supplier]
     }
   },
   {
@@ -119,17 +121,17 @@ const routes = [
     }
   },
   {
-    path: '/medicineReservations',
-    name: 'FutureMedicineReservations',
-    component: FutureMedicineReservations,
+    path: '/report',
+    name: 'Report',
+    component: Report,
     meta: {
       layout: 'AppLayoutMain'
     }
   },
   {
-    path: '/report',
-    name: 'Report',
-    component: Report,
+    path: '/medicineReservations',
+    name: 'FutureMedicineReservations',
+    component: FutureMedicineReservations,
     meta: {
       layout: 'AppLayoutMain'
     }
@@ -156,7 +158,8 @@ router.beforeEach((to, from, next) => {
 
   if (authorizedRoles) {
       if (!isUserLoggedIn) {
-          return next({ path: '/auth' });
+        store.dispatch('authentication/logOut');
+        return next({ path: '/auth' });
       }
 
       const userRole = tokenUtils.getRoleFromToken();
