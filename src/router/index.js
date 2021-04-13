@@ -11,6 +11,7 @@ import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
+import Report from '../pages/Report.vue'
 import * as tokenUtils from '../utils/token'
 
 Vue.use(VueRouter)
@@ -129,6 +130,14 @@ const routes = [
     path: '/medicineReservations',
     name: 'FutureMedicineReservations',
     component: FutureMedicineReservations,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+   {
+    path: '/report',
+    name: 'Report',
+    component: Report,
     meta: {
       layout: 'AppLayoutMain'
     }
