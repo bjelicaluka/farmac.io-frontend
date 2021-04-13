@@ -4,10 +4,12 @@
         <TableHead :columnNames="['Medical Staff', 'Date', 'Time', 'Duration', 'Price', '']"></TableHead>
         <TableBody>
           <TableRow 
-            v-for="a in appointments" 
-            :key="a.id" 
-            :values="[`${a.medicalStaff.firstName} ${a.medicalStaff.lastName} (${a.medicalStaff.averageGrade})`, formatDate(a.dateTime), formatTime(a.dateTime), formatDuration(a.duration), a.price + ' RSD']"
+            v-for="appointment in appointments" 
+            :key="appointment.id" 
+            :values="[`${appointment.medicalStaff.firstName} ${appointment.medicalStaff.lastName} (${appointment.medicalStaff.averageGrade})`, 
+            formatDate(appointment.dateTime), formatTime(appointment.dateTime), formatDuration(appointment.duration), appointment.price + ' RSD']"
           >
+          <RoundButton :title="'Cancel appointment'" :iconName="'clear'" @click="handleCancelAppointment(appointment.id)"></RoundButton>
           </TableRow>
         </TableBody>
     </Table>
@@ -19,6 +21,7 @@ import Table from '../Table/Table'
 import TableHead from '../Table/TableHead'
 import TableBody from '../Table/TableBody'
 import TableRow from '../Table/TableRow'
+import RoundButton from '../Form/RoundButton'
 import {mapGetters, mapActions} from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
@@ -29,11 +32,12 @@ export default {
     TableBody,
     TableRow,
     TableHead,
+    RoundButton
   },
   props: ['appointments'],
   methods: {
     ...mapActions({
-        
+        cancelAppointment : 'appointments/cancelAppointment' 
     }),
     formatDate(d) {
       return moment(d).format('ll');
@@ -43,6 +47,9 @@ export default {
     },
     formatDuration(min) {
       return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm");
+    },
+    handleCancelAppointment(appointmentId){
+      this.cancelAppointment(appointmentId);
     }
   },
 }

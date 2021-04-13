@@ -12,6 +12,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import Card from '../components/Card/Card.vue'
 import PatientsFutureAppointmentTable from '../components/Tables/PatientsFutureAppointmentsTable.vue'
+import toastr from 'toastr'
 
 export default {
     components: {
@@ -21,7 +22,8 @@ export default {
 
     computed: {
         ...mapGetters({
-            patientsAppointments: 'appointments/getAppointments'
+            patientsAppointments: 'appointments/getAppointments',
+            getResult: 'appointments/getResult'
         })
     },
 
@@ -33,6 +35,20 @@ export default {
 
     mounted() {
         this.fetchPatientsFutureAppointments('08d8f514-58cc-41e9-810e-0a83d243cd60');
+    },
+    
+    watch: {
+        getResult({label, ok, message}){
+            if(label == 'cancel'){
+                if(ok){
+                    toastr.success(message);
+                    this.fetchPatientsFutureAppointments('08d8f514-58cc-41e9-810e-0a83d243cd60');
+                }
+                else{
+                    toastr.console.error(message);
+                }
+            }
+        }
     }
 }
 </script>
