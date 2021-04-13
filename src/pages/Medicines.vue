@@ -2,6 +2,10 @@
     <div class="content">
         <div class="container-fluid">
 
+        <div>
+            <Search wrapperClass="row justify-content-center align-items-center" @search="handleSearch" />
+        </div>
+
         <Modal
             modalBoxId="deleteMedicineModal"
             title="Confirmation"
@@ -82,6 +86,7 @@
 </template>
 
 <script>
+import Search from '../components/Search/Search'
 import FormGroup from '../components/Form/FormGroup'
 import MedicineForm from '../components/Forms/MedicineForm'
 import Button from '../components/Form/Button'
@@ -97,6 +102,7 @@ import toastr from 'toastr'
 
 export default {
     components: {
+        Search,
         FormGroup,
         MedicineForm,
         Button,
@@ -132,11 +138,16 @@ export default {
     methods: {
         ...mapActions({
             fetchMedicines: 'medicines/fetchMedicinesForHomePage',
+            fetchMedicinesByName: 'medicines/fetchMedicinesByName',
             fetchMedicine: 'medicines/fetchMedicineById',
             fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
             reserveMedicine: 'shoppingCart/addReservation',
             deleteMedicine: 'medicines/deleteMedicine'
         }), 
+
+        handleSearch(name) {
+            this.fetchMedicinesByName(name);
+        },
 
         onDisplaySelected(id, name){
             if(this.selectedMedicineId != id){
