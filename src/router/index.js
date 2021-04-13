@@ -143,7 +143,16 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain'
     }
-  }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/pages/Profile.vue'),
+    meta: {
+      layout: 'AuthLayout',
+      authorizedRoles: [Roles.Patient, Roles.Pharmacist, Roles.PharmacyAdmin, Roles.Supplier, Roles.SystemAdmin, Roles.Dermatologist]
+    }
+  },
 ]
     
 const router = new VueRouter({
@@ -153,9 +162,14 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const { authorizedRoles } = to.meta;
   const isUserLoggedIn = tokenUtils.isUserLoggedIn();
-
+  const shouldChangePassword = tokenUtils.getShouldChangePassword(); 
+  
+  if (isUserLoggedIn && shouldChangePassword && to.path !== '/profile') {
+    return next({ path: '/profile' });
+  }
+  const { authorizedRoles } = to.meta;
+  
   if (authorizedRoles) {
       if (!isUserLoggedIn) {
         store.dispatch('authentication/logOut');
