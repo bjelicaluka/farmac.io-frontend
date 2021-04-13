@@ -163,7 +163,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const isUserLoggedIn = tokenUtils.isUserLoggedIn();
-  const shouldChangePassword = tokenUtils.getShouldChangePassword(); 
+  const shouldChangePassword = tokenUtils.shouldChangePassword(); 
   
   if (isUserLoggedIn && shouldChangePassword && to.path !== '/profile') {
     return next({ path: '/profile' });

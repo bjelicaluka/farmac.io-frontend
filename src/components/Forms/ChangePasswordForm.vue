@@ -54,7 +54,7 @@ import Form from '../Form/Form.vue'
 import FormRow from '../Form/FormRow.vue'
 import TextInput from '../Form/TextInput.vue'
 
-import { getShouldChangePassword } from '../../utils/token'
+import { shouldChangePassword } from '../../utils/token'
 import toastr from 'toastr'
 
 export default {
@@ -111,7 +111,7 @@ export default {
     },
 
     mounted() {
-        if(getShouldChangePassword()) {
+        if(shouldChangePassword()) {
             toastr.info("You have to change your password since this is your first login.");
         }
     }

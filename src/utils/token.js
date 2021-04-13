@@ -50,7 +50,7 @@ export function getRoleFromToken() {
 	return Object.keys(Roles).find(role => Roles[role] === roleFromToken);
 }
 
-export function getShouldChangePassword() {
+export function shouldChangePassword() {
 	const shouldChangePassword = decodeToken()?.ShouldChangePassword;
 
 	return shouldChangePassword === "true" ?? false;

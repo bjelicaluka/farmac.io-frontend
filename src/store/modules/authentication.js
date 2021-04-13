@@ -45,7 +45,6 @@ const actions = {
             });
         })
         .catch(error => {
-            console.log(error);
             context.commit('setResult', {
                 label: 'changePassword',
                 ok: false,
