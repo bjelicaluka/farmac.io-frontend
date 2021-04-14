@@ -86,6 +86,16 @@ const actions = {
             });
         });
     },
+
+    searchPharmacies: (context, {name, city}) => {
+        axios.get(`/pharmacies/search?name=${name}&streetAndCity=${city}`)
+        .then(resp => {
+            context.commit('setPharmacies', resp.data)
+        })
+        .catch(err => {
+            context.commit('setResult', { label: 'fetch', ok: false })
+        })
+    }
 };
 
 const mutations = {
