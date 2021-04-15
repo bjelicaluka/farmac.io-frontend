@@ -31,6 +31,7 @@
                 <dropdown-item :to="'/patient-registration'">Register</dropdown-item>
               </div>
               <div v-else>
+                <dropdown-item to='/profile'>Profile</dropdown-item>
                 <dropdown-item @click="logOut">Log out</dropdown-item>
               </div>
             </dropdown-menu>

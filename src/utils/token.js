@@ -50,6 +50,12 @@ export function getRoleFromToken() {
 	return Object.keys(Roles).find(role => Roles[role] === roleFromToken);
 }
 
+export function shouldChangePassword() {
+	const shouldChangePassword = decodeToken()?.ShouldChangePassword;
+
+	return shouldChangePassword === "true" ?? false;
+}
+	
 export function getAccountIdFromToken() {
 	return decodeToken()?.name;
 }
@@ -57,6 +63,7 @@ export function getAccountIdFromToken() {
 export function isUserLoggedIn() {
     return getAccountIdFromToken() && !hasTokenExpired();
 }
+
 
 function decodeToken() {
 	const token = localStorage.getItem('token');
