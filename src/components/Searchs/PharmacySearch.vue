@@ -1,6 +1,6 @@
 <template>
     <div>
-        <SearchWithTwoInputs searchFieldClass="col-4" wrapperClass="row justify-content-center align-items-center" @search="handleSearch" title1="Input name" title2="Input street and city"/>
+        <SearchWithTwoInputs searchFieldClass="col-4" wrapperClass="row justify-content-center align-items-center" @search="handleSearch" label1="Input name" label2="Input street and city"/>
     </div>
 </template>
 
@@ -16,18 +16,6 @@ export default {
         SearchWithTwoInputs
     },
 
-    data: function() {
-        return {
-
-        }
-    },
-
-    computed: {
-        ...mapGetters({
-
-        })
-    },
-
     methods: {
         ...mapActions({
             searchPharmacies: 'pharmacies/searchPharmacies'
@@ -36,14 +24,6 @@ export default {
         handleSearch(name, city) {
             this.searchPharmacies({name, city})
         },
-
-    },
-
-    watch: {
-
-    },
-
-    mounted() {
 
     }
 }

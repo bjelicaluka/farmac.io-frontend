@@ -4,13 +4,13 @@
       :class="searchFieldClass"
       v-model="value1"
       :isValid="true"
-      :title="title1"
+      :label="label1"
     />
     <text-input
       :class="searchFieldClass"
       v-model="value2"
       :isValid="true"
-      :title="title2"
+      :label="label2"
     />
     <Button @click="handleSearch" class="ml-2 mt-auto mb-auto" className="btn btn-sm btn-primary">
       <Icon icon="search" textColor='text-white'/>
@@ -34,11 +34,11 @@ export default {
       type: String,
       default: ''
     },
-    title1: {
+    label1: {
         type: String,
         default: ''
     },
-    title2: {
+    label2: {
         type: String,
         default: ''
     }
