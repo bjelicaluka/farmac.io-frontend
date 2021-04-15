@@ -91,6 +91,10 @@ export default {
     },
     existingUser: {
       type: Object
+    },
+    reactOnAction: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -120,6 +124,9 @@ export default {
     },
 
     result({label, ok, message}) {
+      if(!this.reactOnAction)
+        return;
+
       if(label !== 'add' && label !== 'update')
         return;
 

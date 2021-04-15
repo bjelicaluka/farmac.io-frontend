@@ -23,7 +23,7 @@ const actions = {
         });
     },
     fetchDermatologistById: (context, id) => {
-        axios.get(`/dermatologist/${id}`)
+        axios.get(`/dermatologists/${id}`)
         .then(resp => {
             context.commit('setDermatologist', resp.data);
         })
