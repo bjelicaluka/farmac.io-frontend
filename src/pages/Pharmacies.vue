@@ -1,5 +1,6 @@
 <template>
     <div class="content">
+        <PharmacySearch />
         <Modal
             modalBoxId="deletePharmacyModal"
             title="Confirmation"
@@ -47,6 +48,7 @@ import OptionModalButtons from '../components/Modal/OptionModalButtons'
 import PharmacyForm from '../components/Forms/PharmacyForm'
 import PharmacyCard from '../components/Card/PharmacyCard'
 import Button from '../components/Form/Button'
+import PharmacySearch from '../components/Searchs/PharmacySearch'
 import { mapGetters, mapActions } from 'vuex'
 import toastr from 'toastr'
 
@@ -57,7 +59,8 @@ export default {
         OptionModalButtons,
         PharmacyForm,
         PharmacyCard,
-        Button
+        Button,
+        PharmacySearch
     },
     
    data: function() {

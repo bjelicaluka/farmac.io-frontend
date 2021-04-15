@@ -12,6 +12,8 @@
                 </div>
                 <h4 class="card-title">{{pharmacy.name}}</h4>
                 <p class="card-category">{{pharmacy.description}}</p>
+                <p class="card-title">{{pharmacy.address.streetName}} {{pharmacy.address.streetNumber}}, {{pharmacy.address.city}}</p>
+                <Stars :numOfStars="pharmacy.averageGrade"/>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -26,10 +28,12 @@
 <script>
 
 import Button from '../Form/Button'
+import Stars from '../Rating/Stars'
 
 export default {
     components: {
-        Button
+        Button,
+        Stars
     },
 
     props: ['pharmacy'],
