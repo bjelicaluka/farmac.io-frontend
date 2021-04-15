@@ -1,7 +1,7 @@
 <template>
     <div>
         <div :id="id" class="form-group">
-            <label class="form-control-label text-white center">{{label}}</label>
+            <label v-if="showLabel == true" class="form-control-label text-white center">{{label}}</label>
             <select
                 v-model="selectedValue"
                 class="selectpicker form-control"
@@ -62,6 +62,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        showLabel: {
+            type: Boolean,
+            default: true,
         }
     },
 

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import {setAuthorizationHeaderInterceptor, setUnauthorizedHeaderInterceptor} from './utils/token'
 import AppLayout from '@/layouts/AppLayout'
 import { Icon } from 'leaflet';
 import axios from 'axios';
@@ -12,6 +13,8 @@ import 'leaflet/dist/leaflet.css';
 fixLeafletIcons();
 
 axios.defaults.baseURL = process.env.VUE_APP_BASEURL
+setAuthorizationHeaderInterceptor();
+setUnauthorizedHeaderInterceptor(store)
 
 Vue.component('AppLayout', AppLayout)
 

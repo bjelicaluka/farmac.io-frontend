@@ -1,5 +1,5 @@
 import axios from "axios";
-import {setToken, setAxiosInterceptors} from '../../utils/token'
+import {setToken, removeToken} from '../../utils/token'
 
 const state = {
     result: null
@@ -14,13 +14,11 @@ const actions = {
         axios.post('/auth', credentials)
         .then(response => {
             setToken(response.data.token);
-            setAxiosInterceptors();
             
             context.commit('setResult', {
                 label: 'authenticate',
                 ok: true,
                 message: ''
-                
             });
         })
         .catch(error => {
@@ -30,6 +28,29 @@ const actions = {
                 message: error.response.data.ErrorMessage
             });
         });        
+    },
+
+    logOut: (context) => {
+        removeToken();
+    },
+
+    changePassword: (context, {id, newPassword, currentPassword}) => {
+        axios.put(`/accounts/${id}/password`, {newPassword, currentPassword})
+        .then(response => {
+            context.commit('setResult', {
+                label: 'changePassword',
+                ok: true,
+                message: 'You have succesfully changed your password.'
+                
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'changePassword',
+                ok: false,
+                message: error.response.data.ErrorMessage
+            });
+        });   
     }
 };
 

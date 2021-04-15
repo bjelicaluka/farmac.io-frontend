@@ -1,6 +1,7 @@
 <template>
   <div :class="wrapperClass">
     <text-input
+      :class="searchFieldClass"
       v-model="value"
       :isValid="true"
     />
@@ -21,6 +22,10 @@ export default {
     wrapperClass: {
       type: String,
       default: 'row mr-auto'
+    },
+    searchFieldClass: {
+      type: String,
+      default: ''
     }
   },
   data: () => {

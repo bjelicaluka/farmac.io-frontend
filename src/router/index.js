@@ -4,14 +4,16 @@ import Pharmacy from '../pages/Pharmacy.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
 import SystemAdmins from '../pages/SystemAdmins.vue'
+import Suppliers from '../pages/Suppliers.vue'
 import Dermatologists from '../pages/Dermatologists.vue'
 import Medicines from '../pages/Medicines.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
-import Report from '../pages/Report.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
+import Report from '../pages/Report.vue'
 import { Roles } from '../constants'
+import store from '../store/index'
 import * as tokenUtils from '../utils/token'
 
 Vue.use(VueRouter)
@@ -75,7 +77,8 @@ const routes = [
     name: 'Medicines',
     component: Medicines,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient, Roles.Supplier]
     }
   },
   {
@@ -111,6 +114,14 @@ const routes = [
       }
   },
   {
+    path: '/suppliers',
+    name: 'Suppliers',
+    component: Suppliers,
+    meta: {
+        layout: 'AppLayoutMain'
+      }
+  },
+  {
     path: '/dermatologists',
     name: 'Dermatologists',
     component: Dermatologists,
@@ -119,14 +130,22 @@ const routes = [
     }
   },
   {
-    path: '/medicineReservations',
-    name: 'FutureMedicineReservations',
-    component: FutureMedicineReservations,
+    path: '/report',
+    name: 'Report',
+    component: Report,
     meta: {
       layout: 'AppLayoutMain'
     }
   },
   {
+    path: '/medicineReservations',
+    name: 'FutureMedicineReservations',
+    component: FutureMedicineReservations,
+      meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+   {
     path: '/report',
     name: 'Report',
     component: Report,
@@ -141,7 +160,16 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain'
     }
-  }
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/pages/Profile.vue'),
+    meta: {
+      layout: 'AuthLayout',
+      authorizedRoles: [Roles.Patient, Roles.Pharmacist, Roles.PharmacyAdmin, Roles.Supplier, Roles.SystemAdmin, Roles.Dermatologist]
+    }
+  },
 ]
     
 const router = new VueRouter({
@@ -151,12 +179,18 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const { authorizedRoles } = to.meta;
   const isUserLoggedIn = tokenUtils.isUserLoggedIn();
-
+  const shouldChangePassword = tokenUtils.shouldChangePassword(); 
+  
+  if (isUserLoggedIn && shouldChangePassword && to.path !== '/profile') {
+    return next({ path: '/profile' });
+  }
+  const { authorizedRoles } = to.meta;
+  
   if (authorizedRoles) {
       if (!isUserLoggedIn) {
-          return next({ path: '/auth' });
+        store.dispatch('authentication/logOut');
+        return next({ path: '/auth' });
       }
 
       const userRole = tokenUtils.getRoleFromToken();
