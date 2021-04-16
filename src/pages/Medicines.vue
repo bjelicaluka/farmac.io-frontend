@@ -43,7 +43,7 @@
                             <Stars :numOfStars="medicine.averageGrade" />
                         </div>
                         <div slot="buttons">
-                            <RoundButton title="Download specification" iconName="subject" type="btn-info"></RoundButton>
+                            <RoundButton title="Download specification" iconName="subject" type="btn-info" @click="onDownloadSpecification(medicine.id, medicine.name)"></RoundButton>
                             <RoundButton title="Check availability" iconName="add_shopping_cart" type="btn-success" @click="onDisplaySelected(medicine.id, medicine.name)"></RoundButton>
                             
                             <ModalOpener modalBoxId="medicineModal">
@@ -134,11 +134,16 @@ export default {
             fetchMedicines: 'medicines/fetchMedicinesForHomePage',
             fetchMedicinesByName: 'medicines/fetchMedicinesByName',
             fetchMedicine: 'medicines/fetchMedicineById',
+            fetchMedicinePdf: 'medicines/fetchMedicinePdf',
             fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
             reserveMedicine: 'shoppingCart/addReservation',
             deleteMedicine: 'medicines/deleteMedicine'
         }), 
 
+        onDownloadSpecification(id, name) {
+            this.fetchMedicinePdf({id, name});
+        },
+        {
         handleSearch(name) {
             this.fetchMedicinesByName(name);
         },

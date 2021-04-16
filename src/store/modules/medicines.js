@@ -1,4 +1,5 @@
 import axios from 'axios';
+import download from 'downloadjs'
 
 const state = {
     medicines: null,
@@ -61,7 +62,17 @@ const actions = {
         });
     },
 
-    fetchMedicinesByParams: (context, {name, type, gradeFrom, gradeTo}) => {
+    fetchMedicinePdf: (context, {id, name}) => {
+        axios.get(`/medicines/details/${id}`, { responseType: 'blob' })
+            .then(response => {
+              download(response.data, `${name}.pdf`, 'application/pdf');
+            })
+            .catch(error => {
+                context.commit('setResult', { label: 'fetch', ok: false });
+            });
+    },   
+
+  fetchMedicinesByParams: (context, {name, type, gradeFrom, gradeTo}) => {
         axios.get(`/medicines/search?name=${name}&type=${type}&gradeFrom=${gradeFrom}&gradeTo=${gradeTo}`)
         .then(response => {
             context.commit('setMedicines', response.data);
