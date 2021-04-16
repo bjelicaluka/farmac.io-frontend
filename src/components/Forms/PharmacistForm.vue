@@ -21,6 +21,7 @@
     />
 
     <WorkTimeFormGroup
+      v-if="!isEdit"
       :workTime="user.workTime"
       :showErrorMessage="showErrorMessage"
     />

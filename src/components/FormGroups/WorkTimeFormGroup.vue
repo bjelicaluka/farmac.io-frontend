@@ -58,7 +58,6 @@ export default {
   },
   methods: {
     validateWorkHours() {
-      console.log(this.workTime)
       if(!this.workTime.from || !this.workTime.to) return false;
       const duration = moment.duration(this.workTime.to.diff(this.workTime.from));
       const workHours = duration.asHours();
