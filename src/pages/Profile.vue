@@ -11,6 +11,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#password" data-toggle="tab"><i class="material-icons">lock</i>Password</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#allergies" data-toggle="tab"><i class="material-icons">local_pharmacy</i>Allergies</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -25,6 +28,11 @@
                             <ChangePasswordForm/>
                         </div>
                     </div>
+                    <div class="tab-pane" id="allergies">
+                        <div class=" justify-content-center align-items-center">
+                            <AllergiesForm/>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,11 +43,13 @@
 
 import PatientForm from '../components/Forms/PatientForm'
 import ChangePasswordForm from '../components/Forms/ChangePasswordForm'
+import AllergiesForm from '../components/Forms/AllergiesForm'
 
 export default {
     components: {
         PatientForm,
-        ChangePasswordForm
+        ChangePasswordForm,
+        AllergiesForm
     }
 }
 </script>

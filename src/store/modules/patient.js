@@ -61,6 +61,15 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetchPatients', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    addAllergies: (context, request) => {
+        axios.post(`/patients/allergies`, request)
+        .then(resp => {
+            context.commit('setResult', {label: 'addAllergies', ok: true, message: "You successfully added allergies."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'addAllergies', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
