@@ -4,7 +4,7 @@
         <TableHead :columnNames="['Medicine name', 'Manufacturer', '']"></TableHead>
             <TableBody>
                 <TableRow v-for="(medicine, index) in medicines" :key="index" :id="medicine.id" :values="[medicine.name, medicine.manufacturer]">
-                    <RoundButton :title="title" @click="clickHandle(medicine.id)" :iconName="iconName"></RoundButton>
+                    <RoundButton v-if="iconName != ''" :title="title" @click="clickHandle(medicine.id)" :iconName="iconName"></RoundButton>
                 </TableRow>
         </TableBody>
     </Table>

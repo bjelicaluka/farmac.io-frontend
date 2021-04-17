@@ -1,5 +1,6 @@
 <template>
     <div>
+        <MedicinesTable :medicines="allergies" iconName='' />
         <Modal modalBoxId="addAllergiesModal" title="Add allergies">
             <div slot="body">
                 <MedicinesTable :medicines="addedMedicines" iconName='clear' @clickButton='removeAllergy' title="Remove allergy"/>
@@ -35,7 +36,8 @@ export default {
         return {
             medicines: [],
             addedMedicines: [],
-            addedMedicinesIds: []
+            addedMedicinesIds: [],
+            allergies: []
         }
     },
 
@@ -43,7 +45,8 @@ export default {
         ...mapGetters({
             getMedicines: 'medicines/getMedicines',
             getMedicine: 'medicines/getMedicine',
-            result: 'patient/getResult'
+            result: 'patient/getResult',
+            getAllergies: 'patient/getAllergies'
         })
     },
 
@@ -59,11 +62,17 @@ export default {
             if(label === 'addAllergies'){
                 if(ok){
                     toastr.success(message);
+                    this.fetchAllergies(getAccountIdFromToken())
+                    this.addedMedicines = []
+                    this.addedMedicinesIds = []
                 }
                 else{
                     toastr.error(message);
                 }
             }
+        },
+        getAllergies(allergies){
+            this.allergies = allergies;
         }
     },
 
@@ -71,7 +80,8 @@ export default {
         ...mapActions({ 
             fetchMedicines: 'medicines/fetchMedicines',
             fetchMedicine: 'medicines/fetchMedicineById',
-            addPatientsAllergies: 'patient/addAllergies'
+            addPatientsAllergies: 'patient/addAllergies',
+            fetchAllergies: 'patient/fetchAllergies'
         }),
         addAllergy(medicineId) {
             let check = false;
@@ -102,7 +112,8 @@ export default {
     },
 
     mounted() {
-        this.fetchMedicines()
+        this.fetchMedicines();
+        this.fetchAllergies(getAccountIdFromToken());
     }
 }
 

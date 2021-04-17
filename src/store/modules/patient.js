@@ -3,12 +3,14 @@ import axios from "axios"
 const state = {
     result: null,
     patients: null,
-    sortCrit: "", isAsc: true
+    allergies: null,
+    sortCrit: "", isAsc: true,
 };
 
 const getters = {
     getResult: state => state.result,
-    getPatients: state => state.patients
+    getPatients: state => state.patients,
+    getAllergies: state => state.allergies
 };
 
 const actions = {
@@ -63,13 +65,22 @@ const actions = {
         });
     },
     addAllergies: (context, request) => {
-        axios.post(`/patients/allergies`, request)
+        axios.post(`/patients/add-allergies`, request)
         .then(resp => {
             context.commit('setResult', {label: 'addAllergies', ok: true, message: "You successfully added allergies."});
         })
         .catch(err => {
             context.commit('setResult', {label: 'addAllergies', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    fetchAllergies: (context, patientId) => {
+        axios.get(`/patients/patients-allergies/${patientId}`)
+        .then(resp => {
+            context.commit('setAllergies', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetchAllergies', ok: false, message: err.response.data.ErrorMessage});
+        })
     }
 };
 
@@ -79,6 +90,9 @@ const mutations = {
     },
     setPatients: (state, patients) => {
         state.patients = patients;
+    },
+    setAllergies: (state, allergies) => {
+        state.allergies = allergies;
     }
 };
 
