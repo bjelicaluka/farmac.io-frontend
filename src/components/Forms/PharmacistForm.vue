@@ -86,6 +86,10 @@ export default {
     },
     pharmacyId: {
       type: String
+    },
+    reactOnAction: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -107,6 +111,9 @@ export default {
 
   watch: {
     result({label, ok, message}) {
+      if(!this.reactOnAction)
+        return;
+
       if(label === 'add' || label === 'update') {
         if(ok) {
           toastr.success(message);

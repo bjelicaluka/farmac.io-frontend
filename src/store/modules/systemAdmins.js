@@ -7,7 +7,7 @@ const state = {
 };
 
 const getters = {
-    getSytemAdmin: state => state.systemAdmin,
+    getSystemAdmin: state => state.systemAdmin,
     getSystemAdmins: state => state.systemAdmins,
     getResult: state => state.result
 };

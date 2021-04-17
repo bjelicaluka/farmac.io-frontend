@@ -18,7 +18,7 @@
             <div class="card-body">
                 <div class="tab-content text-center">
                     <div class="tab-pane active" id="profile">
-                        <PatientForm/>
+                        <UpdateProfileForm/>
                     </div>
                     <div class="tab-pane" id="password">
                         <div class=" justify-content-center align-items-center">
@@ -33,12 +33,12 @@
 
 <script>
 
-import PatientForm from '../components/Forms/PatientForm'
+import UpdateProfileForm from '../components/Forms/UpdateProfileForm'
 import ChangePasswordForm from '../components/Forms/ChangePasswordForm'
 
 export default {
     components: {
-        PatientForm,
+        UpdateProfileForm,
         ChangePasswordForm
     }
 }
