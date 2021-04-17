@@ -143,7 +143,7 @@ export default {
         onDownloadSpecification(id, name) {
             this.fetchMedicinePdf({id, name});
         },
-        {
+        
         handleSearch(name) {
             this.fetchMedicinesByName(name);
         },
