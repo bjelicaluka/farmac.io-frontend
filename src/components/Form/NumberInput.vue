@@ -7,8 +7,8 @@
           :min="min"
           :max="max"
           class="form-control"
-          v-bind:value="value"
-          v-on:input="$emit('input', $event.target.value)"
+          v-bind:value="parseInt(value)"
+          v-on:input="$emit('input', parseInt($event.target.value))"
           :disabled="disabled"
         >
     </div>

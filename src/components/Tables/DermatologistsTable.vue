@@ -146,7 +146,13 @@ export default {
     DefineAppointmentForm,
     Button
   },
-  props: ['dermatologists', 'pharmacyId', 'searchField'],
+  props: {
+    dermatologists: {},
+    pharmacyId: {},
+    searchField: {
+      default: true
+    }
+  },
   data() {
     return {
       Roles,
