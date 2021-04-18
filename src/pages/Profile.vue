@@ -47,7 +47,6 @@ import AllergiesForm from '../components/Forms/AllergiesForm'
 
 export default {
     components: {
-        PatientForm,
         ChangePasswordForm,
         AllergiesForm,
         UpdateProfileForm
