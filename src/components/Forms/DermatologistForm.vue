@@ -73,6 +73,10 @@ export default {
     existingUser: {
       type: Object
     },
+    reactOnAction: {
+      type: Boolean,
+      default: true
+    }
   },
 
   data: () => {
@@ -93,6 +97,9 @@ export default {
 
   watch: {
     result({message, ok, label}) {
+      if(!this.reactOnAction)
+        return;
+
       if(label !== 'add' && label !== 'update')
         return;
 

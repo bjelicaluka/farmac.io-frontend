@@ -85,7 +85,7 @@ export default {
     Modal,
     PharmacistForm,
     OptionModalButtons,
-    Button,
+    Button
   },
   props: ['pharmacists', 'pharmacyId'],
   data() {
