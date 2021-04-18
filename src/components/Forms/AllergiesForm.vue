@@ -94,7 +94,7 @@ export default {
                 this.fetchMedicine(medicineId);
             }
             else{
-                toastr.error("Allergy is already added.");
+                toastr.info("Allergy is already added.");
             }
         },
         removeAllergy(medicineId){
