@@ -103,7 +103,7 @@ export default {
         },
         addAllergies(){
             let request = {
-                medicinesId : this.addedMedicinesIds,
+                medicineIds : this.addedMedicinesIds,
                 patientId : getAccountIdFromToken()
             }
             this.addPatientsAllergies(request);
