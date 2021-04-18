@@ -76,12 +76,7 @@ export default {
 
         handleSearch(name, city) {
             let sortCriteria = this.sortCriteria.filter(item => item.value == this.selectedSortCriteria)[0]
-            if(this.selectedSortCriteria !== ''){
-                sortCriteria = sortCriteria['label'].toLowerCase();
-            }
-            else{
-                sortCriteria = '';
-            }
+            sortCriteria = this.selectedSortCriteria ? sortCriteria['label'].toLowerCase() : '';
             let isAscending =  this.selectedIsAsc == 1 ? true : false
             this.searchPharmacies({name, city, sortCriteria, isAscending})
         },
