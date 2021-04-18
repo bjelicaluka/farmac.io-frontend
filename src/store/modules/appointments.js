@@ -76,7 +76,17 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'cancel', message: err.response.data.ErrorMessage, ok: false})
         });
-    }
+    },
+    fetchMedicalStaffAppointmentsToReport: (context, medicalStaffId) => {
+        axios.get(`/appointments/my-appointments/${medicalStaffId}`)
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+
 };
 
 const mutations = {

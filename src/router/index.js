@@ -12,6 +12,7 @@ import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
+import AppointmentsToReport from '../pages/AppointmentsToReport.vue'
 import Report from '../pages/Report.vue'
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -140,8 +141,8 @@ const routes = [
   },
   {
     path: '/report',
-    name: 'Report',
-    component: Report,
+    name: 'AppointmentsToReport',
+    component: AppointmentsToReport,
     meta: {
       layout: 'AppLayoutMain'
     }
