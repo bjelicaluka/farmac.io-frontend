@@ -1,10 +1,9 @@
 <template>
   <div>
     <div class="row pl-4 pr-4">
-      <Search @search="handleSearch($event)" />
       <div class="row ml-auto">
         <ModalOpener modalBoxId="pharmacistModal">
-            <Button @click="handleRegisterClick">Register Pharmacyst</Button>
+            <Button @click="handleRegisterClick">Register Pharmacist</Button>
         </ModalOpener>
       </div>
     </div>
@@ -95,7 +94,6 @@ export default {
     return {
       selectedPharmacist: null,
       isEdit: false,
-      searchName: ''
     }
   },
   computed: {
@@ -121,9 +119,6 @@ export default {
     formatAddress(address) {
       const {state, city, streetName, streetNumber} = address;
       return `${state}, ${city}, ${streetName} - ${streetNumber}`
-    },
-    handleSearch(value) {
-      this.$emit('search', value);
     },
     handleRegisterClick() {
       this.isEdit = false;

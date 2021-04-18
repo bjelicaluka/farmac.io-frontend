@@ -23,7 +23,7 @@ const actions = {
         });
     },
     fetchPharmacistById: (context, id) => {
-        axios.get(`/pharmacist/${id}`)
+        axios.get(`/pharmacists/${id}`)
         .then(resp => {
             context.commit('setPharmacist', resp.data);
         })
