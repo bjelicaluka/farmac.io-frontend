@@ -4,13 +4,15 @@ const state = {
     result: null,
     patient: null,
     patients: null,
-    sortCrit: "", isAsc: true
+    allergies: null,
+    sortCrit: "", isAsc: true,
 };
 
 const getters = {
+    getResult: state => state.result,
     getPatients: state => state.patients,
     getPatient: state => state.patient,
-    getResult: state => state.result
+    getAllergies: state => state.allergies
 };
 
 const actions = {
@@ -91,6 +93,24 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetchPatients', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    addAllergies: (context, request) => {
+        axios.post(`/patients/add-allergies`, request)
+        .then(resp => {
+            context.commit('setResult', {label: 'addAllergies', ok: true, message: "You successfully added allergies."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'addAllergies', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchAllergies: (context, patientId) => {
+        axios.get(`/patients/patients-allergies/${patientId}`)
+        .then(resp => {
+            context.commit('setAllergies', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetchAllergies', ok: false, message: err.response.data.ErrorMessage});
+        })
     }
 };
 
@@ -101,7 +121,9 @@ const mutations = {
     setPatient: (state, patient) => {
         state.patient = patient;
     },
-
+    setAllergies: (state, allergies) => {
+        state.allergies = allergies;
+    },
     setResult: (state, result) => {
         state.result = result;
     }
