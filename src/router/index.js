@@ -156,7 +156,7 @@ const routes = [
     }
   },
    {
-    path: '/report',
+    path: '/report/:id',
     name: 'Report',
     component: Report,
     meta: {

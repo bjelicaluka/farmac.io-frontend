@@ -30,7 +30,7 @@ export default {
     methods: {
         ...mapActions({
             fetchAppointments: 'appointments/fetchMedicalStaffAppointmentsToReport'
-        })
+        }),
     },
 
     mounted() {

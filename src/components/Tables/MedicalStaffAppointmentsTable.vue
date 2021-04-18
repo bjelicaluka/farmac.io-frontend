@@ -53,8 +53,8 @@ export default {
     formatDuration(min) {
       return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm");
     },
-    handleStart(appointmentId){
-      
+    handleStart(appointmentId) {
+      this.$router.push(`/report/${appointmentId}`);
     }
   },
   watch: {

@@ -2,7 +2,8 @@
 <div class="content">
     <div class="container-fluid">
         <Card title='Report' :description="''">
-            Page for examination or consultation report...<br>
+            Patient: {{appointment.patient.firstName}} {{appointment.patient.lastName}}<br>
+            Pharmacy: {{appointment.pharmacy.name}}
         </Card>
 
         <Modal
@@ -62,10 +63,7 @@ export default {
         return {
             isValid: false,
             value: '',
-            company: "",
-            date: null,
-            location: null,
-            pharmacyId: '08d8f514-5790-438f-88f7-09089846f3d2' //for testing
+            appointmentId: null
         }
     },
     components: {
@@ -84,22 +82,26 @@ export default {
     computed: {
         ...mapGetters({
             medicineNames: 'medicines/getMedicineNames',
-            smallMedicines: 'medicines/getSmallMedicines'
+            smallMedicines: 'medicines/getSmallMedicines',
+            appointment: 'appointments/getAppointment'
         })
     },
 
     methods: {
         ...mapActions({
             fetchMedicineNames: 'medicines/fetchMedicineNames',
-            fetchMedicinesOrReplacements: 'medicines/fetchMedicinesOrReplacements'
+            fetchMedicinesOrReplacements: 'medicines/fetchMedicinesOrReplacements',
+            fetchAppointment: 'appointments/fetchAppointment'
         }),
         checkMedicine() {
-            this.fetchMedicinesOrReplacements({pharmacyId:this.pharmacyId, name:this.value});
+            this.fetchMedicinesOrReplacements({pharmacyId:this.appointment.pharmacyId, name:this.value});
         }
     },
 
     mounted() {
-        this.fetchMedicineNames(this.pharmacyId);
+        this.appointmentId = this.$route.params.id;
+        this.fetchAppointment(this.appointmentId);
+        this.fetchMedicineNames(this.appointment.pharmacyId);
     }
 }
 
