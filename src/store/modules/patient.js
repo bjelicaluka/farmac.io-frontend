@@ -2,6 +2,7 @@ import axios from "axios"
 
 const state = {
     result: null,
+    patient: null,
     patients: null,
     allergies: null,
     sortCrit: "", isAsc: true,
@@ -10,12 +11,23 @@ const state = {
 const getters = {
     getResult: state => state.result,
     getPatients: state => state.patients,
+    getPatient: state => state.patient,
     getAllergies: state => state.allergies
 };
 
 const actions = {
+    fetchPatientById: (context, id) => {
+        axios.get(`/patients/${id}`)
+        .then(response => {
+            context.commit('setPatient', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
     addPatient: (context, patient) => {
-        axios.post('/accounts/create-patient', patient)
+        axios.post('/patients', patient)
         .then(response => {
             context.commit('setResult', {
                 label: 'add',
@@ -31,9 +43,25 @@ const actions = {
             });
         })
     },
+
     updatePatient: (context, patient) => {
-        console.log(`In next sprints...`);
+        axios.put('/patients', patient)
+         .then(response => {
+             context.commit('setResult', {
+                 label: 'update',
+                 ok: true,
+                 message: `You have successfully updated a patient.`
+             });
+         })
+         .catch(error => {
+             context.commit('setResult', {
+                 label: 'update',
+                 ok: false,
+                 message: error.response.data.ErrorMessage
+             });
+         })
     },
+
     fetchMedicalStaffsPatients: (context, medicalId) => {
         axios.get(`/patients/my-patients/${medicalId}`)
         .then(resp => {
@@ -43,6 +71,7 @@ const actions = {
             context.commit('setResult', {label: 'fetchPatients', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+
     fetchSortedMedicalStaffsPatients: (context, {medicalId, sortCrit}) => {
         if (sortCrit === state.sortCrit)
             state.isAsc = !state.isAsc;
@@ -55,6 +84,7 @@ const actions = {
             context.commit('setResult', {label: 'fetchPatients', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+
     searchPatients: (context, {medicalId, name}) => {
         axios.get(`/patients/my-patients/${medicalId}/search?name=${name}`)
         .then(resp => {
@@ -85,14 +115,17 @@ const actions = {
 };
 
 const mutations = {
-    setResult: (state, result) => {
-        state.result = result;
-    },
     setPatients: (state, patients) => {
         state.patients = patients;
     },
+    setPatient: (state, patient) => {
+        state.patient = patient;
+    },
     setAllergies: (state, allergies) => {
         state.allergies = allergies;
+    },
+    setResult: (state, result) => {
+        state.result = result;
     }
 };
 

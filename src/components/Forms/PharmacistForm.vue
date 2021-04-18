@@ -20,6 +20,12 @@
       modalBoxId="pharmacistModal"
     />
 
+    <WorkTimeFormGroup
+      v-if="!isEdit"
+      :workTime="user.workTime"
+      :showErrorMessage="showErrorMessage"
+    />
+
     <Button @click="showErrorMessage = true" type="submit">{{isEdit ? 'Update' : 'Register'}}</Button>
   </Form>
 </template>
@@ -34,6 +40,7 @@ import Button from '../Form/Button.vue';
 import toastr from 'toastr'
 import moment from 'moment';
 import { mapActions, mapGetters } from 'vuex';
+import WorkTimeFormGroup from '../FormGroups/WorkTimeFormGroup.vue'
 
 const initialUser = {
   firstName: null,
@@ -49,6 +56,10 @@ const initialUser = {
     city: null,
     streetName: null,
     streetNumber: null,
+  },
+  workTime: {
+    from: null,
+    to: null
   }
 };
 
@@ -60,7 +71,7 @@ const initialAccount = {
 }
 
 export default {
-  components: { Form, Button, AccountInfoFormGroup, PersonalInfoFormGroup, AddressFormGroup },
+  components: { Form, Button, AccountInfoFormGroup, PersonalInfoFormGroup, AddressFormGroup, WorkTimeFormGroup },
 
   props: {
     isEdit: {
@@ -75,6 +86,10 @@ export default {
     },
     pharmacyId: {
       type: String
+    },
+    reactOnAction: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -96,6 +111,9 @@ export default {
 
   watch: {
     result({label, ok, message}) {
+      if(!this.reactOnAction)
+        return;
+
       if(label === 'add' || label === 'update') {
         if(ok) {
           toastr.success(message);
@@ -159,6 +177,8 @@ export default {
       if(this.existingUser) {
         this.user = this.existingUser;
         this.user.dateOfBirth = moment(this.existingUser.dateOfBirth).toDate();
+        this.user.workTime.from = moment(this.existingUser.workTime.from).toDate();
+        this.user.workTime.to = moment(this.existingUser.workTime.to).toDate();
       }
     }
   }
