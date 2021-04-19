@@ -88,10 +88,28 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    fetchHistoryOfVisitingDermatologist: (context, patientId) => {
+        axios.get(`/appointments/history/${patientId}`)
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     fetchAppointment: (context, id) => {
         axios.get(`/appointments/${id}`)
         .then(resp => {
             context.commit('setAppointment', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    sortHistoryVisitingDermatologist: (context, {patientId, criteria, isAsc}) => {
+        axios.get(`/appointments/history/${patientId}/sort?criteria=${criteria}&isAsc=${isAsc}`)
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});

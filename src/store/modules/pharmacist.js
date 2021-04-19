@@ -67,6 +67,15 @@ const actions = {
             context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    filterPharmacists: (context, params) => {
+        axios.get(`/pharmacists/filter`, {params})
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     addPharmacist: (context, pharmacist) => {
         axios.post(`/pharmacists`, pharmacist)
         .then(resp => {

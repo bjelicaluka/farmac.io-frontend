@@ -87,8 +87,8 @@ const actions = {
         });
     },
 
-    searchPharmacies: (context, {name, city, sortCriteria, isAscending}) => {
-        axios.get(`/pharmacies/search?name=${name}&streetAndCity=${city}&sortCriteria=${sortCriteria}&isAscending=${isAscending}`)
+    searchPharmacies: (context, paramsObject) => {
+        axios.get(`/pharmacies/search`, {params: paramsObject})
         .then(resp => {
             context.commit('setPharmacies', resp.data)
         })
