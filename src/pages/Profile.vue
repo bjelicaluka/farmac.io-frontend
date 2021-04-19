@@ -43,7 +43,8 @@
                             <h3 v-if="patient">You have {{ patient.user.negativePoints }} negative points.</h3>
                             <br />
                             <p>If you have 3 or more negative points you cannot reserve medicines and book appointments with a dermatologist and pharmacist.
-                                You get negative points if you do not take the reserved medicine or do not appear at the examination or counseling."</p>
+                                You get negative points if you do not take the reserved medicine or do not appear at the examination or counseling. Negative points
+                                will be deleted at the beginning of each month"</p>
                         </div>
                     </div>
                 </div>
