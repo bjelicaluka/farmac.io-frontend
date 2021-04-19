@@ -5,10 +5,10 @@
                 <PharmacyInfo :pharmacy="pharmacy" />
             </Card>
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacist employees.`">
-                <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :pharmacyId="pharmacyId" />
+                <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :adminPharmacyId="pharmacyId" />
             </Card>
             <Card title='Dermatologists' :description="`${pharmacy && pharmacy.name}'s dermatologist employees.`">
-                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :pharmacyId="pharmacyId" />
+                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :adminPharmacyId="pharmacyId" />
             </Card>
             <Card title='Dermatologist Appointments' :description="`${pharmacy && pharmacy.name}'s dermatologist appointments.`">
                 <AppointmentsTable :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />

@@ -67,7 +67,7 @@
       title="Add Dermatologist To Pharmacy"
     >
       <div slot="body">
-        <DermatologistPharmacyForm :dermatologist="selectedDermatologist" :pharmacyId="pharmacyId" />
+        <DermatologistPharmacyForm :dermatologist="selectedDermatologist" :pharmacyId="adminPharmacyId" />
       </div>
     </Modal>
 
@@ -77,7 +77,7 @@
       title="Define Dermatologist Appointment"
     >
       <div slot="body">
-        <DefineAppointmentForm :dermatologistId="selectedDermatologist && selectedDermatologist.userId" :pharmacyId="pharmacyId" />
+        <DefineAppointmentForm :dermatologistId="selectedDermatologist && selectedDermatologist.userId" :pharmacyId="adminPharmacyId" />
       </div>
     </Modal>
 
@@ -146,7 +146,7 @@ export default {
     DefineAppointmentForm,
     Button
   },
-  props: ['dermatologists', 'pharmacyId'],
+  props: ['dermatologists', 'adminPharmacyId'],
   data() {
     return {
       Roles,
@@ -215,11 +215,11 @@ export default {
     },
     onRemoveFromPharmacySubmit() {
       if(this.selectedDermatologist) {
-        this.removeDermatologistFromPharmacy({pharmacyId: this.pharmacyId, dermatologistId: this.selectedDermatologist.id});
+        this.removeDermatologistFromPharmacy({pharmacyId: this.adminPharmacyId, dermatologistId: this.selectedDermatologist.id});
       }
     },
     dermatologistWorksForPharmacy(dermatologistWorkPlaces) {
-      return !!dermatologistWorkPlaces.workPlaces.find(wp => wp.pharmacy.id === this.pharmacyId);
+      return !!dermatologistWorkPlaces.workPlaces.find(wp => wp.pharmacy.id === this.adminPharmacyId);
     }
   },
 }

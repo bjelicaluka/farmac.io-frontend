@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title='Dermatologists' :description="`All dermatologists in the system.`">
-                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :pharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
+                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
             </Card>
         </div> 
     </div>

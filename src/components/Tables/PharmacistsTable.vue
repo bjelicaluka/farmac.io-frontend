@@ -40,7 +40,7 @@
           :isEdit="isEdit"
           :existingAccount="selectedPharmacist"
           :existingUser="selectedPharmacist && selectedPharmacist.user"
-          :pharmacyId="pharmacyId"
+          :pharmacyId="adminPharmacyId"
         />
       </div>
     </Modal>
@@ -90,7 +90,7 @@ export default {
     Button,
     Search,
   },
-  props: ['pharmacists', 'pharmacyId'],
+  props: ['pharmacists', 'adminPharmacyId'],
   data() {
     return {
       selectedPharmacist: null,
