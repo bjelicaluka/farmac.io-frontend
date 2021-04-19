@@ -2,8 +2,36 @@
 <div class="content">
     <div class="container-fluid">
         <Card title='Report' :description="''">
-            Patient: {{appointment.patient.firstName}} {{appointment.patient.lastName}}<br>
-            Pharmacy: {{appointment.pharmacy.name}}
+            <Table>
+                <TableRow :values="['Patient', `${appointment.patient.firstName} ${appointment.patient.lastName}`]">
+                    <Button class="pull-right btn-info">Did not show up</Button>
+                </TableRow>
+                <TableRow :values="['Pharmacy', `${appointment.pharmacy.name}`]"></TableRow>
+                <TableRow :values="['Time', formatDateTime(appointment.dateTime)]"></TableRow>
+            </Table>
+            <TextArea 
+                :label="'Notes (info, diagnosis, etc.)'"
+                v-model="report.notes"
+                :isValid="!!report.notes"
+                :showErrorMessage="showErrorMessage"
+                errorMessage="Notes must be provided."
+            >
+            </TextArea>
+            
+            <div class="col-2">
+                <NumberInput :label="'Therapy duration in days: '" :min="0" :max="60" v-model="report.therapy"></NumberInput>
+            </div>
+            <div>
+                <ModalOpener modalBoxId="prescribe">
+                    <Button>Prescibe medicine</Button>
+                </ModalOpener>
+            </div>
+            <div>
+                <ModalOpener modalBoxId="">
+                    <Button>New appointment</Button>
+                </ModalOpener>
+            </div>
+            <Button @click="handleSave" class="pull-right">Save report</Button>
         </Card>
 
         <Modal
@@ -19,7 +47,7 @@
                   :options="this.medicineNames"
                 >
                 </SelectOptionInput>
-                <Button @click="checkMedicine">Check</Button>                
+                <Button @click="checkMedicine" class="pull-right">Check</Button>                
                 <Table>
                     <TableHead :columnNames="['Name', 'Price', 'In stock', '']"></TableHead>
                     <TableBody>
@@ -33,23 +61,22 @@
                 </Table>
             </div>
 
-
             <div slot="buttons">
                 <InfoModalButtons/>
             </div>
         </Modal>
-        <ModalOpener modalBoxId="prescribe">
-            <Button class="pull-left">Prescibe medicine</Button>
-        </ModalOpener>
     </div> 
 </div>
 </template>
 
 <script>
+import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue'
 import Button from '../components/Form/Button.vue'
+import NumberInput from '../components/Form/NumberInput.vue'
 import SelectOptionInput from '../components/Form/SelectOptionInput.vue'
+import TextArea from '../components/Form/TextArea.vue'
 import InfoModalButtons from '../components/Modal/InfoModalButtons.vue'
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
@@ -63,7 +90,13 @@ export default {
         return {
             isValid: false,
             value: '',
-            appointmentId: null
+            appointmentId: null,
+            report: {
+                appointmentId: null,
+                notes: '',
+                therapy: 0
+            },
+            showErrorMessage: false
         }
     },
     components: {
@@ -77,8 +110,9 @@ export default {
         TableBody,
         TableHead,
         TableRow,
+        TextArea,
+        NumberInput
     },
-    
     computed: {
         ...mapGetters({
             medicineNames: 'medicines/getMedicineNames',
@@ -91,16 +125,24 @@ export default {
         ...mapActions({
             fetchMedicineNames: 'medicines/fetchMedicineNames',
             fetchMedicinesOrReplacements: 'medicines/fetchMedicinesOrReplacements',
-            fetchAppointment: 'appointments/fetchAppointment'
+            fetchAppointment: 'appointments/fetchAppointment',
+            createReport: 'appointments/createReport'
         }),
         checkMedicine() {
             this.fetchMedicinesOrReplacements({pharmacyId:this.appointment.pharmacyId, name:this.value});
+        },
+        formatDateTime(date) {
+            return moment(date).format("DD-MMM-YYYY HH:mm");
+        },
+        handleSave() {
+            //this.createReport(this.report);
         }
     },
 
     mounted() {
         this.appointmentId = this.$route.params.id;
         this.fetchAppointment(this.appointmentId);
+        this.report.appointmentId = this.appointmentId;
         this.fetchMedicineNames(this.appointment.pharmacyId);
     }
 }

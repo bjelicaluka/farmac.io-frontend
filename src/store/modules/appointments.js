@@ -97,6 +97,15 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    createReport: (context, report) => {
+        axios.post(`/appointments/${report.appointmentId}/report`, {"notes": report.notes, "therapyDurationInDays": report.therapy})
+        .then(resp => {
+            context.commit('setResult', {label: 'createReport', ok: true, message: "Report successfully created."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'createReport', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
 };
 
 const mutations = {
