@@ -31,7 +31,7 @@
                 </ModalOpener>
             </div>
             <div>
-                <ModalOpener modalBoxId="">
+                <ModalOpener modalBoxId="newAppointmentModal">
                     <Button>New appointment</Button>
                 </ModalOpener>
             </div>
@@ -67,6 +67,16 @@
             </div>
         </Modal>
 
+        <Modal modalBoxId="newAppointmentModal" title="New appointment">
+            <div slot="body">
+                <define-appointment-form
+                    :patientId="appointment.patientId"
+                    :pharmacistId="appointment.medicalStaffId"
+                    :pharmacyId="appointment.pharmacyId"
+                >
+                </define-appointment-form>
+            </div>
+        </Modal>
         <Modal modalBoxId="saveReportModal" title="Save">
             <div slot="body">
                 <p>Are you sure that you want to end the examination/consultation?</p>
@@ -103,6 +113,7 @@ import TableBody from '../components/Table/TableBody.vue'
 import TableHead from '../components/Table/TableHead.vue'
 import TableRow from '../components/Table/TableRow.vue'
 import OptionModalButtons from '../components/Modal/OptionModalButtons.vue'
+import DefineAppointmentForm from '../components/Forms/DefineAppointmentForm.vue'
 
 export default {
     data: function() {
@@ -130,7 +141,8 @@ export default {
         TableHead,
         TableRow,
         TextArea,
-        OptionModalButtons
+        OptionModalButtons,
+        DefineAppointmentForm
     },
     computed: {
         ...mapGetters({

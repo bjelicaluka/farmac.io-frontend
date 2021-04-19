@@ -34,7 +34,7 @@ export default {
     },
 
     mounted() {
-        this.fetchAppointments('08d8f514-595f-4804-87ef-6b2be803cdf8');
+        this.fetchAppointments('08d8f514-594d-46d7-8949-0ce3ea32a929');
     },
 
     watch: {
@@ -42,7 +42,7 @@ export default {
             if (label === 'createReport') {
                 if(ok) {
                     toastr.success(message);
-                    this.fetchAppointments('08d8f514-595f-4804-87ef-6b2be803cdf8');
+                    this.fetchAppointments('08d8f514-594d-46d7-8949-0ce3ea32a929');
                 }
                 else
                     toastr.error(message);

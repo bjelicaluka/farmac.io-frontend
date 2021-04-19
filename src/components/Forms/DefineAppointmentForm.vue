@@ -59,6 +59,9 @@ export default {
     },
     pharmacyId: {
       type: String
+    },
+    patientId: {
+      type: String
     }
   },
   data: () => {
@@ -78,7 +81,7 @@ export default {
 
   watch: {
       result({ok, label, message}) {
-        if(label !== 'addDermatologist'){
+        if(label !== 'addDermatologist' && label !== 'addPharmacist'){
           return;
         }
         if(ok) {
@@ -90,7 +93,10 @@ export default {
   },
 
   methods: {
-    ...mapActions({addDermatologistAppointment: 'appointments/addDermatologistAppointment'}),
+    ...mapActions({
+      addDermatologistAppointment: 'appointments/addDermatologistAppointment',
+      addPharmacistAppointment: 'appointments/addPharmacistAppointment'
+    }),
 
     onSubmit(e) {
       e.preventDefault();
@@ -103,6 +109,12 @@ export default {
       }
       if(this.pharmacistId) {
         // Joksilon
+        this.addPharmacistAppointment({
+          ...this.appointment,
+          medicalStaffId: this.pharmacistId,
+          pharmacyId: this.pharmacyId,
+          patientId: this.patientId
+        })
       }
     },
     validateDuration() {
