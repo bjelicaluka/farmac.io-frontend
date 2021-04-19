@@ -23,7 +23,7 @@ const actions = {
         });
     },
     fetchPharmacistById: (context, id) => {
-        axios.get(`/pharmacist/${id}`)
+        axios.get(`/pharmacists/${id}`)
         .then(resp => {
             context.commit('setPharmacist', resp.data);
         })
@@ -60,6 +60,15 @@ const actions = {
     },
     searchPharmacyPharmacistsByName: (context, {pharmacyId, name}) => {
         axios.get(`/pharmacies/${pharmacyId}/pharmacists/search?name=${name}`)
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    filterPharmacists: (context, params) => {
+        axios.get(`/pharmacists/filter`, {params})
         .then(resp => {
             context.commit('setPharmacists', resp.data);
         })

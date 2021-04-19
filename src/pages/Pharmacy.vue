@@ -13,6 +13,9 @@
             <Card title='Dermatologist Appointments' :description="`${pharmacy && pharmacy.name}'s dermatologist appointments.`">
                 <AppointmentsTable :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />
             </Card>
+            <Card title='Medicines' :description="`${pharmacy && pharmacy.name}'s medicines that are in stock.`">
+                <MedicineListTable :medicines="medicines" :pharmacyId="pharmacyId" />
+            </Card>
         </div> 
     </div>
 </template>
@@ -26,9 +29,10 @@ import PharmacistsTable from '../components/Tables/PharmacistsTable.vue';
 import PharmacyInfo from '../components/Shared/PharmacyInfo'
 import toastr from 'toastr'
 import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
+import MedicineListTable from '../components/Tables/MedicineListTable.vue';
 
 export default {
-  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable },
+  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable, MedicineListTable },
 
     data: () => {
         return {
@@ -46,7 +50,8 @@ export default {
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
             dermatologistAppointments: 'appointments/getDermatologistAppointments',
-            appointmentsResult: 'appointments/getResult'
+            appointmentsResult: 'appointments/getResult',
+            medicines: 'medicines/getMedicines'
         }),
     },
     watch: {
@@ -92,6 +97,7 @@ export default {
             fetchPharmacyDermatologists: 'dermatologist/fetchPharmacyDermatologists',
             searchPharmacyDermatologists: 'dermatologist/searchPharmacyDermatologistsByName',
             fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
+            fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock'
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -108,6 +114,7 @@ export default {
         this.fetchPharmacyPharmacists(this.pharmacyId);
         this.fetchPharmacyDermatologists(this.pharmacyId);
         this.fetchDermatologistAppointments(this.pharmacyId);
+        this.fetchPharmacyMedicinesInStock(this.pharmacyId);
     }
 }
 </script>

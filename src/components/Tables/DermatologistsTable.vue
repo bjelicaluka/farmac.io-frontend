@@ -4,7 +4,7 @@
       <Button @click="handleRegisterClick" class="pull-right">Register dermatologist</Button>
     </ModalOpener>
 
-    <div class="row pl-4 pr-4">
+    <div class="row pl-4 pr-4" v-if="searchField">
       <Search @search="handleSearch($event)" />
     </div>
     <Table>
@@ -146,7 +146,13 @@ export default {
     DefineAppointmentForm,
     Button
   },
-  props: ['dermatologists', 'adminPharmacyId'],
+  props: {
+    dermatologists: {},
+    adminPharmacyId: {},
+    searchField: {
+      default: true
+    }
+  },
   data() {
     return {
       Roles,

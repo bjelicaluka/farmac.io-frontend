@@ -24,7 +24,7 @@ const actions = {
     },
 
     fetchSupplierById: (context, id) => {
-        axios.get(`/supplier/${id}`)
+        axios.get(`/suppliers/${id}`)
         .then(response => {
             context.commit('setSupplier', response.data);
         })

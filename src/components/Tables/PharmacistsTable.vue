@@ -1,12 +1,11 @@
 <template>
   <div>
-    <div class="row pl-4 pr-4">
+    <ModalOpener modalBoxId="pharmacistModal">
+      <Button @click="handleRegisterClick" class="pull-right">Register Pharmacist</Button>
+    </ModalOpener>
+    
+    <div class="row pl-4 pr-4" v-if="searchField">
       <Search @search="handleSearch($event)" />
-      <div class="row ml-auto">
-        <ModalOpener modalBoxId="pharmacistModal">
-            <Button @click="handleRegisterClick">Register Pharmacist</Button>
-        </ModalOpener>
-      </div>
     </div>
     <Table>
         <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Address', '']"></TableHead>
@@ -72,7 +71,6 @@ import PharmacistForm from '../Forms/PharmacistForm.vue'
 import OptionModalButtons from '../Modal/OptionModalButtons.vue'
 import {mapActions, mapGetters} from 'vuex'
 import Button from '../Form/Button.vue'
-import Search from '../Search/Search.vue'
 import toastr from 'toastr'
 
 export default {
@@ -87,10 +85,15 @@ export default {
     Modal,
     PharmacistForm,
     OptionModalButtons,
-    Button,
-    Search,
+    Button
   },
-  props: ['pharmacists', 'adminPharmacyId'],
+  props: {
+    pharmacists: {},
+    adminPharmacyId: {},
+    searchField: {
+      default: true
+    }
+  },
   data() {
     return {
       selectedPharmacist: null,
