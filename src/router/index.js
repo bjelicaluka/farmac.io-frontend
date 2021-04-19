@@ -13,6 +13,7 @@ import Patients from '../pages/Patients.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
 import Report from '../pages/Report.vue'
+import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatologist.vue'
 import { Roles } from '../constants'
 import store from '../store/index'
 import * as tokenUtils from '../utils/token'
@@ -179,6 +180,14 @@ const routes = [
       authorizedRoles: [Roles.Patient, Roles.Pharmacist, Roles.PharmacyAdmin, Roles.Supplier, Roles.SystemAdmin, Roles.Dermatologist]
     }
   },
+  {
+    path: '/history-dermatologist-appointments',
+    name: 'HistoryOfVisitingDermatologist',
+    component: HistoryOfVisitingDermatologist,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  }
 ]
     
 const router = new VueRouter({

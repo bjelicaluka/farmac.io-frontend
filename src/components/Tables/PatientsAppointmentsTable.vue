@@ -9,7 +9,7 @@
             :values="[`${appointment.medicalStaff.firstName} ${appointment.medicalStaff.lastName} (${appointment.medicalStaff.averageGrade})`, 
             formatDate(appointment.dateTime), formatTime(appointment.dateTime), formatDuration(appointment.duration), appointment.price + ' RSD']"
           >
-          <RoundButton :title="'Cancel appointment'" :iconName="'clear'" @click="handleCancelAppointment(appointment.id)"></RoundButton>
+          <RoundButton v-if="isCancelEnabled" :title="'Cancel appointment'" :iconName="'clear'" @click="handleCancelAppointment(appointment.id)"></RoundButton>
           </TableRow>
         </TableBody>
     </Table>
@@ -34,7 +34,7 @@ export default {
     TableHead,
     RoundButton
   },
-  props: ['appointments'],
+  props: ['appointments', 'isCancelEnabled'],
   computed: {
     ...mapGetters({
         getResult: 'appointments/getResult'

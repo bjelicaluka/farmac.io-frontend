@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title='Appointments in future' :description="`You cannot cancel an appointment if there are less than 24 left.`">
-                <PatientsFutureAppointmentTable :appointments="patientsAppointments"/>
+                <PatientsAppointmentsTable :appointments="patientsAppointments" isCancelEnabled="true"/>
             </Card>
         </div>
     </div>
@@ -11,13 +11,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import Card from '../components/Card/Card.vue'
-import PatientsFutureAppointmentTable from '../components/Tables/PatientsFutureAppointmentsTable.vue'
+import PatientsAppointmentsTable from '../components/Tables/PatientsAppointmentsTable.vue'
 import toastr from 'toastr'
 
 export default {
     components: {
         Card,
-        PatientsFutureAppointmentTable
+        PatientsAppointmentsTable
     },
 
     computed: {
