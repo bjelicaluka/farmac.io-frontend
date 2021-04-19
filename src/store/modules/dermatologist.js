@@ -67,6 +67,24 @@ const actions = {
             context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    filterDermatologists: (context, params) => {
+        axios.get(`/dermatologists/filter`, {params})
+        .then(resp => {
+            context.commit('setDermatologists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    filterDermatologistsWithWorkPlaces: (context, params) => {
+        axios.get(`/dermatologists/with-work-places/filter`, {params})
+        .then(resp => {
+            context.commit('setDermatologists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     addDermatologistToPharmacy: (context, {dermatologistId, pharmacyId, workTime}) => {
         axios.post(`/pharmacies/${pharmacyId}/dermatologists/${dermatologistId}`, workTime)
         .then(resp => {

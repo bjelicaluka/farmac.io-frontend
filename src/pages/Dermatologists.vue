@@ -1,8 +1,11 @@
 <template>
     <div class="content">
         <div class="container-fluid">
+            <Card :description="`Filter dermatologists in the system.`">
+                <MedicalStaffSearch @search="handleSearch" />
+            </Card>
             <Card title='Dermatologists' :description="`All dermatologists in the system.`">
-                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :pharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
+                <DermatologistsTable :searchField="false" :dermatologists="dermatologists" :pharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
             </Card>
         </div> 
     </div>
@@ -14,12 +17,13 @@ import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
 import DermatologistsTable from '../components/Tables/DermatologistsTable.vue';
 import toastr from 'toastr';
+import MedicalStaffSearch from '../components/Searchs/MedicalStaffSearch.vue';
 
 export default {
-  components: { Card, DermatologistsTable },
+    components: { Card, DermatologistsTable, MedicalStaffSearch },
     data: () => {
         return {
-            searchName: null
+            searchParams: {}
         }
     },
     computed: {
@@ -31,7 +35,7 @@ export default {
     watch: {
         result({label, ok, message}) {
             if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
-                this.fetchDermatologists();
+                this.handleSearch(this.searchParams);
 
 
             if(label !== 'removeFromPharmacy' && label !== 'addToPharmacy')
@@ -42,21 +46,21 @@ export default {
             } else {
                 toastr.error(message);
             }
-            this.searchName ? this.handleSearchDermatologists(this.searchName) : this.fetchDermatologists();
+            this.handleSearch(this.searchParams);
         }
     },
     methods: {
         ...mapActions({
-            fetchDermatologists: 'dermatologist/fetchDermatologists',
-            searchDermatologistsByName: 'dermatologist/searchDermatologistsByName',
-        }),
-        handleSearchDermatologists(name) {
-            this.searchName = name;
-            this.searchDermatologistsByName(name);
-        }
+            filterDermatologists: 'dermatologist/filterDermatologistsWithWorkPlaces',
+        }), 
+
+        handleSearch(params) {
+            this.searchParams = params;
+            this.filterDermatologists(params);
+        },
     },
     mounted() {
-        this.fetchDermatologists();
+        this.handleSearch();
     }
 }
 </script>
