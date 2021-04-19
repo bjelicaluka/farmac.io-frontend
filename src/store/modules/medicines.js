@@ -82,6 +82,16 @@ const actions = {
         });
     },
 
+    fetchPharmacyMedicinesInStock: (context, pharmacyId) => {
+        axios.get(`/pharmacies/${pharmacyId}/medicines-in-stock`)
+        .then(response => {
+            context.commit('setMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
     fetchPharmaciesForMedicineById: (context, id) => {
         axios.get(`medicines/${id}/pharmacies`)
         .then(response => {
