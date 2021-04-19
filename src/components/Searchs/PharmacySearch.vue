@@ -18,6 +18,52 @@
                         class="col-4"
             />
         </FormRow>
+        <FormRow class="justify-content-center align-items-center">
+            <div>
+                <br />
+                <p>Grade from: </p>
+            </div>
+            <div class="col-1">
+                <NumberInput 
+                    v-model="gradeFrom"
+                    :min=0
+                    :max=5
+                />
+            </div>
+            <div>
+                <br />
+                <p>to: </p>
+            </div>
+            <div class="col-1">
+                <NumberInput 
+                    v-model="gradeTo"
+                    :min=0
+                    :max=5
+                />
+            </div>
+            <div>
+                <br />
+                <p>Distance from: </p>
+            </div>
+            <div class="col-1">
+                <NumberInput 
+                    v-model="distanceFrom"
+                    :min=0
+                    :max=5
+                />
+            </div>
+            <div>
+                <br />
+                <p>to: </p>
+            </div>
+            <div class="col-1">
+                <NumberInput 
+                    v-model="distanceTo"
+                    :min=0
+                    :max=99999
+                />
+            </div>
+        </FormRow>
     </div>
 </template>
 
@@ -27,6 +73,7 @@
 import SearchWithTwoInputs from '../Search/SearchWithTwoInputs'
 import SelectOptionInput from '../Form/SelectOptionInput'
 import FormRow from '../Form/FormRow'
+import NumberInput from '../Form/NumberInput'
 
 import { mapGetters, mapActions } from 'vuex'
 
@@ -60,13 +107,18 @@ export default {
             ],
 
             selectedSortCriteria: '',
-            selectedIsAsc: null
+            selectedIsAsc: null,
+            gradeFrom: 0,
+            gradeTo: 5,
+            distanceFrom: 0,
+            distanceTo: 0
         }
     },
     components: {
         SearchWithTwoInputs,
         SelectOptionInput,
-        FormRow
+        FormRow, 
+        NumberInput
     },
 
     methods: {
@@ -78,9 +130,43 @@ export default {
             let sortCriteria = this.sortCriteria.filter(item => item.value == this.selectedSortCriteria)[0]
             sortCriteria = this.selectedSortCriteria ? sortCriteria['label'].toLowerCase() : '';
             let isAscending =  this.selectedIsAsc == 1 ? true : false
-            this.searchPharmacies({name, city, sortCriteria, isAscending})
+            let gradeFrom = this.gradeFrom;
+            let gradeTo = this.gradeTo;
+            let distanceFrom = this.distanceFrom;
+            let distanceTo = this.distanceTo;
+            var callSearch = (request) => {
+                this.searchPharmacies(request);
+            }
+            window.navigator.geolocation.getCurrentPosition(function(position){
+                let userLat = position.coords.latitude;
+                let userLon = position.coords.longitude;
+                callSearch({name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
+                }, 
+                function(){
+                    let userLat = 200;
+                    let userLon = 200;
+                    callSearch({name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
+                })
         },
 
+    },
+
+    watch: {
+        gradeFrom(from) {
+            this.gradeFrom = parseInt(from);
+        },
+
+        gradeTo(to) {
+            this.gradeTo = parseInt(to);
+        },
+        
+        distanceFrom(from) {
+            this.distanceFrom = parseFloat(from);
+        },
+
+        distanceTo(to) {
+            this.distanceTo = parseFloat(to)
+        }
     }
 }
 </script>
