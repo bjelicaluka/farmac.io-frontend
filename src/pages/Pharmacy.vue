@@ -14,7 +14,7 @@
                 <AppointmentsTable :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />
             </Card>
             <Card title='Medicines' :description="`${pharmacy && pharmacy.name}'s medicines that are in stock.`">
-                <MedicineListTable :medicines="medicines" :adminPharmacyId="pharmacyId" />
+                <MedicineListTable @search="handleSearchPharmacyMedicines" :medicines="medicines" :adminPharmacyId="pharmacyId" />
             </Card>
         </div> 
     </div>
@@ -81,7 +81,10 @@ export default {
                 this.fetchPharmacy(this.pharmacyId);
             }
             if((label === 'addMedicineToPharmacy' || label === 'removeMedicineFromPharmacy') && ok) {
-                this.fetchPharmacyMedicinesInStock(this.pharmacyId);
+                this.pharmacyMedicineSearchName ? 
+                    this.searchPharmacyMedicinesInStock({pharmacyId: this.pharmacyId, name: this.pharmacyMedicineSearchName})
+                    :
+                    this.fetchPharmacyMedicinesInStock(this.pharmacyId);
             }
         },
         appointmentsResult({ok, label}){
@@ -98,7 +101,8 @@ export default {
             fetchPharmacyDermatologists: 'dermatologist/fetchPharmacyDermatologists',
             searchPharmacyDermatologists: 'dermatologist/searchPharmacyDermatologistsByName',
             fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
-            fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock'
+            fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
+            searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -107,6 +111,10 @@ export default {
         handleSearchDermatologists(name) {
             this.dermatologistSearchName = name;
             this.searchPharmacyDermatologists({pharmacyId: this.pharmacyId, name});
+        },
+        handleSearchPharmacyMedicines(name) {
+            this.pharmacyMedicineSearchName = name;
+            this.searchPharmacyMedicinesInStock({pharmacyId: this.pharmacyId, name});
         }
     },
     mounted() {

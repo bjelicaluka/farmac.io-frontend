@@ -4,6 +4,9 @@
             <Button class="pull-right">Add Medicine</Button>
         </ModalOpener>
 
+        <div class="row pl-4 pr-4" v-if="searchField">
+            <Search @search="handleSearch($event)" />
+        </div>
         <Table>
             <TableHead :columnNames="['Medicine Name', 'Quantity', 'Average Grade', '']"></TableHead>
             <TableBody>
@@ -68,9 +71,16 @@ import DropDownItem from '../DropdownMenu/DropdownItem'
 import OptionModalButtons from '../Modal/OptionModalButtons.vue'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
+import Search from '../Search/Search.vue'
 
 export default {
-    props: ['medicines', 'adminPharmacyId'],
+    props: {
+        medicines: {},
+        adminPharmacyId: {},
+        searchField: {
+            default: true
+        }
+    },
     data: () => {
         return {
             Roles,
@@ -89,7 +99,8 @@ export default {
         Modal,
         DropDownItem,
         DropDownMenu,
-        OptionModalButtons
+        OptionModalButtons,
+        Search
     },
     computed: {
         ...mapGetters({
@@ -114,7 +125,10 @@ export default {
         }),
         onRemoveSubmit() {
             this.removeMedicineFromPharmacy({pharmacyId: this.adminPharmacyId, medicineId: this.selectedPharmacyMedicine.id});
-        }
+        },
+        handleSearch(value) {
+            this.$emit('search', value);
+        },
     }
 }
 </script>

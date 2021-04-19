@@ -104,6 +104,16 @@ const actions = {
         });
     },
 
+    searchPharmacyMedicinesInStock: (context, {pharmacyId, name}) => {
+        axios.get(`/pharmacies/${pharmacyId}/medicines-in-stock/search`, {params: {name}})
+        .then(response => {
+            context.commit('setMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
     fetchPharmaciesForMedicineById: (context, id) => {
         axios.get(`medicines/${id}/pharmacies`)
         .then(response => {
