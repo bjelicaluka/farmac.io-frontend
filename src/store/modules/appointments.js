@@ -78,7 +78,7 @@ const actions = {
         });
     },
     fetchHistoryOfVisitingDermatologist: (context, patientId) => {
-        axios.get(`/appointments/history-of-appointments/${patientId}`)
+        axios.get(`/appointments/history/${patientId}`)
         .then(resp => {
             context.commit('setAppointments', resp.data);
         })
@@ -86,8 +86,8 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    sortHistoryVisitingDermatologist: (context, sortObject) => {
-        axios.get(`/appointments/sort-history-of-visiting?patientId=${sortObject['patientId']}&criteria=${sortObject['criteria']}&isAsc=${sortObject['isAsc']}`)
+    sortHistoryVisitingDermatologist: (context, {patientId, criteria, isAsc}) => {
+        axios.get(`/appointments/history/${patientId}/sort?criteria=${criteria}&isAsc=${isAsc}`)
         .then(resp => {
             context.commit('setAppointments', resp.data);
         })

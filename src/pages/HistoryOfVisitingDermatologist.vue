@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <Card title='History of visiting a dermatologist'>
+            <Card title='History of visiting a dermatologists'>
                 <div class="col-3">
                     <SelectOptionInput
                     label="Select sort criteria"
@@ -56,8 +56,8 @@ export default {
         SelectOptionInput
     },
 
-    data: function(){
-        return{
+    data: function() {
+        return {
             options: selectOptions,
             selectedValue: ''
         }
@@ -84,9 +84,9 @@ export default {
         let criteria = this.selectedValue.split("-")[0]
         const isAsc = this.selectedValue.split("-")[1] == 'asc';
         this.sortAppointments({
+            'patientId' : '08d8f514-58cc-41e9-810e-0a83d243cd60',  //ZAMENITI
             'criteria' : criteria,
-            'isAsc' : isAsc,
-            'patientId' : '08d8f514-58cc-41e9-810e-0a83d243cd60'    //ZAMENITI
+            'isAsc' : isAsc
         });
     }
     },
