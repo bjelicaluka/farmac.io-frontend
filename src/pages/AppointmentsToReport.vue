@@ -38,7 +38,7 @@ export default {
     },
 
     watch: {
-        result({label, ok, message}) {
+        getResult({label, ok, message}) {
             if (label === 'createReport') {
                 if(ok) {
                     toastr.success(message);

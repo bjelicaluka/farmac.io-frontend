@@ -4,7 +4,9 @@
         <Card title='Report' :description="''">
             <Table>
                 <TableRow :values="['Patient', `${appointment.patient.firstName} ${appointment.patient.lastName}`]">
-                    <Button class="pull-right btn-info">Did not show up</Button>
+                    <ModalOpener modalBoxId="notShowUp">
+                        <Button class="pull-right btn-info">Did not show up</Button>
+                    </ModalOpener>
                 </TableRow>
                 <TableRow :values="['Pharmacy', `${appointment.pharmacy.name}`]"></TableRow>
                 <TableRow :values="['Time', formatDateTime(appointment.dateTime)]"></TableRow>
@@ -74,6 +76,14 @@
                 <OptionModalButtons @yes="handleSave"/>
             </div>
         </Modal>
+        <Modal modalBoxId="notShowUp" title="Patient did not show up">
+            <div slot="body">
+                <p>Are you sure that your patient did not show up on the examination/consultation?</p>
+            </div>
+            <div slot="buttons">
+                <OptionModalButtons @yes="handleNotShowUp"/>
+            </div>
+        </Modal>
     </div> 
 </div>
 </template>
@@ -137,7 +147,8 @@ export default {
             fetchMedicineNames: 'medicines/fetchMedicineNames',
             fetchMedicinesOrReplacements: 'medicines/fetchMedicinesOrReplacements',
             fetchAppointment: 'appointments/fetchAppointment',
-            createReport: 'appointments/createReport'
+            createReport: 'appointments/createReport',
+            notePatientDidNotShowUp: 'appointments/notePatientDidNotShowUp'
         }),
         checkMedicine() {
             this.fetchMedicinesOrReplacements({pharmacyId:this.appointment.pharmacyId, name:this.value});
@@ -147,6 +158,11 @@ export default {
         },
         handleSave() {
             this.createReport(this.report);
+            this.$router.push(`/report`);
+        },
+        handleNotShowUp() {
+            this.report.notes = "Patient did not show up.";
+            this.notePatientDidNotShowUp(this.report);
             this.$router.push(`/report`);
         }
     },
