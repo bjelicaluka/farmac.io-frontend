@@ -4,7 +4,7 @@
         <Card title='Report' :description="''">
             <Table>
                 <TableRow :values="['Patient', `${appointment.patient.firstName} ${appointment.patient.lastName}`]">
-                    <ModalOpener modalBoxId="notShowUp">
+                    <ModalOpener modalBoxId="notShowUpModal">
                         <Button class="pull-right btn-info">Did not show up</Button>
                     </ModalOpener>
                 </TableRow>
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div>
-                <ModalOpener modalBoxId="prescribe">
+                <ModalOpener modalBoxId="prescribeModal">
                     <Button>Prescibe medicine</Button>
                 </ModalOpener>
             </div>
@@ -35,12 +35,12 @@
                     <Button>New appointment</Button>
                 </ModalOpener>
             </div>
-            <ModalOpener modalBoxId="saveReport">
+            <ModalOpener modalBoxId="saveReportModal">
                 <Button @click="showErrorMessage = true" class="pull-right">Save report</Button>
             </ModalOpener>
         </Card>
 
-        <Modal modalBoxId="prescribe" title="Prescibe medicine">
+        <Modal modalBoxId="prescribeModal" title="Prescibe medicine">
             <div slot="body">
                 check if available
                 <SelectOptionInput
@@ -48,8 +48,7 @@
                   v-model="selectedMedicine"
                   :isValid="!!selectedMedicine"
                   :options="this.medicineNames"
-                >
-                </SelectOptionInput>
+                />
                 <Button @click="checkMedicine" class="pull-right">Check</Button>                
                 <Table>
                     <TableHead :columnNames="['Name', 'Price', 'In stock', '']"></TableHead>
@@ -68,7 +67,7 @@
             </div>
         </Modal>
 
-        <Modal modalBoxId="saveReport" title="Save">
+        <Modal modalBoxId="saveReportModal" title="Save">
             <div slot="body">
                 <p>Are you sure that you want to end the examination/consultation?</p>
             </div>
@@ -76,7 +75,7 @@
                 <OptionModalButtons @yes="handleSave"/>
             </div>
         </Modal>
-        <Modal modalBoxId="notShowUp" title="Patient did not show up">
+        <Modal modalBoxId="notShowUpModal" title="Patient did not show up">
             <div slot="body">
                 <p>Are you sure that your patient did not show up on the examination/consultation?</p>
             </div>
@@ -151,7 +150,7 @@ export default {
             notePatientDidNotShowUp: 'appointments/notePatientDidNotShowUp'
         }),
         checkMedicine() {
-            this.fetchMedicinesOrReplacements({pharmacyId:this.appointment.pharmacyId, name:this.value});
+            this.fetchMedicinesOrReplacements({pharmacyId:this.appointment.pharmacyId, name:this.selectedMedicine});
         },
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");

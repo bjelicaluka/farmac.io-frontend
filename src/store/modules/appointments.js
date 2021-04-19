@@ -97,8 +97,8 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    createReport: (context, report) => {
-        axios.post(`/appointments/${report.appointmentId}/report`, {"notes": report.notes, "therapyDurationInDays": report.therapy})
+    createReport: (context, {appointmentId, notes, therapy}) => {
+        axios.post(`/appointments/${appointmentId}/report`, {"notes": notes, "therapyDurationInDays": therapy})
         .then(resp => {
             context.commit('setResult', {label: 'createReport', ok: true, message: "Report successfully created."});
         })
@@ -106,8 +106,8 @@ const actions = {
             context.commit('setResult', {label: 'createReport', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    notePatientDidNotShowUp: (context, report) => {
-        axios.post(`/appointments/${report.appointmentId}/not-show-up`, {"notes": report.notes, "therapyDurationInDays": report.therapy})
+    notePatientDidNotShowUp: (context, {appointmentId, notes, therapy}) => {
+        axios.post(`/appointments/${appointmentId}/not-show-up`, {"notes": notes, "therapyDurationInDays": therapy})
         .then(resp => {
             context.commit('setResult', {label: 'createReport', ok: true, message: "Report successfully created."});
         })

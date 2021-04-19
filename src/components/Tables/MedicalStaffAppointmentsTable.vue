@@ -56,9 +56,6 @@ export default {
       this.$router.push(`/report/${appointmentId}`);
     }
   },
-  watch: {
-    
-  }
 }
 </script>
 
