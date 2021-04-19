@@ -7,6 +7,7 @@ const state = {
     medicine: null,
     types: null,
     medicineNames: [],
+    medicineOptions: [],
     pharmaciesForMedicine: null,
     result: null
 }
@@ -18,7 +19,8 @@ const getters = {
     getMedicineNames: state => state.medicineNames,
     getPharmaciesForMedicine: state => state.pharmaciesForMedicine,
     getResult: state => state.result,
-    getSmallMedicines: state => state.smallMedicines
+    getSmallMedicines: state => state.smallMedicines,
+    getMedicineOptions: state => state.medicineOptions
 }
 
 const actions = {
@@ -56,6 +58,16 @@ const actions = {
         axios.get(`/medicines/home`)
         .then(response => {
             context.commit('setMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
+    fetchMedicineOptions: (context) => {
+        axios.get(`/medicines/home`)
+        .then(response => {
+            context.commit('setMedicineOptions', response.data);
         })
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
@@ -181,6 +193,9 @@ const actions = {
 const mutations = {
     setMedicines: (state, medicines) => {
         state.medicines = medicines;
+    },
+    setMedicineOptions: (state, medicines) => {
+        state.medicineOptions = medicines;
     },
     setMedicine: (state, medicine) => {
         state.medicine = medicine;

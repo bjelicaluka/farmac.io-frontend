@@ -14,7 +14,7 @@
                 <AppointmentsTable :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />
             </Card>
             <Card title='Medicines' :description="`${pharmacy && pharmacy.name}'s medicines that are in stock.`">
-                <MedicineListTable :medicines="medicines" :pharmacyId="pharmacyId" />
+                <MedicineListTable :medicines="medicines" :adminPharmacyId="pharmacyId" />
             </Card>
         </div> 
     </div>
@@ -77,10 +77,11 @@ export default {
             }
         },
         pharmacyResult({ok, label, message}) {
-            if(label === 'update') {
-                if(ok) {
-                    this.fetchPharmacy(this.pharmacyId);
-                }
+            if(label === 'update' && ok) {
+                this.fetchPharmacy(this.pharmacyId);
+            }
+            if((label === 'addMedicineToPharmacy' || label === 'removeMedicineFromPharmacy') && ok) {
+                this.fetchPharmacyMedicinesInStock(this.pharmacyId);
             }
         },
         appointmentsResult({ok, label}){
