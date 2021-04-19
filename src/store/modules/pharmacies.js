@@ -95,7 +95,34 @@ const actions = {
         .catch(err => {
             context.commit('setResult', { label: 'fetch', ok: false })
         })
-    }
+    },
+
+    addMedicineToPharmacy: (context, {pharmacyId, medicineId, quantity}) => {
+        axios.post(`/pharmacies/${pharmacyId}/medicines`, {medicineId, quantity})
+        .then(resp => {
+            context.commit('setResult', {
+                label: 'addMedicineToPharmacy',
+                message: `You have successfully added medicine to the pharmacy.`,
+                ok: true
+            });
+        })
+        .catch(err => {
+            context.commit('setResult', { label: 'addMedicineToPharmacy', message: err.response.data.ErrorMessage, ok: false });
+        })
+    },
+    removeMedicineFromPharmacy: (context, {pharmacyId, medicineId}) => {
+        axios.delete(`/pharmacies/${pharmacyId}/medicines/${medicineId}`)
+        .then(resp => {
+            context.commit('setResult', {
+                label: 'removeMedicineFromPharmacy',
+                message: `You have successfully removed medicine from the pharmacy.`,
+                ok: true
+            });
+        })
+        .catch(err => {
+            context.commit('setResult', { label: 'removeMedicineFromPharmacy', message: err.response.data.ErrorMessage, ok: false });
+        })
+    },
 };
 
 const mutations = {

@@ -7,6 +7,7 @@ const state = {
     medicine: null,
     types: null,
     medicineNames: [],
+    medicineOptions: [],
     pharmaciesForMedicine: null,
     result: null
 }
@@ -18,7 +19,8 @@ const getters = {
     getMedicineNames: state => state.medicineNames,
     getPharmaciesForMedicine: state => state.pharmaciesForMedicine,
     getResult: state => state.result,
-    getSmallMedicines: state => state.smallMedicines
+    getSmallMedicines: state => state.smallMedicines,
+    getMedicineOptions: state => state.medicineOptions
 }
 
 const actions = {
@@ -62,6 +64,16 @@ const actions = {
         });
     },
 
+    fetchMedicineOptions: (context) => {
+        axios.get(`/medicines/home`)
+        .then(response => {
+            context.commit('setMedicineOptions', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
     fetchMedicinePdf: (context, {id, name}) => {
         axios.get(`/medicines/details/${id}`, { responseType: 'blob' })
             .then(response => {
@@ -84,6 +96,16 @@ const actions = {
 
     fetchPharmacyMedicinesInStock: (context, pharmacyId) => {
         axios.get(`/pharmacies/${pharmacyId}/medicines-in-stock`)
+        .then(response => {
+            context.commit('setMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
+    searchPharmacyMedicinesInStock: (context, {pharmacyId, name}) => {
+        axios.get(`/pharmacies/${pharmacyId}/medicines-in-stock/search`, {params: {name}})
         .then(response => {
             context.commit('setMedicines', response.data);
         })
@@ -181,6 +203,9 @@ const actions = {
 const mutations = {
     setMedicines: (state, medicines) => {
         state.medicines = medicines;
+    },
+    setMedicineOptions: (state, medicines) => {
+        state.medicineOptions = medicines;
     },
     setMedicine: (state, medicine) => {
         state.medicine = medicine;
