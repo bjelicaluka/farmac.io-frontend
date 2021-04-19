@@ -17,14 +17,14 @@
                         pharmacyMedicine.quantity, pharmacyMedicine.medicine && pharmacyMedicine.medicine.averageGrade]"
                 >
                     <div class="pull-right text-gray">
-                        <drop-down-menu>
-                            <modal-opener
+                        <DropDownMenu>
+                            <ModalOpener
                                 v-if="role === Roles.PharmacyAdmin"
                                 :modalBoxId="'removeMedicineFromPharmacyModal'"
                             >
-                                <drop-down-item @click="selectedPharmacyMedicine = pharmacyMedicine">Remove from Pharmacy</drop-down-item>
-                            </modal-opener>
-                        </drop-down-menu>
+                                <DropDownItem @click="selectedPharmacyMedicine = pharmacyMedicine">Remove from Pharmacy</DropDownItem>
+                            </ModalOpener>
+                        </DropDownMenu>
                     </div>
                 </TableRow>
             </TableBody>
