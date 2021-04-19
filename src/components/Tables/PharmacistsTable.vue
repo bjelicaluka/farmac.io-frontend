@@ -72,6 +72,7 @@ import OptionModalButtons from '../Modal/OptionModalButtons.vue'
 import {mapActions, mapGetters} from 'vuex'
 import Button from '../Form/Button.vue'
 import toastr from 'toastr'
+import Search from '../Search/Search.vue'
 
 export default {
   components: {
@@ -85,7 +86,8 @@ export default {
     Modal,
     PharmacistForm,
     OptionModalButtons,
-    Button
+    Button,
+    Search
   },
   props: {
     pharmacists: {},
