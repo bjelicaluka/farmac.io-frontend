@@ -5,7 +5,7 @@
                 <MedicalStaffSearch @search="handleSearch" />
             </Card>
             <Card title='Dermatologists' :description="`All dermatologists in the system.`">
-                <DermatologistsTable :searchField="false" :dermatologists="dermatologists" :pharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
+                <DermatologistsTable :searchField="false" @search="handleSearchDermatologists" :dermatologists="dermatologists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
             </Card>
         </div> 
     </div>
