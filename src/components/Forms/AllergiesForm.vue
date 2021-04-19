@@ -52,7 +52,9 @@ export default {
 
     watch: {
         getMedicines(allMedicines){
-            this.medicines = allMedicines;
+            this.medicines = allMedicines.filter(medicine => {
+                return this.allergies.filter(allergy => allergy.id == medicine.id).length == 0;
+            });
         },
         getMedicine(medicine){
             this.addedMedicines.push(medicine.medicine);
@@ -73,6 +75,9 @@ export default {
         },
         getAllergies(allergies){
             this.allergies = allergies;
+            this.medicines = this.medicines.filter(medicine => {
+                return this.allergies.filter(allergy => allergy.id == medicine.id).length == 0;
+            });
         }
     },
 
@@ -102,11 +107,13 @@ export default {
             this.addedMedicinesIds = this.addedMedicinesIds.filter(item => item !== medicineId);
         },
         addAllergies(){
-            let request = {
-                medicineIds : this.addedMedicinesIds,
-                patientId : getAccountIdFromToken()
+            if(this.addedMedicinesIds.length != 0){
+                let request = {
+                    medicineIds : this.addedMedicinesIds,
+                    patientId : getAccountIdFromToken()
+                }
+                this.addPatientsAllergies(request);
             }
-            this.addPatientsAllergies(request);
         }
 
     },
