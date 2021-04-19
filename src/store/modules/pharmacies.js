@@ -87,9 +87,8 @@ const actions = {
         });
     },
 
-    searchPharmacies: (context, {name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon}) => {
-        axios.get(`/pharmacies/search?name=${name}&streetAndCity=${city}&sortCriteria=${sortCriteria}&isAscending=${isAscending}
-        &gradeFrom=${gradeFrom}&gradeTo=${gradeTo}&distanceFrom=${distanceFrom}&distanceTo=${distanceTo}&userLat=${userLat}&userLon=${userLon}`)
+    searchPharmacies: (context, paramsObject) => {
+        axios.get(`/pharmacies/search`, {params: paramsObject})
         .then(resp => {
             context.commit('setPharmacies', resp.data)
         })
