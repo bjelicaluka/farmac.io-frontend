@@ -23,7 +23,6 @@ import TableBody from '../Table/TableBody'
 import TableRow from '../Table/TableRow'
 import RoundButton from '../Form/RoundButton'
 import {mapGetters, mapActions} from 'vuex'
-import toastr from 'toastr'
 import moment from 'moment'
 
 export default {

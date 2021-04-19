@@ -17,9 +17,11 @@
                 errorMessage="Notes must be provided."
             >
             </TextArea>
-            
             <div class="col-2">
-                <NumberInput :label="'Therapy duration in days: '" :min="0" :max="60" v-model="report.therapy"></NumberInput>
+                <div class="form-group">
+                    <label class="bmd-label-floating">Therapy duration in days: </label>
+                    <input type="number" v-model="report.therapy" min="0" max="60" class="form-control"/>
+                </div>
             </div>
             <div>
                 <ModalOpener modalBoxId="prescribe">
@@ -31,19 +33,18 @@
                     <Button>New appointment</Button>
                 </ModalOpener>
             </div>
-            <Button @click="handleSave" class="pull-right">Save report</Button>
+            <ModalOpener modalBoxId="saveReport">
+                <Button @click="showErrorMessage = true" class="pull-right">Save report</Button>
+            </ModalOpener>
         </Card>
 
-        <Modal
-            modalBoxId="prescribe"
-            title="Prescibe medicine"
-        >
+        <Modal modalBoxId="prescribe" title="Prescibe medicine">
             <div slot="body">
                 check if available
                 <SelectOptionInput
                   label="Select medicine"
-                  v-model="value"
-                  :isValid="!!value"
+                  v-model="selectedMedicine"
+                  :isValid="!!selectedMedicine"
                   :options="this.medicineNames"
                 >
                 </SelectOptionInput>
@@ -60,9 +61,17 @@
                     </TableBody>
                 </Table>
             </div>
-
             <div slot="buttons">
                 <InfoModalButtons/>
+            </div>
+        </Modal>
+
+        <Modal modalBoxId="saveReport" title="Save">
+            <div slot="body">
+                <p>Are you sure that you want to end the examination/consultation?</p>
+            </div>
+            <div slot="buttons">
+                <OptionModalButtons @yes="handleSave"/>
             </div>
         </Modal>
     </div> 
@@ -72,9 +81,9 @@
 <script>
 import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
+import toastr from 'toastr'
 import Card from '../components/Card/Card.vue'
 import Button from '../components/Form/Button.vue'
-import NumberInput from '../components/Form/NumberInput.vue'
 import SelectOptionInput from '../components/Form/SelectOptionInput.vue'
 import TextArea from '../components/Form/TextArea.vue'
 import InfoModalButtons from '../components/Modal/InfoModalButtons.vue'
@@ -84,12 +93,13 @@ import Table from '../components/Table/Table.vue'
 import TableBody from '../components/Table/TableBody.vue'
 import TableHead from '../components/Table/TableHead.vue'
 import TableRow from '../components/Table/TableRow.vue'
+import OptionModalButtons from '../components/Modal/OptionModalButtons.vue'
 
 export default {
     data: function() {
         return {
             isValid: false,
-            value: '',
+            selectedMedicine: '',
             appointmentId: null,
             report: {
                 appointmentId: null,
@@ -111,13 +121,14 @@ export default {
         TableHead,
         TableRow,
         TextArea,
-        NumberInput
+        OptionModalButtons
     },
     computed: {
         ...mapGetters({
             medicineNames: 'medicines/getMedicineNames',
             smallMedicines: 'medicines/getSmallMedicines',
-            appointment: 'appointments/getAppointment'
+            appointment: 'appointments/getAppointment',
+            result: 'appointments/getResult'
         })
     },
 
@@ -135,7 +146,8 @@ export default {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
         handleSave() {
-            //this.createReport(this.report);
+            this.createReport(this.report);
+            this.$router.push(`/report`);
         }
     },
 
@@ -144,6 +156,17 @@ export default {
         this.fetchAppointment(this.appointmentId);
         this.report.appointmentId = this.appointmentId;
         this.fetchMedicineNames(this.appointment.pharmacyId);
+    },
+        
+    watch: {
+        result({label, ok, message}) {
+            if (label === 'createReport') {
+                if(ok)
+                    toastr.success(message);
+                else
+                    toastr.error(message);
+            }
+        }
     }
 }
 
