@@ -14,7 +14,7 @@
         <ul class="nav" v-else-if="role===Roles.Dermatologist">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="My patients" icon="contacts" to="/patients_list"></sidebar-item>
-          <sidebar-item name="Consultation report" icon="assignment" to="/report"></sidebar-item>
+          <sidebar-item name="Examination report" icon="assignment" to="/report"></sidebar-item>
           <sidebar-item name="Work calendar" icon="event" to="/work_calendar"></sidebar-item>
           <sidebar-item name="Vacation request" icon="holiday_village" to="/vacation_request"></sidebar-item>
           <sidebar-item name="New appointment" icon="book_online" to="/new_appointment"></sidebar-item>
