@@ -14,6 +14,7 @@ import medicineReservations from './modules/medicineReservations';
 import authentication from './modules/authentication'
 import medicalStaff from './modules/medicalStaff'
 import suppliers from './modules/suppliers'
+import supplierStock from './modules/supplierStock'
 
 Vue.use(Vuex)
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     appointments,
     authentication,
     medicalStaff,
-    suppliers
+    suppliers,
+    supplierStock
   }
 });

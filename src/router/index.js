@@ -5,6 +5,7 @@ import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
 import SystemAdmins from '../pages/SystemAdmins.vue'
 import Suppliers from '../pages/Suppliers.vue'
+import SupplierStock from '../pages/SupplierStock'
 import Dermatologists from '../pages/Dermatologists.vue'
 import Pharmacists from '../pages/Pharmacists.vue'
 import Medicines from '../pages/Medicines.vue'
@@ -120,6 +121,14 @@ const routes = [
     path: '/suppliers',
     name: 'Suppliers',
     component: Suppliers,
+    meta: {
+        layout: 'AppLayoutMain'
+      }
+  },
+  {
+    path: '/suppliers/my-stock',
+    name: 'SupplierStock',
+    component: SupplierStock,
     meta: {
         layout: 'AppLayoutMain'
       }
