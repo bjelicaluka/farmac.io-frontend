@@ -31,12 +31,27 @@ const actions = {
                 ok: false
             });
         })
+    },
+
+    fetchPatientFollowings(context, patientId) {
+        axios.get(`/patients/${patientId}/followings`)
+        .then(response => {
+            context.commit('setFollowings', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'fetch',
+                message: error.response.data.ErrorMessage,
+                ok: false
+            })
+        })
     }
 };
 
 const mutations = {
     setFollowings: (state, followings) => {
         state.followings = followings;
+        console.log(state.followings)
     },
 
     setResult: (state, result) => {
