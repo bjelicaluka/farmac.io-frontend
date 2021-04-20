@@ -18,7 +18,7 @@
                                 <a class="nav-link" href="#negativePoints" data-toggle="tab"><i class="material-icons">warning_amber</i>Negative points</a>
                             </li>
                             <li v-if="patient" class="nav-item">
-                                <a class="nav-link" href="#followings" data-toggle="tab"><i class="material-icons">favorite</i>Followings</a>
+                                <a class="nav-link" href="#followings" data-toggle="tab"><i class="material-icons">bookmark</i>Followings</a>
                             </li>
                         </ul>
                     </div>
@@ -105,7 +105,7 @@ export default {
         const accountId = getAccountIdFromToken();
 
         if(role === Roles.Patient) {
-            this.fetchPatient(getAccountIdFromToken());
+            this.fetchPatient(accountId);
             this.fetchPatientFollowings(accountId);
         }
     }

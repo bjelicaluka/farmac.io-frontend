@@ -4,30 +4,22 @@
             <Card :title="pharmacy && pharmacy.name" :description="pharmacy && pharmacy.description">
                 
 
-                
-                <Modal
-                    title="Confirmation"
-                    modalBoxId="confirmFollowModal"
-                >
-                    <div slot="body">
-                    Are you sure that you want to follow {{pharmacy && pharmacy.name}}?
-                    Following pharmacy means that you will get email notification every time there is a new promotion.
-                    </div>
-                    <div slot="buttons">
-                        <OptionModalButtons @yes="handleFollow" />
-                    </div>
-                </Modal>
+                <div v-if="user && user.role === roles.Patient"> 
+                    <div v-if="!isFollowing">
+                        <FollowPharmacyModal modalBoxId="confirmFollowModal" :pharmacyName="pharmacy && pharmacy.name" @yes="handleFollow" />
 
-                <ModalOpener v-if="user && user.role === roles.Patient" modalBoxId="confirmFollowModal">
-                    <ButtonWithIcon
-                        type="button"
-                        className="btn btn-round btn-primary"
-                        iconName="favorite"
-                    >
-                        Follow
-                    </ButtonWithIcon>
-                </ModalOpener>
+                        <ModalOpener modalBoxId="confirmFollowModal">
+                            <ButtonWithIcon type="button" className="btn btn-round btn-primary" iconName="bookmark_add">Follow</ButtonWithIcon>
+                        </ModalOpener>
+                    </div>
+                    <div v-else>
+                        <UnfollowPharmacyModal modalBoxId="confirmUnfollowModal" :pharmacyName="pharmacy && pharmacy.name" @yes="handleUnfollow" />
 
+                        <ModalOpener modalBoxId="confirmUnfollowModal">
+                            <ButtonWithIcon type="button" className="btn btn-round btn-primary" iconName="bookmark_remove">Unfollow</ButtonWithIcon>
+                        </ModalOpener>
+                    </div>
+                </div>
 
                 <PharmacyInfo :pharmacy="pharmacy" />
             </Card>
@@ -58,9 +50,9 @@ import toastr from 'toastr'
 import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 import MedicineListTable from '../components/Tables/MedicineListTable.vue';
 import ButtonWithIcon from '../components/Form/ButtonWithIcon'
-import Modal from '../components/Modal/Modal'
+import FollowPharmacyModal from '../components/Modals/FollowPharmacyModal'
+import UnfollowPharmacyModal from '../components/Modals/UnfollowPharmacyModal'
 import ModalOpener from '../components/Modal/ModalOpener'
-import OptionModalButtons from '../components/Modal/OptionModalButtons'
 
 import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
@@ -75,9 +67,9 @@ export default {
         AppointmentsTable,
         MedicineListTable,
         ButtonWithIcon,
-        Modal,
-        ModalOpener,
-        OptionModalButtons
+        FollowPharmacyModal,
+        UnfollowPharmacyModal,
+        ModalOpener
     },
 
     data: () => {
@@ -100,8 +92,10 @@ export default {
             dermatologistAppointments: 'appointments/getDermatologistAppointments',
             appointmentsResult: 'appointments/getResult',
             medicines: 'medicines/getMedicines',
-            followingResult: 'followings/getResult'
-        }),
+            followingResult: 'followings/getResult',
+            isFollowing: 'followings/isFollowing',
+        })
+
     },
     watch: {
         dermatologistResult({label, ok, message}) {
@@ -143,15 +137,17 @@ export default {
         },
 
         followingResult({label, ok, message}) {
-            if(label !== 'follow')
+            if(label !== 'follow' && label !== 'unfollow')
                  return;
             
             if(ok) {
+                this.fetchPatientFollowings(this.user.id);
                 toastr.success(message);
             } else {
                 toastr.error(message);
             }
         }
+
     },
     methods: {
         ...mapActions({
@@ -163,7 +159,10 @@ export default {
             fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
             fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
-            followPharmacy: 'followings/followPharmacy'
+            fetchPatientFollowings: 'followings/fetchPatientFollowings',
+            followPharmacy: 'followings/followPharmacy',
+            unfollowPharmacy: 'followings/unfollowPharmacy',
+            setCurrentPharmacy: 'followings/setCurrentPharmacy'
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -183,6 +182,13 @@ export default {
                 patientId: this.user.id,
                 pharmacyId: this.pharmacyId
             })
+        },
+
+        handleUnfollow() {
+            this.unfollowPharmacy({
+                patientId: this.user.id,
+                pharmacyId: this.pharmacyId
+            })
         }
     },
     mounted() {
@@ -196,6 +202,11 @@ export default {
         this.user = {
             id: getAccountIdFromToken(),
             role: getRoleFromToken()
+        }
+
+        if(this.user.role === Roles.Patient) {
+            this.fetchPatientFollowings(this.user.id);
+            this.setCurrentPharmacy(this.pharmacyId);
         }
     }
 }

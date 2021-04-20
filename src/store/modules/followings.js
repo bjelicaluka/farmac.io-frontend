@@ -1,13 +1,15 @@
 import axios from "axios";
 
 const state = {
-    followings: null,
-    result: null
+    followings: [],
+    result: null,
+    currentPharmacy: null
 };
 
 const getters = {
     getFollowings: state => state.followings,
-    getResult: state => state.result
+    getResult: state => state.result,
+    isFollowing: state => state.followings.find(f => f.pharmacyId === state.currentPharmacy) != undefined
 };
 
 const actions = {
@@ -45,13 +47,47 @@ const actions = {
                 ok: false
             })
         })
-    }
+    },
+
+    unfollowPharmacy(context, { patientId, pharmacyId }) {
+        const followId = state.followings.find(f => f.pharmacyId === pharmacyId).id;
+        axios.delete(`/patients/${patientId}/followings/${followId}`)
+        .then(response => {
+            context.commit('setResult', {
+                label: 'unfollow',
+                message: 'You have successfully unfollowed this pharmacy.',
+                ok: true
+            })
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'unfollow',
+                message: error.response.data.ErrorMessage,
+                ok: false
+            });
+        })
+    },
+
+    setCurrentPharmacy: (context, currentPharmacy) => {
+        context.commit('setCurrentPharmacy', currentPharmacy);
+    },
 };
 
 const mutations = {
     setFollowings: (state, followings) => {
-        state.followings = followings;
-        console.log(state.followings)
+        state.followings = followings.map(f => {
+            return {
+                id: f.followId,
+                pharmacyName: f.pharmacy.name,
+                pharmacyId: f.pharmacy.id,
+                since: f.since
+            }
+
+        });
+    },
+    
+    setCurrentPharmacy: (state, currentPharmacy) => {
+        state.currentPharmacy = currentPharmacy;
     },
 
     setResult: (state, result) => {
