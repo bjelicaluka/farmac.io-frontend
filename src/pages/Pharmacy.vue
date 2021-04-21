@@ -16,7 +16,22 @@
             <Card title='Medicines' :description="`${pharmacy && pharmacy.name}'s medicines that are in stock.`">
                 <MedicineListTable @search="handleSearchPharmacyMedicines" :medicines="medicines" :adminPharmacyId="pharmacyId" />
             </Card>
+            <ModalOpener
+                modalBoxId="pharmacyOrderModal"
+            >
+                <Button>Create Pharmacy Order</Button>
+            </ModalOpener>
         </div> 
+
+        <Modal
+            modalBoxId="pharmacyOrderModal"
+            title="Pharmacy Medicines Order"
+            sizeClass="modal-lg"
+        >
+            <div slot="body">
+                <PharmacyOrderForm :pharmacyId="pharmacyId" pharmacyAdminId="08d8f514-5921-423d-852c-694311688aa2" />
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -30,9 +45,13 @@ import PharmacyInfo from '../components/Shared/PharmacyInfo'
 import toastr from 'toastr'
 import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 import MedicineListTable from '../components/Tables/MedicineListTable.vue';
+import ModalOpener from '../components/Modal/ModalOpener.vue';
+import Button from '../components/Form/Button.vue';
+import Modal from '../components/Modal/Modal.vue';
+import PharmacyOrderForm from '../components/Forms/PharmacyOrderForm.vue';
 
 export default {
-  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable, MedicineListTable },
+  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable, MedicineListTable, ModalOpener, Button, Modal, PharmacyOrderForm },
 
     data: () => {
         return {
