@@ -19,7 +19,13 @@
             <ModalOpener
                 modalBoxId="pharmacyOrderModal"
             >
-                <Button>Create Pharmacy Order</Button>
+                <Button @click="isPharmacyOrderEdit = false">Create Pharmacy Order</Button>
+            </ModalOpener>
+
+            <ModalOpener
+                modalBoxId="pharmacyOrderModal"
+            >
+                <Button @click="isPharmacyOrderEdit = true">Update Pharmacy Order</Button>
             </ModalOpener>
         </div> 
 
@@ -29,7 +35,12 @@
             sizeClass="modal-lg"
         >
             <div slot="body">
-                <PharmacyOrderForm :pharmacyId="pharmacyId" pharmacyAdminId="08d8f514-5921-423d-852c-694311688aa2" />
+                <PharmacyOrderForm 
+                    :isEdit="isPharmacyOrderEdit" 
+                    :existingPharmacyOrder="pharmacyOrder" 
+                    :pharmacyId="pharmacyId" 
+                    pharmacyAdminId="08d8f514-5921-423d-852c-694311688aa2"
+                />
             </div>
         </Modal>
     </div>
@@ -57,7 +68,8 @@ export default {
         return {
             pharmacyId: null,
             dermatologistSearchName: null,
-            pharmacistSearchName: null
+            pharmacistSearchName: null,
+            isPharmacyOrderEdit: false
         }
     },
     computed: {
@@ -70,7 +82,8 @@ export default {
             dermatologistResult: 'dermatologist/getResult',
             dermatologistAppointments: 'appointments/getDermatologistAppointments',
             appointmentsResult: 'appointments/getResult',
-            medicines: 'medicines/getMedicines'
+            medicines: 'medicines/getMedicines',
+            pharmacyOrder: 'pharmacyOrders/getPharmacyOrder'
         }),
     },
     watch: {
@@ -122,6 +135,8 @@ export default {
             fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
             fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
+            // TEMP
+            fetchPharmacyOrderById: 'pharmacyOrders/fetchPharmacyOrderById'
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -143,6 +158,8 @@ export default {
         this.fetchPharmacyDermatologists(this.pharmacyId);
         this.fetchDermatologistAppointments(this.pharmacyId);
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
+        // TEMP
+        this.fetchPharmacyOrderById({pharmacyOrderId: '08d904d2-dbf2-4b37-8e06-24bc12ed0474', pharmacyId: this.pharmacyId});
     }
 }
 </script>

@@ -160,7 +160,7 @@ export default {
     computed: {
         ...mapGetters({
             getMedicines: 'medicines/getMedicineOptions',
-            result: 'pharmacies/getResult'
+            result: 'pharmacyOrders/getResult'
         })
     },
 
@@ -195,7 +195,7 @@ export default {
     methods: {
         ...mapActions({
             addPharmacyOrder: 'pharmacyOrders/addPharmacyOrder',
-            updatePharmacyOrder: '',
+            updatePharmacyOrder: 'pharmacyOrders/updatePharmacyOrder',
             fetchMedicines: 'medicines/fetchMedicineOptions'
         }),
 
@@ -210,7 +210,8 @@ export default {
             }
             
             if(this.existingPharmacyOrder) {
-                this.pharmacyOrder = this.existingPharmacyOrder;
+                this.pharmacyOrder.offersDeadline = moment(this.existingPharmacyOrder.offersDeadline);
+                this.pharmacyOrder.orderedMedicines = [...this.existingPharmacyOrder.orderedMedicines];
             }
         },
 
@@ -255,6 +256,7 @@ export default {
                 this.addPharmacyOrder(pharmacyOrderObject); 
             } else {
                 pharmacyOrderObject.id = this.existingPharmacyOrder.id;
+                console.log(pharmacyOrderObject);
                 this.updatePharmacyOrder(pharmacyOrderObject);
             }
         }
