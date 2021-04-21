@@ -15,6 +15,7 @@ import authentication from './modules/authentication'
 import medicalStaff from './modules/medicalStaff'
 import suppliers from './modules/suppliers'
 import supplierStock from './modules/supplierStock'
+import supplierOffers from './modules/supplierOffers'
 
 Vue.use(Vuex)
 
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     authentication,
     medicalStaff,
     suppliers,
-    supplierStock
+    supplierStock,
+    supplierOffers
   }
 });
