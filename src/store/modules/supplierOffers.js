@@ -19,6 +19,25 @@ const actions = {
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
         })
+    },
+
+    updateOfferFromSupplier: (context, supplierOffer) => {
+        axios.put(`/suppliers/${supplierOffer.supplierId}/offers`, supplierOffer)
+        .then(response => {
+            context.commit('setResult', {
+                label: 'update',
+                ok: true,
+                message: `You have successfully updated an existing offer.`
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'update',
+                ok: false,
+                message: error.response.data.ErrorMessage
+                
+            });
+        })
     }
 };
 
