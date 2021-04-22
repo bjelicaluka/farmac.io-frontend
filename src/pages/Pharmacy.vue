@@ -57,9 +57,6 @@ import ButtonWithIcon from '../components/Form/ButtonWithIcon'
 import FollowPharmacyModal from '../components/Modals/FollowPharmacyModal'
 import UnfollowPharmacyModal from '../components/Modals/UnfollowPharmacyModal'
 import ModalOpener from '../components/Modal/ModalOpener'
-import Button from '../components/Form/Button.vue';
-import Modal from '../components/Modal/Modal.vue';
-import PharmacyOrderForm from '../components/Forms/PharmacyOrderForm.vue';
 
 import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
@@ -77,9 +74,6 @@ export default {
         FollowPharmacyModal,
         UnfollowPharmacyModal,
         ModalOpener,
-        Button, 
-        Modal, 
-        PharmacyOrderForm,
         PharmacyOrdersTable
     },
 
@@ -90,7 +84,7 @@ export default {
             dermatologistSearchName: null,
             pharmacistSearchName: null,
             isPharmacyOrderEdit: false,
-            pharmacyOrderProcessedFilter: false
+            pharmacyOrderProcessedFilter: false,
             roles: Roles
         }
     },
