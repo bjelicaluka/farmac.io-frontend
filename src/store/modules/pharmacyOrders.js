@@ -43,7 +43,7 @@ const actions = {
             context.commit('setResult', {
                 label: 'add',
                 ok: true,
-                message: `You have successfully added a new pharmacyOrder.`
+                message: `You have successfully added a new pharmacy order.`
             });
         })
         .catch(error => {
@@ -60,7 +60,7 @@ const actions = {
             context.commit('setResult', {
                 label: 'update',
                 ok: true,
-                message: `You have successfully updated a pharmacyOrder.`
+                message: `You have successfully updated a pharmacy order.`
             });
         })
         .catch(error => {

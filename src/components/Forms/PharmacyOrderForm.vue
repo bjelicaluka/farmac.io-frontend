@@ -7,7 +7,7 @@
                 :showErrorMessage="showErrorMessage"
                 label="Offers Deadline"
                 errorMessage="Please pick a valid offers deadline."
-                type="date"
+                type="datetime"
                 id="pharmacyOrderOffersDeadline"
                 :disabled="disabled"
             />
@@ -24,9 +24,11 @@
                     </div>
 
                     <div class='col-5'>
-                        <TextInput
+                        <NumberInput
                             label="Quantity"
                             v-model="orderedMedicine.quantity"
+                            :min="0"
+                            :max="99999"
                         />
                     </div>
                     
@@ -65,15 +67,7 @@
                                         :key="i"
                                         :values="[getMedicineName(orderedMedicine.medicineId), orderedMedicine.quantity]"
                                     >
-                                        <a 
-                                            v-if="!disabled"
-                                            class="btn btn-primary btn-sm btn-just-icon btn-round btn" 
-                                            rel="tooltip" 
-                                            title="Remove" 
-                                            @click="removeOrderedMedicine(orderedMedicine.medicineId)"
-                                        >
-                                            <i class="material-icons">clear</i>
-                                        </a>
+                                        <RoundButton  v-if="!disabled" @click="removeOrderedMedicine(orderedMedicine.medicineId)" type="btn-primary" iconName="clear"/>
                                     </TableRow>
                             </TableBody>
                         </Table>
@@ -96,7 +90,6 @@ import Card from '../Card/Card'
 import Form from '../Form/Form'
 import FormGroup from '../Form/FormGroup'
 import FormRow from '../Form/FormRow'
-import TextInput from '../Form/TextInput'
 import Button from '../Form/Button'
 import SelectOptionInput from '../Form/SelectOptionInput'
 import Table from '../Table/Table.vue'
@@ -109,10 +102,12 @@ import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
+import RoundButton from '../Form/RoundButton.vue'
+import NumberInput from '../Form/NumberInput.vue'
 
 const initialOrderedMedicine = {
     medicineId: '',
-    quantity: ''
+    quantity: 0
 }
 
 const initialPharmacyOrder = {
@@ -126,7 +121,6 @@ export default {
         Form,
         FormGroup,
         FormRow,
-        TextInput,
         Button,
         SelectOptionInput,
         Table,
@@ -134,7 +128,9 @@ export default {
         TableBody,
         TableRow,
         DateTimePicker,
-        InputErrorMessage
+        InputErrorMessage,
+        RoundButton,
+        NumberInput
     },
 
     props: {
@@ -227,8 +223,7 @@ export default {
         },
 
         validateOrderedMedicine() {
-            return  this.orderedMedicine.quantity.trim().length === 0 ||
-                    this.orderedMedicine.medicineId.trim().length === 0 ||
+            return  this.orderedMedicine.medicineId.trim().length === 0 ||
                     isNaN(this.orderedMedicine.quantity) ||
                     parseInt(this.orderedMedicine.quantity) <= 0;
         },
@@ -263,7 +258,6 @@ export default {
                 this.addPharmacyOrder(pharmacyOrderObject); 
             } else {
                 pharmacyOrderObject.id = this.existingPharmacyOrder.id;
-                console.log(pharmacyOrderObject);
                 this.updatePharmacyOrder(pharmacyOrderObject);
             }
         }
