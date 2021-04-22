@@ -9,8 +9,10 @@
                 errorMessage="Please pick a valid offers deadline."
                 type="date"
                 id="pharmacyOrderOffersDeadline"
+                :disabled="disabled"
             />
-            <Form @submit="addOrderedMedicine">
+
+            <Form v-if="!disabled" @submit="addOrderedMedicine">
                 <FormRow>
                     <div class='col-5'>
                         <SelectOptionInput
@@ -64,6 +66,7 @@
                                         :values="[getMedicineName(orderedMedicine.medicineId), orderedMedicine.quantity]"
                                     >
                                         <a 
+                                            v-if="!disabled"
                                             class="btn btn-primary btn-sm btn-just-icon btn-round btn" 
                                             rel="tooltip" 
                                             title="Remove" 
@@ -83,7 +86,7 @@
                 Please pick medicines to order.
             </InputErrorMessage>
         </FormGroup>
-        <Button class="pull-right" @click="showErrorMessage = true" type="submit">{{ isEdit ? 'Update' : 'Create' }}</Button>
+        <Button v-if="!disabled" class="pull-right" @click="showErrorMessage = true" type="submit">{{ isEdit ? 'Update' : 'Create' }}</Button>
     </Form>
 </template>
 
@@ -137,6 +140,10 @@ export default {
     props: {
         isEdit: {
             type: Boolean,
+            default: false
+        },
+        disabled: {
+            type:Boolean,
             default: false
         },
         existingPharmacyOrder: {
@@ -212,7 +219,7 @@ export default {
             if(this.existingPharmacyOrder) {
                 this.pharmacyOrder.offersDeadline = moment(this.existingPharmacyOrder.offersDeadline);
                 this.pharmacyOrder.orderedMedicines = [...this.existingPharmacyOrder.orderedMedicines];
-            }
+            } 
         },
 
         validateOffersDeadline() {
@@ -261,5 +268,6 @@ export default {
             }
         }
     }
+
 }
 </script>

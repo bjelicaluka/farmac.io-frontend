@@ -21,6 +21,25 @@ const actions = {
         })
     },
 
+    addOfferFromSupplier: (context, supplierOffer) => {
+        axios.post(`/suppliers/${supplierOffer.supplierId}/offers`, supplierOffer)
+        .then(response => {
+            context.commit('setResult', {
+                label: 'add',
+                ok: true,
+                message: `You have successfully added a new offer.`
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'add',
+                ok: false,
+                message: error.response.data.ErrorMessage
+                
+            });
+        })
+    },
+
     updateOfferFromSupplier: (context, supplierOffer) => {
         axios.put(`/suppliers/${supplierOffer.supplierId}/offers`, supplierOffer)
         .then(response => {

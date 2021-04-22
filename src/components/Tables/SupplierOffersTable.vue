@@ -28,7 +28,9 @@
         <Modal modalBoxId="supplierOfferModal" title="Update Offer">
             <div slot="body">
                 <SupplierOfferForm
+                    :isEdit=true
                     :existingSupplierOffer="selectedSupplierOffer"
+                    :existingPharmacyOrder="selectedSupplierOffer && selectedSupplierOffer.pharmacyOrder"
                 />
             </div>
         </Modal>
@@ -75,7 +77,6 @@ export default {
 
     methods: {
          handleEditClick(supplierOffer) {
-            //this.isEdit = true;
             this.selectedSupplierOffer = supplierOffer;
         },
 

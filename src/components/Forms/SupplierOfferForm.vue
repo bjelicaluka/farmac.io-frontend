@@ -1,5 +1,13 @@
 <template>
     <Form @submit="onSubmit($event)">
+        <FormGroup title="Order">
+            <PharmacyOrderForm
+                :isEdit=true
+                :disabled=true
+                :existingPharmacyOrder="existingPharmacyOrder"
+            />
+        </FormGroup>
+
         <FormGroup>
             <FormRow>
                 <div class="col-12">
@@ -30,12 +38,13 @@
             </FormRow>
         </FormGroup>
 
-        <Button @click="showErrorMessage = true" class="pull-right" type="submit">Update</Button>
+        <Button @click="showErrorMessage = true" class="pull-right" type="submit">{{ isEdit ? 'Update' : 'Create' }}</Button>
     </Form>
 
 </template>
 
 <script>
+import PharmacyOrderForm from '../Forms/PharmacyOrderForm'
 import Form from '../Form/Form.vue'
 import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
@@ -44,6 +53,7 @@ import Button from '../Form/Button.vue'
 import DateTimePicker from '../Form/DateTimePicker.vue'
 
 import { mapActions, mapGetters } from 'vuex'
+import { getAccountIdFromToken } from '../../utils/token'
 import toastr from 'toastr'
 import moment from 'moment'
 
@@ -54,6 +64,7 @@ const initialOffer = {
 
 export default {
     components: {
+        PharmacyOrderForm,
         Form,
         FormGroup,
         FormRow,
@@ -63,9 +74,19 @@ export default {
     },
 
     props: {
-       existingSupplierOffer: {
+        isEdit: {
+            type: Boolean,
+            default: false
+        },
+
+        existingSupplierOffer: {
            type: Object
-       }
+        },
+
+        existingPharmacyOrder: {
+           type: Object,
+           default: null
+        }
     },
     data: () => {
         return {
@@ -90,26 +111,52 @@ export default {
             }
         },
 
+        isEdit() {
+            this.setEdit();
+        },
+
         existingSupplierOffer() {
-            this.offer = {...this.existingSupplierOffer};
-            this.offer.deliveryDeadline = moment(this.existingSupplierOffer.deliveryDeadline).toDate()
+            this.setEdit();
         }
     },
 
   methods: {
     ...mapActions({
-        updateOfferFromSupplier: 'supplierOffers/updateOfferFromSupplier'
+        updateOfferFromSupplier: 'supplierOffers/updateOfferFromSupplier',
+        addOfferFromSupplier: 'supplierOffers/addOfferFromSupplier'
     }),
+
+    setEdit() {
+        if(!this.isEdit) {
+            this.offer = {...initialOffer};
+            return;
+        }
+
+        if(this.existingSupplierOffer) {
+            this.offer = {...this.existingSupplierOffer};
+            this.offer.deliveryDeadline = moment(this.existingSupplierOffer.deliveryDeadline).toDate()
+        }
+
+    },
 
     onSubmit(e) {
         e.preventDefault();
 
-        this.updateOfferFromSupplier({
-            id: this.offer.id,
-            supplierId: this.offer.supplierId,
-            totalPrice: this.offer.totalPrice,
-            deliveryDeadline: this.offer.deliveryDeadline.format()
-        });
+        if(!this.isEdit) {
+            this.addOfferFromSupplier({
+                supplierId: getAccountIdFromToken(),
+                totalPrice: this.offer.totalPrice,
+                deliveryDeadline: this.offer.deliveryDeadline.format(),
+                pharmacyOrderId: this.existingPharmacyOrder.id
+            });
+        } else {
+            this.updateOfferFromSupplier({
+                id: this.offer.id,
+                supplierId: this.offer.supplierId,
+                totalPrice: this.offer.totalPrice,
+                deliveryDeadline: this.offer.deliveryDeadline.format()
+            });
+        }
     },
 
     validateDeliveryDate(delivery) {
