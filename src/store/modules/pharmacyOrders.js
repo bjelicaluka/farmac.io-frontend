@@ -27,6 +27,16 @@ const actions = {
         });
     },
 
+    filterPharmacyOrders: (context, {pharmacyId, isProcessed}) => {
+        axios.get(`/pharmacy/${pharmacyId}/pharmacy-orders/filter`, {params: {isProcessed}})
+        .then(response => {
+            context.commit('setPharmacyOrders', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
     addPharmacyOrder: (context, pharmacyOrder) => {
         axios.post(`/pharmacy/${pharmacyOrder.pharmacyId}/pharmacy-orders`, pharmacyOrder)
         .then(response => {

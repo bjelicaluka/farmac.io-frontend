@@ -16,33 +16,10 @@
             <Card title='Medicines' :description="`${pharmacy && pharmacy.name}'s medicines that are in stock.`">
                 <MedicineListTable @search="handleSearchPharmacyMedicines" :medicines="medicines" :adminPharmacyId="pharmacyId" />
             </Card>
-            <ModalOpener
-                modalBoxId="pharmacyOrderModal"
-            >
-                <Button @click="isPharmacyOrderEdit = false">Create Pharmacy Order</Button>
-            </ModalOpener>
-
-            <ModalOpener
-                modalBoxId="pharmacyOrderModal"
-            >
-                <Button @click="isPharmacyOrderEdit = true">Update Pharmacy Order</Button>
-            </ModalOpener>
+            <Card title='Medicine Orders' :description="`Medicine orders for ${pharmacy && pharmacy.name} pharmacy.`">
+                <PharmacyOrdersTable :pharmacyOrders="pharmacyOrders" :pharmacyId="pharmacyId" @filter="pharmacyOrderProcessedFilter = $event" />
+            </Card>
         </div> 
-
-        <Modal
-            modalBoxId="pharmacyOrderModal"
-            title="Pharmacy Medicines Order"
-            sizeClass="modal-lg"
-        >
-            <div slot="body">
-                <PharmacyOrderForm 
-                    :isEdit="isPharmacyOrderEdit" 
-                    :existingPharmacyOrder="pharmacyOrder" 
-                    :pharmacyId="pharmacyId" 
-                    pharmacyAdminId="08d8f514-5921-423d-852c-694311688aa2"
-                />
-            </div>
-        </Modal>
     </div>
 </template>
 
@@ -56,20 +33,18 @@ import PharmacyInfo from '../components/Shared/PharmacyInfo'
 import toastr from 'toastr'
 import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 import MedicineListTable from '../components/Tables/MedicineListTable.vue';
-import ModalOpener from '../components/Modal/ModalOpener.vue';
-import Button from '../components/Form/Button.vue';
-import Modal from '../components/Modal/Modal.vue';
-import PharmacyOrderForm from '../components/Forms/PharmacyOrderForm.vue';
+import PharmacyOrdersTable from '../components/Tables/PharmacyOrdersTable.vue';
 
 export default {
-  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable, MedicineListTable, ModalOpener, Button, Modal, PharmacyOrderForm },
+  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable, MedicineListTable, PharmacyOrdersTable },
 
     data: () => {
         return {
             pharmacyId: null,
             dermatologistSearchName: null,
             pharmacistSearchName: null,
-            isPharmacyOrderEdit: false
+            isPharmacyOrderEdit: false,
+            pharmacyOrderProcessedFilter: false
         }
     },
     computed: {
@@ -78,12 +53,14 @@ export default {
             pharmacyResult: 'pharmacies/getResult',
             pharmacists: 'pharmacist/getPharmacists',
             pharmacistResult: 'pharmacist/getResult',
+            pharmacyOrdersResult: 'pharmacyOrders/getResult',
+
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
             dermatologistAppointments: 'appointments/getDermatologistAppointments',
             appointmentsResult: 'appointments/getResult',
             medicines: 'medicines/getMedicines',
-            pharmacyOrder: 'pharmacyOrders/getPharmacyOrder'
+            pharmacyOrders: 'pharmacyOrders/getPharmacyOrders'
         }),
     },
     watch: {
@@ -123,6 +100,14 @@ export default {
             if(label==='reserveAppointment' && ok) {
                 this.fetchDermatologistAppointments(this.pharmacyId);
             }
+        },
+        pharmacyOrdersResult({ok, label}){
+            if(label === 'add' || label === 'update') {
+                ok && this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
+            }
+        },
+        pharmacyOrderProcessedFilter() {
+            this.filterPharmacyOrders({pharmacyId: this.pharmacyId, isProcessed: this.pharmacyOrderProcessedFilter});
         }
     },
     methods: {
@@ -135,8 +120,7 @@ export default {
             fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
             fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
-            // TEMP
-            fetchPharmacyOrderById: 'pharmacyOrders/fetchPharmacyOrderById'
+            filterPharmacyOrders: 'pharmacyOrders/filterPharmacyOrders'
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -158,8 +142,7 @@ export default {
         this.fetchPharmacyDermatologists(this.pharmacyId);
         this.fetchDermatologistAppointments(this.pharmacyId);
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
-        // TEMP
-        this.fetchPharmacyOrderById({pharmacyOrderId: '08d904d2-dbf2-4b37-8e06-24bc12ed0474', pharmacyId: this.pharmacyId});
+        this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
     }
 }
 </script>
