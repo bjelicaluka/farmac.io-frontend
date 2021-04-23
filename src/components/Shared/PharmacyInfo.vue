@@ -1,9 +1,12 @@
 <template>
   <div>
     <div class="row">
-      <ModalOpener class="ml-auto mr-3 mb-2" modalBoxId="pharmacyModal">
+      <ModalOpener class="ml-auto mr-1 mb-2" modalBoxId="pharmacyModal">
         <Button>Edit Pharmacy General Info</Button>
       </ModalOpener>
+      <div class="mr-3 mb-2">
+        <Button @click="changeRoutePriceList" class="pull-right">Edit prices</Button>
+      </div>
     </div>
     <Map v-if="pharmacy" :center="pharmacy.address">
       <div slot="markers">
@@ -42,6 +45,12 @@ export default {
       type: Object,
     }
   },
+  methods: {
+    changeRoutePriceList(e) {
+      e.preventDefault();
+      this.$router.push(`/pharmacy-price-list/${this.pharmacy.id}`);
+    }
+  }
 }
 </script>
 
