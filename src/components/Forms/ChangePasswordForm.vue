@@ -47,7 +47,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validatePassword,  } from '../../utils/validation'
-import { removeToken, getAccountIdFromToken } from '../../utils/token'
+import { getAccountIdFromToken } from '../../utils/token'
 
 import Button from '../Form/Button.vue'
 import Form from '../Form/Form.vue'

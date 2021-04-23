@@ -1,50 +1,51 @@
 import axios from "axios";
 
 const state = {
-    pharmacyOrder: null,
-    pharmacyOrders: null,
+    pharmacyPriceList: null,
+    pharmacyPriceLists: null,
     result: null
 };
 
 const getters = {
-    getPharmacyOrder: state => state.pharmacyOrder,
-    getPharmacyOrders: state => state.pharmacyOrders,
+    getPharmacyPriceList: state => state.pharmacyPriceList,
+    getPharmacyPriceLists: state => state.pharmacyPriceLists,
     getResult: state => state.result
 };
 
 const actions = {
-    fetchPharmacyOrders: (context) => {
+    fetchPharmacyPriceLists: (context) => {
         // didulidudu
     },
 
-    fetchPharmacyOrderById: (context, {pharmacyId, pharmacyOrderId}) => {
-        axios.get(`/pharmacy/${pharmacyId}/pharmacy-orders/${pharmacyOrderId}`)
+    fetchPharmacyPriceListById: (context, {pharmacyId, pharmacyPriceListId}) => {
+        axios.get(`/pharmacy/${pharmacyId}/price-list/${pharmacyPriceListId}`)
         .then(response => {
-            context.commit('setPharmacyOrder', response.data);
+            context.commit('setPharmacyPriceList', response.data);
         })
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
 
-    filterPharmacyOrders: (context, {pharmacyId, isProcessed}) => {
-        axios.get(`/pharmacy/${pharmacyId}/pharmacy-orders/filter`, {params: {isProcessed}})
+    fetchPharmacyPriceListForPharmacy: (context, pharmacyId) => {
+        axios.get(`/pharmacy/${pharmacyId}/price-list`)
         .then(response => {
-            context.commit('setPharmacyOrders', response.data);
+            context.commit('setPharmacyPriceList', response.data);
         })
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
         });
     },
 
-    addPharmacyOrder: (context, pharmacyOrder) => {
-        axios.post(`/pharmacy/${pharmacyOrder.pharmacyId}/pharmacy-orders`, pharmacyOrder)
+    addPharmacyPriceList: (context, pharmacyPriceList) => {
+        axios.post(`/pharmacy/${pharmacyPriceList.pharmacyId}/price-list`, pharmacyPriceList)
         .then(response => {
             context.commit('setResult', {
                 label: 'add',
                 ok: true,
-                message: `You have successfully added a new pharmacy order.`
+                message: `You have successfully added a new pharmacy price list.`
             });
+            context.commit('setPharmacyPriceList', response.data);
         })
         .catch(error => {
             context.commit('setResult', {
@@ -54,13 +55,13 @@ const actions = {
             });
         });
     },
-    updatePharmacyOrder: (context, pharmacyOrder) => {
-        axios.put(`/pharmacy/${pharmacyOrder.pharmacyId}/pharmacy-orders`, pharmacyOrder)
+    updatePharmacyPriceList: (context, pharmacyPriceList) => {
+        axios.put(`/pharmacy/${pharmacyPriceList.pharmacyId}/price-list`, pharmacyPriceList)
         .then(response => {
             context.commit('setResult', {
                 label: 'update',
                 ok: true,
-                message: `You have successfully updated a pharmacy order.`
+                message: `You have successfully updated pharmacy price list.`
             });
         })
         .catch(error => {
@@ -72,17 +73,17 @@ const actions = {
             });
         });
     },
-    deletePharmacyOrder: (context, id) => {
+    deletePharmacyPriceList: (context, id) => {
         // didulidudu
     },
 };
 
 const mutations = {
-    setPharmacyOrder: (state, pharmacyOrder) => {
-        state.pharmacyOrder = pharmacyOrder;
+    setPharmacyPriceList: (state, pharmacyPriceList) => {
+        state.pharmacyPriceList = pharmacyPriceList;
     },
-    setPharmacyOrders: (state, pharmacyOrders) => {
-        state.pharmacyOrders = pharmacyOrders;
+    setPharmacyPriceLists: (state, pharmacyPriceLists) => {
+        state.pharmacyPriceLists = pharmacyPriceLists;
     },
     setResult: (state, result) => {
         state.result = result;

@@ -1,32 +1,42 @@
 <template>
     <Form @submit="onSubmit($event)">
         <FormGroup>
-            <DateTimePicker
-                v-model="pharmacyOrder.offersDeadline"
-                :isValid="validateOffersDeadline()"
-                :showErrorMessage="showErrorMessage"
-                label="Offers Deadline"
-                errorMessage="Please pick a valid offers deadline."
-                type="datetime"
-                id="pharmacyOrderOffersDeadline"
-            />
-            <Form @submit="addOrderedMedicine">
+            <FormRow>
+                    <div class='col-6'>
+                        <TextInput
+                            label="Consultation price"
+                            v-model="priceList.consultationPrice"
+                            :isValid="validateFloat(priceList.consultationPrice)"
+                            :showErrorMessage="showErrorMessage"
+                            errorMessage="Please enter a valid consultation price"
+                        />
+                    </div>
+
+                    <div class='col-6'>
+                        <TextInput
+                            label="Examination price"
+                            v-model="priceList.examinationPrice"
+                            :isValid="validateFloat(priceList.examinationPrice)"
+                            :showErrorMessage="showErrorMessage"
+                            errorMessage="Please enter a valid examination price"
+                        />
+                    </div>
+                </FormRow>
+            <Form @submit="addMedicinePrice">
                 <FormRow>
                     <div class='col-5'>
                         <SelectOptionInput
                             label="Medicine"
-                            v-model="orderedMedicine.medicineId"
+                            v-model="medicinePrice.medicineId"
                             :options="medicines"
                             errorMessage="Please select valid option"
                         />
                     </div>
 
                     <div class='col-5'>
-                        <NumberInput
-                            label="Quantity"
-                            v-model="orderedMedicine.quantity"
-                            :min="0"
-                            :max="99999"
+                        <TextInput
+                            label="Price"
+                            v-model="medicinePrice.price"
                         />
                     </div>
                     
@@ -48,7 +58,7 @@
                     </div>
                     <div class='col-5'>
                         <small class="form-text text-muted">
-                            Quantity be positive round number.
+                            Price be positive number.
                         </small>
                     </div>
                 </FormRow>
@@ -56,16 +66,15 @@
 
             <FormRow>
                 <div class='col-12'>
-                    <Card title="Ordered Medicines" v-if="pharmacyOrder.orderedMedicines.length !== 0">
+                    <Card title="Medicine Prices" v-if="priceList.medicinePriceList.length !== 0">
                         <Table>
-                            <TableHead :columnNames="['Medicine Name', 'Quantity', '']"></TableHead>
+                            <TableHead :columnNames="['Medicine Name', 'Price']"></TableHead>
                                 <TableBody>
                                     <TableRow 
-                                        v-for="(orderedMedicine, i) in pharmacyOrder.orderedMedicines"
+                                        v-for="(medicinePrice, i) in priceList.medicinePriceList"
                                         :key="i"
-                                        :values="[getMedicineName(orderedMedicine.medicineId), orderedMedicine.quantity]"
+                                        :values="[getMedicineName(medicinePrice.medicineId), medicinePrice.price]"
                                     >
-                                        <RoundButton @click="removeOrderedMedicine(orderedMedicine.medicineId)" type="btn-primary" iconName="clear"/>
                                     </TableRow>
                             </TableBody>
                         </Table>
@@ -73,12 +82,12 @@
                 </div>
             </FormRow>
             <InputErrorMessage
-                :isValid="showErrorMessage ? pharmacyOrder.orderedMedicines.length !== 0 : true"
+                :isValid="showErrorMessage ? priceList.medicinePriceList.length !== 0 : true"
             >
-                Please pick medicines to order.
+                Please enter medicine prices.
             </InputErrorMessage>
         </FormGroup>
-        <Button class="pull-right" @click="showErrorMessage = true" type="submit">{{ isEdit ? 'Update' : 'Create' }}</Button>
+        <Button class="pull-right" @click="showErrorMessage = true" type="submit">Save</Button>
     </Form>
 </template>
 
@@ -88,29 +97,28 @@ import Card from '../Card/Card'
 import Form from '../Form/Form'
 import FormGroup from '../Form/FormGroup'
 import FormRow from '../Form/FormRow'
+import TextInput from '../Form/TextInput'
 import Button from '../Form/Button'
 import SelectOptionInput from '../Form/SelectOptionInput'
 import Table from '../Table/Table.vue'
 import TableHead from '../Table/TableHead.vue'
 import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
-import DateTimePicker from '../Form/DateTimePicker.vue'
 
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
-import RoundButton from '../Form/RoundButton.vue'
-import NumberInput from '../Form/NumberInput.vue'
 
-const initialOrderedMedicine = {
+const initialMedicinePrice = {
     medicineId: '',
-    quantity: 0
+    price: ''
 }
 
-const initialPharmacyOrder = {
-    offersDeadline: null,
-    orderedMedicines: []
+const initialPharmacyPriceList = {
+    consultationPrice: '',
+    examinationPrice: '',
+    medicinePriceList: []
 };
 
 export default {
@@ -119,16 +127,14 @@ export default {
         Form,
         FormGroup,
         FormRow,
+        TextInput,
         Button,
         SelectOptionInput,
         Table,
         TableHead,
         TableBody,
         TableRow,
-        DateTimePicker,
-        InputErrorMessage,
-        RoundButton,
-        NumberInput
+        InputErrorMessage
     },
 
     props: {
@@ -136,18 +142,17 @@ export default {
             type: Boolean,
             default: false
         },
-        existingPharmacyOrder: {
+        existingPharmacyPriceList: {
             type: Object
         },
         pharmacyId: {},
-        pharmacyAdminId: {}
     },
 
 
     data: () => {
         return {
-            orderedMedicine: {...initialOrderedMedicine},
-            pharmacyOrder: {...initialPharmacyOrder},
+            medicinePrice: {...initialMedicinePrice},
+            priceList: {...initialPharmacyPriceList},
             medicines: [],
 
             showErrorMessage: false
@@ -157,7 +162,7 @@ export default {
     computed: {
         ...mapGetters({
             getMedicines: 'medicines/getMedicineOptions',
-            result: 'pharmacyOrders/getResult'
+            result: 'pharmacyPriceLists/getResult'
         })
     },
 
@@ -180,7 +185,7 @@ export default {
         isEdit() {
             this.setEdit();
         },
-        existingPharmacyOrder() {
+        existingPharmacyPriceList() {
             this.setEdit();
         }
     },
@@ -191,8 +196,8 @@ export default {
 
     methods: {
         ...mapActions({
-            addPharmacyOrder: 'pharmacyOrders/addPharmacyOrder',
-            updatePharmacyOrder: 'pharmacyOrders/updatePharmacyOrder',
+            addPharmacyPriceList: 'pharmacyPriceLists/addPharmacyPriceList',
+            updatePharmacyPriceList: 'pharmacyPriceLists/updatePharmacyPriceList',
             fetchMedicines: 'medicines/fetchMedicineOptions'
         }),
 
@@ -202,57 +207,54 @@ export default {
 
         setEdit() {
             if(!this.isEdit) {
-                this.pharmacyOrder = {...initialPharmacyOrder};
+                this.priceList = {...initialPharmacyPriceList};
                 return;
             }
             
-            if(this.existingPharmacyOrder) {
-                this.pharmacyOrder.offersDeadline = moment(this.existingPharmacyOrder.offersDeadline);
-                this.pharmacyOrder.orderedMedicines = [...this.existingPharmacyOrder.orderedMedicines];
+            if(this.existingPharmacyPriceList) {
+                this.priceList.consultationPrice = this.existingPharmacyPriceList.consultationPrice;
+                this.priceList.examinationPrice = this.existingPharmacyPriceList.examinationPrice;
+                this.priceList.medicinePriceList = [...this.existingPharmacyPriceList.medicinePriceList];
             }
         },
 
-        validateOffersDeadline() {
-            return !!this.pharmacyOrder.offersDeadline && this.pharmacyOrder.offersDeadline.isAfter(moment());
+        validateMedicinePrice() {
+            return  this.medicinePrice.price.trim().length === 0 ||
+                    this.medicinePrice.medicineId.trim().length === 0 ||
+                    !this.validateFloat(this.medicinePrice.price);
         },
 
-        validateOrderedMedicine() {
-            return  this.orderedMedicine.medicineId.trim().length === 0 ||
-                    isNaN(this.orderedMedicine.quantity) ||
-                    parseInt(this.orderedMedicine.quantity) <= 0;
+        validateFloat(number) {
+            return !!number && !(isNaN(number) || parseFloat(number) <= 0)
         },
 
-        addOrderedMedicine() {
-            if(this.validateOrderedMedicine()) return;
+        addMedicinePrice() {
+            if(this.validateMedicinePrice()) return;
 
-            const existingOrderedMedicine = this.pharmacyOrder.orderedMedicines.find(m => m.medicineId === this.orderedMedicine.medicineId);
-            if(existingOrderedMedicine) {
-                existingOrderedMedicine.quantity = parseFloat(existingOrderedMedicine.quantity) + parseFloat(this.orderedMedicine.quantity)
+            const existingMedicinePrice = this.priceList.medicinePriceList.find(m => m.medicineId === this.medicinePrice.medicineId);
+            if(existingMedicinePrice) {
+                existingMedicinePrice.price = this.medicinePrice.price;
             } else {
-                this.pharmacyOrder.orderedMedicines.push({...this.orderedMedicine});
+                this.priceList.medicinePriceList.push({...this.medicinePrice});
             }
 
-            this.orderedMedicine = {...initialOrderedMedicine};
-        },
-
-        removeOrderedMedicine(id) {
-            this.pharmacyOrder.orderedMedicines = this.pharmacyOrder.orderedMedicines.filter(m => m.medicineId !== id);
+            this.medicinePrice = {...initialMedicinePrice};
         },
 
         onSubmit(e) {
             e.preventDefault();
-            const pharmacyOrderObject = {
-                orderedMedicines: this.pharmacyOrder.orderedMedicines,
-                offersDeadline: this.pharmacyOrder.offersDeadline,
+            const priceListObject = {
+                medicinePriceList: this.priceList.medicinePriceList,
+                examinationPrice: this.priceList.examinationPrice,
+                consultationPrice: this.priceList.consultationPrice,
                 pharmacyId: this.pharmacyId,
-                pharmacyAdminId: this.pharmacyAdminId,
             };
 
             if(!this.isEdit) {
-                this.addPharmacyOrder(pharmacyOrderObject); 
+                this.addPharmacyPriceList(priceListObject); 
             } else {
-                pharmacyOrderObject.id = this.existingPharmacyOrder.id;
-                this.updatePharmacyOrder(pharmacyOrderObject);
+                priceListObject.id = this.existingPharmacyPriceList.id;
+                this.updatePharmacyPriceList(priceListObject);
             }
         }
     }
