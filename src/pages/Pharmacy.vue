@@ -35,33 +35,10 @@
             <Card title='Medicines' :description="`${pharmacy && pharmacy.name}'s medicines that are in stock.`">
                 <MedicineListTable @search="handleSearchPharmacyMedicines" :medicines="medicines" :adminPharmacyId="pharmacyId" />
             </Card>
-            <ModalOpener
-                modalBoxId="pharmacyOrderModal"
-            >
-                <Button @click="isPharmacyOrderEdit = false">Create Pharmacy Order</Button>
-            </ModalOpener>
-
-            <ModalOpener
-                modalBoxId="pharmacyOrderModal"
-            >
-                <Button @click="isPharmacyOrderEdit = true">Update Pharmacy Order</Button>
-            </ModalOpener>
+            <Card title='Medicine Orders' :description="`Medicine orders for ${pharmacy && pharmacy.name} pharmacy.`">
+                <PharmacyOrdersTable :pharmacyOrders="pharmacyOrders" :pharmacyId="pharmacyId" @filter="pharmacyOrderProcessedFilter = $event" />
+            </Card>
         </div> 
-
-        <Modal
-            modalBoxId="pharmacyOrderModal"
-            title="Pharmacy Medicines Order"
-            sizeClass="modal-lg"
-        >
-            <div slot="body">
-                <PharmacyOrderForm 
-                    :isEdit="isPharmacyOrderEdit" 
-                    :existingPharmacyOrder="pharmacyOrder" 
-                    :pharmacyId="pharmacyId" 
-                    pharmacyAdminId="08d8f514-5921-423d-852c-694311688aa2"
-                />
-            </div>
-        </Modal>
     </div>
 </template>
 
@@ -75,13 +52,11 @@ import PharmacyInfo from '../components/Shared/PharmacyInfo'
 import toastr from 'toastr'
 import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 import MedicineListTable from '../components/Tables/MedicineListTable.vue';
+import PharmacyOrdersTable from '../components/Tables/PharmacyOrdersTable.vue';
 import ButtonWithIcon from '../components/Form/ButtonWithIcon'
 import FollowPharmacyModal from '../components/Modals/FollowPharmacyModal'
 import UnfollowPharmacyModal from '../components/Modals/UnfollowPharmacyModal'
 import ModalOpener from '../components/Modal/ModalOpener'
-import Button from '../components/Form/Button.vue';
-import Modal from '../components/Modal/Modal.vue';
-import PharmacyOrderForm from '../components/Forms/PharmacyOrderForm.vue';
 
 import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
@@ -99,9 +74,7 @@ export default {
         FollowPharmacyModal,
         UnfollowPharmacyModal,
         ModalOpener,
-        Button, 
-        Modal, 
-        PharmacyOrderForm
+        PharmacyOrdersTable
     },
 
     data: () => {
@@ -111,6 +84,7 @@ export default {
             dermatologistSearchName: null,
             pharmacistSearchName: null,
             isPharmacyOrderEdit: false,
+            pharmacyOrderProcessedFilter: false,
             roles: Roles
         }
     },
@@ -120,16 +94,18 @@ export default {
             pharmacyResult: 'pharmacies/getResult',
             pharmacists: 'pharmacist/getPharmacists',
             pharmacistResult: 'pharmacist/getResult',
+            pharmacyOrdersResult: 'pharmacyOrders/getResult',
+
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
             dermatologistAppointments: 'appointments/getDermatologistAppointments',
             appointmentsResult: 'appointments/getResult',
             medicines: 'medicines/getMedicines',
+            pharmacyOrders: 'pharmacyOrders/getPharmacyOrders',
             pharmacyOrder: 'pharmacyOrders/getPharmacyOrder',
             followingResult: 'followings/getResult',
             isFollowing: 'followings/isFollowing',
         })
-
     },
     watch: {
         dermatologistResult({label, ok, message}) {
@@ -169,7 +145,14 @@ export default {
                 this.fetchDermatologistAppointments(this.pharmacyId);
             }
         },
-
+        pharmacyOrdersResult({ok, label}){
+            if(label === 'add' || label === 'update') {
+                ok && this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
+            }
+        },
+        pharmacyOrderProcessedFilter() {
+            this.filterPharmacyOrders({pharmacyId: this.pharmacyId, isProcessed: this.pharmacyOrderProcessedFilter});
+        },
         followingResult({label, ok, message}) {
             if(label !== 'follow' && label !== 'unfollow')
                  return;
@@ -193,8 +176,7 @@ export default {
             fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
             fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
-            // TEMP
-            fetchPharmacyOrderById: 'pharmacyOrders/fetchPharmacyOrderById',
+            filterPharmacyOrders: 'pharmacyOrders/filterPharmacyOrders',
             fetchPatientFollowings: 'followings/fetchPatientFollowings',
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
@@ -234,8 +216,7 @@ export default {
         this.fetchPharmacyDermatologists(this.pharmacyId);
         this.fetchDermatologistAppointments(this.pharmacyId);
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
-        // TEMP
-        this.fetchPharmacyOrderById({pharmacyOrderId: '08d904d2-dbf2-4b37-8e06-24bc12ed0474', pharmacyId: this.pharmacyId});
+        this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
 
         this.user = {
             id: getAccountIdFromToken(),
