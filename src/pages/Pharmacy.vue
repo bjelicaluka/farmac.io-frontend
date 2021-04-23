@@ -2,6 +2,25 @@
     <div class="content">
         <div class="container-fluid">
             <Card :title="pharmacy && pharmacy.name" :description="pharmacy && pharmacy.description">
+                
+
+                <div v-if="user && user.role === roles.Patient"> 
+                    <div v-if="!isFollowing">
+                        <FollowPharmacyModal modalBoxId="confirmFollowModal" :pharmacyName="pharmacy && pharmacy.name" @yes="handleFollow" />
+
+                        <ModalOpener modalBoxId="confirmFollowModal">
+                            <ButtonWithIcon type="button" className="btn btn-round btn-primary" iconName="bookmark_add">Follow</ButtonWithIcon>
+                        </ModalOpener>
+                    </div>
+                    <div v-else>
+                        <UnfollowPharmacyModal modalBoxId="confirmUnfollowModal" :pharmacyName="pharmacy && pharmacy.name" @yes="handleUnfollow" />
+
+                        <ModalOpener modalBoxId="confirmUnfollowModal">
+                            <ButtonWithIcon type="button" className="btn btn-round btn-primary" iconName="bookmark_remove">Unfollow</ButtonWithIcon>
+                        </ModalOpener>
+                    </div>
+                </div>
+
                 <PharmacyInfo :pharmacy="pharmacy" />
             </Card>
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacist employees.`">
@@ -56,20 +75,43 @@ import PharmacyInfo from '../components/Shared/PharmacyInfo'
 import toastr from 'toastr'
 import AppointmentsTable from '../components/Tables/AppointmentsTable.vue';
 import MedicineListTable from '../components/Tables/MedicineListTable.vue';
-import ModalOpener from '../components/Modal/ModalOpener.vue';
+import ButtonWithIcon from '../components/Form/ButtonWithIcon'
+import FollowPharmacyModal from '../components/Modals/FollowPharmacyModal'
+import UnfollowPharmacyModal from '../components/Modals/UnfollowPharmacyModal'
+import ModalOpener from '../components/Modal/ModalOpener'
 import Button from '../components/Form/Button.vue';
 import Modal from '../components/Modal/Modal.vue';
 import PharmacyOrderForm from '../components/Forms/PharmacyOrderForm.vue';
 
+import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
+import { Roles } from '../constants'
+
+
 export default {
-  components: { PharmacistsTable, Card, DermatologistsTable, PharmacyInfo, AppointmentsTable, MedicineListTable, ModalOpener, Button, Modal, PharmacyOrderForm },
+     components: {
+        PharmacistsTable,
+        Card,
+        DermatologistsTable,
+        PharmacyInfo,
+        AppointmentsTable,
+        MedicineListTable,
+        ButtonWithIcon,
+        FollowPharmacyModal,
+        UnfollowPharmacyModal,
+        ModalOpener,
+        Button, 
+        Modal, 
+        PharmacyOrderForm
+    },
 
     data: () => {
         return {
             pharmacyId: null,
+            user: null,
             dermatologistSearchName: null,
             pharmacistSearchName: null,
-            isPharmacyOrderEdit: false
+            isPharmacyOrderEdit: false,
+            roles: Roles
         }
     },
     computed: {
@@ -83,8 +125,11 @@ export default {
             dermatologistAppointments: 'appointments/getDermatologistAppointments',
             appointmentsResult: 'appointments/getResult',
             medicines: 'medicines/getMedicines',
-            pharmacyOrder: 'pharmacyOrders/getPharmacyOrder'
-        }),
+            pharmacyOrder: 'pharmacyOrders/getPharmacyOrder',
+            followingResult: 'followings/getResult',
+            isFollowing: 'followings/isFollowing',
+        })
+
     },
     watch: {
         dermatologistResult({label, ok, message}) {
@@ -123,7 +168,20 @@ export default {
             if(label==='reserveAppointment' && ok) {
                 this.fetchDermatologistAppointments(this.pharmacyId);
             }
+        },
+
+        followingResult({label, ok, message}) {
+            if(label !== 'follow' && label !== 'unfollow')
+                 return;
+            
+            if(ok) {
+                this.fetchPatientFollowings(this.user.id);
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
         }
+
     },
     methods: {
         ...mapActions({
@@ -136,7 +194,11 @@ export default {
             fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
             // TEMP
-            fetchPharmacyOrderById: 'pharmacyOrders/fetchPharmacyOrderById'
+            fetchPharmacyOrderById: 'pharmacyOrders/fetchPharmacyOrderById',
+            fetchPatientFollowings: 'followings/fetchPatientFollowings',
+            followPharmacy: 'followings/followPharmacy',
+            unfollowPharmacy: 'followings/unfollowPharmacy',
+            setCurrentPharmacy: 'followings/setCurrentPharmacy'
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -149,6 +211,20 @@ export default {
         handleSearchPharmacyMedicines(name) {
             this.pharmacyMedicineSearchName = name;
             this.searchPharmacyMedicinesInStock({pharmacyId: this.pharmacyId, name});
+        },
+
+        handleFollow() {
+            this.followPharmacy({
+                patientId: this.user.id,
+                pharmacyId: this.pharmacyId
+            })
+        },
+
+        handleUnfollow() {
+            this.unfollowPharmacy({
+                patientId: this.user.id,
+                pharmacyId: this.pharmacyId
+            })
         }
     },
     mounted() {
@@ -160,6 +236,16 @@ export default {
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
         // TEMP
         this.fetchPharmacyOrderById({pharmacyOrderId: '08d904d2-dbf2-4b37-8e06-24bc12ed0474', pharmacyId: this.pharmacyId});
+
+        this.user = {
+            id: getAccountIdFromToken(),
+            role: getRoleFromToken()
+        }
+
+        if(this.user.role === Roles.Patient) {
+            this.fetchPatientFollowings(this.user.id);
+            this.setCurrentPharmacy(this.pharmacyId);
+        }
     }
 }
 </script>
