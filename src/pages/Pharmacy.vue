@@ -106,7 +106,6 @@ export default {
             followingResult: 'followings/getResult',
             isFollowing: 'followings/isFollowing',
         })
-
     },
     watch: {
         dermatologistResult({label, ok, message}) {
@@ -154,7 +153,6 @@ export default {
         pharmacyOrderProcessedFilter() {
             this.filterPharmacyOrders({pharmacyId: this.pharmacyId, isProcessed: this.pharmacyOrderProcessedFilter});
         },
-
         followingResult({label, ok, message}) {
             if(label !== 'follow' && label !== 'unfollow')
                  return;

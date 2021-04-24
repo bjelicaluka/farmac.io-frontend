@@ -70,7 +70,6 @@
                 />
             </div>
         </Modal>
-
     </div>
 </template>
 
@@ -89,6 +88,7 @@ import Modal from '../Modal/Modal.vue'
 import {Roles} from '../../constants'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
+
 import { getRoleFromToken } from '../../utils/token'
 import moment from 'moment'
 
