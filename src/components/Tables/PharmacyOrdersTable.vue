@@ -13,12 +13,16 @@
                 :options="[{label: 'Processed', value: true}, {label: 'Waiting', value: false}]"
             />
         <Table>
-            <TableHead :columnNames="['Medicines', 'Is Processed', '']"></TableHead>
+            <TableHead :columnNames="['Medicines', 'Deadline', 'Is Processed', '']"></TableHead>
             <TableBody>
                 <TableRow 
                     v-for="(pharmacyOrder, i) in pharmacyOrders" 
                     :key="i" 
-                    :values="[formatOrderedMedicines(pharmacyOrder), pharmacyOrder.isProcessed ? 'Processed' : 'Waiting to be processed']"
+                    :values="[
+                        formatOrderedMedicines(pharmacyOrder),
+                        formatDateTime(pharmacyOrder.offersDeadline),
+                        pharmacyOrder.isProcessed ? 'Processed' : 'Waiting to be processed'
+                    ]"
                 >
                     <div class="pull-right text-gray">
                         <DropDownMenu>
@@ -28,6 +32,14 @@
                             >
                                 <DropDownItem @click="selectedPharmacyOrder = pharmacyOrder">Edit</DropDownItem>
                             </ModalOpener>
+
+                            <ModalOpener
+                                v-if="role === Roles.Supplier"
+                                modalBoxId="supplierOfferModal"
+                            >
+                                <DropDownItem @click="selectedPharmacyOrder = pharmacyOrder">Add offer</DropDownItem>
+                            </ModalOpener>
+
                         </DropDownMenu>
                     </div>
                 </TableRow>
@@ -49,6 +61,15 @@
                 />
             </div>
         </Modal>
+
+        <Modal modalBoxId="supplierOfferModal" title="Update Offer">
+            <div slot="body">
+                <SupplierOfferForm
+                    :isEdit=false
+                    :existingPharmacyOrder="selectedPharmacyOrder"
+                />
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -59,6 +80,7 @@ import TableHead from '../Table/TableHead.vue'
 import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
 import PharmacyOrderForm from '../Forms/PharmacyOrderForm'
+import SupplierOfferForm from '../Forms/SupplierOfferForm'
 import SelectOptionInput from '../Form/SelectOptionInput'
 import ModalOpener from '../Modal/ModalOpener.vue'
 import Button from '../Form/Button.vue'
@@ -66,6 +88,9 @@ import Modal from '../Modal/Modal.vue'
 import {Roles} from '../../constants'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
+
+import { getRoleFromToken } from '../../utils/token'
+import moment from 'moment'
 
 export default {
     props: {
@@ -75,7 +100,7 @@ export default {
     data: () => {
         return {
             Roles,
-            role: Roles.PharmacyAdmin,
+            role: null,
             selectedPharmacyOrder: null,
             pharmacyOrderStatusFilter: null
         }
@@ -91,6 +116,7 @@ export default {
         DropDownItem,
         DropDownMenu,
         PharmacyOrderForm,
+        SupplierOfferForm,
         SelectOptionInput
     },
     watch: {
@@ -99,11 +125,19 @@ export default {
         }
     },
     methods: {
+        formatDateTime(date) {
+            return moment(date).format("DD-MMM-YYYY HH:mm");
+        },
+
         formatOrderedMedicines(pharmacyOrder) {
             const maxLength = 100;
             const string = pharmacyOrder.orderedMedicines.map(({medicine, quantity}) => `${medicine.name}: ${quantity}`).join(', ');
             return string.length >= maxLength ? string.substring(0, maxLength - 3) + '...' : string;
         }
+    },
+
+    mounted() {
+        this.role = getRoleFromToken() ?? Roles.PharmacyAdmin;
     }
 }
 </script>

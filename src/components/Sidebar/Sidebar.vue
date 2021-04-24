@@ -24,11 +24,13 @@
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
           <sidebar-item name="Shopping cart" icon="shopping_cart" to="/shoppingCart"></sidebar-item>
-          <sidebar-item name="PharmacyAdmins" icon="accessibility" to="/pharmacy-admins"></sidebar-item>
-          <sidebar-item name="SystemAdmins" icon="accessibility" to="/system-admins"></sidebar-item>
-          <sidebar-item name="Suppliers" icon="accessibility" to="/suppliers"></sidebar-item>
+          <sidebar-item name="PharmacyAdmins" icon="people" to="/pharmacy-admins"></sidebar-item>
+          <sidebar-item name="SystemAdmins" icon="people" to="/system-admins"></sidebar-item>
+          <sidebar-item name="Suppliers" icon="people" to="/suppliers"></sidebar-item>
           <sidebar-item name="Stock" icon="inventory_2" to="/suppliers/my-stock"></sidebar-item>
-          <sidebar-item name="Dermatologists" icon="accessibility" to="/dermatologists"></sidebar-item>          <sidebar-item name="Medicine reservations" icon="medical_services" to="/medicineReservations"></sidebar-item>
+          <sidebar-item name="Offers" icon="local_offer" to="/suppliers/my-offers"></sidebar-item>
+          <sidebar-item name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
+          <sidebar-item name="Medicine reservations" icon="medical_services" to="/medicineReservations"></sidebar-item>
           <sidebar-item name="Dermatologist appointments" icon="schedule" to="/dermatologist-appointments"></sidebar-item>
           <sidebar-item name="History visiting dermatologist" icon="history" to="/history-dermatologist-appointments"></sidebar-item>
         </ul>

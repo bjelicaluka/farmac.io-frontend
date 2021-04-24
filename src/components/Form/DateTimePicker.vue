@@ -6,6 +6,7 @@
         type="text"
         class="form-control datetimepicker"
         :id="id"
+        :disabled="disabled"
       />
     </div>
     <InputErrorMessage
@@ -55,6 +56,10 @@ export default {
       type: String,
       default: "Invalid input."
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
   },
   mounted() {
     $(`#${this.id}`).datetimepicker({
