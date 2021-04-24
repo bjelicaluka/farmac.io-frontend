@@ -14,7 +14,7 @@
                     <DateTimePicker
                         label="Delivery date"
                         v-model="offer.deliveryDeadline"
-                        :isValid="validateDeliveryDate(offer.deliveryDeadline)"
+                        :isValid="validateDeliveryDate()"
                         :showErrorMessage="showErrorMessage"
                         errorMessage="Delivery date must be provided and at least 1 hour from now."
                         type="datetime"
@@ -159,10 +159,10 @@ export default {
         }
     },
 
-    validateDeliveryDate(delivery) {
+    validateDeliveryDate() {
         const oneHourFromNow = moment().add(moment.duration(1, 'hours'));
 
-        return delivery > oneHourFromNow;
+        return this.offer.deliveryDeadline > oneHourFromNow;
     }
 
   }

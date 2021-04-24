@@ -85,11 +85,7 @@ export default {
         },
 
         formatStatus(status) {
-            const descriptiveStatuses = {
-                '0': 'Accepted',
-                '1': 'Refused',
-                '2': 'Waiting for answer'
-            }
+            const descriptiveStatuses = ['Accepted', 'Refused', 'Waiting for answer'];
 
             return descriptiveStatuses[status]
         }
