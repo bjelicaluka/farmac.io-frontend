@@ -24,6 +24,22 @@
                         </Button>
                     </FormRow>
                 </Form>
+                <FormRow class="justify-content-center align-items-center">
+                    <SelectOptionInput @input="searchPharmacies"
+                                label="Select type"
+                                :showLabel=false
+                                v-model="selectedSortCriteria"
+                                :options="selectOptions1"
+                                class="col-4"
+                    />
+                    <SelectOptionInput @input="searchPharmacies"
+                                label="Select type"
+                                :showLabel=false
+                                v-model="selectedIsAsc"
+                                :options="selectOptions2"
+                                class="col-4"
+                    />
+                </FormRow>
                 <PharmaciesTable :pharmacies='pharmacies'></PharmaciesTable>
             </Card>
         </div>
@@ -39,9 +55,33 @@ import NumberInput from '../components/Form/NumberInput'
 import Icon from '../components/Icon/Icon'
 import Card from '../components/Card/Card'
 import PharmaciesTable from '../components/Tables/PharmaciesTable'
+import SelectOptionInput from '../components/Form/SelectOptionInput'
 import {mapGetters, mapActions} from 'vuex'
 import moment from 'moment'
+import toastr from 'toastr'
 
+
+let sortCriteria = [
+            {
+                value: 1,
+                label: 'Price'
+            },
+            {
+                value: 2,
+                label: 'Grade'
+            }
+    ];
+
+let isAsc = [
+            {
+                value: 1,
+                label: 'Ascending'
+            },
+            {
+                value: 2,
+                label: 'Descending'
+            }
+    ];
 
 export default {
     components: {
@@ -52,7 +92,8 @@ export default {
         NumberInput,
         Icon,
         Card,
-        PharmaciesTable
+        PharmaciesTable,
+        SelectOptionInput
     },
     
     data: function(){
@@ -60,7 +101,11 @@ export default {
             selectedDate: '',
             showErrorMessage: false,
             duration: 0,
-            pharmacies: []
+            pharmacies: [],
+            selectOptions1: sortCriteria,
+            selectOptions2: isAsc,
+            selectedSortCriteria: '',
+            selectedIsAsc: null
         }
     },
 
@@ -75,13 +120,26 @@ export default {
             searchPharmaciesForAppointments: 'pharmacies/searchPharmaciesForAppointments'
         }),
         searchPharmacies(){
+            if(this.selectedDate === ''){
+                this.showErrorMessage = true;
+                return;
+            }
+            if(this.duration === 0){
+                toastr.info("The duration of the consultation must be greater than 0.");
+                return;
+            }
+            let sortCriteria = this.selectOptions1.filter(item => item.value == this.selectedSortCriteria)[0]
+            sortCriteria = this.selectedSortCriteria ? sortCriteria['label'].toLowerCase() : '';
+            let isAscending =  this.selectedIsAsc == 1 ? true : false
             this.searchPharmaciesForAppointments(
                 {
                     consultationDateTime: moment(this.selectedDate).format(),
-                    duration: this.duration
+                    duration: this.duration,
+                    isAsc: isAscending,
+                    sortCriteria: sortCriteria
                 }
             );
-        }
+        },
     },
 
     watch: {
