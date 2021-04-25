@@ -2,16 +2,17 @@
     <div>
         <ModalOpener
             modalBoxId="pharmacyOrderModal"
+            v-if="user.role === Roles.PharmacyAdmin"
         >
             <Button class="mt-4" @click="selectedPharmacyOrder = null">Create Pharmacy Order</Button>
         </ModalOpener>
 
-            <SelectOptionInput
-                class="pull-right"
-                label="All Orders"
-                v-model="pharmacyOrderStatusFilter"
-                :options="[{label: 'Processed', value: true}, {label: 'Waiting', value: false}]"
-            />
+        <SelectOptionInput
+            class="pull-right"
+            label="All Orders"
+            v-model="pharmacyOrderStatusFilter"
+            :options="[{label: 'Processed', value: true}, {label: 'Waiting', value: false}]"
+        />
         <Table>
             <TableHead :columnNames="['Medicines', 'Deadline', 'Is Processed', '']"></TableHead>
             <TableBody>
@@ -25,9 +26,8 @@
                     ]"
                 >
                     <div class="pull-right text-gray">
-                        <DropDownMenu>
+                        <DropDownMenu v-if="user.role === Roles.PharmacyAdmin">
                             <ModalOpener
-                                v-if="role === Roles.PharmacyAdmin"
                                 modalBoxId="pharmacyOrderModal"
                             >
                                 <DropDownItem @click="selectedPharmacyOrder = pharmacyOrder">Edit</DropDownItem>
@@ -47,7 +47,7 @@
         </Table>
 
         <Modal
-            v-if="role === Roles.PharmacyAdmin"
+            v-if="user.role === Roles.PharmacyAdmin"
             modalBoxId="pharmacyOrderModal"
             title="Pharmacy Medicines Order"
             sizeClass="modal-lg"
@@ -88,8 +88,8 @@ import Modal from '../Modal/Modal.vue'
 import {Roles} from '../../constants'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 
-import { getRoleFromToken } from '../../utils/token'
 import moment from 'moment'
 
 export default {
@@ -100,9 +100,16 @@ export default {
     data: () => {
         return {
             Roles,
+            user: {},
             role: null,
             selectedPharmacyOrder: null,
             pharmacyOrderStatusFilter: null
+        }
+    },
+    mounted() {
+        this.user = {
+            id: getAccountIdFromToken(),
+            role: getRoleFromToken()
         }
     },
     components: {
@@ -135,9 +142,5 @@ export default {
             return string.length >= maxLength ? string.substring(0, maxLength - 3) + '...' : string;
         }
     },
-
-    mounted() {
-        this.role = getRoleFromToken() ?? Roles.PharmacyAdmin;
-    }
 }
 </script>

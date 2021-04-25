@@ -5,7 +5,7 @@
                 <MedicalStaffSearch @search="handleSearch" />
             </Card>
             <Card title='Pharmacists' :description="`All pharmacists in the system.`">
-                <PharmacistsTable :searchField="false" @search="handleSearchPharmacists" :pharmacists="pharmacists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
+                <PharmacistsTable :searchField="false" :pharmacists="pharmacists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
             </Card>
         </div> 
     </div>

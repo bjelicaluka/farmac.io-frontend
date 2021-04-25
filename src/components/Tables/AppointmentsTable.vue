@@ -20,11 +20,19 @@
           >
             <div class="pull-right text-gray">
               <drop-down-menu>
-                <modal-opener :modalBoxId="'appointmentModal'">
+                <modal-opener 
+                  :modalBoxId="'appointmentModal'"
+                  v-if="user.role === Roles.PharmacyAdmin"
+                >
                   <drop-down-item @click="handleDeleteClick(a)">Delete</drop-down-item>
                 </modal-opener>
 
-                  <drop-down-item v-if="!a.isReserved" @click="handleMakeAppointmentClick(a)">Make appointment</drop-down-item>
+                  <drop-down-item
+                    v-if="!a.isReserved && user.role === Roles.Patient" 
+                    @click="handleMakeAppointmentClick(a)"
+                  >
+                    Make appointment
+                  </drop-down-item>
               </drop-down-menu>
             </div>
           </TableRow>
@@ -57,6 +65,8 @@ import FormRow from '../Form/FormRow.vue'
 import {mapGetters, mapActions} from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import { Roles } from '../../constants'
 
 let selectOptions = [
   {
@@ -95,7 +105,15 @@ export default {
     return {
       selectedAppointment: null,
       options: selectOptions,
+      user: {},
+      Roles,
       selectedValue: ''
+    }
+  },
+  mounted() {
+    this.user = {
+      id: getAccountIdFromToken(),
+      role: getRoleFromToken()
     }
   },
   computed: {

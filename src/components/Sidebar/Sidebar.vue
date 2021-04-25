@@ -2,7 +2,7 @@
   <div class="sidebar" data-color="purple" data-background-color="white">
       <sidebar-logo></sidebar-logo>
       <div class="sidebar-wrapper">
-        <ul class="nav" v-if="role===Roles.Pharmacist">
+        <ul class="nav" v-if="user.role === Roles.Pharmacist">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="My patients" icon="contacts" to="/patients_list"></sidebar-item>
           <sidebar-item name="Consultation report" icon="assignment" to="/report"></sidebar-item>
@@ -11,7 +11,7 @@
           <sidebar-item name="New appointment" icon="book_online" to="/new_appointment"></sidebar-item>
           <sidebar-item name="Issue medicine" icon="medication" to="/issue_medicine"></sidebar-item>
         </ul>
-        <ul class="nav" v-else-if="role===Roles.Dermatologist">
+        <ul class="nav" v-else-if="user.role === Roles.Dermatologist">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="My patients" icon="contacts" to="/patients_list"></sidebar-item>
           <sidebar-item name="Examination report" icon="assignment" to="/report"></sidebar-item>
@@ -29,7 +29,8 @@
           <sidebar-item name="Suppliers" icon="people" to="/suppliers"></sidebar-item>
           <sidebar-item name="Stock" icon="inventory_2" to="/suppliers/my-stock"></sidebar-item>
           <sidebar-item name="Offers" icon="local_offer" to="/suppliers/my-offers"></sidebar-item>
-          <sidebar-item name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
+          <sidebar-item v-if="!isUnauthorized()" name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
+          <sidebar-item v-if="!isUnauthorized()" name="Pharmacists" icon="people" to="/pharmacists"></sidebar-item>
           <sidebar-item name="Medicine reservations" icon="medical_services" to="/medicineReservations"></sidebar-item>
           <sidebar-item name="Dermatologist appointments" icon="schedule" to="/dermatologist-appointments"></sidebar-item>
           <sidebar-item name="History visiting dermatologist" icon="history" to="/history-dermatologist-appointments"></sidebar-item>
@@ -37,7 +38,7 @@
 
         <div>
           <br>Select for testing:
-          <select v-model="role">
+          <select v-model="user.role">
             <option value="None" selected="selected">Unauthorized</option>
             <option value="Patient">Patient</option>
             <option value="Dermatologist">Dermatologist</option>
@@ -53,17 +54,29 @@
 import SidebarItem from './SidebarItem.vue'
 import SidebarLogo from './SidebarLogo.vue'
 import {Roles} from '../../constants.js'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 
 export default {
   data: () => {
     return {
       Roles,
-      role: ''
+      user: {}
+    }
+  },
+  mounted() {
+    this.user = {
+      id: getAccountIdFromToken(),
+      role: getRoleFromToken()
     }
   },
   components: {
     SidebarLogo,
     SidebarItem
+  },
+  methods: {
+    isUnauthorized() {
+      return Object.keys(this.Roles).findIndex(role => this.Roles[role] === this.user.role) === -1;
+    }
   }
 }
 </script>

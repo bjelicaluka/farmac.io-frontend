@@ -1,6 +1,9 @@
 <template>
   <div>
-    <ModalOpener modalBoxId="pharmacistModal">
+    <ModalOpener
+      modalBoxId="pharmacistModal"
+      v-if="user.role === Roles.PharmacyAdmin"
+    >
       <Button @click="handleRegisterClick" class="pull-right">Register Pharmacist</Button>
     </ModalOpener>
     
@@ -16,7 +19,7 @@
           :values="[p.username, `${p.user.firstName} ${p.user.lastName}`, p.email, p.user.pid, p.user.phoneNumber, formatAddress(p.user.address)]"
         >
           <div class="pull-right text-gray">
-            <drop-down-menu>
+            <drop-down-menu v-if="user.role === Roles.PharmacyAdmin && adminPharmacyId === p.user.pharmacyId">
               <modal-opener :modalBoxId="'pharmacistModal'">
                 <drop-down-item @click="handleEditClick(p)">Edit</drop-down-item>
               </modal-opener>
@@ -33,6 +36,7 @@
       modalBoxId="pharmacistModal"
       title="Pharmacist"
       sizeClass="modal-lg"
+      v-if="user.role === Roles.PharmacyAdmin"
     >
       <div slot="body">
         <PharmacistForm
@@ -46,6 +50,7 @@
     <Modal
       modalBoxId="deletePharmacistModal"
       title="Delete Pharmacist"
+      v-if="user.role === Roles.PharmacyAdmin"
     >
       <div slot="body">
         <p v-if="selectedPharmacist">Are you sure that you want to delete pharmacist {{selectedPharmacist.user.firstName}} {{selectedPharmacist.user.lastName}}?</p>
@@ -73,6 +78,8 @@ import {mapActions, mapGetters} from 'vuex'
 import Button from '../Form/Button.vue'
 import toastr from 'toastr'
 import Search from '../Search/Search.vue'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import { Roles } from '../../constants'
 
 export default {
   components: {
@@ -99,8 +106,16 @@ export default {
   data() {
     return {
       selectedPharmacist: null,
+      user: {},
+      Roles,
       isEdit: false,
       searchName: ''
+    }
+  },
+  mounted() {
+    this.user = {
+      id: getAccountIdFromToken(),
+      role: getRoleFromToken()
     }
   },
   computed: {
