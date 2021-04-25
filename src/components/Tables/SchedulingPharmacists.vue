@@ -1,7 +1,7 @@
 <template>
     <div>
         <Table>
-            <TableHead :columnNames="['Name', 'Last name', 'Average grade', '']"></TableHead>
+            <TableHead :columnNames="['First name', 'Last name', 'Average grade', '']"></TableHead>
                 <TableBody>
                     <TableRow
                         v-for="(pharmacist, index) in pharmacists"

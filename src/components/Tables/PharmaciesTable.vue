@@ -6,7 +6,7 @@
           <TableRow 
             v-for="pharmacy in pharmacies" 
             :key="pharmacy.id" 
-            :values="[pharmacy.name, pharmacy.averageGrade, `${pharmacy.address.streetName} ${pharmacy.address.streetNumber}, ${pharmacy.address.city}`, pharmacy.consultationPrice]">
+            :values="[pharmacy.name, pharmacy.averageGrade, formAddress(pharmacy), pharmacy.consultationPrice]">
             <ModalOpener id="pharmacists" modalBoxId="pharmacistsModal">
               <RoundButton :title="'See pharmacists'" :iconName="'people'" @click="selectPharmacy(pharmacy)"></RoundButton>
             </ModalOpener>
@@ -17,7 +17,7 @@
         <div slot="body">
             <Card title="You can book an appointment with one of these pharmacists:">
               <SelectOptionInput class="justify-content-center align-items-center" @input="displayPharmacists"
-                          label="Select type"
+                          label="Sort by"
                           :showLabel=false
                           v-model="selectedSortCriteria"
                           :options="selectOptions"
@@ -46,15 +46,15 @@ import { getUserIdFromToken } from '../../utils/token'
 import toastr from 'toastr'
 
 let sortCriteria = [
-            {
-                value: 'grade-asc',
-                label: 'Average grade - Ascending'
-            },
-            {
-                value: 'grade-desc',
-                label: 'Average grade - Descending '
-            }
-    ];
+  {
+      value: 'grade-asc',
+      label: 'Average grade - Ascending'
+  },
+  {
+      value: 'grade-desc',
+      label: 'Average grade - Descending '
+  }
+];
 
 
 export default {
@@ -71,8 +71,8 @@ export default {
     SelectOptionInput
   },
   props: ['pharmacies', 'dateTime', 'duration', 'sortCriteria', 'isAsc'],
-  data: function(){
-    return{
+  data: function() {
+    return {
       pharmacists: [],
       selectOptions: sortCriteria,
       selectedSortCriteria: '',
@@ -89,7 +89,7 @@ export default {
   methods: {
     ...mapActions({
           fetchPharmacists: 'pharmacist/fetchFreePharmacist',
-          addAppointment: 'appointments/addPharmacistAppointment'
+          addAppointment: 'appointments/addPharmacistAppointmentAsUser'
     }),
     selectPharmacy(pharmacy){
       this.selectedPharmacyId = pharmacy.id;
@@ -110,15 +110,17 @@ export default {
     },
     makeAppointmentWithPharmacist(pharmacistId){
       let requestObject = {
-        dateTime: this.dateTime,
+        dateTime: moment(this.dateTime).format(),
         duration: this.duration,
         price: this.selectedPharmacyPrice,
         pharmacyId: this.selectedPharmacyId,
         medicalStaffId: pharmacistId,
         patientId: getUserIdFromToken()
       };
-      console.log(requestObject);
       this.addAppointment(requestObject);
+    },
+    formAddress(pharmacy){
+      return `${pharmacy.address.streetName} ${pharmacy.address.streetNumber}, ${pharmacy.address.city}`;
     }
   },
   watch: {
@@ -126,12 +128,12 @@ export default {
       this.pharmacists = pharmacists;
     },
 
-    getResult({label, ok, message}){
-      if(label == 'addPharmacist'){
-        if(ok){
+    getResult({label, ok, message}) {
+      if(label === 'addPharmacist') {
+        if(ok) {
           toastr.success(message);
         }
-        else{
+        else {
           toastr.error(message);
         }
       }

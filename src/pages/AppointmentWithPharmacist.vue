@@ -29,14 +29,14 @@
                                 label="Select type"
                                 :showLabel=false
                                 v-model="selectedSortCriteria"
-                                :options="selectOptions1"
+                                :options="sortBy"
                                 class="col-4"
                     />
                     <SelectOptionInput @input="searchPharmacies"
                                 label="Select type"
                                 :showLabel=false
                                 v-model="selectedIsAsc"
-                                :options="selectOptions2"
+                                :options="sortOrder"
                                 class="col-4"
                     />
                 </FormRow>
@@ -102,8 +102,8 @@ export default {
             showErrorMessage: false,
             duration: 0,
             pharmacies: [],
-            selectOptions1: sortCriteria,
-            selectOptions2: isAsc,
+            sortBy: sortCriteria,
+            sortOrder: isAsc,
             selectedSortCriteria: '',
             selectedIsAsc: null
         }
