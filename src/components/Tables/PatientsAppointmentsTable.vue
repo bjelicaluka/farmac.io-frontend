@@ -34,7 +34,7 @@ export default {
     TableHead,
     RoundButton
   },
-  props: ['appointments', 'isCancelEnabled'],
+  props: ['appointments', 'isCancelEnabled', 'cancelDermatologistAppointment'],
   computed: {
     ...mapGetters({
         getResult: 'appointments/getResult'
@@ -42,7 +42,8 @@ export default {
   },
   methods: {
     ...mapActions({
-        cancelAppointment : 'appointments/cancelAppointment' 
+        cancelAppointmentWithDermatologist : 'appointments/cancelAppointment', 
+        cancelAppointmentWithPharmacist: 'appointments/cancelAppointmentWithPharmacist'
     }),
     formatDate(d) {
       return moment(d).format('ll');
@@ -54,7 +55,12 @@ export default {
       return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm");
     },
     handleCancelAppointment(appointmentId){
-      this.cancelAppointment(appointmentId);
+      if(this.cancelDermatologistAppointment){
+        this.cancelAppointmentWithDermatologist(appointmentId);
+      }
+      else{
+        this.cancelAppointmentWithPharmacist(appointmentId);
+      }
     }
   },
   watch: {
