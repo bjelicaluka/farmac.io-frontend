@@ -5,7 +5,7 @@
         <input 
           :type="type" 
           class="form-control"
-          v-bind:value="value + ''"
+          v-bind:value="!!value ? value + '' : value"
           v-on:input="$emit('input', $event.target.value)"
           :disabled="disabled"
         >

@@ -49,6 +49,15 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    fetchFreePharmacist: (context, {consultationDateTime, duration, sortCritera, isAsc, pharmacyId}) =>{
+        axios.get(`/pharmacies/available/${pharmacyId}/pharmacists`, {params: {consultationDateTime, duration, sortCritera, isAsc}})
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     searchPharmacistsByName: (context, name) => {
         axios.get(`/pharmacists/search?name=${name}`)
         .then(resp => {

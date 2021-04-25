@@ -1,10 +1,14 @@
 <template>
   <div>
     <div class="row">
-      <ModalOpener class="ml-auto mr-1 mb-2" modalBoxId="pharmacyModal">
+      <ModalOpener 
+        class="ml-auto mr-1 mb-2" 
+        modalBoxId="pharmacyModal"
+        v-if="user.role === Roles.PharmacyAdmin"
+      >
         <Button>Edit Pharmacy General Info</Button>
       </ModalOpener>
-      <div class="mr-3 mb-2">
+      <div class="mr-3 mb-2" v-if="user.role === Roles.PharmacyAdmin">
         <Button @click="changeRoutePriceList" class="pull-right">Edit prices</Button>
       </div>
     </div>
@@ -22,6 +26,7 @@
     <Modal
       modalBoxId="pharmacyModal"
       title="Edit Pharmacy General Info"
+      v-if="user.role === Roles.PharmacyAdmin"
     >
       <div slot="body">
         <PharmacyForm :isEdit="true" :existingPharmacy="pharmacy" />
@@ -31,6 +36,8 @@
 </template>
 
 <script>
+import { Roles } from '../../constants'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 import Button from '../Form/Button.vue'
 import PharmacyForm from '../Forms/PharmacyForm.vue'
 import Map from '../Map/Map.vue'
@@ -43,6 +50,18 @@ export default {
   props: {
     pharmacy: {
       type: Object,
+    }
+  },
+  data: () => {
+    return {
+      user: {},
+      Roles
+    }
+  },
+  mounted() {
+    this.user = {
+      id: getAccountIdFromToken(),
+      role: getRoleFromToken()
     }
   },
   methods: {

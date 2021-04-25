@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ModalOpener modalBoxId="dermatologistModal">
+    <ModalOpener modalBoxId="dermatologistModal" v-if="user.role === Roles.PharmacyAdmin">
       <Button @click="handleRegisterClick" class="pull-right">Register dermatologist</Button>
     </ModalOpener>
 
@@ -15,30 +15,36 @@
           :key="d.id" 
           :values="getTableRow(d)"
         >
-          <div class="pull-right text-gray">
+          <div class="pull-right text-gray" v-if="user.role === Roles.PharmacyAdmin || user.role === Roles.SystemAdmin">
             <drop-down-menu>
               <modal-opener
-                v-if="role === Roles.PharmacyAdmin && !dermatologistWorksForPharmacy(d)"
+                v-if="user.role === Roles.PharmacyAdmin && !dermatologistWorksForPharmacy(d)"
                 :modalBoxId="'addDermatologistToPharmacyModal'"
               >
                 <drop-down-item @click="handleAddToPharmacyClick(d.dermatologistAccount)">Add to Pharmacy</drop-down-item>
               </modal-opener>
               <modal-opener
-                v-if="role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
+                v-if="user.role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
                 :modalBoxId="'removeDermatologistFromPharmacyModal'"
               >
                 <drop-down-item @click="handleRemoveFromPharmacyClick(d.dermatologistAccount)">Remove from Pharmacy</drop-down-item>
               </modal-opener>
               <modal-opener
-                v-if="role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
+                v-if="user.role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
                 :modalBoxId="'defineDermatologistAppointmentModal'"
               >
                 <drop-down-item @click="handleDefineAppointmentClick(d.dermatologistAccount)">Define Appointment</drop-down-item>
               </modal-opener>
-              <modal-opener :modalBoxId="'dermatologistModal'">
+              <modal-opener
+                :modalBoxId="'dermatologistModal'"
+                v-if="user.role === Roles.SystemAdmin"
+              >
                 <drop-down-item @click="handleEditClick(d.dermatologistAccount)">Edit</drop-down-item>
               </modal-opener>
-              <modal-opener :modalBoxId="'deleteDermatologistModal'">
+              <modal-opener
+                :modalBoxId="'deleteDermatologistModal'"
+                v-if="user.role === Roles.SystemAdmin"
+              >
                 <drop-down-item @click="handleDeleteClick(d.dermatologistAccount)">Delete</drop-down-item>
               </modal-opener>
             </drop-down-menu>
@@ -62,7 +68,7 @@
       </Modal>
     <Modal
 
-      v-if="role === Roles.PharmacyAdmin"
+      v-if="user.role === Roles.PharmacyAdmin"
       modalBoxId="addDermatologistToPharmacyModal"
       title="Add Dermatologist To Pharmacy"
     >
@@ -72,7 +78,7 @@
     </Modal>
 
     <Modal
-      v-if="role === Roles.PharmacyAdmin"
+      v-if="user.role === Roles.PharmacyAdmin"
       modalBoxId="defineDermatologistAppointmentModal"
       title="Define Dermatologist Appointment"
     >
@@ -82,7 +88,7 @@
     </Modal>
 
     <Modal
-      v-if="role === Roles.PharmacyAdmin"
+      v-if="user.role === Roles.PharmacyAdmin"
       modalBoxId="removeDermatologistFromPharmacyModal"
       title="Remove Dermatologist From Pharmacy"
     >
@@ -128,6 +134,7 @@ import Button from '../Form/Button'
 import {Roles} from '../../constants';
 import DefineAppointmentForm from '../Forms/DefineAppointmentForm';
 import toastr from 'toastr'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 
 export default {
   components: {
@@ -156,10 +163,17 @@ export default {
   data() {
     return {
       Roles,
-      role: 'PharmacyAdmin',
       selectedDermatologist: null,
       isEdit: false,
+      user: {},
       searchName: ''
+    }
+  },
+
+  mounted() {
+    this.user = {
+      id: getAccountIdFromToken(),
+      role: getRoleFromToken()
     }
   },
 

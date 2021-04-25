@@ -1,6 +1,9 @@
 <template>
     <div>
-        <ModalOpener modalBoxId="addMedicineToPharmacyModal">
+        <ModalOpener
+            modalBoxId="addMedicineToPharmacyModal"
+            v-if="user.role === Roles.PharmacyAdmin"
+        >
             <Button class="pull-right">Add Medicine</Button>
         </ModalOpener>
 
@@ -17,9 +20,9 @@
                         pharmacyMedicine.quantity, pharmacyMedicine.medicine && pharmacyMedicine.medicine.averageGrade]"
                 >
                     <div class="pull-right text-gray">
-                        <DropDownMenu>
+                        <DropDownMenu v-if="user.role === Roles.PharmacyAdmin">
                             <ModalOpener
-                                v-if="role === Roles.PharmacyAdmin"
+                                v-if="user.role === Roles.PharmacyAdmin"
                                 :modalBoxId="'removeMedicineFromPharmacyModal'"
                             >
                                 <DropDownItem @click="selectedPharmacyMedicine = pharmacyMedicine">Remove from Pharmacy</DropDownItem>
@@ -31,7 +34,7 @@
         </Table>
 
         <Modal
-            v-if="role === Roles.PharmacyAdmin"
+            v-if="user.role === Roles.PharmacyAdmin"
             modalBoxId="addMedicineToPharmacyModal"
             title="Add Medicine To Pharmacy"
         >
@@ -41,6 +44,7 @@
         </Modal>
 
         <Modal
+            v-if="user.role === Roles.PharmacyAdmin"
             modalBoxId="removeMedicineFromPharmacyModal"
             title="Remove Medicine From Pharmacy"
         >
@@ -72,6 +76,7 @@ import OptionModalButtons from '../Modal/OptionModalButtons.vue'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import Search from '../Search/Search.vue'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 
 export default {
     props: {
@@ -84,8 +89,14 @@ export default {
     data: () => {
         return {
             Roles,
-            role: Roles.PharmacyAdmin,
+            user: {},
             selectedPharmacyMedicine: null
+        }
+    },
+    mounted() {
+        this.user = {
+            id: getAccountIdFromToken(),
+            role: getRoleFromToken()
         }
     },
     components: {
