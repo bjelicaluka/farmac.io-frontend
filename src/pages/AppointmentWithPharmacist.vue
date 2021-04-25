@@ -40,7 +40,7 @@
                                 class="col-4"
                     />
                 </FormRow>
-                <PharmaciesTable :pharmacies='pharmacies'></PharmaciesTable>
+                <PharmaciesTable :pharmacies='pharmacies' :dateTime="selectedDate" :duration="duration" :isAsc="selectedIsAsc" :sortCriteria="selectedSortCriteria"></PharmaciesTable>
             </Card>
         </div>
     </div>
@@ -144,6 +144,7 @@ export default {
 
     watch: {
         getPharmacies(pharmacies){
+            console.log(pharmacies.length);
             this.pharmacies = pharmacies;
         }
     }
