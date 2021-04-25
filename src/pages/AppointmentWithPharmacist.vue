@@ -26,14 +26,14 @@
                 </Form>
                 <FormRow class="justify-content-center align-items-center">
                     <SelectOptionInput @input="searchPharmacies"
-                                label="Select type"
+                                label="Sort criteria"
                                 :showLabel=false
                                 v-model="selectedSortCriteria"
                                 :options="sortBy"
                                 class="col-4"
                     />
                     <SelectOptionInput @input="searchPharmacies"
-                                label="Select type"
+                                label="Sort order"
                                 :showLabel=false
                                 v-model="selectedIsAsc"
                                 :options="sortOrder"
