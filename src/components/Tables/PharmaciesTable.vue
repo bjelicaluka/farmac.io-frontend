@@ -8,7 +8,7 @@
             :key="pharmacy.id" 
             :values="[pharmacy.name, pharmacy.averageGrade, `${pharmacy.address.streetName} ${pharmacy.address.streetNumber}, ${pharmacy.address.city}`, pharmacy.consultationPrice]">
             <ModalOpener id="pharmacists" modalBoxId="pharmacistsModal">
-              <RoundButton :title="'See pharmacists'" :iconName="'people'" @click="selectPharmacy(pharmacy.id)"></RoundButton>
+              <RoundButton :title="'See pharmacists'" :iconName="'people'" @click="selectPharmacy(pharmacy)"></RoundButton>
             </ModalOpener>
           </TableRow>
         </TableBody>
@@ -22,7 +22,7 @@
                           v-model="selectedSortCriteria"
                           :options="selectOptions"
               />
-              <SchedulingPharmacists :pharmacists="pharmacists"></SchedulingPharmacists>
+              <SchedulingPharmacists :pharmacists="pharmacists" @makeAppointment="makeAppointmentWithPharmacist"></SchedulingPharmacists>
             </Card>
         </div>
     </Modal>
@@ -42,6 +42,8 @@ import SchedulingPharmacists from '../Tables/SchedulingPharmacists'
 import SelectOptionInput from '../Form/SelectOptionInput'
 import {mapGetters, mapActions} from 'vuex'
 import moment from 'moment'
+import { getUserIdFromToken } from '../../utils/token'
+import toastr from 'toastr'
 
 let sortCriteria = [
             {
@@ -74,20 +76,24 @@ export default {
       pharmacists: [],
       selectOptions: sortCriteria,
       selectedSortCriteria: '',
-      selectedPharmacyId: null
+      selectedPharmacyId: null,
+      selectedPharmacyPrice: null
     }
   },
   computed: {
     ...mapGetters({
-        getPharmacists: 'pharmacist/getPharmacists'
+        getPharmacists: 'pharmacist/getPharmacists',
+        getResult: 'appointments/getResult'
     })
   },
   methods: {
     ...mapActions({
-          fetchPharmacists: 'pharmacist/fetchFreePharmacist'
+          fetchPharmacists: 'pharmacist/fetchFreePharmacist',
+          addAppointment: 'appointments/addPharmacistAppointment'
     }),
-    selectPharmacy(pharmacyId){
-      this.selectedPharmacyId = pharmacyId;
+    selectPharmacy(pharmacy){
+      this.selectedPharmacyId = pharmacy.id;
+      this.selectedPharmacyPrice = pharmacy.consultationPrice;
       this.displayPharmacists();
     },
     displayPharmacists(){
@@ -101,11 +107,34 @@ export default {
           pharmacyId: this.selectedPharmacyId
         }
         this.fetchPharmacists(paramsObject);
+    },
+    makeAppointmentWithPharmacist(pharmacistId){
+      let requestObject = {
+        dateTime: this.dateTime,
+        duration: this.duration,
+        price: this.selectedPharmacyPrice,
+        pharmacyId: this.selectedPharmacyId,
+        medicalStaffId: pharmacistId,
+        patientId: getUserIdFromToken()
+      };
+      console.log(requestObject);
+      this.addAppointment(requestObject);
     }
   },
   watch: {
     getPharmacists(pharmacists){
       this.pharmacists = pharmacists;
+    },
+
+    getResult({label, ok, message}){
+      if(label == 'addPharmacist'){
+        if(ok){
+          toastr.success(message);
+        }
+        else{
+          toastr.error(message);
+        }
+      }
     }
   }
 }

@@ -124,6 +124,11 @@ export default {
                 this.showErrorMessage = true;
                 return;
             }
+            let now = new Date();
+            if(this.selectedDate < now){
+                toastr.info("The date must not be in the past.");
+                return;
+            }
             if(this.duration === 0){
                 toastr.info("The duration of the consultation must be greater than 0.");
                 return;

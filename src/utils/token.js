@@ -60,6 +60,10 @@ export function getAccountIdFromToken() {
 	return decodeToken()?.name;
 }
 
+export function getUserIdFromToken(){
+	return decodeToken()?.UserId;
+}
+
 export function isUserLoggedIn() {
     return getAccountIdFromToken() && !hasTokenExpired();
 }

@@ -23,8 +23,6 @@ import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
 import RoundButton from '../Form/RoundButton'
 
-import moment from 'moment'
-
 export default {
     props: ['pharmacists'],
 
@@ -38,7 +36,7 @@ export default {
 
     methods: {
         handleBookAppointment(pharmacistId) {
- 
+            this.$emit("makeAppointment", pharmacistId);
         }
     }
 }
