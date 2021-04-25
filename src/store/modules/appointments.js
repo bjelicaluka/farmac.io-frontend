@@ -115,8 +115,8 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    createReport: (context, {appointmentId, notes, therapy}) => {
-        axios.post(`/appointments/${appointmentId}/report`, {"notes": notes, "therapyDurationInDays": therapy})
+    createReport: (context, {appointmentId, notes, therapy, prescribed}) => {
+        axios.post(`/appointments/${appointmentId}/report`, {"notes": notes, "therapyDurationInDays": therapy, "prescribedMedicines": prescribed})
         .then(resp => {
             context.commit('setResult', {label: 'createReport', ok: true, message: "Report successfully created."});
         })
