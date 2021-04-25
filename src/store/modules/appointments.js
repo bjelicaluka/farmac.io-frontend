@@ -70,6 +70,15 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    fetchPatientsFutureAppointmentsWithPharmacists: (context, patientId) => {
+        axios.get(`/appointments/future-with-pharmacists/${patientId}`)
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     cancelAppointment: (context, appointmentId) => {
         axios.delete(`/appointments/cancel-appointment/${appointmentId}`)
         .then(resp => {

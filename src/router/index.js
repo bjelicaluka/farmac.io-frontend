@@ -18,7 +18,9 @@ import FutureDermatologistAppointments from '../pages/FutureDermatologistAppoint
 import AppointmentsToReport from '../pages/AppointmentsToReport.vue'
 import Report from '../pages/Report.vue'
 import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatologist.vue'
+import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
+
 import { Roles } from '../constants'
 import store from '../store/index'
 import * as tokenUtils from '../utils/token'
@@ -215,6 +217,14 @@ const routes = [
     name: 'HistoryOfVisitingDermatologist',
     component: HistoryOfVisitingDermatologist,
     meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/pharmacists-appointments',
+    name: 'FuturePharmacistsAppointments',
+    component: FuturePharmacistsAppointments,
+      meta: {
       layout: 'AppLayoutMain'
     }
   },
