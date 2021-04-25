@@ -42,7 +42,7 @@ export default {
     },
     max: {
       type: Number,
-      default: 0
+      default: 999999999
     },
     isValid: {
       type: Boolean,
