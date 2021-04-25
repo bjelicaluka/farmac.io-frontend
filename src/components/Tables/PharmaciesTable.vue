@@ -8,7 +8,7 @@
             :key="pharmacy.id" 
             :values="[pharmacy.name, pharmacy.averageGrade, `${pharmacy.address.streetName} ${pharmacy.address.streetNumber}, ${pharmacy.address.city}`, pharmacy.consultationPrice]">
             <ModalOpener id="pharmacists" modalBoxId="pharmacistsModal">
-              <RoundButton :title="'See pharmacists'" :iconName="'people'" @click="displayPharmacists(pharmacy.id)"></RoundButton>
+              <RoundButton :title="'See pharmacists'" :iconName="'people'" @click="selectPharmacy(pharmacy.id)"></RoundButton>
             </ModalOpener>
           </TableRow>
         </TableBody>
@@ -16,6 +16,12 @@
     <Modal modalBoxId="pharmacistsModal" title="">
         <div slot="body">
             <Card title="You can book an appointment with one of these pharmacists:">
+              <SelectOptionInput class="justify-content-center align-items-center" @input="displayPharmacists"
+                          label="Select type"
+                          :showLabel=false
+                          v-model="selectedSortCriteria"
+                          :options="selectOptions"
+              />
               <SchedulingPharmacists :pharmacists="pharmacists"></SchedulingPharmacists>
             </Card>
         </div>
@@ -33,8 +39,21 @@ import Modal from '../Modal/Modal'
 import ModalOpener from '../Modal/ModalOpener'
 import Card from '../Card/Card'
 import SchedulingPharmacists from '../Tables/SchedulingPharmacists'
+import SelectOptionInput from '../Form/SelectOptionInput'
 import {mapGetters, mapActions} from 'vuex'
 import moment from 'moment'
+
+let sortCriteria = [
+            {
+                value: 'grade-asc',
+                label: 'Average grade - Ascending'
+            },
+            {
+                value: 'grade-desc',
+                label: 'Average grade - Descending '
+            }
+    ];
+
 
 export default {
   components: {
@@ -46,12 +65,16 @@ export default {
     Modal,
     ModalOpener,
     Card,
-    SchedulingPharmacists
+    SchedulingPharmacists,
+    SelectOptionInput
   },
   props: ['pharmacies', 'dateTime', 'duration', 'sortCriteria', 'isAsc'],
   data: function(){
     return{
-      pharmacists: []
+      pharmacists: [],
+      selectOptions: sortCriteria,
+      selectedSortCriteria: '',
+      selectedPharmacyId: null
     }
   },
   computed: {
@@ -63,13 +86,19 @@ export default {
     ...mapActions({
           fetchPharmacists: 'pharmacist/fetchFreePharmacist'
     }),
-    displayPharmacists(pharmacyId){
+    selectPharmacy(pharmacyId){
+      this.selectedPharmacyId = pharmacyId;
+      this.displayPharmacists();
+    },
+    displayPharmacists(){
+        let criteria = this.selectedSortCriteria === '' ? '' : this.selectedSortCriteria.split("-")[0]
+        const isAsc = this.selectedSortCriteria === '' ? false : this.selectedSortCriteria.split("-")[1] == 'asc';
         let paramsObject = {
           consultationDateTime: moment(this.dateTime).format(), 
           duration: this.duration,
-          sortCritera: this.sortCriteria, 
-          isAsc: this.isAsc, 
-          pharmacyId: pharmacyId
+          sortCritera: criteria, 
+          isAsc: isAsc, 
+          pharmacyId: this.selectedPharmacyId
         }
         this.fetchPharmacists(paramsObject);
     }
