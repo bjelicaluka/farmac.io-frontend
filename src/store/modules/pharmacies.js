@@ -123,6 +123,15 @@ const actions = {
             context.commit('setResult', { label: 'removeMedicineFromPharmacy', message: err.response.data.ErrorMessage, ok: false });
         })
     },
+    searchPharmaciesForAppointments: (context, paramsObject) => {
+        axios.get(`/pharmacies/available`, {params: paramsObject})
+        .then(resp => {
+            context.commit('setPharmacies', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', { label: 'fetch', ok: false })
+        })
+    }
 };
 
 const mutations = {
