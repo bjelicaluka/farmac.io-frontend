@@ -65,7 +65,7 @@ import FormRow from '../Form/FormRow.vue'
 import {mapGetters, mapActions} from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
-import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import { getAccountIdFromToken, getRoleFromToken, getUserIdFromToken } from '../../utils/token'
 import { Roles } from '../../constants'
 
 let selectOptions = [
@@ -154,7 +154,7 @@ export default {
     }
     ,
     handleMakeAppointmentClick(appointment) {
-      let appointmentRequest = { 'appointmentId' : appointment.id, "patientId" : '08d8f514-58cc-41e9-810e-0a83d243cd60', "pharmacyId" : appointment.pharmacyId};
+      let appointmentRequest = { 'appointmentId' : appointment.id, "patientId" : getUserIdFromToken(), "pharmacyId" : appointment.pharmacyId};
       this.reserveAppointment(appointmentRequest);
     },
     handleChangeSort(){

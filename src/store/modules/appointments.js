@@ -160,6 +160,15 @@ const actions = {
             context.commit('setResult', {label: 'addPharmacist', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    cancelAppointmentWithPharmacist: (context, appointmentId) => {
+        axios.delete(`/appointments/pharmacist/${appointmentId}`)
+        .then(res => {
+            context.commit('setResult', {label: 'cancel', message: 'You have successfully cancelled appointment.', ok: true})
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'cancel', message: err.response.data.ErrorMessage, ok: false})
+        });
+    }
 };
 
 const mutations = {
