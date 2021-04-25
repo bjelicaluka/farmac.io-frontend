@@ -55,7 +55,7 @@ export default {
       return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm");
     },
     handleCancelAppointment(appointmentId){
-      if(this.cancelDermatologistAppointment === true){
+      if(this.cancelDermatologistAppointment){
         this.cancelAppointmentWithDermatologist(appointmentId);
       }
       else{
