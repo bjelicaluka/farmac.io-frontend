@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 const state = {
     result: null
 };
@@ -28,7 +29,8 @@ const actions = {
     },
 
     tryToVerifyEmail: (context, token) => {
-        axios.put('/email-verification', {},
+        const axiosWithoutInterceptors = axios.create();
+        axiosWithoutInterceptors.put('/email-verification', {},
         {
             headers: {
                 'Authorization': `Bearer ${token}`
