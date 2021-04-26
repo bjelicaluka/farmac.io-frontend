@@ -1,6 +1,6 @@
 <template>
     <Form @submit="onSubmit($event)">
-        <FormGroup title="Order">
+        <FormGroup>
             <PharmacyOrderForm
                 :isEdit=true
                 :disabled=true

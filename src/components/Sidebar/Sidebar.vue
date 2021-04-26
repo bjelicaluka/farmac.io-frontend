@@ -19,16 +19,28 @@
           <sidebar-item name="Vacation request" icon="holiday_village" to="/vacation_request"></sidebar-item>
           <sidebar-item name="New appointment" icon="book_online" to="/new_appointment"></sidebar-item>
         </ul>
+        <ul class="nav" v-else-if="user.role === Roles.SystemAdmin">
+          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
+          <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
+          <sidebar-item name="PharmacyAdmins" icon="people" to="/pharmacy-admins"></sidebar-item>
+          <sidebar-item name="SystemAdmins" icon="people" to="/system-admins"></sidebar-item>
+          <sidebar-item name="Suppliers" icon="people" to="/suppliers"></sidebar-item>
+        </ul>
+
+        <ul class="nav" v-else-if="user.role === Roles.Supplier">
+          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
+          <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
+          <sidebar-item name="Stock" icon="inventory_2" to="/suppliers/my-stock"></sidebar-item>
+          <sidebar-item name="Offers" icon="local_offer" to="/suppliers/my-offers"></sidebar-item>
+        </ul>
+
         <ul class="nav" v-else>
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
           <sidebar-item name="Shopping cart" icon="shopping_cart" to="/shoppingCart"></sidebar-item>
-          <sidebar-item name="PharmacyAdmins" icon="people" to="/pharmacy-admins"></sidebar-item>
-          <sidebar-item name="SystemAdmins" icon="people" to="/system-admins"></sidebar-item>
-          <sidebar-item name="Suppliers" icon="people" to="/suppliers"></sidebar-item>
-          <sidebar-item name="Stock" icon="inventory_2" to="/suppliers/my-stock"></sidebar-item>
-          <sidebar-item name="Offers" icon="local_offer" to="/suppliers/my-offers"></sidebar-item>
           <sidebar-item v-if="!isUnauthorized()" name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
           <sidebar-item v-if="!isUnauthorized()" name="Pharmacists" icon="people" to="/pharmacists"></sidebar-item>
           <sidebar-item name="Medicine reservations" icon="medical_services" to="/medicineReservations"></sidebar-item>

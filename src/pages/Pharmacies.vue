@@ -1,7 +1,9 @@
 <template>
     <div class="content">
         <PharmacySearch />
+
         <Modal
+            v-if="role == roles.SystemAdmin"
             modalBoxId="deletePharmacyModal"
             title="Confirmation"
         >
@@ -25,6 +27,7 @@
             </div>
 
             <Modal
+                v-if="role == roles.SystemAdmin"
                 modalBoxId="pharmacyModal"
                 title="Create Pharmacy"
             >
@@ -33,7 +36,7 @@
                 </div>
             </Modal>
 
-            <ModalOpener modalBoxId="pharmacyModal">
+            <ModalOpener v-if="role == roles.SystemAdmin" modalBoxId="pharmacyModal">
                 <Button class="pull-right">Create Pharmacy</Button>
             </ModalOpener>
         </div>
@@ -52,6 +55,9 @@ import PharmacySearch from '../components/Searchs/PharmacySearch'
 import { mapGetters, mapActions } from 'vuex'
 import toastr from 'toastr'
 
+import { Roles } from '../constants'
+import { getRoleFromToken } from '../utils/token'
+
 export default {
     components: {
         Modal,
@@ -66,7 +72,9 @@ export default {
    data: function() {
         return {
             selectedPharmacyName: '',
-            selectedPharmacyId: null
+            selectedPharmacyId: null,
+            role: null,
+            roles: Roles
         }
     },
 
@@ -113,6 +121,7 @@ export default {
   },
 
   mounted() {
+      this.role = getRoleFromToken();
       this.fetchPharmacies();
   }
 }

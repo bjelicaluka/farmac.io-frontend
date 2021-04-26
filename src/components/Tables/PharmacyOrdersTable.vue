@@ -26,15 +26,16 @@
                     ]"
                 >
                     <div class="pull-right text-gray">
-                        <DropDownMenu v-if="user.role === Roles.PharmacyAdmin">
+                        <DropDownMenu>
                             <ModalOpener
+                                v-if="user.role === Roles.PharmacyAdmin"
                                 modalBoxId="pharmacyOrderModal"
                             >
                                 <DropDownItem @click="selectedPharmacyOrder = pharmacyOrder">Edit</DropDownItem>
                             </ModalOpener>
 
                             <ModalOpener
-                                v-if="role === Roles.Supplier"
+                                v-if="user.role === Roles.Supplier"
                                 modalBoxId="supplierOfferModal"
                             >
                                 <DropDownItem @click="selectedPharmacyOrder = pharmacyOrder">Add offer</DropDownItem>
@@ -62,7 +63,7 @@
             </div>
         </Modal>
 
-        <Modal modalBoxId="supplierOfferModal" title="Update Offer">
+        <Modal modalBoxId="supplierOfferModal" title="Give offer">
             <div slot="body">
                 <SupplierOfferForm
                     :isEdit=false
