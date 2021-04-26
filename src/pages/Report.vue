@@ -2,7 +2,7 @@
 <div class="content">
     <div class="container-fluid">
         <Card title='Report' :description="''">
-            <Table>
+            <Table v-if="!!appointment">
                 <TableRow :values="['Patient', `${appointment.patient.firstName} ${appointment.patient.lastName}`]">
                     <ModalOpener modalBoxId="notShowUpModal">
                         <Button class="pull-right btn-info">Did not show up</Button>
@@ -22,12 +22,28 @@
             <div class="col-2">
                 <div class="form-group">
                     <label class="bmd-label-floating">Therapy duration in days: </label>
-                    <input type="number" v-model="report.therapy" min="0" max="60" class="form-control"/>
+                    <input type="number" v-model="report.therapyDurationInDays" min="0" max="60" class="form-control"/>
                 </div>
             </div>
+
+            <div>
+                <Table v-if="prescribed.length>0">
+                    <TableHead :columnNames="['Prescribed medicines', 'Quantity']"></TableHead>
+                    <TableBody>
+                    <TableRow
+                        v-for="m in prescribed" 
+                        :key="m.medicineId"
+                        :values="[m.name, m.quantity]"
+                    >
+                        <RoundButton @click="removePrescribed(m.medicineId, m.quantity)" iconName="clear"></RoundButton>
+                    </TableRow>
+                    </TableBody>
+                </Table>
+            </div>
+
             <div>
                 <ModalOpener modalBoxId="prescribeModal">
-                    <Button>Prescibe medicine</Button>
+                    <Button @click="handleFetchMedicineNames">Prescibe medicine</Button>
                 </ModalOpener>
             </div>
             <div>
@@ -51,13 +67,18 @@
                 />
                 <Button @click="checkMedicine" class="pull-right">Check</Button>                
                 <Table>
-                    <TableHead :columnNames="['Name', 'Price', 'In stock', '']"></TableHead>
+                    <TableHead :columnNames="['Name', 'Price', 'In stock', 'Allergy', '']"></TableHead>
                     <TableBody>
                     <TableRow
                         v-for="m in smallMedicines" 
-                        :key="m.id" 
-                        :values="[m.name, m.price+' din', m.inStock]"
+                        :key="m.medicineId" 
+                        :values="[m.name, m.price+' RSD', m.inStock, m.isAllergy?'ALLERGIC':'']"
                     >
+                        <RoundButton
+                            :disabled="m.inStock<=0 || m.isAllergy"
+                            @click="addPrescribed(m.medicineId, m.name, 1)"
+                            iconName="add"
+                        ></RoundButton>
                     </TableRow>
                     </TableBody>
                 </Table>
@@ -69,7 +90,7 @@
 
         <Modal modalBoxId="newAppointmentModal" title="New appointment">
             <div slot="body">
-                <define-appointment-form
+                <define-appointment-form v-if="!!appointment"
                     :patientId="appointment.patientId"
                     :pharmacistId="appointment.medicalStaffId"
                     :pharmacyId="appointment.pharmacyId"
@@ -114,6 +135,7 @@ import TableHead from '../components/Table/TableHead.vue'
 import TableRow from '../components/Table/TableRow.vue'
 import OptionModalButtons from '../components/Modal/OptionModalButtons.vue'
 import DefineAppointmentForm from '../components/Forms/DefineAppointmentForm.vue'
+import RoundButton from '../components/Form/RoundButton.vue'
 
 export default {
     data: function() {
@@ -124,9 +146,12 @@ export default {
             report: {
                 appointmentId: null,
                 notes: '',
-                therapy: 0
+                therapyDurationInDays: 0,
+                prescribedMedicines: []
             },
-            showErrorMessage: false
+            prescribed: [],
+            showErrorMessage: false,
+            namesFetched: false
         }
     },
     components: {
@@ -142,7 +167,8 @@ export default {
         TableRow,
         TextArea,
         OptionModalButtons,
-        DefineAppointmentForm
+        DefineAppointmentForm,
+        RoundButton
     },
     computed: {
         ...mapGetters({
@@ -162,19 +188,49 @@ export default {
             notePatientDidNotShowUp: 'appointments/notePatientDidNotShowUp'
         }),
         checkMedicine() {
-            this.fetchMedicinesOrReplacements({pharmacyId:this.appointment.pharmacyId, name:this.selectedMedicine});
+            this.fetchMedicinesOrReplacements({pharmacyId:this.appointment.pharmacyId, name:this.selectedMedicine, patientId:this.appointment.patientId});
         },
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
         handleSave() {
+            this.prescribed.forEach(pm => this.report.prescribedMedicines.push({"medicineId":pm.medicineId, "quantity":pm.quantity}))
             this.createReport(this.report);
             this.$router.push(`/report`);
         },
         handleNotShowUp() {
             this.report.notes = "Patient did not show up.";
+            this.report.prescribedMedicines = [];
             this.notePatientDidNotShowUp(this.report);
             this.$router.push(`/report`);
+        },
+        handleFetchMedicineNames() {
+            if (!this.namesFetched) {
+                this.fetchMedicineNames(this.appointment.pharmacyId);
+                this.namesFetched = true;
+            }
+        },
+        addPrescribed(medicineId, name, quantity) {
+            let prescribedMedicine = this.prescribed.find(m => m.medicineId === medicineId);
+            if (prescribedMedicine)
+                prescribedMedicine.quantity += quantity;
+            else
+                this.prescribed.push({medicineId, name, quantity});
+            this.smallMedicines.forEach(m => {
+                if (m.medicineId === medicineId) {
+                    m.inStock -= quantity;
+                    return;
+                }
+            });
+        },
+        removePrescribed(medicineId, quantity) {
+            this.prescribed = this.prescribed.filter(p => p.medicineId !== medicineId);
+            this.smallMedicines.forEach(m => {
+                if (m.medicineId === medicineId) {
+                    m.inStock += quantity;
+                    return;
+                }
+            });
         }
     },
 
@@ -182,7 +238,6 @@ export default {
         this.appointmentId = this.$route.params.id;
         this.fetchAppointment(this.appointmentId);
         this.report.appointmentId = this.appointmentId;
-        this.fetchMedicineNames(this.appointment.pharmacyId);
     },
         
     watch: {

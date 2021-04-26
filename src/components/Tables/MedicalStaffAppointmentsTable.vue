@@ -22,7 +22,6 @@ import TableHead from '../Table/TableHead'
 import TableBody from '../Table/TableBody'
 import TableRow from '../Table/TableRow'
 import RoundButton from '../Form/RoundButton'
-import {mapGetters, mapActions} from 'vuex'
 import moment from 'moment'
 
 export default {
@@ -34,15 +33,7 @@ export default {
     RoundButton
   },
   props: ['appointments'],
-  computed: {
-    ...mapGetters({
-        getResult: 'appointments/getResult'
-    })
-  },
   methods: {
-    ...mapActions({
-        fetchAppointments: 'appointments/fetchMedicalStaffAppointmentsToReport'
-    }),
     formatDate(d) {
       return moment(d).format('ll');
     },

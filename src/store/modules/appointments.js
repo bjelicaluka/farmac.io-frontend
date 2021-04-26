@@ -124,8 +124,8 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    createReport: (context, {appointmentId, notes, therapy}) => {
-        axios.post(`/appointments/${appointmentId}/report`, {"notes": notes, "therapyDurationInDays": therapy})
+    createReport: (context, {appointmentId, notes, therapyDurationInDays, prescribedMedicines}) => {
+        axios.post(`/appointments/${appointmentId}/report`, {notes, therapyDurationInDays, prescribedMedicines})
         .then(resp => {
             context.commit('setResult', {label: 'createReport', ok: true, message: "Report successfully created."});
         })
@@ -133,10 +133,10 @@ const actions = {
             context.commit('setResult', {label: 'createReport', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    notePatientDidNotShowUp: (context, {appointmentId, notes, therapy}) => {
-        axios.post(`/appointments/${appointmentId}/not-show-up`, {"notes": notes, "therapyDurationInDays": therapy})
+    notePatientDidNotShowUp: (context, {appointmentId, notes, therapyDurationInDays, prescribedMedicines}) => {
+        axios.post(`/appointments/${appointmentId}/not-show-up`, {notes, therapyDurationInDays, prescribedMedicines})
         .then(resp => {
-            context.commit('setResult', {label: 'createReport', ok: true, message: "Report successfully created."});
+            context.commit('setResult', {label: 'createReport', ok: true, message: "Did-not-show-up report successfully created."});
         })
         .catch(err => {
             context.commit('setResult', {label: 'createReport', ok: false, message: err.response.data.ErrorMessage});

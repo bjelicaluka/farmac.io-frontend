@@ -134,8 +134,8 @@ const actions = {
         });
     },
     
-    fetchMedicinesOrReplacements: (context, {pharmacyId, name}) => {
-        axios.get(`medicines/in-pharmacy/${pharmacyId}/search?name=${name}`)
+    fetchMedicinesOrReplacements: (context, {pharmacyId, name, patientId}) => {
+        axios.get(`medicines/in-pharmacy/${pharmacyId}/search?name=${name}&patientId=${patientId}`)
         .then(response => {
             context.commit('setSmallMedicines', response.data);
         })
