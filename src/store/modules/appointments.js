@@ -142,13 +142,13 @@ const actions = {
             context.commit('setResult', {label: 'createReport', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    addPharmacistAppointment: (context, appointment) => {
-        axios.post(`/appointments/pharmacist`, appointment)
+    addAnotherAppointmentByMedicalStaff: (context, appointment) => {
+        axios.post(`/appointments/another`, appointment)
         .then(resp => {
-            context.commit('setResult', {label: 'addPharmacist', ok: true, message: "Successfully added pharmacist appointment."});
+            context.commit('setResult', {label: 'addPharmacist', ok: true, message: "Successfully added new appointment."});
         })
         .catch(err => {
-            context.commit('setResult', {label: 'addPharmacist', ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'addAnother', ok: false, message: err.response.data.ErrorMessage});
         });
     },
     addPharmacistAppointmentAsUser: (context, appointment) => {
