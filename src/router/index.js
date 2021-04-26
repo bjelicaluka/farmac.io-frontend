@@ -103,7 +103,8 @@ const routes = [
     name: 'Patients',
     component: Patients,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
     }
   },
   {
@@ -181,7 +182,8 @@ const routes = [
     name: 'AppointmentsToReport',
     component: AppointmentsToReport,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
     }
   },
   {
@@ -197,7 +199,8 @@ const routes = [
     name: 'Report',
     component: Report,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
     }
   },
   {
