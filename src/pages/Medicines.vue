@@ -5,6 +5,7 @@
         <MedicineSearch />
 
         <Modal
+            v-if="role == roles.SystemAdmin"
             modalBoxId="deleteMedicineModal"
             title="Confirmation"
         >
@@ -46,11 +47,13 @@
                             <RoundButton title="Download specification" iconName="subject" type="btn-info" @click="onDownloadSpecification(medicine.id, medicine.name)"></RoundButton>
                             <RoundButton title="Check availability" iconName="add_shopping_cart" type="btn-success" @click="onDisplaySelected(medicine.id, medicine.name)"></RoundButton>
                             
-                            <ModalOpener modalBoxId="medicineModal">
-                            <RoundButton title="Delete medicine" iconName="edit" type="btn-warning" @click="onEditSelected(medicine.id)"></RoundButton>
-                            </ModalOpener>
-                            
-                            <RoundButton title="Delete medicine" iconName="delete" type="btn-danger" @click="onDeleteSelected(medicine.id, medicine.name)"></RoundButton>
+                            <template v-if="role == roles.SystemAdmin">
+                                <ModalOpener modalBoxId="medicineModal">
+                                <RoundButton title="Edit medicine" iconName="edit" type="btn-warning" @click="onEditSelected(medicine.id)"></RoundButton>
+                                </ModalOpener>
+                                
+                                <RoundButton title="Delete medicine" iconName="delete" type="btn-danger" @click="onDeleteSelected(medicine.id, medicine.name)"></RoundButton>
+                            </template>
 
                              </div>
                     </RotatingCard>
@@ -59,6 +62,7 @@
         </div>
 
         <Modal
+            v-if="role == roles.SystemAdmin"
             modalBoxId="medicineModal"
             title="Medicine"
             sizeClass="modal-lg"
@@ -71,7 +75,7 @@
             </div>
         </Modal>
 
-        <ModalOpener modalBoxId="medicineModal">
+        <ModalOpener v-if="role == roles.SystemAdmin" modalBoxId="medicineModal">
             <Button @click="handleRegisterClick" class="pull-right">Create Medicine</Button>
         </ModalOpener>
     </div>
@@ -92,6 +96,9 @@ import Card from '../components/Card/Card.vue'
 import RoundButton from '../components/Form/RoundButton.vue'
 import { mapGetters, mapActions } from 'vuex'
 import toastr from 'toastr'
+
+import { Roles } from '../constants'
+import { getRoleFromToken } from '../utils/token'
 
 export default {
     components: {
@@ -116,7 +123,9 @@ export default {
             selectedMedicineName: null,
             selectedMedicine: null,
             pharmaciesForMedicines: [],
-            isEdit: false
+            isEdit: false,
+            role: null,
+            roles: Roles
         }
     },
 
@@ -231,7 +240,8 @@ export default {
     },
 
     mounted() {
-      this.fetchMedicines();
+        this.role = getRoleFromToken();
+        this.fetchMedicines();
     }
 };
 

@@ -95,8 +95,7 @@ const routes = [
     name: 'Medicines',
     component: Medicines,
     meta: {
-      layout: 'AppLayoutMain',
-      authorizedRoles: [Roles.Patient, Roles.Supplier]
+      layout: 'AppLayoutMain'
     }
   },
   {
@@ -120,7 +119,8 @@ const routes = [
     name: 'PharmacyAdmins',
     component: PharmacyAdmins,
     meta: {
-        layout: 'AppLayoutMain'
+        layout: 'AppLayoutMain',
+        authorizedRoles: [Roles.SystemAdmin]
       }
   },
   {
@@ -128,7 +128,8 @@ const routes = [
     name: 'SystemAdmins',
     component: SystemAdmins,
     meta: {
-        layout: 'AppLayoutMain'
+        layout: 'AppLayoutMain',
+        authorizedRoles: [Roles.SystemAdmin]
       }
   },
   {
@@ -136,7 +137,8 @@ const routes = [
     name: 'Suppliers',
     component: Suppliers,
     meta: {
-        layout: 'AppLayoutMain'
+        layout: 'AppLayoutMain',
+        authorizedRoles: [Roles.SystemAdmin]
       }
   },
   {
@@ -144,7 +146,8 @@ const routes = [
     name: 'SupplierStock',
     component: SupplierStock,
     meta: {
-        layout: 'AppLayoutMain'
+        layout: 'AppLayoutMain',
+        authorizedRoles: [Roles.Supplier]
       }
   },
   {
@@ -152,7 +155,8 @@ const routes = [
     name: 'SupplierOffers',
     component: SupplierOffers,
     meta: {
-        layout: 'AppLayoutMain'
+        layout: 'AppLayoutMain',
+        authorizedRoles: [Roles.Supplier]
       }
   },
   {
@@ -160,7 +164,8 @@ const routes = [
     name: 'Dermatologists',
     component: Dermatologists,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient, Roles.SystemAdmin]
     }
   },
   {
