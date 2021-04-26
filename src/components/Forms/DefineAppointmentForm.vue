@@ -102,15 +102,18 @@ export default {
       e.preventDefault();
       if(this.dermatologistId) {
         this.addDermatologistAppointment({
-          ...this.appointment,
+          dateTime: this.appointment.dateTime.format(),
+          duration: this.appointment.duration,
+          price: this.appointment.price,
           medicalStaffId: this.dermatologistId,
           pharmacyId: this.pharmacyId,
         })
       }
       if(this.pharmacistId) {
-        // Joksilon
         this.addPharmacistAppointment({
-          ...this.appointment,
+          dateTime: this.appointment.dateTime.format(),
+          duration: this.appointment.duration,
+          price: this.appointment.price,
           medicalStaffId: this.pharmacistId,
           pharmacyId: this.pharmacyId,
           patientId: this.patientId

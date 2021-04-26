@@ -22,18 +22,18 @@
             <div class="col-2">
                 <div class="form-group">
                     <label class="bmd-label-floating">Therapy duration in days: </label>
-                    <input type="number" v-model="report.therapy" min="0" max="60" class="form-control"/>
+                    <input type="number" v-model="report.therapyDurationInDays" min="0" max="60" class="form-control"/>
                 </div>
             </div>
 
             <div>
-                <Table v-if="report.prescribed.length>0">
+                <Table v-if="prescribed.length>0">
                     <TableHead :columnNames="['Prescribed medicines', 'Quantity']"></TableHead>
                     <TableBody>
                     <TableRow
-                        v-for="m in report.prescribed" 
-                        :key="m.medicineId" 
-                        :values="[getMedicineNameById(m.medicineId), m.quantity]"
+                        v-for="m in prescribed" 
+                        :key="m.medicineId"
+                        :values="[m.name, m.quantity]"
                     >
                         <RoundButton @click="removePrescribed(m.medicineId, m.quantity)" iconName="clear"></RoundButton>
                     </TableRow>
@@ -76,7 +76,7 @@
                     >
                         <RoundButton
                             :disabled="m.inStock<=0 || m.isAllergy"
-                            @click="addPrescribed(m.medicineId, 1)"
+                            @click="addPrescribed(m.medicineId, m.name, 1)"
                             iconName="add"
                         ></RoundButton>
                     </TableRow>
@@ -146,9 +146,10 @@ export default {
             report: {
                 appointmentId: null,
                 notes: '',
-                therapy: 0,
-                prescribed: []
+                therapyDurationInDays: 0,
+                prescribedMedicines: []
             },
+            prescribed: [],
             showErrorMessage: false,
             namesFetched: false
         }
@@ -193,12 +194,13 @@ export default {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
         handleSave() {
+            this.prescribed.forEach(pm => this.report.prescribedMedicines.push({"medicineId":pm.medicineId, "quantity":pm.quantity}))
             this.createReport(this.report);
             this.$router.push(`/report`);
         },
         handleNotShowUp() {
             this.report.notes = "Patient did not show up.";
-            this.report.prescribed = [];
+            this.report.prescribedMedicines = [];
             this.notePatientDidNotShowUp(this.report);
             this.$router.push(`/report`);
         },
@@ -208,38 +210,27 @@ export default {
                 this.namesFetched = true;
             }
         },
-        addPrescribed(medicineId, quantity) {
-            let found = false;
-            this.report.prescribed.forEach(m => {
-                if (m.medicineId == medicineId) {
-                    m.quantity += quantity;
-                    found = true;
-                    return;
-                }
-            });
-            if (!found)
-                this.report.prescribed.push({medicineId, quantity});
+        addPrescribed(medicineId, name, quantity) {
+            let prescribedMedicine = this.prescribed.find(m => m.medicineId === medicineId);
+            if (prescribedMedicine)
+                prescribedMedicine.quantity += quantity;
+            else
+                this.prescribed.push({medicineId, name, quantity});
             this.smallMedicines.forEach(m => {
-                if (m.medicineId == medicineId) {
+                if (m.medicineId === medicineId) {
                     m.inStock -= quantity;
                     return;
                 }
             });
         },
         removePrescribed(medicineId, quantity) {
-            this.report.prescribed = this.report.prescribed.filter(p => p.medicineId !== medicineId);
+            this.prescribed = this.prescribed.filter(p => p.medicineId !== medicineId);
             this.smallMedicines.forEach(m => {
-                if (m.medicineId == medicineId) {
+                if (m.medicineId === medicineId) {
                     m.inStock += quantity;
                     return;
                 }
             });
-        },
-        getMedicineNameById(medicineId) {
-            for (let i = 0; i < this.smallMedicines.length; i++)
-                if (this.smallMedicines[i].medicineId == medicineId)
-                    return this.smallMedicines[i].name;
-            return ""
         }
     },
 
