@@ -92,7 +92,7 @@
             <div slot="body">
                 <define-appointment-form v-if="!!appointment"
                     :patientId="appointment.patientId"
-                    :pharmacistId="appointment.medicalStaffId"
+                    :medicalStaffId="appointment.medicalStaffId"
                     :pharmacyId="appointment.pharmacyId"
                 >
                 </define-appointment-form>

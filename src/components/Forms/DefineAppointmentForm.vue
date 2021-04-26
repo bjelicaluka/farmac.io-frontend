@@ -54,10 +54,10 @@ export default {
     dermatologistId: {
       type: String
     },
-    pharmacistId: {
+    pharmacyId: {
       type: String
     },
-    pharmacyId: {
+    medicalStaffId: {
       type: String
     },
     patientId: {
@@ -81,7 +81,7 @@ export default {
 
   watch: {
       result({ok, label, message}) {
-        if(label !== 'addDermatologist' && label !== 'addPharmacist'){
+        if(label !== 'addDermatologist' && label !== 'addAnother'){
           return;
         }
         if(ok) {
@@ -95,7 +95,7 @@ export default {
   methods: {
     ...mapActions({
       addDermatologistAppointment: 'appointments/addDermatologistAppointment',
-      addPharmacistAppointment: 'appointments/addPharmacistAppointment'
+      addAnotherAppointment: 'appointments/addAnotherAppointmentByMedicalStaff'
     }),
 
     onSubmit(e) {
@@ -109,12 +109,12 @@ export default {
           pharmacyId: this.pharmacyId,
         })
       }
-      if(this.pharmacistId) {
-        this.addPharmacistAppointment({
+      if(this.medicalStaffId) {
+        this.addAnotherAppointment({
           dateTime: this.appointment.dateTime.format(),
           duration: this.appointment.duration,
           price: this.appointment.price,
-          medicalStaffId: this.pharmacistId,
+          medicalStaffId: this.medicalStaffId,
           pharmacyId: this.pharmacyId,
           patientId: this.patientId
         })
