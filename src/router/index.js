@@ -31,7 +31,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/pages/Home.vue'),
+    component: Pharmacies,
     meta: {
       layout: 'AppLayoutMain'
     }
@@ -112,7 +112,8 @@ const routes = [
     name: 'ShoppingCart',
     component: ShoppingCart,
       meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   },
   {
@@ -174,7 +175,8 @@ const routes = [
     name: 'Pharmacists',
     component: Pharmacists,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient, Roles.SystemAdmin]
     }
   },
   {
@@ -191,7 +193,8 @@ const routes = [
     name: 'FutureMedicineReservations',
     component: FutureMedicineReservations,
       meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   },
    {
@@ -208,7 +211,8 @@ const routes = [
     name: 'FutureDermatologistAppointments',
     component: FutureDermatologistAppointments,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   },
   {
@@ -225,7 +229,8 @@ const routes = [
     name: 'HistoryOfVisitingDermatologist',
     component: HistoryOfVisitingDermatologist,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   },
   {
@@ -233,7 +238,8 @@ const routes = [
     name: 'FuturePharmacistsAppointments',
     component: FuturePharmacistsAppointments,
       meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   },
   {
@@ -241,7 +247,8 @@ const routes = [
     name: 'AppointmentWithPharmacist',
     component: AppointmentWithPharmacist,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   }
 ]

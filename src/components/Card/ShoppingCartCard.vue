@@ -17,13 +17,16 @@
       </div>
       <div class="total-price">{{amount === 0 ? price : amount * price}} RSD</div>
       <div class="add-to-card">
-        <RoundButton @click="reserveMedicine" type="btn-success" iconName="add_shopping_cart" title="Add to cart" />
+        <RoundButton v-if="role === roles.Patient" @click="reserveMedicine" type="btn-success" iconName="add_shopping_cart" title="Add to cart" />
       </div>
   </div>
 </template>
 
 <script>
 import RoundButton from '../Form/RoundButton.vue'
+import { Roles } from '../../constants'
+import { getRoleFromToken } from '../../utils/token'
+
 export default {
   props: ['pharmacyName', 'pharmacyStreet', 'pharmacyCity', 'price', 'id'],
 
@@ -33,7 +36,9 @@ export default {
 
   data: function() {
     return {
-      amount: 0
+      amount: 0,
+      role: null,
+      roles: Roles
     }
   },
 
@@ -51,6 +56,10 @@ export default {
         if(this.amount > 0)
           this.$emit('addMedicineToCart', e, this.id, this.amount, this.price, this.pharmacyName, this.pharmacyStreet, this.pharmacyCity);
       }
+  },
+
+  mounted() {
+    this.role = getRoleFromToken();
   }
 }
 
