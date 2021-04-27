@@ -8,7 +8,7 @@
       <Search @search="handleSearch($event)" />
     </div>
     <Table>
-        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Address', '']"></TableHead>
+        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Grade', 'Address', '']"></TableHead>
         <TableBody>
         <TableRow 
           v-for="d in dermatologists" 
@@ -203,7 +203,7 @@ export default {
     },
     getTableRow(dermatologistWorkPlaces) {
       const d = dermatologistWorkPlaces.dermatologistAccount;
-      return [d.username, `${d.user.firstName} ${d.user.lastName}`, d.email, d.user.pid, d.user.phoneNumber, this.formatAddress(d.user.address)];
+      return [d.username, `${d.user.firstName} ${d.user.lastName}`, d.email, d.user.pid, d.user.phoneNumber, d.user?.averageGrade + '/5.0', this.formatAddress(d.user.address)];
     },
     formatAddress(address) {
       const {state, city, streetName, streetNumber} = address;

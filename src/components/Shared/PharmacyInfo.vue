@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <Stars class="ml-3 mb-2"  :numOfStars="pharmacy.averageGrade" />
+      <Stars class="ml-3 mb-2"  :numOfStars="pharmacy && pharmacy.averageGrade" />
       <ModalOpener 
         class="ml-auto mr-1 mb-2" 
         modalBoxId="pharmacyModal"
