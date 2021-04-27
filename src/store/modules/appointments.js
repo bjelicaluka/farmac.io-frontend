@@ -145,7 +145,7 @@ const actions = {
     addAnotherAppointmentByMedicalStaff: (context, appointment) => {
         axios.post(`/appointments/another`, appointment)
         .then(resp => {
-            context.commit('setResult', {label: 'addPharmacist', ok: true, message: "Successfully added new appointment."});
+            context.commit('setResult', {label: 'addAnother', ok: true, message: "Successfully added new appointment."});
         })
         .catch(err => {
             context.commit('setResult', {label: 'addAnother', ok: false, message: err.response.data.ErrorMessage});
