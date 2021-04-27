@@ -20,6 +20,7 @@ import Report from '../pages/Report.vue'
 import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatologist.vue'
 import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
+import Grades from '../pages/Grades.vue'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -249,6 +250,14 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Patient]
+    }
+  },
+  {
+    path: '/grades',
+    name: 'Grades',
+    component: Grades,
+    meta: {
+      layout: 'AppLayoutMain'
     }
   }
 ]
