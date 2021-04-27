@@ -48,6 +48,7 @@
           <sidebar-item name="History visiting dermatologist" icon="history" to="/history-dermatologist-appointments"></sidebar-item>
           <sidebar-item name="Pharmacists appointments" icon="schedule" to="/pharmacists-appointments"></sidebar-item>
           <sidebar-item name="Consultation with pharmacist" icon="people" to="/appointments-with-pharmacist"></sidebar-item>
+          <sidebar-item name="Grades" icon="thumb_up_off_alt" to="/grades"></sidebar-item>
         </ul>
 
         <div>

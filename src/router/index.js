@@ -20,6 +20,7 @@ import Report from '../pages/Report.vue'
 import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatologist.vue'
 import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
+import Grades from '../pages/Grades.vue'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -237,6 +238,14 @@ const routes = [
     path: '/appointments-with-pharmacist',
     name: 'AppointmentWithPharmacist',
     component: AppointmentWithPharmacist,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/grades',
+    name: 'Grades',
+    component: Grades,
     meta: {
       layout: 'AppLayoutMain'
     }
