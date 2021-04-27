@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="row">
+      <Stars class="ml-3 mb-2"  :numOfStars="pharmacy.averageGrade" />
       <ModalOpener 
         class="ml-auto mr-1 mb-2" 
         modalBoxId="pharmacyModal"
@@ -44,9 +45,10 @@ import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
 import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener.vue'
+import Stars from '../Rating/Stars.vue'
 
 export default {
-  components: { Map, MapMarker, Button, PharmacyForm, Modal, ModalOpener },
+  components: { Map, MapMarker, Button, PharmacyForm, Modal, ModalOpener, Stars },
   props: {
     pharmacy: {
       type: Object,
