@@ -92,6 +92,7 @@ import DropDownItem from '../DropdownMenu/DropdownItem'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 
 import moment from 'moment'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     props: {
@@ -104,7 +105,7 @@ export default {
             user: {},
             role: null,
             selectedPharmacyOrder: null,
-            pharmacyOrderStatusFilter: null
+            pharmacyOrderStatusFilter: null,
         }
     },
     mounted() {
@@ -132,7 +133,16 @@ export default {
             this.$emit('filter', this.pharmacyOrderStatusFilter);
         }
     },
+    computed: {
+        ...mapGetters({
+            supplierOffers: 'supplierOffers/getSupplierOffers'
+        })
+    },
     methods: {
+        ...mapActions({
+            fetchSupplierOffersForPharmacyOrder: 'supplierOffers/fetchOffersForPharmacyOrder'
+        }),
+
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
@@ -141,7 +151,7 @@ export default {
             const maxLength = 100;
             const string = pharmacyOrder.orderedMedicines.map(({medicine, quantity}) => `${medicine.name}: ${quantity}`).join(', ');
             return string.length >= maxLength ? string.substring(0, maxLength - 3) + '...' : string;
-        }
+        },
     },
 }
 </script>

@@ -21,6 +21,16 @@ const actions = {
         })
     },
 
+    fetchOffersForPharmacyOrder: (context, pharmacyOrderId) => {
+        axios.get(`/suppliers/offers/pharmacy-order/${pharmacyOrderId}`)
+        .then(response => {
+            context.commit('setSupplierOffers', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        })
+    },
+
     addOfferFromSupplier: (context, supplierOffer) => {
         axios.post(`/suppliers/${supplierOffer.supplierId}/offers`, supplierOffer)
         .then(response => {
