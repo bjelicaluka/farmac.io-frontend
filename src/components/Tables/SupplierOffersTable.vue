@@ -15,7 +15,7 @@
                     ]"
                 >
                     <div class="pull-right text-gray">
-                        <DropDownMenu v-if="supplierOffer.status === 2">
+                        <DropDownMenu v-if="supplierOffer.status === 2 && user.role === Roles.Supplier">
                             <ModalOpener modalBoxId="supplierOfferModal" >
                                 <DropDownItem @click="handleEditClick(supplierOffer)">Update Offer</DropDownItem>
                             </ModalOpener>
@@ -50,6 +50,8 @@ import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
 
 import moment from 'moment'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import { Roles } from '../../constants'
 
 export default {
     props: {
@@ -59,7 +61,16 @@ export default {
     data: () => {
         return {
             selectedSupplierOffer: null,
-            supplierId: null
+            supplierId: null,
+            user: {},
+            Roles
+        }
+    },
+
+    mounted() {
+        this.user = {
+            id: getAccountIdFromToken(),
+            role: getRoleFromToken()
         }
     },
 

@@ -41,6 +41,13 @@
                                 <DropDownItem @click="selectedPharmacyOrder = pharmacyOrder">Add offer</DropDownItem>
                             </ModalOpener>
 
+                            <ModalOpener
+                                v-if="user.role === Roles.PharmacyAdmin"
+                                modalBoxId="supplierOffersModal"
+                            >
+                                <DropDownItem @click="fetchSupplierOffersForPharmacyOrder(pharmacyOrder.id)">See offers</DropDownItem>
+                            </ModalOpener>
+
                         </DropDownMenu>
                     </div>
                 </TableRow>
@@ -71,6 +78,19 @@
                 />
             </div>
         </Modal>
+
+        <Modal
+            v-if="user.role === Roles.PharmacyAdmin"
+            modalBoxId="supplierOffersModal"
+            title="Supplier Offers"
+            sizeClass="modal-lg"
+        >
+            <div slot="body">
+                <SupplierOffersTable
+                    :supplierOffers="supplierOffers || []"
+                />
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -80,6 +100,7 @@ import Table from '../Table/Table.vue'
 import TableHead from '../Table/TableHead.vue'
 import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
+import SupplierOffersTable from '../Tables/SupplierOffersTable'
 import PharmacyOrderForm from '../Forms/PharmacyOrderForm'
 import SupplierOfferForm from '../Forms/SupplierOfferForm'
 import SelectOptionInput from '../Form/SelectOptionInput'
@@ -103,7 +124,6 @@ export default {
         return {
             Roles,
             user: {},
-            role: null,
             selectedPharmacyOrder: null,
             pharmacyOrderStatusFilter: null,
         }
@@ -126,7 +146,8 @@ export default {
         DropDownMenu,
         PharmacyOrderForm,
         SupplierOfferForm,
-        SelectOptionInput
+        SelectOptionInput,
+        SupplierOffersTable
     },
     watch: {
         pharmacyOrderStatusFilter() {
