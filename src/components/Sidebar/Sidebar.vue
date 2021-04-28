@@ -53,6 +53,7 @@
         <ul class="nav"  v-else-if="user.role === Roles.PharmacyAdmin">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
+          <sidebar-item name="Pharmacy Reports" icon="local_pharmacy" to="/pharmacy-reports"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
         </ul>
 
