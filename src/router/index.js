@@ -21,7 +21,9 @@ import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatolog
 import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
 import Grades from '../pages/Grades.vue'
+import WriteComplaint from '../pages/WriteComplaint.vue'
 import Complaints from '../pages/Complaints.vue'
+import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -262,11 +264,30 @@ const routes = [
     }
   },
   {
+    path: '/write-complaint',
+    name: 'WriteComplaint',
+    component: WriteComplaint,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
+    }
+  },
+  {
     path: '/complaints',
     name: 'Complaints',
     component: Complaints,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin]
+    }
+  },
+  {
+    path: '/complaints/:id/answers',
+    name: 'ComplaintAnswers',
+    component: ComplaintAnswers,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin]
     }
   }
 ]

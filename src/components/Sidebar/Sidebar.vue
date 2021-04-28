@@ -26,6 +26,8 @@
           <sidebar-item name="PharmacyAdmins" icon="people" to="/pharmacy-admins"></sidebar-item>
           <sidebar-item name="SystemAdmins" icon="people" to="/system-admins"></sidebar-item>
           <sidebar-item name="Suppliers" icon="people" to="/suppliers"></sidebar-item>
+          <sidebar-item name="Complaints" icon="thumb_down_off_alt" to="/complaints"></sidebar-item>
+
         </ul>
 
         <ul class="nav" v-else-if="user.role === Roles.Supplier">
@@ -48,7 +50,7 @@
           <sidebar-item name="Pharmacists appointments" icon="schedule" to="/pharmacists-appointments"></sidebar-item>
           <sidebar-item name="Consultation with pharmacist" icon="people" to="/appointments-with-pharmacist"></sidebar-item>
           <sidebar-item name="Grades" icon="thumb_up_off_alt" to="/grades"></sidebar-item>
-          <sidebar-item name="Complaints" icon="thumb_down_off_alt" to="/complaints"></sidebar-item>
+          <sidebar-item name="Write complaint" icon="thumb_down_off_alt" to="/write-complaint"></sidebar-item>
         </ul>
 
         <ul class="nav"  v-else-if="user.role === Roles.PharmacyAdmin">

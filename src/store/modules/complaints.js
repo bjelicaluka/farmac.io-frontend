@@ -1,6 +1,8 @@
 import axios from "axios";
 
 const state = {
+    complaints: [],
+    complaint: null,
     dermatologistsToComplaintAbout: [],
     pharmacistsToComplaintAbout: [],
     pharmaciesToComplaintAbout: [],
@@ -8,6 +10,8 @@ const state = {
 };
 
 const getters = {
+    getComplaints: state => state.complaints,
+    getComplaint: state => state.complaint,
     getDermatologistsToComplaintAbout: state => state.dermatologistsToComplaintAbout,
     getPharmacistsToComplaintAbout: state => state.pharmacistsToComplaintAbout,
     getPharmaciesToComplaintAbout: state => state.pharmaciesToComplaintAbout,
@@ -15,6 +19,26 @@ const getters = {
 };
 
 const actions = {
+    fetchComplaints: (context) => {
+        axios.get(`/complaints`)
+        .then(response => {
+            context.commit('setComplaints', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
+        })
+    },
+
+    fetchComplaintById: (context, complaintId) => {
+        axios.get(`/complaints/${complaintId}`)
+        .then(response => {
+            context.commit('setComplaint', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
+        })
+    },
+
     fetchDermatologistsToComplaintAbout: (context, patientId) => {
         axios.get(`/complaints/${patientId}/complaintable/dermatologists`)
         .then(response => {
@@ -85,10 +109,32 @@ const actions = {
         .catch(error => {
             context.commit('setResult', {label:'createComplaint', ok: false, message: error.response.data.ErrorMessage });
         });
+    },
+
+    createAnswerForComplaint: (context, answer) => {
+        axios.post(`/complaints/${answer.complaintId}/answers`, answer)
+        .then(response => {
+            context.commit('setResult', {
+                label: 'createAnswer',
+                ok: true,
+                message: 'You have sucessfully answered to this complaint.'
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'createAnswer', ok: false, message: error.response.data.ErrorMessage });
+        });
     }
 };
 
 const mutations = {
+    setComplaints: (state, complaints) => {
+        state.complaints = complaints;
+    },
+
+    setComplaint: (state, complaint) => {
+        state.complaint = complaint;
+    },
+
     setDermatologistsToComplaintAbout: (state, dermatologists) => {
         state.dermatologistsToComplaintAbout = dermatologists;
     },
