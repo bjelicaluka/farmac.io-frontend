@@ -6,6 +6,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { getUserIdFromToken } from '../utils/token'
 import WorkCalendar from '../components/Calendar/WorkCalendar.vue'
 
 export default {
@@ -25,7 +26,8 @@ export default {
     }),
   },
   mounted() {
-    this.fetchAppointmentsAsEvents('08d8f514-594d-46d7-8949-0ce3ea32a929')
+    const userId = getUserIdFromToken();
+    this.fetchAppointmentsAsEvents(userId);
   }
 }
 </script>

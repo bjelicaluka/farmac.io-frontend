@@ -1,7 +1,7 @@
 <template>
 <div class="content">
     <div class="container-fluid">
-        <Card title='Report' :description="''">
+        <Card :title="appointmentKind+' report'" :description="''">
             <Table v-if="!!appointment">
                 <TableRow :values="['Patient', `${appointment.patient.firstName} ${appointment.patient.lastName}`]">
                     <ModalOpener modalBoxId="notShowUpModal">
@@ -100,7 +100,7 @@
         </Modal>
         <Modal modalBoxId="saveReportModal" title="Save">
             <div slot="body">
-                <p>Are you sure that you want to end the examination/consultation?</p>
+                <p>Are you sure that you want to end the {{appointmentKind}}?</p>
             </div>
             <div slot="buttons">
                 <OptionModalButtons @yes="handleSave"/>
@@ -108,7 +108,7 @@
         </Modal>
         <Modal modalBoxId="notShowUpModal" title="Patient did not show up">
             <div slot="body">
-                <p>Are you sure that your patient did not show up on the examination/consultation?</p>
+                <p>Are you sure that your patient did not show up on the {{appointmentKind}}?</p>
             </div>
             <div slot="buttons">
                 <OptionModalButtons @yes="handleNotShowUp"/>
@@ -121,6 +121,8 @@
 <script>
 import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
+import { getRoleFromToken } from '../utils/token'
+import { Roles } from '../constants'
 import toastr from 'toastr'
 import Card from '../components/Card/Card.vue'
 import Button from '../components/Form/Button.vue'
@@ -151,7 +153,8 @@ export default {
             },
             prescribed: [],
             showErrorMessage: false,
-            namesFetched: false
+            namesFetched: false,
+            appointmentKind: ""
         }
     },
     components: {
@@ -168,7 +171,7 @@ export default {
         TextArea,
         OptionModalButtons,
         DefineAppointmentForm,
-        RoundButton
+        RoundButton,
     },
     computed: {
         ...mapGetters({
@@ -237,6 +240,7 @@ export default {
     mounted() {
         this.appointmentId = this.$route.params.id;
         this.fetchAppointment(this.appointmentId);
+        this.appointmentKind = getRoleFromToken()===Roles.Dermatologist?'Examination':'Consultation';
         this.report.appointmentId = this.appointmentId;
     },
         
