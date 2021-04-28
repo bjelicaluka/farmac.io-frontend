@@ -21,6 +21,7 @@ import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatolog
 import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
 import Grades from '../pages/Grades.vue'
+import Complaints from '../pages/Complaints.vue'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -256,6 +257,14 @@ const routes = [
     path: '/grades',
     name: 'Grades',
     component: Grades,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/complaints',
+    name: 'Complaints',
+    component: Complaints,
     meta: {
       layout: 'AppLayoutMain'
     }
