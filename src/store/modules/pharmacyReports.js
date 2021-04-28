@@ -3,12 +3,14 @@ import axios from "axios";
 const state = {
     examinationReports: null,
     medicineConsumptionReports: null,
+    pharmacyIncomeReports: null,
     result: null
 };
 
 const getters = {
     getExaminationReports: state => state.examinationReports,
     getMedicineConsumptionReports: state => state.medicineConsumptionReports,
+    getPharmacyIncomeReports: state => state.pharmacyIncomeReports,
     getResult: state => state.result
 };
 
@@ -34,6 +36,16 @@ const actions = {
         });
     },
 
+    fetchPharmacyIncomeReports: (context, {pharmacyId, timePeriod}) => {
+        axios.post(`/pharmacy/${pharmacyId}/pharmacy-income-report`, timePeriod)
+        .then(response => {
+            context.commit('setPharmacyIncomeReports', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
 };
 
 const mutations = {
@@ -42,6 +54,9 @@ const mutations = {
     },
     setMedicineConsumptionReports: (state, medicineConsumptionReports) => {
         state.medicineConsumptionReports = medicineConsumptionReports;
+    },
+    setPharmacyIncomeReports: (state, pharmacyIncomeReports) => {
+        state.pharmacyIncomeReports = pharmacyIncomeReports;
     },
     setResult: (state, result) => {
         state.result = result;

@@ -20,6 +20,14 @@
                     :seriesData="medicineConsumptionReportsChartData"
                 />
             </Card>
+            <Card
+                title="Pharmacy Income"
+                v-if="medicineConsumptionReportsChartData.length"
+            >
+                <PharmacyIncomeChart
+                    :seriesData="pharmacyIncomeReportsChartData"
+                />
+            </Card>
         </div> 
     </div>
 </template>
@@ -35,6 +43,7 @@ import ExaminationsChart from '../components/Charts/ExaminationsChart.vue'
 import ReportTimeIntervalPickerForm from '../components/Forms/ReportTimeIntervalPickerForm'
 import moment from 'moment'
 import MedicineConsumptionChart from '../components/Charts/MedicineConsumptionChart.vue'
+import PharmacyIncomeChart from '../components/Charts/PharmacyIncomeChart.vue'
 
 
 export default {
@@ -42,7 +51,8 @@ export default {
           Card,
           ExaminationsChart,
           ReportTimeIntervalPickerForm,
-          MedicineConsumptionChart
+          MedicineConsumptionChart,
+          PharmacyIncomeChart
     },
 
     data: () => {
@@ -52,6 +62,7 @@ export default {
             roles: Roles,
             examinationReportsChartData: [],
             medicineConsumptionReportsChartData: [],
+            pharmacyIncomeReportsChartData: [],
             intervalType: 'month'
         }
     },
@@ -59,7 +70,8 @@ export default {
         ...mapGetters({
             pharmacyAdmin: 'pharmacyAdmins/getPharmacyAdmin',
             examinationReports: 'pharmacyReports/getExaminationReports',
-            medicineConsumptionReports: 'pharmacyReports/getMedicineConsumptionReports'
+            medicineConsumptionReports: 'pharmacyReports/getMedicineConsumptionReports',
+            pharmacyIncomeReports: 'pharmacyReports/getPharmacyIncomeReports'
         })
     },
     watch: {
@@ -74,6 +86,12 @@ export default {
         },
         medicineConsumptionReports() {
             this.medicineConsumptionReportsChartData = this.medicineConsumptionReports.map(mc => {
+                const groupName = this.intervalType === 'month' ? mc.group : moment(mc.group, 'MM').format('MMMM');
+                return { y: mc.value, x: groupName }
+            });
+        },
+        pharmacyIncomeReports() {
+            this.pharmacyIncomeReportsChartData = this.pharmacyIncomeReports.map(mc => {
                 const groupName = this.intervalType === 'month' ? mc.group : moment(mc.group, 'MM').format('MMMM');
                 return { y: mc.value, x: groupName }
             });

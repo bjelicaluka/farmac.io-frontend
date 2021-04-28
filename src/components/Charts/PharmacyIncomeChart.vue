@@ -2,7 +2,7 @@
   <div id="chart">
     <apexchart
       ref="realtimeChart"
-      type="line"
+      type="bar"
       height="350"
       :options="chartOptions" 
       :series="series"
@@ -26,7 +26,7 @@ export default {
   data: () => {
     return {
       series: [{
-          name: "Medicine Consumption",
+          name: "Pharmacy Income",
           data: []
       }],
       chartOptions: {
@@ -38,7 +38,19 @@ export default {
           }
         },
         stroke: {
-          curve: 'straight'
+          curve: 'stepline'
+        },
+        yaxis: {
+          title: {
+            text: 'RSD'
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: (val) => {
+              return val + " RSD"
+            }
+          }
         },
         grid: {
           row: {

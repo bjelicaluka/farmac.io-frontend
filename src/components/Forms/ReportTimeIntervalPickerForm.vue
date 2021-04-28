@@ -97,13 +97,15 @@ export default {
   methods: {
     ...mapActions({
       fetchExaminationReports: 'pharmacyReports/fetchExaminationReports',
-      fetchMedicineConsumptionReports: 'pharmacyReports/fetchMedicineConsumptionReports'
+      fetchMedicineConsumptionReports: 'pharmacyReports/fetchMedicineConsumptionReports',
+      fetchPharmacyIncomeReports: 'pharmacyReports/fetchPharmacyIncomeReports',
     }),
 
     onSubmit(e) {
       e.preventDefault();
       this.fetchExaminationReports({pharmacyId: this.pharmacyId, timePeriod: {from: this.from.format(), to: this.to.format()}});
       this.fetchMedicineConsumptionReports({pharmacyId: this.pharmacyId, timePeriod: {from: this.from.format(), to: this.to.format()}});
+      this.fetchPharmacyIncomeReports({pharmacyId: this.pharmacyId, timePeriod: {from: this.from.format(), to: this.to.format()}});
     },
     handleNext() {
       this.from = moment(this.from.add(1, this.intervalType));
