@@ -15,18 +15,6 @@ const actions = {
         axios.get(`/suppliers/${supplierId}/offers`)
         .then(response => {
             context.commit('setSupplierOffers', response.data);
-            context.commit('setResult', { label: 'fetch', ok: true });
-        })
-        .catch(error => {
-            context.commit('setResult', { label: 'fetch', ok: false });
-        })
-    },
-
-    fetchFilteredOffersForSupplier: (context, {supplierId, filterBy}) => {
-        axios.get(`/suppliers/${supplierId}/offers/filter`, {params: {status: filterBy}})
-        .then(response => {
-            context.commit('setSupplierOffers', response.data);
-            context.commit('setResult', { label: 'fetch', ok: true });
         })
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
