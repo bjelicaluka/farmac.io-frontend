@@ -96,6 +96,7 @@ export default {
     computed: {
         ...mapGetters({
             dermatologistsToComplaintAbout: 'complaints/getDermatologistsToComplaintAbout',
+            pharmacistsToComplaintAbout: 'complaints/getPharmacistsToComplaintAbout',
             result: 'complaints/getResult'
         })
     },
@@ -103,12 +104,16 @@ export default {
     methods: {
         ...mapActions({
             fetchDermatologistsToComplaintAbout: 'complaints/fetchDermatologistsToComplaintAbout',
-            createComplaintAboutDermatologist: 'complaints/createComplaintAboutDermatologist'
+            fetchPharmacistsToComplaintAbout: 'complaints/fetchPharmacistsToComplaintAbout',
+            createComplaintAboutDermatologist: 'complaints/createComplaintAboutDermatologist',
+            createComplaintAboutPharmacist: 'complaints/createComplaintAboutPharmacist'
+
         }),
 
         getFetchComplaintAboutMethod(complaintAbout) {
             const fetchActions = {
-                'Dermatologist': this.fetchDermatologistsToComplaintAbout
+                'Dermatologist': this.fetchDermatologistsToComplaintAbout,
+                'Pharmacist': this.fetchPharmacistsToComplaintAbout
             }
 
             return fetchActions[complaintAbout];
@@ -116,7 +121,8 @@ export default {
 
         getCreateComplaintAboutMethod(complaintAbout) {
             const createComplaintActions = {
-                'Dermatologist': this.createComplaintAboutDermatologist
+                'Dermatologist': this.createComplaintAboutDermatologist,
+                'Pharmacist': this.createComplaintAboutPharmacist
             };
 
             return createComplaintActions[complaintAbout];
@@ -128,6 +134,14 @@ export default {
                     writerId: this.userId,
                     text: this.complaintText,
                     dermatologistId: this.selectedComplaintFor
+                };
+            }
+
+            if(this.selectedComplaintAbout === 'Pharmacist') {
+                 return {
+                    writerId: this.userId,
+                    text: this.complaintText,
+                    pharmacistId: this.selectedComplaintFor
                 };
             }
         },
@@ -170,6 +184,15 @@ export default {
                 return {
                     label: `${dermatologist.firstName} ${dermatologist.lastName}`,
                     value: dermatologist.id
+                }
+            });
+        },
+
+        pharmacistsToComplaintAbout(pharmacists) {
+            this.complaintForOptions = pharmacists.map(pharmacist => {
+                return {
+                    label: `${pharmacist.firstName} ${pharmacist.lastName}`,
+                    value: pharmacist.id
                 }
             });
         },
