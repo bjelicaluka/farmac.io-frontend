@@ -1,6 +1,9 @@
 <template>
     <div class="content">
         <div class="container-fluid">
+            <Card>
+                <ReportTimeIntervalPickerForm /> 
+            </Card>
             <Card
                 title="Chart"
                 class="col-6"
@@ -21,12 +24,14 @@ import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
 import Card from '../components/Card/Card.vue'
 import Chart from '../components/Chart/Chart.vue'
+import ReportTimeIntervalPickerForm from '../components/Forms/ReportTimeIntervalPickerForm'
 
 
 export default {
      components: {
           Card,
-          Chart
+          Chart,
+          ReportTimeIntervalPickerForm
     },
 
     data: () => {
