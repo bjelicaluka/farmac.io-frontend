@@ -258,7 +258,7 @@ const routes = [
     component: Calendar,
     meta: {
       layout: 'AppLayoutMain',
-      //authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
     }
   },
 ]

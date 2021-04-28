@@ -1,17 +1,44 @@
 <template>
+<div>
   <FullCalendar :options="calendarOptions" />
+  <modal modalBoxId="selectedEvent" title="Appointment">
+    <div slot="body">
+      <Table>
+        <TableRow :values="['Patient', `${selected.title}`]"></TableRow>
+        <TableRow :values="['Pharmacy', `${selected.extendedProps.pharmacyName}`]"></TableRow>
+        <TableRow :values="['Time', formatDateTime(selected.start)]"></TableRow>
+      </Table>
+    </div>
+    <div slot="buttons">
+      <option-modal-buttons/>
+    </div>
+  </modal>
+  <modal-opener id="opener" modalBoxId="selectedEvent">Last selected</modal-opener>
+</div>
 </template>
 
 <script>
+import moment from 'moment'
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import ModalOpener from '../Modal/ModalOpener.vue'
+import Modal from '../Modal/Modal.vue'
+import OptionModalButtons from '../Modal/OptionModalButtons.vue'
+import Table from '../Table/Table.vue'
+import TableRow from '../Table/TableRow.vue'
 
 export default {
   components: {
-    FullCalendar
+    FullCalendar,
+    ModalOpener,
+    Modal,
+    OptionModalButtons,
+    Table,
+    TableRow
   },
+  props: ['appointments'],
   data() {
     return {
       calendarOptions: {
@@ -24,22 +51,23 @@ export default {
         initialView: 'dayGridMonth',
         dateClick: this.handleDateClick,
         eventClick: this.handleEventClick,
-        events: [
-          { title: 'Pera Peric', date: '2021-04-01 06:00' , end: '2021-04-01 06:20' },
-          { title: 'Milos Panic', date: '2021-04-01 15:00' , end: '2021-04-01 15:30' },
-          { title: 'Pera Peric', date: '2021-04-01 16:56' , end: '2021-04-01 17:20' },
-          { title: 'Pera Peric', date: '2021-04-02 16:00' , end: '2021-04-02 16:20' },
-          { title: 'Milos Panic', date: '2021-04-02 15:00' , end: '2021-04-02 15:25' }
-        ]
+        events: this.appointments
+      },
+      selected: {
+        extendedProps: {}
       }
     }
   },
   methods: {
     handleDateClick(arg) {
-      alert('date click! ' + arg.dateStr)
+      alert('Date: ' + arg.dateStr);
     },
     handleEventClick(clickInfo) {
-      alert(`Appointment with ${clickInfo.event.title}`)
+      this.selected = clickInfo.event;
+      document.getElementById("opener").click();
+    },
+    formatDateTime(date) {
+      return moment(date).format("DD-MMM-YYYY HH:mm");
     },
   }
 }
