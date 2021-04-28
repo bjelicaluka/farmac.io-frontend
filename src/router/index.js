@@ -24,6 +24,7 @@ import Grades from '../pages/Grades.vue'
 import WriteComplaint from '../pages/WriteComplaint.vue'
 import Complaints from '../pages/Complaints.vue'
 import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
+import Answers from '../pages/Answers.vue'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -288,6 +289,15 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.SystemAdmin, Roles.Patient]
+    }
+  },
+  {
+    path: '/complaints/my-answers',
+    name: 'Answers',
+    component: Answers,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin]
     }
   }
 ]

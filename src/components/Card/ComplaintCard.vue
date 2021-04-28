@@ -3,7 +3,7 @@
     <div class="card">
         <div class="card-body ">
             <h6 class="card-category text-danger">
-                <i class="material-icons">feedback</i> For {{!!complaint && getComplaintFor()}}
+                <i class="material-icons">feedback</i> Complaint for {{!!complaint && getComplaintFor()}}
             </h6>
             <h4 class="card-title">
                 {{!!complaint && complaint.text}}
@@ -15,7 +15,7 @@
                 <span>{{formatName(!!complaint && complaint.writer)}}</span>
             </div>
             <div v-if="showAnswersButton" @click="goToAnswersPage" class="stats ml-auto">
-                <i class="material-icons">chat_bubble</i> Answers
+                <i class="material-icons">question_answer</i> Answers
             </div>
         </div>
     </div>

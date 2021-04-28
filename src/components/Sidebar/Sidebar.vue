@@ -27,7 +27,7 @@
           <sidebar-item name="SystemAdmins" icon="people" to="/system-admins"></sidebar-item>
           <sidebar-item name="Suppliers" icon="people" to="/suppliers"></sidebar-item>
           <sidebar-item name="Complaints" icon="thumb_down_off_alt" to="/complaints"></sidebar-item>
-
+          <sidebar-item name="My answers" icon="question_answer" to="/complaints/my-answers"></sidebar-item>
         </ul>
 
         <ul class="nav" v-else-if="user.role === Roles.Supplier">

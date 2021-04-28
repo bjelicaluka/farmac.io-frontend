@@ -3,6 +3,7 @@ import axios from "axios";
 const state = {
     complaints: [],
     complaint: null,
+    answers: [],
     dermatologistsToComplaintAbout: [],
     pharmacistsToComplaintAbout: [],
     pharmaciesToComplaintAbout: [],
@@ -12,6 +13,7 @@ const state = {
 const getters = {
     getComplaints: state => state.complaints,
     getComplaint: state => state.complaint,
+    getAnswers: state => state.answers,
     getDermatologistsToComplaintAbout: state => state.dermatologistsToComplaintAbout,
     getPharmacistsToComplaintAbout: state => state.pharmacistsToComplaintAbout,
     getPharmaciesToComplaintAbout: state => state.pharmaciesToComplaintAbout,
@@ -121,6 +123,16 @@ const actions = {
         });
     },
 
+    fetchAnswersByWriter: (context, writerId) => {
+        axios.get(`/complaints/answered-by/${writerId}`)
+        .then(response => {
+            context.commit('setAnswers', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
+        })
+    },
+
     createAnswerForComplaint: (context, answer) => {
         axios.post(`/complaints/${answer.complaintId}/answers`, answer)
         .then(response => {
@@ -143,6 +155,10 @@ const mutations = {
 
     setComplaint: (state, complaint) => {
         state.complaint = complaint;
+    },
+
+    setAnswers: (state, answers) => {
+        state.answers = answers;
     },
 
     setDermatologistsToComplaintAbout: (state, dermatologists) => {
