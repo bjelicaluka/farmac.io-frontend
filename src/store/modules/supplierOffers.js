@@ -21,6 +21,16 @@ const actions = {
         })
     },
 
+    fetchOffersForPharmacyOrder: (context, pharmacyOrderId) => {
+        axios.get(`/suppliers/offers/pharmacy-order/${pharmacyOrderId}`)
+        .then(response => {
+            context.commit('setSupplierOffers', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        })
+    },
+
     addOfferFromSupplier: (context, supplierOffer) => {
         axios.post(`/suppliers/${supplierOffer.supplierId}/offers`, supplierOffer)
         .then(response => {
@@ -57,7 +67,26 @@ const actions = {
                 
             });
         })
-    }
+    },
+
+    acceptSupplierOffer: (context, supplierOfferId) => {
+        axios.post(`/suppliers/offers/${supplierOfferId}`, {})
+        .then(response => {
+            context.commit('setResult', {
+                label: 'accept',
+                ok: true,
+                message: `You have successfully accept an offer.`
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'accept',
+                ok: false,
+                message: error.response.data.ErrorMessage
+                
+            });
+        })
+    },
 };
 
 const mutations = {

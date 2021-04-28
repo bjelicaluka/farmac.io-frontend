@@ -41,6 +41,13 @@
                                 <DropDownItem @click="selectedPharmacyOrder = pharmacyOrder">Add offer</DropDownItem>
                             </ModalOpener>
 
+                            <ModalOpener
+                                v-if="user.role === Roles.PharmacyAdmin"
+                                modalBoxId="supplierOffersModal"
+                            >
+                                <DropDownItem @click="fetchSupplierOffersForPharmacyOrder(pharmacyOrder.id)">See offers</DropDownItem>
+                            </ModalOpener>
+
                         </DropDownMenu>
                     </div>
                 </TableRow>
@@ -71,6 +78,19 @@
                 />
             </div>
         </Modal>
+
+        <Modal
+            v-if="user.role === Roles.PharmacyAdmin"
+            modalBoxId="supplierOffersModal"
+            title="Supplier Offers"
+            sizeClass="modal-lg"
+        >
+            <div slot="body">
+                <SupplierOffersTable
+                    :supplierOffers="supplierOffers || []"
+                />
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -80,6 +100,7 @@ import Table from '../Table/Table.vue'
 import TableHead from '../Table/TableHead.vue'
 import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
+import SupplierOffersTable from '../Tables/SupplierOffersTable'
 import PharmacyOrderForm from '../Forms/PharmacyOrderForm'
 import SupplierOfferForm from '../Forms/SupplierOfferForm'
 import SelectOptionInput from '../Form/SelectOptionInput'
@@ -92,6 +113,7 @@ import DropDownItem from '../DropdownMenu/DropdownItem'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 
 import moment from 'moment'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     props: {
@@ -102,9 +124,8 @@ export default {
         return {
             Roles,
             user: {},
-            role: null,
             selectedPharmacyOrder: null,
-            pharmacyOrderStatusFilter: null
+            pharmacyOrderStatusFilter: null,
         }
     },
     mounted() {
@@ -125,14 +146,24 @@ export default {
         DropDownMenu,
         PharmacyOrderForm,
         SupplierOfferForm,
-        SelectOptionInput
+        SelectOptionInput,
+        SupplierOffersTable
     },
     watch: {
         pharmacyOrderStatusFilter() {
             this.$emit('filter', this.pharmacyOrderStatusFilter);
         }
     },
+    computed: {
+        ...mapGetters({
+            supplierOffers: 'supplierOffers/getSupplierOffers'
+        })
+    },
     methods: {
+        ...mapActions({
+            fetchSupplierOffersForPharmacyOrder: 'supplierOffers/fetchOffersForPharmacyOrder'
+        }),
+
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
@@ -141,7 +172,7 @@ export default {
             const maxLength = 100;
             const string = pharmacyOrder.orderedMedicines.map(({medicine, quantity}) => `${medicine.name}: ${quantity}`).join(', ');
             return string.length >= maxLength ? string.substring(0, maxLength - 3) + '...' : string;
-        }
+        },
     },
 }
 </script>
