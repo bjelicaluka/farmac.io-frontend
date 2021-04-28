@@ -1,5 +1,14 @@
 <template>
     <div>
+        <div class="col-3">
+        <SelectOptionInput class="justify-content-center align-items-center"
+            label="Filter by"
+            :showLabel=false
+            v-model="selectedFilterOption"
+            :options="filterOptions"
+            />
+        </div>
+
         <Table>
             <TableHead :columnNames="['For', 'Deadline', 'Delivery date', 'Total price', 'Status', ...(user.role === Roles.PharmacyAdmin ? [''] : [])]"></TableHead>
             <TableBody>
@@ -55,6 +64,7 @@ import ModalOpener from '../Modal/ModalOpener'
 import SupplierOfferForm from '../Forms/SupplierOfferForm'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
+import SelectOptionInput from '../Form/SelectOptionInput'
 
 import moment from 'moment'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
@@ -62,6 +72,23 @@ import { Roles } from '../../constants'
 import RoundButton from '../Form/RoundButton.vue'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
+
+
+let filterOptions = [
+  {
+      value: '0',
+      label: 'Accepted'
+  },
+  {
+      value: '1',
+      label: 'Refused'
+  },
+  {
+      value: '2',
+      label: 'Waiting for answer'
+  }
+];
+
 
 export default {
     props: {
@@ -72,15 +99,10 @@ export default {
         return {
             selectedSupplierOffer: null,
             supplierId: null,
+            filterOptions,
+            selectedFilterOption: null,
             user: {},
             Roles
-        }
-    },
-
-    mounted() {
-        this.user = {
-            id: getAccountIdFromToken(),
-            role: getRoleFromToken()
         }
     },
 
@@ -94,14 +116,14 @@ export default {
         SupplierOfferForm,
         DropDownMenu,
         DropDownItem,
+        SelectOptionInput,
         RoundButton
     },
 
-    computed: {
-        ...mapGetters({result: 'supplierOffers/getResult'})
-    },
-
     watch: {
+        selectedFilterOption() {
+            this.$emit('filterChanged', this.selectedFilterOption);
+        },
         result({label, ok, message}) {
             if(label !== 'delete' && label !== 'accept')
                 return;
@@ -112,6 +134,10 @@ export default {
                 toastr.error(message);
             }
         }
+    },
+
+    computed: {
+        ...mapGetters({result: 'supplierOffers/getResult'})
     },
 
     methods: {
@@ -135,6 +161,13 @@ export default {
             const descriptiveStatuses = ['Accepted', 'Refused', 'Waiting for answer'];
 
             return descriptiveStatuses[status]
+        }
+    },
+    
+    mounted() {
+        this.user = {
+            id: getAccountIdFromToken(),
+            role: getRoleFromToken()
         }
     }
 }
