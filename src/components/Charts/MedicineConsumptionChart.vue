@@ -2,7 +2,7 @@
   <div id="chart">
     <apexchart
       ref="realtimeChart"
-      type="line" 
+      type="line"
       height="350"
       :options="chartOptions" 
       :series="series"
@@ -26,7 +26,7 @@ export default {
   data: () => {
     return {
       series: [{
-          name: "Examinations",
+          name: "Medicine Consumption",
           data: []
       }],
       chartOptions: {
@@ -38,7 +38,7 @@ export default {
           }
         },
         stroke: {
-          curve: 'smooth'
+          curve: 'curved'
         },
         grid: {
           row: {

@@ -6,11 +6,18 @@
             </Card>
             <Card
                 title="Examinations"
-                class="col-6"
                 v-if="examinationReportsChartData.length"
             >
                 <ExaminationsChart
                     :seriesData="examinationReportsChartData"
+                />
+            </Card>
+            <Card
+                title="Medicine Consumption"
+                v-if="medicineConsumptionReportsChartData.length"
+            >
+                <MedicineConsumptionChart
+                    :seriesData="medicineConsumptionReportsChartData"
                 />
             </Card>
         </div> 
@@ -27,13 +34,15 @@ import Card from '../components/Card/Card.vue'
 import ExaminationsChart from '../components/Charts/ExaminationsChart.vue'
 import ReportTimeIntervalPickerForm from '../components/Forms/ReportTimeIntervalPickerForm'
 import moment from 'moment'
+import MedicineConsumptionChart from '../components/Charts/MedicineConsumptionChart.vue'
 
 
 export default {
      components: {
           Card,
           ExaminationsChart,
-          ReportTimeIntervalPickerForm
+          ReportTimeIntervalPickerForm,
+          MedicineConsumptionChart
     },
 
     data: () => {
@@ -42,13 +51,15 @@ export default {
             user: {},
             roles: Roles,
             examinationReportsChartData: [],
+            medicineConsumptionReportsChartData: [],
             intervalType: 'month'
         }
     },
     computed: {
         ...mapGetters({
             pharmacyAdmin: 'pharmacyAdmins/getPharmacyAdmin',
-            examinationReports: 'pharmacyReports/getExaminationReports'
+            examinationReports: 'pharmacyReports/getExaminationReports',
+            medicineConsumptionReports: 'pharmacyReports/getMedicineConsumptionReports'
         })
     },
     watch: {
@@ -59,6 +70,12 @@ export default {
             this.examinationReportsChartData = this.examinationReports.map(ex => {
                 const groupName = this.intervalType === 'month' ? ex.group : moment(ex.group, 'MM').format('MMMM');
                 return { y: ex.value, x: groupName }
+            });
+        },
+        medicineConsumptionReports() {
+            this.medicineConsumptionReportsChartData = this.medicineConsumptionReports.map(mc => {
+                const groupName = this.intervalType === 'month' ? mc.group : moment(mc.group, 'MM').format('MMMM');
+                return { y: mc.value, x: groupName }
             });
         }
     },
