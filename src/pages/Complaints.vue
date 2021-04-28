@@ -97,6 +97,7 @@ export default {
         ...mapGetters({
             dermatologistsToComplaintAbout: 'complaints/getDermatologistsToComplaintAbout',
             pharmacistsToComplaintAbout: 'complaints/getPharmacistsToComplaintAbout',
+            pharmaciesToComplaintAbout: 'complaints/getPharmaciesToComplaintAbout',
             result: 'complaints/getResult'
         })
     },
@@ -105,15 +106,18 @@ export default {
         ...mapActions({
             fetchDermatologistsToComplaintAbout: 'complaints/fetchDermatologistsToComplaintAbout',
             fetchPharmacistsToComplaintAbout: 'complaints/fetchPharmacistsToComplaintAbout',
+            fetchPharmaciesToComplaintAbout: 'complaints/fetchPharmaciesToComplaintAbout',
             createComplaintAboutDermatologist: 'complaints/createComplaintAboutDermatologist',
-            createComplaintAboutPharmacist: 'complaints/createComplaintAboutPharmacist'
+            createComplaintAboutPharmacist: 'complaints/createComplaintAboutPharmacist',
+            createComplaintAboutPharmacy: 'complaints/createComplaintAboutPharmacy'
 
         }),
 
         getFetchComplaintAboutMethod(complaintAbout) {
             const fetchActions = {
                 'Dermatologist': this.fetchDermatologistsToComplaintAbout,
-                'Pharmacist': this.fetchPharmacistsToComplaintAbout
+                'Pharmacist': this.fetchPharmacistsToComplaintAbout,
+                'Pharmacy': this.fetchPharmaciesToComplaintAbout
             }
 
             return fetchActions[complaintAbout];
@@ -122,7 +126,8 @@ export default {
         getCreateComplaintAboutMethod(complaintAbout) {
             const createComplaintActions = {
                 'Dermatologist': this.createComplaintAboutDermatologist,
-                'Pharmacist': this.createComplaintAboutPharmacist
+                'Pharmacist': this.createComplaintAboutPharmacist,
+                'Pharmacy': this.createComplaintAboutPharmacy
             };
 
             return createComplaintActions[complaintAbout];
@@ -142,6 +147,14 @@ export default {
                     writerId: this.userId,
                     text: this.complaintText,
                     pharmacistId: this.selectedComplaintFor
+                };
+            }
+
+            if(this.selectedComplaintAbout === 'Pharmacy') {
+                 return {
+                    writerId: this.userId,
+                    text: this.complaintText,
+                    pharmacyId: this.selectedComplaintFor
                 };
             }
         },
@@ -193,6 +206,15 @@ export default {
                 return {
                     label: `${pharmacist.firstName} ${pharmacist.lastName}`,
                     value: pharmacist.id
+                }
+            });
+        },
+
+        pharmaciesToComplaintAbout(pharmacies) {
+            this.complaintForOptions = pharmacies.map(pharmacy => {
+                return {
+                    label: pharmacy.name,
+                    value: pharmacy.id
                 }
             });
         },

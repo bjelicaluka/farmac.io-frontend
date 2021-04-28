@@ -3,12 +3,14 @@ import axios from "axios";
 const state = {
     dermatologistsToComplaintAbout: [],
     pharmacistsToComplaintAbout: [],
+    pharmaciesToComplaintAbout: [],
     result: null
 };
 
 const getters = {
     getDermatologistsToComplaintAbout: state => state.dermatologistsToComplaintAbout,
     getPharmacistsToComplaintAbout: state => state.pharmacistsToComplaintAbout,
+    getPharmaciesToComplaintAbout: state => state.pharmaciesToComplaintAbout,
     getResult: state => state.result
 };
 
@@ -59,6 +61,30 @@ const actions = {
         .catch(error => {
             context.commit('setResult', {label:'createComplaint', ok: false, message: error.response.data.ErrorMessage });
         });
+    },
+
+    fetchPharmaciesToComplaintAbout: (context, patientId) => {
+        axios.get(`/complaints/${patientId}/complaintable/pharmacies`)
+        .then(response => {
+            context.commit('setPharmaciesToComplaintAbout', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
+        })
+    },
+
+    createComplaintAboutPharmacy: (context, complaint) => {
+        axios.post(`/complaints/about-pharmacies`, complaint)
+        .then(response => {
+            context.commit('setResult', {
+                label: 'createComplaint',
+                ok: true,
+                message: 'You have sucessfully complainted about pharmacy.'
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'createComplaint', ok: false, message: error.response.data.ErrorMessage });
+        });
     }
 };
 
@@ -69,6 +95,10 @@ const mutations = {
 
     setPharmacistsToComplaintAbout: (state, pharmacists) => {
         state.pharmacistsToComplaintAbout = pharmacists;
+    },
+
+    setPharmaciesToComplaintAbout: (state, pharmacies) => {
+        state.pharmaciesToComplaintAbout = pharmacies;
     },
 
     setResult: (state, result) => {
