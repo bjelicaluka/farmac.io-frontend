@@ -1,5 +1,14 @@
 <template>
     <div>
+        <div class="col-3">
+        <SelectOptionInput class="justify-content-center align-items-center"
+            label="Filter by"
+            :showLabel=false
+            v-model="selectedFilterOption"
+            :options="filterOptions"
+            />
+        </div>
+
         <Table>
             <TableHead :columnNames="['For', 'Deadline', 'Delivery date', 'Total price', 'Status', '']"></TableHead>
             <TableBody>
@@ -48,8 +57,26 @@ import ModalOpener from '../Modal/ModalOpener'
 import SupplierOfferForm from '../Forms/SupplierOfferForm'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
+import SelectOptionInput from '../Form/SelectOptionInput'
 
 import moment from 'moment'
+
+
+let filterOptions = [
+  {
+      value: '0',
+      label: 'Accepted'
+  },
+  {
+      value: '1',
+      label: 'Refused'
+  },
+  {
+      value: '2',
+      label: 'Waiting for answer'
+  }
+];
+
 
 export default {
     props: {
@@ -59,7 +86,9 @@ export default {
     data: () => {
         return {
             selectedSupplierOffer: null,
-            supplierId: null
+            supplierId: null,
+            filterOptions,
+            selectedFilterOption: null
         }
     },
 
@@ -72,7 +101,14 @@ export default {
         ModalOpener,
         SupplierOfferForm,
         DropDownMenu,
-        DropDownItem
+        DropDownItem,
+        SelectOptionInput
+    },
+
+    watch: {
+        selectedFilterOption() {
+            this.$emit('filterChanged', this.selectedFilterOption);
+        }
     },
 
     methods: {
