@@ -249,7 +249,7 @@ export default {
             e.preventDefault();
             const pharmacyOrderObject = {
                 orderedMedicines: this.pharmacyOrder.orderedMedicines,
-                offersDeadline: this.pharmacyOrder.offersDeadline,
+                offersDeadline: moment(this.pharmacyOrder.offersDeadline).format(),
                 pharmacyId: this.pharmacyId,
                 pharmacyAdminId: this.pharmacyAdminId,
             };

@@ -67,7 +67,26 @@ const actions = {
                 
             });
         })
-    }
+    },
+
+    acceptSupplierOffer: (context, supplierOfferId) => {
+        axios.post(`/suppliers/offers/${supplierOfferId}`, {})
+        .then(response => {
+            context.commit('setResult', {
+                label: 'accept',
+                ok: true,
+                message: `You have successfully accept an offer.`
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'accept',
+                ok: false,
+                message: error.response.data.ErrorMessage
+                
+            });
+        })
+    },
 };
 
 const mutations = {

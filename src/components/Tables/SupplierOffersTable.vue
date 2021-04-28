@@ -1,7 +1,7 @@
 <template>
     <div>
         <Table>
-            <TableHead :columnNames="['For', 'Deadline', 'Delivery date', 'Total price', 'Status', '']"></TableHead>
+            <TableHead :columnNames="['For', 'Deadline', 'Delivery date', 'Total price', 'Status', ...(user.role === Roles.PharmacyAdmin ? [''] : [])]"></TableHead>
             <TableBody>
                 <TableRow 
                     v-for="(supplierOffer, i) in supplierOffers" 
@@ -20,6 +20,13 @@
                                 <DropDownItem @click="handleEditClick(supplierOffer)">Update Offer</DropDownItem>
                             </ModalOpener>
                         </DropDownMenu>
+                        
+                        <RoundButton
+                            v-if="user.role === Roles.PharmacyAdmin"
+                            :title="'Accept Offer'"
+                            :iconName="'check'"
+                            @click="handleAcceptOffer(supplierOffer.id)"
+                        />
                     </div>
                 </TableRow>
             </TableBody>
@@ -52,6 +59,9 @@ import DropDownItem from '../DropdownMenu/DropdownItem'
 import moment from 'moment'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 import { Roles } from '../../constants'
+import RoundButton from '../Form/RoundButton.vue'
+import { mapActions, mapGetters } from 'vuex'
+import toastr from 'toastr'
 
 export default {
     props: {
@@ -83,12 +93,38 @@ export default {
         ModalOpener,
         SupplierOfferForm,
         DropDownMenu,
-        DropDownItem
+        DropDownItem,
+        RoundButton
+    },
+
+    computed: {
+        ...mapGetters({result: 'supplierOffers/getResult'})
+    },
+
+    watch: {
+        result({label, ok, message}) {
+            if(label !== 'delete' && label !== 'accept')
+                return;
+
+            if(ok) {
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
+        }
     },
 
     methods: {
+        ...mapActions({
+            acceptSupplierOffer: 'supplierOffers/acceptSupplierOffer'
+        }),
+
          handleEditClick(supplierOffer) {
             this.selectedSupplierOffer = supplierOffer;
+        },
+
+        handleAcceptOffer(supplierOfferId) {
+            this.acceptSupplierOffer(supplierOfferId);
         },
 
         formatDateTime(date) {
