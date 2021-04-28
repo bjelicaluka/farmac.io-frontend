@@ -86,16 +86,22 @@ export default {
     intervalType() {
       this.from = moment().startOf(this.intervalType);
       this.to = moment().endOf(this.intervalType);
+      this.$emit('intervalTypeChange', this.intervalType);
     },
+  },
+
+  mounted() {
+    this.$emit('intervalTypeChange', this.intervalType);
   },
 
   methods: {
     ...mapActions({
+      fetchExaminationReports: 'pharmacyReports/fetchExaminationReports'
     }),
 
     onSubmit(e) {
       e.preventDefault();
-      
+      this.fetchExaminationReports({pharmacyId: this.pharmacyId, timePeriod: {from: this.from.format(), to: this.to.format()}});
     },
     handleNext() {
       this.from = moment(this.from.add(1, this.intervalType));

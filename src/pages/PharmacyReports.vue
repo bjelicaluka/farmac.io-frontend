@@ -2,14 +2,15 @@
     <div class="content">
         <div class="container-fluid">
             <Card>
-                <ReportTimeIntervalPickerForm /> 
+                <ReportTimeIntervalPickerForm @intervalTypeChange="intervalType = $event" :pharmacyId="pharmacyId" /> 
             </Card>
             <Card
-                title="Chart"
+                title="Examinations"
                 class="col-6"
+                v-if="examinationReportsChartData.length"
             >
-                <Chart
-                    :seriesData="[{y: 10, x: 'Jan'}, {y: 41, x: 'Feb'}, {y: 31, x: 'Mar'}]"
+                <ExaminationsChart
+                    :seriesData="examinationReportsChartData"
                 />
             </Card>
         </div> 
@@ -23,14 +24,15 @@ import { mapGetters, mapActions } from 'vuex'
 import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
 import Card from '../components/Card/Card.vue'
-import Chart from '../components/Chart/Chart.vue'
+import ExaminationsChart from '../components/Charts/ExaminationsChart.vue'
 import ReportTimeIntervalPickerForm from '../components/Forms/ReportTimeIntervalPickerForm'
+import moment from 'moment'
 
 
 export default {
      components: {
           Card,
-          Chart,
+          ExaminationsChart,
           ReportTimeIntervalPickerForm
     },
 
@@ -38,23 +40,33 @@ export default {
         return {
             pharmacyId: null,
             user: {},
-            roles: Roles
+            roles: Roles,
+            examinationReportsChartData: [],
+            intervalType: 'month'
         }
     },
     computed: {
         ...mapGetters({
-            pharmacyAdmin: 'pharmacyAdmins/getPharmacyAdmin'
+            pharmacyAdmin: 'pharmacyAdmins/getPharmacyAdmin',
+            examinationReports: 'pharmacyReports/getExaminationReports'
         })
     },
     watch: {
         pharmacyAdmin() {
             this.pharmacyId = this.pharmacyAdmin.user.pharmacyId;
+        },
+        examinationReports() {
+            this.examinationReportsChartData = this.examinationReports.map(ex => {
+                const groupName = this.intervalType === 'month' ? ex.group : moment(ex.group, 'MM').format('MMMM');
+                return { y: ex.value, x: groupName }
+            });
         }
     },
     methods: {
         ...mapActions({
             fetchPharmacyAdminById: 'pharmacyAdmins/fetchPharmacyAdminById',
         }),
+
     },
     mounted() {
         this.user = {
