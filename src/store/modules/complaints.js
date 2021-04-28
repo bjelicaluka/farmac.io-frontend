@@ -29,6 +29,16 @@ const actions = {
         })
     },
 
+    fetchComplaintsByWriter: (context, writerId) => {
+        axios.get(`/complaints/by/${writerId}`)
+        .then(response => {
+            context.commit('setComplaints', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
+        })
+    },
+
     fetchComplaintById: (context, complaintId) => {
         axios.get(`/complaints/${complaintId}`)
         .then(response => {

@@ -16,7 +16,7 @@
 import ComplaintsTable from '../components/Tables/ComplaintsTable'
 
 import { mapActions, mapGetters } from 'vuex'
-import { getRoleFromToken } from '../utils/token'
+import { getRoleFromToken, getUserIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
 
 export default {
@@ -27,9 +27,10 @@ export default {
     data: function() {
         return {
             user: {
-                role: null,
-                roles: Roles
-            }
+                id: null,
+                role: null
+            },
+            roles: Roles
         }
     },
 
@@ -41,14 +42,21 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchComplaints: 'complaints/fetchComplaints'
+            fetchComplaints: 'complaints/fetchComplaints',
+            fetchComplaintsByWriter: 'complaints/fetchComplaintsByWriter'
         })
     },
 
     mounted() {
-        this.user.role = getRoleFromToken();
-        if(this.user.role === Roles.SystemAdmin) {
+        this.user = {
+            role: getRoleFromToken(),
+            id: getUserIdFromToken()
+        };
+
+        if(this.user.role === this.roles.SystemAdmin) {
             this.fetchComplaints();
+        } else if (this.user.role === this.roles.Patient) {
+            this.fetchComplaintsByWriter(this.user.id);
         }
     }
 

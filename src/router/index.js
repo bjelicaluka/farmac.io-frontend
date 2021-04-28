@@ -278,7 +278,7 @@ const routes = [
     component: Complaints,
     meta: {
       layout: 'AppLayoutMain',
-      authorizedRoles: [Roles.SystemAdmin]
+      authorizedRoles: [Roles.SystemAdmin, Roles.Patient]
     }
   },
   {
@@ -287,7 +287,7 @@ const routes = [
     component: ComplaintAnswers,
     meta: {
       layout: 'AppLayoutMain',
-      authorizedRoles: [Roles.SystemAdmin]
+      authorizedRoles: [Roles.SystemAdmin, Roles.Patient]
     }
   }
 ]

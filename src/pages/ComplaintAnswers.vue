@@ -10,7 +10,7 @@
                         </div>
                     </div>
 
-                    <Form @submit="handleSubmit">
+                    <Form v-if="role === roles.SystemAdmin" @submit="handleSubmit">
                         <FormGroup>
                             <TextArea
                                 label="Answer text"
@@ -42,7 +42,8 @@ import FormGroup from '../components/Form/FormGroup'
 import TextArea from '../components/Form/TextArea'
 import Button from '../components/Form/Button'
 
-import { getUserIdFromToken } from '../utils/token'
+import { getRoleFromToken, getUserIdFromToken } from '../utils/token'
+import { Roles } from '../constants'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 
@@ -60,6 +61,8 @@ export default {
     data: function() {
         return {
             complaintId: null,
+            role: null,
+            roles: Roles,
             answersText: '',
             showErrorMessage: false
         }
@@ -104,6 +107,7 @@ export default {
     },
 
     mounted() {
+        this.role = getRoleFromToken();
         this.complaintId = this.$route.params.id;
         this.fetchComplaintById(this.complaintId);
     }

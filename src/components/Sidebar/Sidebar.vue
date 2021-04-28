@@ -51,6 +51,7 @@
           <sidebar-item name="Consultation with pharmacist" icon="people" to="/appointments-with-pharmacist"></sidebar-item>
           <sidebar-item name="Grades" icon="thumb_up_off_alt" to="/grades"></sidebar-item>
           <sidebar-item name="Write complaint" icon="thumb_down_off_alt" to="/write-complaint"></sidebar-item>
+          <sidebar-item name="My complaints" icon="thumb_down_off_alt" to="/complaints"></sidebar-item>
         </ul>
 
         <ul class="nav"  v-else-if="user.role === Roles.PharmacyAdmin">
