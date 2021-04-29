@@ -88,7 +88,8 @@ const routes = [
     name: 'PharmacyReports',
     component: PharmacyReports,
     meta: {
-      layout: 'AppLayoutMain'
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.PharmacyAdmin]
     }
   },
   {

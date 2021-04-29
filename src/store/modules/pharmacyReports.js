@@ -17,7 +17,7 @@ const getters = {
 const actions = {
 
     fetchExaminationReports: (context, {pharmacyId, timePeriod}) => {
-        axios.post(`/pharmacy/${pharmacyId}/examination-report`, timePeriod)
+        axios.post(`/pharmacies/${pharmacyId}/examination-report`, timePeriod)
         .then(response => {
             context.commit('setExaminationReports', response.data);
         })
@@ -27,7 +27,7 @@ const actions = {
     },
 
     fetchMedicineConsumptionReports: (context, {pharmacyId, timePeriod}) => {
-        axios.post(`/pharmacy/${pharmacyId}/medicine-consumption-report`, timePeriod)
+        axios.post(`/pharmacies/${pharmacyId}/medicine-consumption-report`, timePeriod)
         .then(response => {
             context.commit('setMedicineConsumptionReports', response.data);
         })
@@ -37,7 +37,7 @@ const actions = {
     },
 
     fetchPharmacyIncomeReports: (context, {pharmacyId, timePeriod}) => {
-        axios.post(`/pharmacy/${pharmacyId}/pharmacy-income-report`, timePeriod)
+        axios.post(`/pharmacies/${pharmacyId}/pharmacy-income-report`, timePeriod)
         .then(response => {
             context.commit('setPharmacyIncomeReports', response.data);
         })
