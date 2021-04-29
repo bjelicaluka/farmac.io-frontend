@@ -19,6 +19,7 @@ import supplierOffers from './modules/supplierOffers'
 import pharmacyOrders from './modules/pharmacyOrders'
 import pharmacyPriceLists from './modules/pharmacyPriceLists'
 import followings from './modules/followings'
+import complaints from './modules/complaints'
 
 Vue.use(Vuex)
 
@@ -42,6 +43,7 @@ export default new Vuex.Store({
     supplierOffers,
     pharmacyOrders,
     pharmacyPriceLists,
-    followings
+    followings,
+    complaints
   }
 });

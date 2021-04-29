@@ -8,6 +8,7 @@
           v-bind:value="value"
           v-on:input="$emit('input', $event.target.value)"
           :disabled="disabled"
+          :placeholder="placeholder"
         />
     </div>
     <InputErrorMessage
@@ -54,6 +55,10 @@ export default {
       type: String,
       default: "Invalid input."
     },
+    placeholder: {
+      type: String,
+      default: ''
+    }
   }
 }
 </script>
