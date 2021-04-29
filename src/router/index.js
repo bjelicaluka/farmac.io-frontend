@@ -18,6 +18,7 @@ import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
 import AppointmentsToReport from '../pages/AppointmentsToReport.vue'
 import Report from '../pages/Report.vue'
+import ViewReport from '../pages/ViewReport.vue'
 import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatologist.vue'
 import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
@@ -259,6 +260,14 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
+    }
+  },
+  {
+    path: '/view-report/:id',
+    name: 'ViewReport',
+    component: ViewReport,
+    meta: {
+      layout: 'AppLayoutMain',
     }
   },
 ]

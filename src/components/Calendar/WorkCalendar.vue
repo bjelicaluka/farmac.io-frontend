@@ -92,7 +92,7 @@ export default {
     },
     handleReport() {
       if (this.selected.extendedProps.isReported)
-        return; //TODO
+        this.$router.push(`/view-report/${this.selected.id}`);
       else
         this.$router.push(`/report/${this.selected.id}`);
     },
