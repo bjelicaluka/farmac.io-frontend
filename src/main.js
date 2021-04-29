@@ -7,6 +7,7 @@ import AppLayout from '@/layouts/AppLayout'
 import { Icon } from 'leaflet';
 import axios from 'axios';
 import toastr from 'toastr'
+import VueApexCharts from 'vue-apexcharts'
 
 import 'leaflet/dist/leaflet.css';
 
@@ -16,6 +17,9 @@ axios.defaults.baseURL = process.env.VUE_APP_BASEURL
 setAuthorizationHeaderInterceptor();
 setUnauthorizedHeaderInterceptor(store)
 
+Vue.use(VueApexCharts)
+
+Vue.component('apexchart', VueApexCharts)
 Vue.component('AppLayout', AppLayout)
 
 Vue.config.productionTip = false

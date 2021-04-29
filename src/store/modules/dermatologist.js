@@ -3,6 +3,9 @@ import axios from "axios";
 const state = {
     dermatologist: null,
     dermatologists: null,
+    canBeRatedDermatologists: null,
+    ratedDermatologists: null,
+    dermatologistGrade: null,
     result: null,
     pharmacyNames: null
 };
@@ -11,6 +14,9 @@ const getters = {
     getDermatologist: state => state.dermatologist,
     getDermatologists: state => state.dermatologists,
     getPharmacyNames: state => state.pharmacyNames,
+    getCanBeRatedDermatologists: state => state.canBeRatedDermatologists,
+    getRatedDermatologists: state => state.ratedDermatologists,
+    getDermatologistGrade: state => state.dermatologistGrade,
     getResult: state => state.result,
 };
 
@@ -141,6 +147,43 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    fetchCanBeRatedDermatologists: (context, patientId) => {
+        axios.get(`/dermatologists/${patientId}/can-rate`)
+        .then(resp => {
+            context.commit('setCanBeRatedDermatologists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        })
+    },
+    fetchRatedDermatologists: (context, patientId) => {
+        axios.get(`/dermatologists/${patientId}/rated`)
+        .then(resp => {
+            context.commit('setRatedDermatologists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        })
+    },
+    fetchDermatologistGrade: (context, { patientId, dermatologistId }) => {
+        axios.get(`/dermatologists/${dermatologistId}/grade/${patientId}`)
+        .then(resp => {
+            context.commit('setDermatologistGrade', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        })
+    },
+    rateDermatologist: (context, {patientId, dermatologistId, grade}) => {
+        console.log(dermatologistId);
+        axios.post(`/dermatologists/rate`, {patientId, dermatologistId, grade})
+        .then(resp => {
+            context.commit('setResult', {label: 'grades', ok: true, message: "You have successfully rated a dermatologist."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'grades', ok: false, message: err.response.data.ErrorMessage});
+        })
     }
 };
 
@@ -158,6 +201,15 @@ const mutations = {
     },
     setResult: (state, result) => {
         state.result = result;
+    },
+    setCanBeRatedDermatologists: (state, canBeRatedDermatologists) => {
+        state.canBeRatedDermatologists = canBeRatedDermatologists;
+    },
+    setRatedDermatologists: (state, ratedDermatologists) => {
+        state.ratedDermatologists = ratedDermatologists;
+    },
+    setDermatologistGrade: (state, dermatologistGrade) => {
+        state.dermatologistGrade = dermatologistGrade;
     }
 };
 

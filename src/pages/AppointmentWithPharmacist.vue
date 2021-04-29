@@ -133,7 +133,7 @@ export default {
                 toastr.info("The duration of the consultation must be greater than 0.");
                 return;
             }
-            let sortCriteria = this.selectOptions1.filter(item => item.value == this.selectedSortCriteria)[0]
+            let sortCriteria = this.sortBy.filter(item => item.value == this.selectedSortCriteria)[0]
             sortCriteria = this.selectedSortCriteria ? sortCriteria['label'].toLowerCase() : '';
             let isAscending =  this.selectedIsAsc == 1 ? true : false
             this.searchPharmaciesForAppointments(
