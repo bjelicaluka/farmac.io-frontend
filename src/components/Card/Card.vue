@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-header card-header-primary">
+    <div v-if="!!title || !!description" class="card-header card-header-primary">
       <h4 class="card-title">{{title}}</h4>
       <p class="card-category">{{description}}</p>
     </div>

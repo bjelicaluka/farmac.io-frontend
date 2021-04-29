@@ -102,7 +102,6 @@ export default {
             appointmentsResult: 'appointments/getResult',
             medicines: 'medicines/getMedicines',
             pharmacyOrders: 'pharmacyOrders/getPharmacyOrders',
-            pharmacyOrder: 'pharmacyOrders/getPharmacyOrder',
             followingResult: 'followings/getResult',
             isFollowing: 'followings/isFollowing',
         })
@@ -177,8 +176,6 @@ export default {
             fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
             filterPharmacyOrders: 'pharmacyOrders/filterPharmacyOrders',
-            // TEMP
-            fetchPharmacyOrderById: 'pharmacyOrders/fetchPharmacyOrderById',
             fetchPatientFollowings: 'followings/fetchPatientFollowings',
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
@@ -219,8 +216,6 @@ export default {
         this.fetchDermatologistAppointments(this.pharmacyId);
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
         this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
-        // TEMP
-        this.fetchPharmacyOrderById({pharmacyOrderId: '08d904d2-dbf2-4b37-8e06-24bc12ed0474', pharmacyId: this.pharmacyId});
 
         this.user = {
             id: getAccountIdFromToken(),

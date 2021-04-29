@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Pharmacy from '../pages/Pharmacy.vue'
+import PharmacyReports from '../pages/PharmacyReports'
 import PharmacyPriceList from '../pages/PharmacyPriceList.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
@@ -81,6 +82,15 @@ const routes = [
     component: Pharmacy,
     meta: {
       layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/pharmacy-reports',
+    name: 'PharmacyReports',
+    component: PharmacyReports,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.PharmacyAdmin]
     }
   },
   {
