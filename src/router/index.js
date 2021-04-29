@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Pharmacy from '../pages/Pharmacy.vue'
+import PharmacyReports from '../pages/PharmacyReports'
 import PharmacyPriceList from '../pages/PharmacyPriceList.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
@@ -21,6 +22,7 @@ import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatolog
 import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
 import Grades from '../pages/Grades.vue'
+import Complaints from '../pages/Complaints.vue'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -80,6 +82,15 @@ const routes = [
     component: Pharmacy,
     meta: {
       layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/pharmacy-reports',
+    name: 'PharmacyReports',
+    component: PharmacyReports,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.PharmacyAdmin]
     }
   },
   {
@@ -256,6 +267,14 @@ const routes = [
     path: '/grades',
     name: 'Grades',
     component: Grades,
+    meta: {
+      layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/complaints',
+    name: 'Complaints',
+    component: Complaints,
     meta: {
       layout: 'AppLayoutMain'
     }

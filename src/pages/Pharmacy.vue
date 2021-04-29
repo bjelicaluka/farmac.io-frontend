@@ -190,7 +190,6 @@ export default {
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
             filterPharmacyOrders: 'pharmacyOrders/filterPharmacyOrders',
             fetchPharmacyPromotions: 'pharmacyPromotions/fetchPharmacyPromotions',
-            
             fetchPatientFollowings: 'followings/fetchPatientFollowings',
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
