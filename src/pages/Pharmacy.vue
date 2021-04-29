@@ -38,6 +38,9 @@
             <Card title='Medicine Orders' :description="`Medicine orders for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin || user.role === roles.Supplier">
                 <PharmacyOrdersTable :pharmacyOrders="pharmacyOrders" :pharmacyId="pharmacyId" @filter="pharmacyOrderProcessedFilter = $event" />
             </Card>
+            <Card title='Promotions' :description="`Promotions for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
+                <PharmacyPromotionsTable :pharmacyPromotions="pharmacyPromotions" :pharmacyId="pharmacyId" />
+            </Card>
         </div> 
     </div>
 </template>
@@ -60,6 +63,7 @@ import ModalOpener from '../components/Modal/ModalOpener'
 
 import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
+import PharmacyPromotionsTable from '../components/Tables/PharmacyPromotionsTable.vue';
 
 
 export default {
@@ -74,7 +78,8 @@ export default {
         FollowPharmacyModal,
         UnfollowPharmacyModal,
         ModalOpener,
-        PharmacyOrdersTable
+        PharmacyOrdersTable,
+          PharmacyPromotionsTable
     },
 
     data: () => {
@@ -95,6 +100,7 @@ export default {
             pharmacists: 'pharmacist/getPharmacists',
             pharmacistResult: 'pharmacist/getResult',
             pharmacyOrdersResult: 'pharmacyOrders/getResult',
+            pharmacyPromotionsResult: 'pharmacyPromotions/getResult',
 
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
@@ -102,6 +108,8 @@ export default {
             appointmentsResult: 'appointments/getResult',
             medicines: 'medicines/getMedicines',
             pharmacyOrders: 'pharmacyOrders/getPharmacyOrders',
+            pharmacyPromotions: 'pharmacyPromotions/getPharmacyPromotions',
+            pharmacyOrder: 'pharmacyOrders/getPharmacyOrder',
             followingResult: 'followings/getResult',
             isFollowing: 'followings/isFollowing',
         })
@@ -149,6 +157,11 @@ export default {
                 ok && this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
             }
         },
+        pharmacyPromotionsResult({ok, label}){
+            if(['add', 'update', 'delete'].find(l => l === label)) {
+                ok && this.fetchPharmacyPromotions(this.pharmacyId);
+            }
+        },
         pharmacyOrderProcessedFilter() {
             this.filterPharmacyOrders({pharmacyId: this.pharmacyId, isProcessed: this.pharmacyOrderProcessedFilter});
         },
@@ -176,6 +189,7 @@ export default {
             fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
             filterPharmacyOrders: 'pharmacyOrders/filterPharmacyOrders',
+            fetchPharmacyPromotions: 'pharmacyPromotions/fetchPharmacyPromotions',
             fetchPatientFollowings: 'followings/fetchPatientFollowings',
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
@@ -216,6 +230,7 @@ export default {
         this.fetchDermatologistAppointments(this.pharmacyId);
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
         this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
+        this.fetchPharmacyPromotions(this.pharmacyId);
 
         this.user = {
             id: getAccountIdFromToken(),
