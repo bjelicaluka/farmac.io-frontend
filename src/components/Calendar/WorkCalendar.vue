@@ -1,6 +1,13 @@
 <template>
 <div>
-  <FullCalendar :options="calendarOptions" />
+  <SelectOptionInput v-if="!!pharmacies"
+    class="col-4"
+    :label="'ALL PHARMACIES'"
+    :showLabel="false"
+    @change="handleChangePharmacy"
+    :options="pharmacies"
+  />
+  <FullCalendar :options="calendarOptions" ref="calendar" />
   <modal modalBoxId="selectedEvent" title="Appointment">
     <div slot="body">
       <Table>
@@ -37,6 +44,7 @@ import Table from '../Table/Table.vue'
 import TableRow from '../Table/TableRow.vue'
 import ButtonWithIcon from '../Form/ButtonWithIcon.vue'
 import ModalCloser from '../Modal/ModalCloser.vue'
+import SelectOptionInput from '../Form/SelectOptionInput.vue'
 
 export default {
   components: {
@@ -46,9 +54,10 @@ export default {
     Table,
     TableRow,
     ButtonWithIcon,
-    ModalCloser
+    ModalCloser,
+    SelectOptionInput
   },
-  props: ['appointments'],
+  props: ['appointments', 'pharmacies'],
   data() {
     return {
       calendarOptions: {
@@ -65,7 +74,8 @@ export default {
       },
       selected: {
         extendedProps: {}
-      }
+      },
+      currentPharmacy: null
     }
   },
   methods: {
@@ -85,6 +95,15 @@ export default {
         return; //TODO
       else
         this.$router.push(`/report/${this.selected.id}`);
+    },
+    handleChangePharmacy(e) {
+      this.currentPharmacy = e.target.value;
+      let calendarApi = this.$refs.calendar.getApi();
+      calendarApi.getEvents().forEach(a => {
+        if (this.currentPharmacy==='' || a.extendedProps.pharmacyName === this.currentPharmacy)
+          a.setProp('display','auto')
+        else a.setProp('display','none')
+      });
     }
   }
 }

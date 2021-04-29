@@ -4,11 +4,13 @@ const state = {
     dermatologist: null,
     dermatologists: null,
     result: null,
+    pharmacyNames: null
 };
 
 const getters = {
     getDermatologist: state => state.dermatologist,
     getDermatologists: state => state.dermatologists,
+    getPharmacyNames: state => state.pharmacyNames,
     getResult: state => state.result,
 };
 
@@ -130,6 +132,15 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'delete', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    fetchDermatologistsWorkPlaceNames: (context, dermatologistId) => {
+        axios.get(`/dermatologists/${dermatologistId}/work-place-names`)
+        .then(resp => {
+            context.commit('setPharmacyNames', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
@@ -139,6 +150,11 @@ const mutations = {
     },
     setDermatologists: (state, dermatologists) => {
         state.dermatologists = dermatologists;
+    },
+    setPharmacyNames: (state, pharmacyNames) => {
+        let names = [{label:'aaaaaaaaaaaaa', value:'aaaaaaaaa'}];
+        pharmacyNames.forEach(pn => names.push({label:pn, value:pn}))
+        state.pharmacyNames = names;
     },
     setResult: (state, result) => {
         state.result = result;

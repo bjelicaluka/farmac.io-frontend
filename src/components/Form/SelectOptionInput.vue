@@ -1,12 +1,13 @@
 <template>
     <div>
         <div :id="id" class="form-group">
-            <label v-if="showLabel == true" class="form-control-label text-white center">{{label}}</label>
+            <label v-if="showLabel" class="form-control-label text-white center">{{label}}</label>
             <select
                 v-model="selectedValue"
                 class="selectpicker form-control"
                 data-style="btn btn-primary btn-round"
                 :disabled="disabled"
+                @change="emitChange"
             >
                 <option value='' selected>{{label}}</option>
                 <option v-for="(option, index) in options" :value="option.value" :key="index">{{option.label}}</option>
@@ -89,6 +90,11 @@ export default {
         value(val) {
             this.selectedValue = val;
             this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
+        },
+    },    
+    methods: {
+        emitChange(e) {
+            this.$emit('change', e);
         }
     }
 }

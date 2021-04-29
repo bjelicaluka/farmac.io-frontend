@@ -1,13 +1,18 @@
 <template>
 <div class="content">
-    <work-calendar v-if="!!appointments" :appointments="appointments"></work-calendar>
+    <work-calendar v-if="!!appointments"
+      :appointments="appointments"
+      :pharmacies="pharmacyNames"
+    >
+    </work-calendar>
 </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { getUserIdFromToken } from '../utils/token'
+import { getUserIdFromToken, getRoleFromToken } from '../utils/token'
 import WorkCalendar from '../components/Calendar/WorkCalendar.vue'
+import { Roles } from '../constants'
 
 export default {
   components: { WorkCalendar },
@@ -18,16 +23,21 @@ export default {
   computed: {
     ...mapGetters({
       appointments: 'appointments/getCalendarEvents',
+      pharmacyNames: 'dermatologist/getPharmacyNames'
     })
   },
   methods: {
     ...mapActions({
       fetchAppointmentsAsEvents: 'appointments/fetchAppointmentsAsEvents',
+      fetchDermatologistsWorkPlaceNames: 'dermatologist/fetchDermatologistsWorkPlaceNames'
     }),
   },
   mounted() {
     const userId = getUserIdFromToken();
+    const userRole = getRoleFromToken();
     this.fetchAppointmentsAsEvents(userId);
+    if (userRole === Roles.Dermatologist)
+      this.fetchDermatologistsWorkPlaceNames(userId);
   }
 }
 </script>

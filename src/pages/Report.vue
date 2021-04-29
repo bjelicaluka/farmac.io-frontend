@@ -58,7 +58,6 @@
 
         <Modal modalBoxId="prescribeModal" title="Prescibe medicine">
             <div slot="body">
-                check if available
                 <SelectOptionInput
                   label="Select medicine"
                   v-model="selectedMedicine"
