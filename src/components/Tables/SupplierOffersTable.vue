@@ -1,7 +1,7 @@
 <template>
     <div>
         <Table>
-            <TableHead :columnNames="['For', 'Deadline', 'Delivery date', 'Total price', 'Status', '']"></TableHead>
+            <TableHead :columnNames="['For', 'Deadline', 'Delivery date', 'Total price', 'Status', ...(user.role === Roles.PharmacyAdmin ? [''] : [])]"></TableHead>
             <TableBody>
                 <TableRow 
                     v-for="(supplierOffer, i) in supplierOffers" 
@@ -15,11 +15,18 @@
                     ]"
                 >
                     <div class="pull-right text-gray">
-                        <DropDownMenu v-if="supplierOffer.status === 2">
+                        <DropDownMenu v-if="supplierOffer.status === 2 && user.role === Roles.Supplier">
                             <ModalOpener modalBoxId="supplierOfferModal" >
                                 <DropDownItem @click="handleEditClick(supplierOffer)">Update Offer</DropDownItem>
                             </ModalOpener>
                         </DropDownMenu>
+                        
+                        <RoundButton
+                            v-if="user.role === Roles.PharmacyAdmin"
+                            :title="'Accept Offer'"
+                            :iconName="'check'"
+                            @click="handleAcceptOffer(supplierOffer.id)"
+                        />
                     </div>
                 </TableRow>
             </TableBody>
@@ -50,6 +57,11 @@ import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
 
 import moment from 'moment'
+import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import { Roles } from '../../constants'
+import RoundButton from '../Form/RoundButton.vue'
+import { mapActions, mapGetters } from 'vuex'
+import toastr from 'toastr'
 
 export default {
     props: {
@@ -59,7 +71,11 @@ export default {
     data: () => {
         return {
             selectedSupplierOffer: null,
-            supplierId: null
+            supplierId: null,
+            filterOptions,
+            selectedFilterOption: null,
+            user: {},
+            Roles
         }
     },
 
@@ -72,12 +88,42 @@ export default {
         ModalOpener,
         SupplierOfferForm,
         DropDownMenu,
-        DropDownItem
+        DropDownItem,
+        SelectOptionInput,
+        RoundButton
+    },
+
+    watch: {
+        selectedFilterOption() {
+            this.$emit('filterChanged', this.selectedFilterOption);
+        },
+        result({label, ok, message}) {
+            if(label !== 'delete' && label !== 'accept')
+                return;
+
+            if(ok) {
+                toastr.success(message);
+            } else {
+                toastr.error(message);
+            }
+        }
+    },
+
+    computed: {
+        ...mapGetters({result: 'supplierOffers/getResult'})
     },
 
     methods: {
+        ...mapActions({
+            acceptSupplierOffer: 'supplierOffers/acceptSupplierOffer'
+        }),
+
          handleEditClick(supplierOffer) {
             this.selectedSupplierOffer = supplierOffer;
+        },
+
+        handleAcceptOffer(supplierOfferId) {
+            this.acceptSupplierOffer(supplierOfferId);
         },
 
         formatDateTime(date) {
@@ -88,6 +134,13 @@ export default {
             const descriptiveStatuses = ['Accepted', 'Refused', 'Waiting for answer'];
 
             return descriptiveStatuses[status]
+        }
+    },
+    
+    mounted() {
+        this.user = {
+            id: getAccountIdFromToken(),
+            role: getRoleFromToken()
         }
     }
 }

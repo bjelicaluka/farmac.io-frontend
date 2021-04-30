@@ -1,6 +1,6 @@
 <template>
   <thead class="text-primary">
-        <th v-for="columnName in columnNames" :key="columnName">{{ columnName }}</th>
+        <th v-for="(columnName, i) in columnNames" :key="i">{{ columnName }}</th>
   </thead>
 </template>
 

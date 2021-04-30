@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Pharmacy from '../pages/Pharmacy.vue'
+import PharmacyReports from '../pages/PharmacyReports'
 import PharmacyPriceList from '../pages/PharmacyPriceList.vue'
 import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
@@ -21,6 +22,10 @@ import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatolog
 import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
 import Grades from '../pages/Grades.vue'
+import WriteComplaint from '../pages/WriteComplaint.vue'
+import Complaints from '../pages/Complaints.vue'
+import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
+import Answers from '../pages/Answers.vue'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -80,6 +85,15 @@ const routes = [
     component: Pharmacy,
     meta: {
       layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/pharmacy-reports',
+    name: 'PharmacyReports',
+    component: PharmacyReports,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.PharmacyAdmin]
     }
   },
   {
@@ -258,6 +272,42 @@ const routes = [
     component: Grades,
     meta: {
       layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/write-complaint',
+    name: 'WriteComplaint',
+    component: WriteComplaint,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
+    }
+  },
+  {
+    path: '/complaints',
+    name: 'Complaints',
+    component: Complaints,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin, Roles.Patient]
+    }
+  },
+  {
+    path: '/complaints/:id/answers',
+    name: 'ComplaintAnswers',
+    component: ComplaintAnswers,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin, Roles.Patient]
+    }
+  },
+  {
+    path: '/complaints/my-answers',
+    name: 'Answers',
+    component: Answers,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin]
     }
   }
 ]
