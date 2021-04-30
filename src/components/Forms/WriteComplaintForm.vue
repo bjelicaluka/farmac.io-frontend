@@ -110,7 +110,7 @@ export default {
                 'Dermatologist': this.fetchDermatologistsToComplaintAbout,
                 'Pharmacist': this.fetchPharmacistsToComplaintAbout,
                 'Pharmacy': this.fetchPharmaciesToComplaintAbout
-            }
+            };
 
             return fetchActions[complaintAbout];
         },

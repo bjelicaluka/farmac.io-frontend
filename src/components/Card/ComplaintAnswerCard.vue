@@ -11,7 +11,7 @@
         </div>
         <div class="card-footer ">
             <div class="author">
-                <img src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg?auto=format&fit=crop&w=334&q=80&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D" rel="nofollow" alt="..." class="avatar img-raised">
+                <i class="material-icons md-light">account_circle</i>
                 <span>{{formatName(!!answer && answer.writer)}}</span>
             </div>
             <div v-if="showComplaintButton" @click="goToComplaintPage" class="stats ml-auto">
@@ -48,3 +48,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+.material-icons.md-light { color: rgba(153, 153, 153, 1); }
+
+</style>
