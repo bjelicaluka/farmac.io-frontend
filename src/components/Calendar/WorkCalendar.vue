@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     handleDateClick(arg) {
-      toastr.info('Date: ' + arg.dateStr);
+      toastr.info('Date: ' + this.formatDateTime(arg.dateStr));
     },
     handleEventClick(clickInfo) {
       this.selected = clickInfo.event;
