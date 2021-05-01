@@ -34,6 +34,7 @@
 
 <script>
 import moment from 'moment'
+import toastr from 'toastr'
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -80,7 +81,7 @@ export default {
   },
   methods: {
     handleDateClick(arg) {
-      alert('Date: ' + arg.dateStr);
+      toastr.info('Date: ' + arg.dateStr);
     },
     handleEventClick(clickInfo) {
       this.selected = clickInfo.event;
@@ -110,10 +111,38 @@ export default {
 </script>
 
 <style>
+
 .fc-daygrid-event, .fc-timegrid-event {
     background-color: purple;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(128 0 128 / 40%);
 }
+
+a.fc-event:hover {
+  background-color: #5c005c;
+  cursor: pointer;
+}
+
 .fc-event-title, .fc-event-time {
     color: white;
 }
+
+.fc-daygrid-event-dot {
+  border: 4px solid white;
+}
+
+.fc .fc-button:hover, .fc .fc-button[disabled]:hover {
+  background-color: #5c005c;
+  border-color: #5c005c;
+}
+
+.fc .fc-button-primary, .fc .fc-button-primary:disabled {
+  background-color: purple;
+  border-color: purple;
+}
+
+.fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #5c005c;
+  border-color: #5c005c;
+}
+
 </style>
