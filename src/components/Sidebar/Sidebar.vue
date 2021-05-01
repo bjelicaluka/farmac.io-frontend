@@ -47,11 +47,14 @@
           <sidebar-item name="History visiting dermatologist" icon="history" to="/history-dermatologist-appointments"></sidebar-item>
           <sidebar-item name="Pharmacists appointments" icon="schedule" to="/pharmacists-appointments"></sidebar-item>
           <sidebar-item name="Consultation with pharmacist" icon="people" to="/appointments-with-pharmacist"></sidebar-item>
+          <sidebar-item name="Grades" icon="thumb_up_off_alt" to="/grades"></sidebar-item>
+          <sidebar-item name="Complaints" icon="thumb_down_off_alt" to="/complaints"></sidebar-item>
         </ul>
 
         <ul class="nav"  v-else-if="user.role === Roles.PharmacyAdmin">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
+          <sidebar-item name="Pharmacy Reports" icon="local_pharmacy" to="/pharmacy-reports"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
         </ul>
 

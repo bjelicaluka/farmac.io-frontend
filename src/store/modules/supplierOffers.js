@@ -15,6 +15,28 @@ const actions = {
         axios.get(`/suppliers/${supplierId}/offers`)
         .then(response => {
             context.commit('setSupplierOffers', response.data);
+            context.commit('setResult', { label: 'fetch', ok: true });
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        })
+    },
+
+    fetchFilteredOffersForSupplier: (context, {supplierId, filterBy}) => {
+        axios.get(`/suppliers/${supplierId}/offers/filter`, {params: {status: filterBy}})
+        .then(response => {
+            context.commit('setSupplierOffers', response.data);
+            context.commit('setResult', { label: 'fetch', ok: true });
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        })
+    },
+
+    fetchOffersForPharmacyOrder: (context, pharmacyOrderId) => {
+        axios.get(`/suppliers/offers/pharmacy-order/${pharmacyOrderId}`)
+        .then(response => {
+            context.commit('setSupplierOffers', response.data);
         })
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
@@ -57,7 +79,26 @@ const actions = {
                 
             });
         })
-    }
+    },
+
+    acceptSupplierOffer: (context, supplierOfferId) => {
+        axios.post(`/suppliers/offers/${supplierOfferId}`, {})
+        .then(response => {
+            context.commit('setResult', {
+                label: 'accept',
+                ok: true,
+                message: `You have successfully accept an offer.`
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'accept',
+                ok: false,
+                message: error.response.data.ErrorMessage
+                
+            });
+        })
+    },
 };
 
 const mutations = {
