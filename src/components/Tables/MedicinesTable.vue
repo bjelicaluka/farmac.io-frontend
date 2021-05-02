@@ -4,8 +4,8 @@
         <TableHead :columnNames="['Medicine name', 'Manufacturer', '']"></TableHead>
             <TableBody>
                 <TableRow v-for="(medicine, index) in medicines" :key="index" :id="medicine.id" :values="[medicine.name, medicine.manufacturer]">
-                    <RoundButton v-if="iconName != '' && flag==1" :title="title" @click="clickHandle(medicine.id)" :iconName="iconName"></RoundButton>
-                    <StarRating v-if="flag==2" v-model="medicine.grade" @rating-selected ="selectedGrade(medicine)" :star-size="20"></StarRating>
+                    <RoundButton v-if="iconName != '' && buttonOrRating==1" :title="title" @click="clickHandle(medicine.id)" :iconName="iconName"></RoundButton>
+                    <StarRating v-if="buttonOrRating==2" v-model="medicine.grade" @rating-selected ="selectedGrade(medicine)" :star-size="20"></StarRating>
                 </TableRow>
         </TableBody>
     </Table>
@@ -25,7 +25,7 @@ import StarRating from 'vue-star-rating'
 const $ = window.$;
 
 export default {
-    props: ['medicines', 'iconName', 'title', 'flag'],
+    props: ['medicines', 'iconName', 'title', 'buttonOrRating'],
     components: {
         Table,
         TableHead,

@@ -4,8 +4,8 @@
             <Card :description="`You can rate the dermatologist which you visited.`" title="Rate dermatologists">
                 <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="canBeRatedDermatologists" />
             </Card>
-            <Card :description="`You can rate the maedicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
-                <MedicinesTable :flag="2" :medicines="medicinesThatCanBeRated" title="Rate medicines" @selectedGrade="selectedGrade"/>
+            <Card :description="`You can rate the medicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
+                <MedicinesTable :buttonOrRating="2" :medicines="medicinesThatCanBeRated" title="Rate medicines" @selectedGrade="selectedGrade"/>
             </Card>
         </div> 
     </div>
@@ -43,7 +43,7 @@ export default {
     },
     watch: {
         getResultDermatologist({label, ok, message}) {
-            if(label == 'grades') {
+            if(label ==- 'grade') {
                 if(ok) {
                     this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
                 }
@@ -59,10 +59,10 @@ export default {
             });
         },
         getResultMedicine({label, ok, message}) {
-            if(label == 'grade') {
+            if(label === 'grade') {
                 if(ok) {
                     toastr.success(message)
-                    this.fetchMedicinesThatCanBeRated('08d8f850-724b-4236-8fd9-6cd7d952f120');
+                    this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
                 }
                 else{
                     toastr.error(message);
@@ -79,7 +79,7 @@ export default {
         selectedGrade(medicine) {
             let requestObject = {
                 value: medicine.grade,
-                patientId: '08d8f850-724b-4236-8fd9-6cd7d952f120',
+                patientId: getAccountIdFromToken(),
                 medicineId: medicine.id
             };
             this.rateMedicine(requestObject);
@@ -87,7 +87,7 @@ export default {
     },
     mounted() {
         this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
-        this.fetchMedicinesThatCanBeRated('08d8f850-724b-4236-8fd9-6cd7d952f120');
+        this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
     }
 }
 </script>

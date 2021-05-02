@@ -168,10 +168,10 @@ const actions = {
         console.log(dermatologistId);
         axios.post(`/dermatologists/rate`, {patientId, dermatologistId, grade})
         .then(resp => {
-            context.commit('setResult', {label: 'grades', ok: true, message: "You have successfully rated a dermatologist."});
+            context.commit('setResult', {label: 'grade', ok: true, message: "You have successfully rated a dermatologist."});
         })
         .catch(err => {
-            context.commit('setResult', {label: 'grades', ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'grade', ok: false, message: err.response.data.ErrorMessage});
         })
     }
 };
