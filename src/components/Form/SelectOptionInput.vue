@@ -1,7 +1,7 @@
 <template>
     <div>
         <div :id="id" class="form-group">
-            <label v-if="showLabel == true" class="form-control-label text-white center">{{label}}</label>
+            <label v-if="showLabel" class="form-control-label text-white center">{{label}}</label>
             <select
                 v-model="selectedValue"
                 class="selectpicker form-control"
@@ -89,7 +89,7 @@ export default {
         value(val) {
             this.selectedValue = val;
             this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
-        }
+        },
     }
 }
 </script>
