@@ -175,9 +175,8 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         })
     },
-    rateDermatologist: (context, {patientId, dermatologistId, grade}) => {
-        console.log(dermatologistId);
-        axios.post(`/dermatologists/rate`, {patientId, dermatologistId, grade})
+    rateDermatologist: (context, {patientId, medicalStaffId, grade}) => {
+        axios.post(`/dermatologists/rate`, {patientId, medicalStaffId, grade})
         .then(resp => {
             context.commit('setResult', {label: 'grade', ok: true, message: "You have successfully rated a dermatologist."});
         })
