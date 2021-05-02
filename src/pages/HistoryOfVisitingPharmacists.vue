@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <Card title='History of visiting a dermatologists'>
+            <Card title='History of visiting a pharmacists'>
                 <div class="col-3">
                     <SelectOptionInput
                     label="Select sort criteria"
@@ -78,22 +78,22 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchHistoryOfVisitingDermatologist: 'appointments/fetchHistoryOfVisitingDermatologist',
-            sortAppointments: 'appointments/sortHistoryVisitingDermatologist'
+            fetchHistoryOfVisitingPharmacists: 'appointments/fetchHistoryOfVisitingPharmacists',
+            sortAppointments: 'appointments/sortHistoryVisitingPharmacists'
         }),
         handleChangeSort(){
-        let criteria = this.selectedValue.split("-")[0]
-        const isAsc = this.selectedValue.split("-")[1] == 'asc';
-        this.sortAppointments({
-            'patientId' : getUserIdFromToken(),
-            'criteria' : criteria,
-            'isAsc' : isAsc
-        });
+            let criteria = this.selectedValue.split("-")[0]
+            const isAsc = this.selectedValue.split("-")[1] == 'asc';
+            this.sortAppointments({
+                'patientId' : getUserIdFromToken(),  
+                'criteria' : criteria,
+                'isAsc' : isAsc
+            });
     }
     },
 
     mounted() {
-        this.fetchHistoryOfVisitingDermatologist(getUserIdFromToken());
+        this.fetchHistoryOfVisitingPharmacists(getUserIdFromToken());  
     },
 }
 </script>

@@ -28,6 +28,7 @@ import WriteComplaint from '../pages/WriteComplaint.vue'
 import Complaints from '../pages/Complaints.vue'
 import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
 import Answers from '../pages/Answers.vue'
+import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -328,6 +329,15 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.SystemAdmin]
+    }
+  },
+  {
+    path: '/history-pharmacists-visits',
+    name: 'HistoryOfVisitingPharmacists',
+    component: HistoryOfVisitingPharmacists,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   }
 ]
