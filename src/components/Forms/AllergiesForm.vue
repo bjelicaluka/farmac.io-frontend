@@ -1,11 +1,11 @@
 <template>
     <div>
-        <MedicinesTable :medicines="allergies" iconName='' />
+        <MedicinesTable :medicines="allergies" iconName='' :flag="1"/>
         <Modal modalBoxId="addAllergiesModal" title="Add allergies">
             <div slot="body">
-                <MedicinesTable :medicines="addedMedicines" iconName='clear' @clickButton='removeAllergy' title="Remove allergy"/>
+                <MedicinesTable :medicines="addedMedicines" iconName='clear' @clickButton='removeAllergy' title="Remove allergy" :flag="1"/>
                 <Button type="submit" @click="addAllergies">Add allergies</Button>
-                <MedicinesTable :medicines="medicines" iconName='local_pharmacy' @clickButton="addAllergy" title="Add allergy"/>
+                <MedicinesTable :medicines="medicines" iconName='local_pharmacy' @clickButton="addAllergy" title="Add allergy" :flag="1"/>
             </div>
         </Modal>
         <ModalOpener id="addAllergiesModalOpener"  modalBoxId="addAllergiesModal">
