@@ -4,8 +4,8 @@
     class="col-4"
     :label="'ALL PHARMACIES'"
     :showLabel="false"
-    @change="handleChangePharmacy"
     :options="pharmacies"
+    v-model="currentPharmacy"
   />
   <FullCalendar :options="calendarOptions" ref="calendar" />
   <modal modalBoxId="selectedEvent" title="Appointment">
@@ -96,9 +96,10 @@ export default {
         this.$router.push(`/view-report/${this.selected.id}`);
       else
         this.$router.push(`/report/${this.selected.id}`);
-    },
-    handleChangePharmacy(e) {
-      this.currentPharmacy = e.target.value;
+    }
+  },
+  watch: {
+    currentPharmacy() {
       let calendarApi = this.$refs.calendar.getApi();
       calendarApi.getEvents().forEach(a => {
         if (this.currentPharmacy==='' || a.extendedProps.pharmacyName === this.currentPharmacy)
@@ -143,6 +144,10 @@ a.fc-event:hover {
 .fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
   background-color: #5c005c;
   border-color: #5c005c;
+}
+
+#opener {
+  display: none;
 }
 
 </style>

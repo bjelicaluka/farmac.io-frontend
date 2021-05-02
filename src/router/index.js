@@ -280,6 +280,7 @@ const routes = [
     component: ViewReport,
     meta: {
       layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist, Roles.Patient]
     }
   },
   {

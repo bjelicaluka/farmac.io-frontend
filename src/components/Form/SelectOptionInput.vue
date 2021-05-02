@@ -7,7 +7,6 @@
                 class="selectpicker form-control"
                 data-style="btn btn-primary btn-round"
                 :disabled="disabled"
-                @change="emitChange"
             >
                 <option value='' selected>{{label}}</option>
                 <option v-for="(option, index) in options" :value="option.value" :key="index">{{option.label}}</option>
@@ -91,11 +90,6 @@ export default {
             this.selectedValue = val;
             this.$nextTick(function() { $(`#${this.id} .selectpicker`).selectpicker('refresh'); });
         },
-    },    
-    methods: {
-        emitChange(e) {
-            this.$emit('change', e);
-        }
     }
 }
 </script>

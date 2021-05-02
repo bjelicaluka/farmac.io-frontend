@@ -195,9 +195,7 @@ const mutations = {
         state.dermatologists = dermatologists;
     },
     setPharmacyNames: (state, pharmacyNames) => {
-        let names = [{label:'aaaaaaaaaaaaa', value:'aaaaaaaaa'}];
-        pharmacyNames.forEach(pn => names.push({label:pn, value:pn}))
-        state.pharmacyNames = names;
+        state.pharmacyNames = pharmacyNames;
     },
     setResult: (state, result) => {
         state.result = result;
