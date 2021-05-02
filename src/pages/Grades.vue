@@ -43,7 +43,7 @@ export default {
     },
     watch: {
         getResultDermatologist({label, ok, message}) {
-            if(label ==- 'grade') {
+            if(label === 'grade') {
                 if(ok) {
                     this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
                 }
