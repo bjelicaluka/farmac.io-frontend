@@ -6,7 +6,7 @@
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="My patients" icon="contacts" to="/patients_list"></sidebar-item>
           <sidebar-item name="Consultation report" icon="assignment" to="/report"></sidebar-item>
-          <sidebar-item name="Work calendar" icon="event" to="/work_calendar"></sidebar-item>
+          <sidebar-item name="Work calendar" icon="event" to="/work-calendar"></sidebar-item>
           <sidebar-item name="Vacation request" icon="holiday_village" to="/vacation_request"></sidebar-item>
           <sidebar-item name="New appointment" icon="book_online" to="/new_appointment"></sidebar-item>
           <sidebar-item name="Issue medicine" icon="medication" to="/issue_medicine"></sidebar-item>
@@ -15,7 +15,7 @@
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="My patients" icon="contacts" to="/patients_list"></sidebar-item>
           <sidebar-item name="Examination report" icon="assignment" to="/report"></sidebar-item>
-          <sidebar-item name="Work calendar" icon="event" to="/work_calendar"></sidebar-item>
+          <sidebar-item name="Work calendar" icon="event" to="/work-calendar"></sidebar-item>
           <sidebar-item name="Vacation request" icon="holiday_village" to="/vacation_request"></sidebar-item>
           <sidebar-item name="New appointment" icon="book_online" to="/new_appointment"></sidebar-item>
         </ul>
@@ -26,6 +26,7 @@
           <sidebar-item name="PharmacyAdmins" icon="people" to="/pharmacy-admins"></sidebar-item>
           <sidebar-item name="SystemAdmins" icon="people" to="/system-admins"></sidebar-item>
           <sidebar-item name="Suppliers" icon="people" to="/suppliers"></sidebar-item>
+          <sidebar-item name="LoyaltyPoints" icon="loyalty" to="/loyalty-points"></sidebar-item>
           <sidebar-item name="Complaints" icon="thumb_down_off_alt" to="/complaints"></sidebar-item>
           <sidebar-item name="My answers" icon="question_answer" to="/complaints/my-answers"></sidebar-item>
         </ul>
@@ -49,6 +50,7 @@
           <sidebar-item name="History visiting dermatologist" icon="history" to="/history-dermatologist-appointments"></sidebar-item>
           <sidebar-item name="Pharmacists appointments" icon="schedule" to="/pharmacists-appointments"></sidebar-item>
           <sidebar-item name="Consultation with pharmacist" icon="people" to="/appointments-with-pharmacist"></sidebar-item>
+          <sidebar-item name="History visiting pharmacists" icon="history" to="/history-pharmacists-visits"></sidebar-item>
           <sidebar-item name="Grades" icon="thumb_up_off_alt" to="/grades"></sidebar-item>
           <sidebar-item name="Write complaint" icon="thumb_down_off_alt" to="/write-complaint"></sidebar-item>
           <sidebar-item name="My complaints" icon="thumb_down_off_alt" to="/complaints"></sidebar-item>

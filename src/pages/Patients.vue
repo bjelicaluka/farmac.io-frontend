@@ -10,6 +10,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { getAccountIdFromToken } from '../utils/token'
 import Card from '../components/Card/Card.vue'
 import PatientsTable from '../components/Tables/PatientsTable.vue'
 
@@ -23,7 +24,7 @@ export default {
         return {
             searchName: null,
             sortCrit: '',
-            medicalId: "08d8f514-5a07-4f4a-8004-cef3216f73ef" // for testing
+            medicalId: getAccountIdFromToken()
         }
     },
 

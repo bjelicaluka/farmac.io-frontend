@@ -7,6 +7,7 @@ import Pharmacies from '../pages/Pharmacies.vue'
 import PharmacyAdmins from '../pages/PharmacyAdmins.vue'
 import SystemAdmins from '../pages/SystemAdmins.vue'
 import Suppliers from '../pages/Suppliers.vue'
+import Calendar from '../pages/Calendar.vue'
 import SupplierStock from '../pages/SupplierStock'
 import SupplierOffers from '../pages/SupplierOffers'
 import Dermatologists from '../pages/Dermatologists.vue'
@@ -18,6 +19,7 @@ import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
 import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
 import AppointmentsToReport from '../pages/AppointmentsToReport.vue'
 import Report from '../pages/Report.vue'
+import ViewReport from '../pages/ViewReport.vue'
 import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatologist.vue'
 import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
@@ -26,6 +28,8 @@ import WriteComplaint from '../pages/WriteComplaint.vue'
 import Complaints from '../pages/Complaints.vue'
 import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
 import Answers from '../pages/Answers.vue'
+import LoyaltyPoints from '../pages/LoyaltyPoints'
+import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -267,6 +271,24 @@ const routes = [
     }
   },
   {
+    path: '/work-calendar',
+    name: 'WorkCalendar',
+    component: Calendar,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
+    }
+  },
+  {
+    path: '/view-report/:id',
+    name: 'ViewReport',
+    component: ViewReport,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist, Roles.Patient]
+    }
+  },
+  {
     path: '/grades',
     name: 'Grades',
     component: Grades,
@@ -308,6 +330,24 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.SystemAdmin]
+    }
+  },
+  {
+    path: '/loyalty-points',
+    name: 'LoyaltyPoints',
+    component: LoyaltyPoints,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin]
+    }
+  },
+  {
+    path: '/history-pharmacists-visits',
+    name: 'HistoryOfVisitingPharmacists',
+    component: HistoryOfVisitingPharmacists,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   }
 ]

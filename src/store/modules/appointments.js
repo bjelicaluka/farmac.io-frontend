@@ -5,6 +5,7 @@ const state = {
     appointments: null,
     appointment: null,
     dermatologistAppointments: null,
+    calendarEvents: null,
     result: null,
 };
 
@@ -12,6 +13,7 @@ const getters = {
     getAppointments: state => state.appointments,
     getAppointment: state => state.appointment,
     getDermatologistAppointments: state => state.dermatologistAppointments,
+    getCalendarEvents: state => state.calendarEvents,
     getResult: state => state.result,
 };
 
@@ -145,7 +147,7 @@ const actions = {
     addAnotherAppointmentByMedicalStaff: (context, appointment) => {
         axios.post(`/appointments/another`, appointment)
         .then(resp => {
-            context.commit('setResult', {label: 'addPharmacist', ok: true, message: "Successfully added new appointment."});
+            context.commit('setResult', {label: 'addAnother', ok: true, message: "Successfully added new appointment."});
         })
         .catch(err => {
             context.commit('setResult', {label: 'addAnother', ok: false, message: err.response.data.ErrorMessage});
@@ -168,6 +170,33 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'cancel', message: err.response.data.ErrorMessage, ok: false})
         });
+    },
+    fetchAppointmentsAsEvents: (context, medicalStaffId) => {
+        axios.get(`/appointments/for-calendar/${medicalStaffId}`)
+        .then(resp => {
+            context.commit('setCalendarEvents', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchHistoryOfVisitingPharmacists: (context, patientId) => {
+        axios.get(`/appointments/history-visit-pharmacists/${patientId}`)
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    sortHistoryVisitingPharmacists: (context, {patientId, criteria, isAsc}) => {
+        axios.get(`/appointments/history-visit-pharmacists/${patientId}/sort`, {params: {criteria, isAsc}})
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
@@ -180,6 +209,9 @@ const mutations = {
     },
     setDermatologistAppointments: (state, appointments) => {
         state.dermatologistAppointments = appointments;
+    },
+    setCalendarEvents: (state, appointments) => {
+        state.calendarEvents = appointments;
     },
     setResult: (state, result) => {
         state.result = result;
