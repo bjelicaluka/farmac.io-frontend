@@ -7,6 +7,9 @@
             <Card :description="`You can rate the medicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
                 <MedicinesTable :buttonOrRating="2" :medicines="medicinesThatCanBeRated" title="Rate medicines" @selectedGrade="selectedGrade"/>
             </Card>
+            <Card :description="`You can rate the pharmacy which services you consumed in the past.`" title="Rate pharmacy">
+                <RatePharmacyTable :pharmacies="pharmaciesThatCanBeRated" />
+            </Card>
         </div> 
     </div>
 </template>
@@ -17,20 +20,22 @@ import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
 import MedicalStaffTable from '../components/Tables/MedicalStaffTable'
 import MedicinesTable from '../components/Tables/MedicinesTable'
-import { getAccountIdFromToken } from '../utils/token'
+import RatePharmacyTable from '../components/Tables/RatePharmacyTable'
+import { getAccountIdFromToken, getUserIdFromToken } from '../utils/token'
 import toastr from 'toastr'
 
 export default {
     components: { 
         Card,
         MedicalStaffTable,
-        MedicinesTable
+        MedicinesTable,
+        RatePharmacyTable
     },
     data: () => {
         return {
             canBeRatedDermatologists: [],
             medicinesThatCanBeRated: [],
-            grade: 0
+            pharmaciesThatCanBeRated: []
         }
     },
     computed: {
@@ -38,7 +43,9 @@ export default {
             getCanBeRatedDermatologists: 'dermatologist/getCanBeRatedDermatologists',
             getMedicinesThatCanBeRated: 'medicines/getSmallMedicines',
             getResultDermatologist: 'dermatologist/getResult',
-            getResultMedicine: 'medicines/getResult'
+            getResultMedicine: 'medicines/getResult',
+            getResultPharmacy: 'pharmacies/getResult',
+            getPharmaciesThatCanBeRated: 'pharmacies/getPharmacies'
         }),
     },
     watch: {
@@ -62,10 +69,23 @@ export default {
             if(label === 'grade') {
                 if(ok) {
                     toastr.success(message)
-                    this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
+                    this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
                 }
-                else{
+                else {
                     toastr.error(message);
+                }
+            }
+        },
+        getPharmaciesThatCanBeRated(pharmacies) {
+            this.pharmaciesThatCanBeRated = pharmacies;
+            this.pharmaciesThatCanBeRated.forEach(pharmacy => {
+                pharmacy['grade'] = 0;
+            });
+        },
+        getResultPharmacy({label, ok, message}) {
+            if(label === 'grade') {
+                if(ok) {
+                    this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
                 }
             }
         }
@@ -74,12 +94,13 @@ export default {
         ...mapActions({
             fetchCanBeRatedDermatologists: 'dermatologist/fetchCanBeRatedDermatologists',
             fetchMedicinesThatCanBeRated: 'medicines/fetchMedicinesThatCanRate',
-            rateMedicine: 'medicines/rateMedicine'
+            rateMedicine: 'medicines/rateMedicine',
+            fetchPharmaciesThatCanBeRated: 'pharmacies/fetchPharmaciesThatCanRate'
         }), 
         selectedGrade(medicine) {
             let requestObject = {
                 value: medicine.grade,
-                patientId: getAccountIdFromToken(),
+                patientId: getUserIdFromToken(),
                 medicineId: medicine.id
             };
             this.rateMedicine(requestObject);
@@ -87,7 +108,8 @@ export default {
     },
     mounted() {
         this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
-        this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
+        this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
+        this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
     }
 }
 </script>
