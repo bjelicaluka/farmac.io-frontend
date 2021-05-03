@@ -14,7 +14,7 @@
                     v-for="(pharmacyPromotion, i) in pharmacyPromotions" 
                     :key="i" 
                     :values="[
-                        pharmacyPromotion.discount,
+                        pharmacyPromotion.discount + ' %',
                         formatDate(pharmacyPromotion.from),
                         formatDate(pharmacyPromotion.to),
                     ]"
