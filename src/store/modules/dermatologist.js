@@ -152,6 +152,7 @@ const actions = {
         axios.get(`/dermatologists/${patientId}/can-rate`)
         .then(resp => {
             context.commit('setCanBeRatedDermatologists', resp.data);
+            context.commit('setResult', {label: 'fetch', ok: true, message: ""});
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});

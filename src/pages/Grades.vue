@@ -69,7 +69,7 @@ export default {
                     toastr.success(message)
                     this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
                 }
-                else{
+                else {
                     toastr.error(message);
                 }
             }
@@ -85,7 +85,7 @@ export default {
                 if(ok) {
                     this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
                 }
-        }
+            }
         }
     },
     methods: {

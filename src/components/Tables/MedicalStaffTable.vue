@@ -53,22 +53,23 @@ export default {
             let medicalStaffId = staff.userId;
             let grade = staff.grade;
             let patientId = getAccountIdFromToken();
-            if(this.medicalStaffType  == 'Dermatologist'){
+            if(this.medicalStaffType  === 'Dermatologist') {
                 this.rateDermatologist({patientId, medicalStaffId, grade});
             }
-            else{
+            else {
                 this.ratePharmacist({patientId, medicalStaffId, grade});
             }
         },
-        getValues(staff){
+        getValues(staff) {
             return [`${staff.user.firstName} ${staff.user.lastName}`, staff.user.averageGrade];
         },
-        handleUpdateMessage(label, ok, message){
+
+        handleUpdateMessage(label, ok, message) {
             if(label === 'grade') {
                 if(ok) {
                     toastr.success(message);
                 }
-                else{
+                else {
                     toastr.error(message);
                 }
             }
@@ -76,10 +77,10 @@ export default {
     },
 
     watch: {
-        getResultDermatologist({label, ok, message}){
+        getResultDermatologist({label, ok, message}) {
             this.handleUpdateMessage(label, ok, message);
         },
-        getResultPharmacist({label, ok, message}){
+        getResultPharmacist({label, ok, message}) {
             this.handleUpdateMessage(label, ok, message);
         }
     }
