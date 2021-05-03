@@ -92,6 +92,8 @@ export default {
             if(label === 'grade') {
                 if(ok) {
                     this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
+                }
+            }
         },
         getPharmacistsThatCanBeRated(pharmacists) {
             this.pharmacistsThatCanBeRated = pharmacists;

@@ -1,5 +1,5 @@
 <template>
-    <div class="col-8 card" style="min-height:90vh;">
+    <div class="col-9 card" style="min-height:90vh;">
         <div class="card card-nav-tabs card-plain" >
             <div class="card-header card-header-primary">
                 <div class="nav-tabs-navigation">
@@ -19,6 +19,9 @@
                             </li>
                             <li v-if="patient" class="nav-item">
                                 <a class="nav-link" href="#followings" data-toggle="tab"><i class="material-icons">bookmark</i>Followings</a>
+                            </li>
+                            <li v-if="patient" class="nav-item">
+                                <a class="nav-link" href="#loyaltyProgram" data-toggle="tab"><i class="material-icons">loyalty</i>Loyalty</a>
                             </li>
                         </ul>
                     </div>
@@ -47,12 +50,27 @@
                             <br />
                             <p>If you have 3 or more negative points you cannot reserve medicines and book appointments with a dermatologist and pharmacist.
                                 You get negative points if you do not take the reserved medicine or do not appear at the examination or counseling. Negative points
-                                will be deleted at the beginning of each month"</p>
+                                will be deleted at the beginning of each month.</p>
                         </div>
                     </div>
                     <div v-if="patient" class="tab-pane" id="followings">
                         <div class=" justify-content-center align-items-center">
                             <FollowingsTable :followings="patientFollowings" />
+                        </div>
+                    </div>
+                    <div v-if="patient" class="tab-pane" id="loyaltyProgram">
+                        <div class=" justify-content-center align-items-center">
+                            <br />
+                            <br />
+                            <div v-if="patient.user.loyaltyProgram">
+                                <h3>You have <b>{{ patient.user.points }}</b> loyalty points. You belong to a <b>{{ patient.user.loyaltyProgram.name }}</b> category and have 
+                                    <b>{{ patient.user.loyaltyProgram.discount }}%</b> discount.</h3>
+                            </div>
+                            <div v-else>
+                                <h3>You don't have loyalty program yet.</h3>
+                            </div>
+                            <br />
+                            <h5>You collect points by reserving medicines, scheduling appointments with dermatologists and pharmacists.</h5>
                         </div>
                     </div>
                 </div>
