@@ -70,7 +70,7 @@ export default {
             this.rateDermatologist({patientId, dermatologistId, grade});
         },
         getValues(staff){
-            return [`${staff.user.firstName} ${staff.user.lastName}`, staff.user.averageGrade];
+            return [`${staff.user.firstName} ${staff.user.lastName}`, parseFloat(staff.user.averageGrade).toFixed(2)];
         }
     },
 

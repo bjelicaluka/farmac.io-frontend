@@ -5,7 +5,7 @@
                 <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="canBeRatedDermatologists" />
             </Card>
             <Card :description="`You can rate the medicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
-                <MedicinesTable :buttonOrRating="2" :medicines="medicinesThatCanBeRated" title="Rate medicines" @selectedGrade="selectedGrade"/>
+                <RateMedicineTable :medicines="medicinesThatCanBeRated" />
             </Card>
         </div> 
     </div>
@@ -16,15 +16,15 @@
 import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
 import MedicalStaffTable from '../components/Tables/MedicalStaffTable'
-import MedicinesTable from '../components/Tables/MedicinesTable'
-import { getAccountIdFromToken } from '../utils/token'
+import RateMedicineTable from '../components/Tables/RateMedicineTable'
+import { getAccountIdFromToken, getUserIdFromToken } from '../utils/token'
 import toastr from 'toastr'
 
 export default {
     components: { 
         Card,
         MedicalStaffTable,
-        MedicinesTable
+        RateMedicineTable
     },
     data: () => {
         return {
@@ -62,7 +62,7 @@ export default {
             if(label === 'grade') {
                 if(ok) {
                     toastr.success(message)
-                    this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
+                    this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
                 }
                 else{
                     toastr.error(message);
@@ -74,20 +74,11 @@ export default {
         ...mapActions({
             fetchCanBeRatedDermatologists: 'dermatologist/fetchCanBeRatedDermatologists',
             fetchMedicinesThatCanBeRated: 'medicines/fetchMedicinesThatCanRate',
-            rateMedicine: 'medicines/rateMedicine'
-        }), 
-        selectedGrade(medicine) {
-            let requestObject = {
-                value: medicine.grade,
-                patientId: getAccountIdFromToken(),
-                medicineId: medicine.id
-            };
-            this.rateMedicine(requestObject);
-        }
+        }),
     },
     mounted() {
         this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
-        this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
+        this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
     }
 }
 </script>
