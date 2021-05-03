@@ -7,11 +7,13 @@ const state = {
     ratedDermatologists: null,
     dermatologistGrade: null,
     result: null,
+    pharmacyNames: null
 };
 
 const getters = {
     getDermatologist: state => state.dermatologist,
     getDermatologists: state => state.dermatologists,
+    getPharmacyNames: state => state.pharmacyNames,
     getCanBeRatedDermatologists: state => state.canBeRatedDermatologists,
     getRatedDermatologists: state => state.ratedDermatologists,
     getDermatologistGrade: state => state.dermatologistGrade,
@@ -137,6 +139,15 @@ const actions = {
             context.commit('setResult', {label: 'delete', ok: false, message: err.response.data.ErrorMessage});
         });
     },
+    fetchDermatologistsWorkPlaceNames: (context, dermatologistId) => {
+        axios.get(`/dermatologists/${dermatologistId}/work-place-names`)
+        .then(resp => {
+            context.commit('setPharmacyNames', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
     fetchCanBeRatedDermatologists: (context, patientId) => {
         axios.get(`/dermatologists/${patientId}/can-rate`)
         .then(resp => {
@@ -168,10 +179,10 @@ const actions = {
         console.log(dermatologistId);
         axios.post(`/dermatologists/rate`, {patientId, dermatologistId, grade})
         .then(resp => {
-            context.commit('setResult', {label: 'grades', ok: true, message: "You have successfully rated a dermatologist."});
+            context.commit('setResult', {label: 'grade', ok: true, message: "You have successfully rated a dermatologist."});
         })
         .catch(err => {
-            context.commit('setResult', {label: 'grades', ok: false, message: err.response.data.ErrorMessage});
+            context.commit('setResult', {label: 'grade', ok: false, message: err.response.data.ErrorMessage});
         })
     }
 };
@@ -182,6 +193,9 @@ const mutations = {
     },
     setDermatologists: (state, dermatologists) => {
         state.dermatologists = dermatologists;
+    },
+    setPharmacyNames: (state, pharmacyNames) => {
+        state.pharmacyNames = pharmacyNames;
     },
     setResult: (state, result) => {
         state.result = result;

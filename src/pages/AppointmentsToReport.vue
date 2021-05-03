@@ -10,6 +10,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { getUserIdFromToken } from '../utils/token'
 import Card from '../components/Card/Card.vue'
 import MedicalStaffAppointmentsTable from '../components/Tables/MedicalStaffAppointmentsTable.vue'
 import toastr from 'toastr'
@@ -34,7 +35,8 @@ export default {
     },
 
     mounted() {
-        this.fetchAppointments('08d8f514-594d-46d7-8949-0ce3ea32a929');
+        const userId = getUserIdFromToken();
+        this.fetchAppointments(userId);
     },
 
     watch: {
@@ -42,7 +44,8 @@ export default {
             if (label === 'createReport') {
                 if(ok) {
                     toastr.success(message);
-                    this.fetchAppointments('08d8f514-594d-46d7-8949-0ce3ea32a929');
+                    const userId = getUserIdFromToken();
+                    this.fetchAppointments(userId);
                 }
                 else
                     toastr.error(message);

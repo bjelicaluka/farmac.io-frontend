@@ -196,6 +196,38 @@ const actions = {
                 message: error.response.data.ErrorMessage
             });
         });
+    },
+
+    fetchMedicinesThatCanRate: (context, patientId) => {
+        axios.get(`/medicines/${patientId}/can-rate`)
+        .then(response => {
+            context.commit('setSmallMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'fetch',
+                ok: false,
+                message: error.response.data.ErrorMessage
+            })
+        })
+    },
+
+    rateMedicine: (context, {value, patientId, medicineId}) => {
+        axios.post(`/medicines/rate`, {value, patientId, medicineId})
+        .then(response => {
+            context.commit('setResult', { 
+                label: 'grade',
+                ok: true,
+                message: "You have successfully rated the medicine."
+            })
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'grade',
+                ok: false,
+                message: error.response.data.ErrorMessage
+            })
+        })
     }
 
 }
