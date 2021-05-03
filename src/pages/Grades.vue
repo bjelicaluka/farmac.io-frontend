@@ -8,7 +8,7 @@
                 <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="pharmacistsThatCanBeRated" :medicalStaffType ="'Pharmacist'" />
             </Card>
             <Card :description="`You can rate the medicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
-                <MedicinesTable :buttonOrRating="2" :medicines="medicinesThatCanBeRated" title="Rate medicines" @selectedGrade="selectedGrade"/>
+                <RateMedicineTable :medicines="medicinesThatCanBeRated" />
             </Card>
             <Card :description="`You can rate the pharmacy which services you consumed in the past.`" title="Rate pharmacy">
                 <RatePharmacyTable :pharmacies="pharmaciesThatCanBeRated" />
@@ -22,7 +22,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import Card from '../components/Card/Card.vue';
 import MedicalStaffTable from '../components/Tables/MedicalStaffTable'
-import MedicinesTable from '../components/Tables/MedicinesTable'
+import RateMedicineTable from '../components/Tables/RateMedicineTable'
 import RatePharmacyTable from '../components/Tables/RatePharmacyTable'
 import { getAccountIdFromToken, getUserIdFromToken } from '../utils/token'
 import toastr from 'toastr'
@@ -31,7 +31,7 @@ export default {
     components: { 
         Card,
         MedicalStaffTable,
-        MedicinesTable,
+        RateMedicineTable,
         RatePharmacyTable
     },
     data: () => {
@@ -113,18 +113,9 @@ export default {
         ...mapActions({
             fetchCanBeRatedDermatologists: 'dermatologist/fetchCanBeRatedDermatologists',
             fetchMedicinesThatCanBeRated: 'medicines/fetchMedicinesThatCanRate',
-            rateMedicine: 'medicines/rateMedicine',
             fetchPharmaciesThatCanBeRated: 'pharmacies/fetchPharmaciesThatCanRate',
             fetchPharmacistsThatPatientCanRate: 'pharmacist/fetchPharmacistsThatPatientCanRate',
         }), 
-        selectedGrade(medicine) {
-            let requestObject = {
-                value: medicine.grade,
-                patientId: getUserIdFromToken(),
-                medicineId: medicine.id
-            };
-            this.rateMedicine(requestObject);
-        }
     },
     mounted() {
         this.fetchCanBeRatedDermatologists(getAccountIdFromToken());

@@ -60,8 +60,9 @@ export default {
                 this.ratePharmacist({patientId, medicalStaffId, grade});
             }
         },
-        getValues(staff) {
-            return [`${staff.user.firstName} ${staff.user.lastName}`, staff.user.averageGrade];
+
+        getValues(staff){
+            return [`${staff.user.firstName} ${staff.user.lastName}`, parseFloat(staff.user.averageGrade).toFixed(2)];
         },
 
         handleUpdateMessage(label, ok, message) {
