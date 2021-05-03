@@ -6,7 +6,7 @@
           <TableRow 
             v-for="appointment in appointments" 
             :key="appointment.id" 
-            :values="[`${appointment.medicalStaff.firstName} ${appointment.medicalStaff.lastName} (${appointment.medicalStaff.averageGrade})`, 
+            :values="[`${appointment.medicalStaff.firstName} ${appointment.medicalStaff.lastName} (${parseFloat(appointment.medicalStaff.averageGrade).toFixed(2)})`, 
             formatDate(appointment.dateTime), formatTime(appointment.dateTime), formatDuration(appointment.duration), appointment.price + ' RSD']"
           >
           <RoundButton v-if="isCancelEnabled" :title="'Cancel appointment'" :iconName="'clear'" @click="handleCancelAppointment(appointment.id)"></RoundButton>

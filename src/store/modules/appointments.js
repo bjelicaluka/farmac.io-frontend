@@ -179,6 +179,24 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    fetchHistoryOfVisitingPharmacists: (context, patientId) => {
+        axios.get(`/appointments/history-visit-pharmacists/${patientId}`)
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    sortHistoryVisitingPharmacists: (context, {patientId, criteria, isAsc}) => {
+        axios.get(`/appointments/history-visit-pharmacists/${patientId}/sort`, {params: {criteria, isAsc}})
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
