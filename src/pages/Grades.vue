@@ -2,7 +2,10 @@
     <div class="content">
         <div class="container-fluid">
             <Card :description="`You can rate the dermatologist which you visited.`" title="Rate dermatologists">
-                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="canBeRatedDermatologists" />
+                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="canBeRatedDermatologists" :medicalStaffType ="'Dermatologist'"/>
+            </Card>
+             <Card :description="`You can rate the pharmacists which you visited.`" title="Rate pharmacists">
+                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="pharmacistsThatCanBeRated" :medicalStaffType ="'Pharmacist'" />
             </Card>
             <Card :description="`You can rate the medicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
                 <MedicinesTable :buttonOrRating="2" :medicines="medicinesThatCanBeRated" title="Rate medicines" @selectedGrade="selectedGrade"/>
@@ -30,7 +33,7 @@ export default {
         return {
             canBeRatedDermatologists: [],
             medicinesThatCanBeRated: [],
-            grade: 0
+            pharmacistsThatCanBeRated: []
         }
     },
     computed: {
@@ -38,7 +41,9 @@ export default {
             getCanBeRatedDermatologists: 'dermatologist/getCanBeRatedDermatologists',
             getMedicinesThatCanBeRated: 'medicines/getSmallMedicines',
             getResultDermatologist: 'dermatologist/getResult',
-            getResultMedicine: 'medicines/getResult'
+            getResultMedicine: 'medicines/getResult',
+            getResultPharmacist: 'pharmacist/getResult',
+            getPharmacistsThatCanBeRated: 'pharmacist/getPharmacists'
         }),
     },
     watch: {
@@ -64,8 +69,21 @@ export default {
                     toastr.success(message)
                     this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
                 }
-                else{
+                else {
                     toastr.error(message);
+                }
+            }
+        },
+        getPharmacistsThatCanBeRated(pharmacists) {
+            this.pharmacistsThatCanBeRated = pharmacists;
+            this.pharmacistsThatCanBeRated.forEach(pharmacist => {
+                pharmacist['grade'] = 0;
+            });
+        },
+        getResultPharmacist({label, ok, message}) {
+            if(label === 'grade') {
+                if(ok) {
+                    this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
                 }
             }
         }
@@ -74,7 +92,8 @@ export default {
         ...mapActions({
             fetchCanBeRatedDermatologists: 'dermatologist/fetchCanBeRatedDermatologists',
             fetchMedicinesThatCanBeRated: 'medicines/fetchMedicinesThatCanRate',
-            rateMedicine: 'medicines/rateMedicine'
+            rateMedicine: 'medicines/rateMedicine',
+            fetchPharmacistsThatPatientCanRate: 'pharmacist/fetchPharmacistsThatPatientCanRate',
         }), 
         selectedGrade(medicine) {
             let requestObject = {
@@ -87,6 +106,7 @@ export default {
     },
     mounted() {
         this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
+        this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
         this.fetchMedicinesThatCanBeRated(getAccountIdFromToken());
     }
 }
