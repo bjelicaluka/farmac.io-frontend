@@ -16,7 +16,7 @@
           <TableRow 
             v-for="a in appointments" 
             :key="a.id" 
-            :values="[`${a.medicalStaff.firstName} ${a.medicalStaff.lastName} (${a.medicalStaff.averageGrade})`, a.isReserved ? 'Yes' : 'No', formatDate(a.dateTime), formatTime(a.dateTime), formatDuration(a.duration), a.price + ' RSD']"
+            :values="[`${a.medicalStaff.firstName} ${a.medicalStaff.lastName} (${parseFloat(a.medicalStaff.averageGrade).toFixed(2)})`, a.isReserved ? 'Yes' : 'No', formatDate(a.dateTime), formatTime(a.dateTime), formatDuration(a.duration), a.price + ' RSD']"
           >
             <div class="pull-right text-gray">
               <drop-down-menu>

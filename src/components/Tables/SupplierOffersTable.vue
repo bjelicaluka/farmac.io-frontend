@@ -31,7 +31,7 @@
                         </DropDownMenu>
                         
                         <RoundButton
-                            v-if="user.role === Roles.PharmacyAdmin"
+                            v-if="user.role === Roles.PharmacyAdmin && supplierOffer.status === 2"
                             :title="'Accept Offer'"
                             :iconName="'check'"
                             @click="handleAcceptOffer(supplierOffer.id)"

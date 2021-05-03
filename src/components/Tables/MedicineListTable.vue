@@ -17,7 +17,7 @@
                     v-for="(pharmacyMedicine, i) in medicines" 
                     :key="i" 
                     :values="[pharmacyMedicine.medicine && pharmacyMedicine.medicine.name,
-                        pharmacyMedicine.quantity, pharmacyMedicine.medicine && pharmacyMedicine.medicine.averageGrade]"
+                        pharmacyMedicine.quantity, pharmacyMedicine.medicine && parseFloat(pharmacyMedicine.medicine.averageGrade).toFixed(2) + ' / 5.0']"
                 >
                     <div class="pull-right text-gray">
                         <DropDownMenu v-if="user.role === Roles.PharmacyAdmin">

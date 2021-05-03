@@ -16,7 +16,7 @@
         <TableRow 
           v-for="p in pharmacists" 
           :key="p.id" 
-          :values="[p.username, `${p.user.firstName} ${p.user.lastName}`, p.email, p.user.pid, p.user.phoneNumber, p.user.averageGrade + ' / 5.0', formatAddress(p.user.address)]"
+          :values="[p.username, `${p.user.firstName} ${p.user.lastName}`, p.email, p.user.pid, p.user.phoneNumber, parseFloat(p.user.averageGrade).toFixed(2) + ' / 5.0', formatAddress(p.user.address)]"
         >
           <div class="pull-right text-gray">
             <drop-down-menu v-if="user.role === Roles.PharmacyAdmin && adminPharmacyId === p.user.pharmacyId">
