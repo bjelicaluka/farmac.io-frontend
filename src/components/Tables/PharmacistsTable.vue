@@ -11,7 +11,7 @@
       <Search @search="handleSearch($event)" />
     </div>
     <Table>
-        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Address', '']"></TableHead>
+        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Grade', 'Address', '']"></TableHead>
         <TableBody>
         <TableRow 
           v-for="p in pharmacists" 
