@@ -8,7 +8,7 @@
                         v-model="loyaltyPoints.consultationPoints"
                         :isValid="!isNaN(loyaltyPoints.consultationPoints)"
                         :showErrorMessage="showErrorMessage"
-                        errorMessage="Please enter a valid examination points"
+                        errorMessage="Consultation points must be greater or equal to 0."
                         :min=0
                         :max=100
                     />
@@ -20,7 +20,7 @@
                         v-model="loyaltyPoints.examinationPoints"
                         :isValid="!isNaN(loyaltyPoints.examinationPoints)"
                         :showErrorMessage="showErrorMessage"
-                        errorMessage="Please enter a valid examination points"
+                        errorMessage="Examination points must be greater or equal to 0."
                         :min=0
                         :max=100
                     />
@@ -64,7 +64,7 @@
                     </div>
                     <div class='col-5'>
                         <small class="form-text text-muted">
-                            Points must be positive number.
+                            Medicine points must be greater than 0.
                         </small>
                     </div>
                 </FormRow>
