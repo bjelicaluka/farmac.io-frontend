@@ -7,7 +7,7 @@
             v-for="pharmacy in pharmacies" 
             :key="pharmacy.id" 
             :values="[pharmacy.name, formAddress(pharmacy), parseFloat(pharmacy.averageGrade).toFixed(2)]">
-            <StarRating v-model="pharmacy.grade" @rating-selected ="selectedGrade(pharmacy)" :star-size="20"></StarRating>
+            <StarRating v-model="pharmacy.grade" @rating-selected="selectedGrade(pharmacy)" :star-size="20"></StarRating>
           </TableRow>
         </TableBody>
     </Table>
@@ -56,7 +56,7 @@ export default {
         }
     },
     watch: {
-        getResult({label, ok, message}){
+        getResult({label, ok, message}) {
             if(label === 'grade') {
                 if(ok) {
                     toastr.success(message);
