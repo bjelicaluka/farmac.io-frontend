@@ -122,6 +122,7 @@ export default {
         selectedFilterOption() {
             this.$emit('filterChanged', this.selectedFilterOption);
         },
+        
         result({label, ok, message}) {
             if(label !== 'delete' && label !== 'accept')
                 return;

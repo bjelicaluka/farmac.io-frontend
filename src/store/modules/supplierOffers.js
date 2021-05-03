@@ -21,6 +21,17 @@ const actions = {
         })
     },
 
+    fetchFilteredOffersForSupplier: (context, {supplierId, filterBy}) => {
+        axios.get(`/suppliers/${supplierId}/offers/filter`, {params: {status: filterBy}})
+        .then(response => {
+            context.commit('setSupplierOffers', response.data);
+            context.commit('setResult', { label: 'fetch', ok: true });
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        })
+    },
+
     fetchOffersForPharmacyOrder: (context, pharmacyOrderId) => {
         axios.get(`/suppliers/offers/pharmacy-order/${pharmacyOrderId}`)
         .then(response => {

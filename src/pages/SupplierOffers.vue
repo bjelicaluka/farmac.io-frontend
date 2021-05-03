@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title="Your offers for pharmacy orders">
-                <SupplierOffersTable :supplierOffers="supplierOffers" />
+                <SupplierOffersTable :supplierOffers="supplierOffers" @filterChanged="handleFiltering" />
             </Card>
         </div>
     </div>
@@ -45,8 +45,16 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchOffersFor: 'supplierOffers/fetchOffersForSupplier'
-        })
+            fetchOffersFor: 'supplierOffers/fetchOffersForSupplier',
+            fetchFilteredOffersFor: 'supplierOffers/fetchFilteredOffersForSupplier'
+        }),
+
+        handleFiltering(filterOption) {
+            this.fetchFilteredOffersFor({
+                supplierId: this.supplierId,
+                filterBy: filterOption
+            });
+        }
     },
 
     mounted() {
