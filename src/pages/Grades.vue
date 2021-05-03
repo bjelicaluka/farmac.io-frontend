@@ -2,7 +2,10 @@
     <div class="content">
         <div class="container-fluid">
             <Card :description="`You can rate the dermatologist which you visited.`" title="Rate dermatologists">
-                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="canBeRatedDermatologists" />
+                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="canBeRatedDermatologists" :medicalStaffType ="'Dermatologist'"/>
+            </Card>
+             <Card :description="`You can rate the pharmacists which you visited.`" title="Rate pharmacists">
+                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaff="pharmacistsThatCanBeRated" :medicalStaffType ="'Pharmacist'" />
             </Card>
             <Card :description="`You can rate the medicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
                 <MedicinesTable :buttonOrRating="2" :medicines="medicinesThatCanBeRated" title="Rate medicines" @selectedGrade="selectedGrade"/>
@@ -35,7 +38,8 @@ export default {
         return {
             canBeRatedDermatologists: [],
             medicinesThatCanBeRated: [],
-            pharmaciesThatCanBeRated: []
+            pharmaciesThatCanBeRated: [],
+            pharmacistsThatCanBeRated: []
         }
     },
     computed: {
@@ -45,7 +49,9 @@ export default {
             getResultDermatologist: 'dermatologist/getResult',
             getResultMedicine: 'medicines/getResult',
             getResultPharmacy: 'pharmacies/getResult',
-            getPharmaciesThatCanBeRated: 'pharmacies/getPharmacies'
+            getPharmaciesThatCanBeRated: 'pharmacies/getPharmacies',
+            getResultPharmacist: 'pharmacist/getResult',
+            getPharmacistsThatCanBeRated: 'pharmacist/getPharmacists'
         }),
     },
     watch: {
@@ -86,6 +92,17 @@ export default {
             if(label === 'grade') {
                 if(ok) {
                     this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
+        },
+        getPharmacistsThatCanBeRated(pharmacists) {
+            this.pharmacistsThatCanBeRated = pharmacists;
+            this.pharmacistsThatCanBeRated.forEach(pharmacist => {
+                pharmacist['grade'] = 0;
+            });
+        },
+        getResultPharmacist({label, ok, message}) {
+            if(label === 'grade') {
+                if(ok) {
+                    this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
                 }
             }
         }
@@ -95,7 +112,8 @@ export default {
             fetchCanBeRatedDermatologists: 'dermatologist/fetchCanBeRatedDermatologists',
             fetchMedicinesThatCanBeRated: 'medicines/fetchMedicinesThatCanRate',
             rateMedicine: 'medicines/rateMedicine',
-            fetchPharmaciesThatCanBeRated: 'pharmacies/fetchPharmaciesThatCanRate'
+            fetchPharmaciesThatCanBeRated: 'pharmacies/fetchPharmaciesThatCanRate',
+            fetchPharmacistsThatPatientCanRate: 'pharmacist/fetchPharmacistsThatPatientCanRate',
         }), 
         selectedGrade(medicine) {
             let requestObject = {
@@ -110,6 +128,7 @@ export default {
         this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
         this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
         this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
+        this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
     }
 }
 </script>
