@@ -8,7 +8,7 @@
                         :key="index"
                         :values="getValues(staff)"
                     >
-                    <StarRating v-model="staff.grade" @rating-selected ="rateMedicalStaff(staff)" :star-size="20"></StarRating>
+                    <StarRating v-model="staff.grade" @rating-selected="rateMedicalStaff(staff)" :star-size="20"></StarRating>
                     </TableRow>
             </TableBody>
         </Table>
@@ -27,7 +27,7 @@ import { getAccountIdFromToken, getUserIdFromToken } from '../../utils/token'
 import toastr from 'toastr'
 
 export default {
-    props: ['medicalStaff', 'columnNames', 'canRate', 'dermatologistOrPharmacist'],
+    props: ['medicalStaff', 'columnNames', 'canRate', 'medicalStaffType'],
 
     components: {
         Table,
@@ -53,7 +53,7 @@ export default {
             let medicalStaffId = staff.userId;
             let grade = staff.grade;
             let patientId = getAccountIdFromToken();
-            if(this.dermatologistOrPharmacist == 1){
+            if(this.medicalStaffType  == 'Dermatologist'){
                 this.rateDermatologist({patientId, medicalStaffId, grade});
             }
             else{
@@ -62,30 +62,25 @@ export default {
         },
         getValues(staff){
             return [`${staff.user.firstName} ${staff.user.lastName}`, staff.user.averageGrade];
+        },
+        handleUpdateMessage(label, ok, message){
+            if(label === 'grade') {
+                if(ok) {
+                    toastr.success(message);
+                }
+                else{
+                    toastr.error(message);
+                }
+            }
         }
     },
 
     watch: {
         getResultDermatologist({label, ok, message}){
-            if(label === 'grade') {
-                if(ok) {
-                    toastr.success(message);
-                }
-                else{
-                    toastr.error(message);
-                }
-            }
+            this.handleUpdateMessage(label, ok, message);
         },
         getResultPharmacist({label, ok, message}){
-            console.log(label)
-            if(label === 'grade') {
-                if(ok) {
-                    toastr.success(message);
-                }
-                else{
-                    toastr.error(message);
-                }
-            }
+            this.handleUpdateMessage(label, ok, message);
         }
     }
 }
