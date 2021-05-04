@@ -2,7 +2,7 @@
 
     <Modal sizeClass="modal-lg" title="Scan QR Code" :modalBoxId="modalBoxId">
         <div slot="body">
-            <div class="">
+            <div class="card">
                 <div class="card card-nav-tabs card-plain" >
                     <div class="card-header card-header-primary">
                         <div class="nav-tabs-navigation">
@@ -45,6 +45,8 @@
                         </div>
                     </div>
                 </div>
+            
+                <PharmaciesForERecipeTable :pharmacies="pharmacies" />
             </div>
         </div>
 
@@ -63,18 +65,20 @@
 import Modal from '../Modal/Modal'
 import ModalCloser from '../Modal/ModalCloser'
 import Button from '../Form/Button'
+import PharmaciesForERecipeTable from '../Tables/PharmaciesForERecipeTable'
 
+import { mapActions, mapGetters } from 'vuex'
 import QrcodeDecoder from 'qrcode-decoder';
 import Webcam from 'webcam-easy';
-
-const $ = window.$;
+import toastr from 'toastr'
 
 export default {
     
     components: {
         Modal,
         ModalCloser,
-        Button
+        Button,
+        PharmaciesForERecipeTable
     },
 
     props: [
@@ -88,7 +92,31 @@ export default {
         }
     },
 
+
+    computed: {
+        ...mapGetters({
+            pharmacies: 'eRecipes/getPharmaciesForERecipe',
+            result: 'eRecipes/getResult'
+        }),
+    },
+
+    watch: {
+        result({ok}) {
+            if(!ok) {
+                toastr.error(`Given QR Code does not contain valid eRecipe.`);
+            }
+        },
+
+        pharmacies() {
+            console.log('zmaenioads');
+        }
+    },
+
     methods: {
+        ...mapActions({
+            fetchPharmaciesForERecipe: 'eRecipes/fetchPharmaciesForERecipe'
+        }),
+
         switchedToUpload() {
             this.qrDecoder.stop();
             this.camera?.stop();
@@ -117,7 +145,7 @@ export default {
             if (!this.qrDecoder.isCanvasSupported()) {
                 return;
             }
-            
+
             var video = document.querySelector('#webcam');
             this.qrDecoder.decodeFromVideo(video)
             .then(result => {
@@ -126,9 +154,10 @@ export default {
         },
 
         handleQrDecoredResult(result) {
-            console.log(result);
             if(result) {
-                console.log('some logic goes here.');
+                this.fetchPharmaciesForERecipe(result.data);
+            } else {
+                toastr.error(`Given image does not contain valid QR Code.`);
             }
         }
     }
