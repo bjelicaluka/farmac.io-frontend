@@ -46,7 +46,7 @@
                     </div>
                 </div>
             
-                <PharmaciesForERecipeTable :pharmacies="pharmacies" />
+                <PharmaciesForERecipeTable :pharmacies="pharmacies" :eRecipeId="eRecipeId" />
             </div>
         </div>
 
@@ -88,7 +88,8 @@ export default {
     data: function() {
         return { 
             camera: null,
-            qrDecoder: new QrcodeDecoder()
+            qrDecoder: new QrcodeDecoder(),
+            eRecipeId: ''
         }
     },
 
@@ -105,10 +106,6 @@ export default {
             if(!ok) {
                 toastr.error(`Given QR Code does not contain valid eRecipe.`);
             }
-        },
-
-        pharmacies() {
-            console.log('zmaenioads');
         }
     },
 
@@ -156,6 +153,7 @@ export default {
         handleQrDecoredResult(result) {
             if(result) {
                 this.fetchPharmaciesForERecipe(result.data);
+                this.eRecipeId = result.data;
             } else {
                 toastr.error(`Given image does not contain valid QR Code.`);
             }

@@ -23,6 +23,20 @@ const actions = {
                 message: error.response.data.ErrorMessage
             });
         });
+    },
+
+    sortPharmaciesForERecipe(context, { eRecipeId, criteria, isAsc }) {
+        axios.get(`/e-recipes/${eRecipeId}/pharmacies/sort`, { params: { criteria, isAsc } })
+        .then(response => {
+            context.commit('setPharmaciesForERecipe', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'fetch',
+                ok: false,
+                message: error.response.data.ErrorMessage
+            });
+        });
     }
 };
 
