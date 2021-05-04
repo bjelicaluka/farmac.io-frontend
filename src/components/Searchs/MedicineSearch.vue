@@ -1,6 +1,8 @@
 <template>
     <div>
-        <Search searchFieldClass="col-4" wrapperClass="row justify-content-center align-items-center" @search="handleSearch" />
+        <ERecipePurchaseModal modalBoxId="eRecipePurchaseModal" />
+        <Search searchFieldClass="col-5" wrapperClass="row justify-content-center align-items-center" @search="handleSearch" />
+
         <div class="row justify-content-center align-items-center">
             <div class="col-2">
                 <SelectOptionInput
@@ -36,6 +38,12 @@
                     :max=5
                 />
             </div>
+
+            <div class="col-1">
+                <ModalOpener modalBoxId="eRecipePurchaseModal">
+                    <ButtonWithIcon className="btn btn-primary btn-sm" iconName="qr_code_scanner" />
+                </ModalOpener>
+            </div>
         </div>
     </div>
 </template>
@@ -46,6 +54,9 @@
 import Search from '../Search/Search'
 import SelectOptionInput from '../Form/SelectOptionInput'
 import NumberInput from '../Form/NumberInput'
+import ButtonWithIcon from '../Form/ButtonWithIcon.vue'
+import ERecipePurchaseModal from '../Modals/ERecipePurchaseModal'
+import ModalOpener from '../Modal/ModalOpener.vue'
 
 import { mapGetters, mapActions } from 'vuex'
 
@@ -53,7 +64,10 @@ export default {
     components: {
         Search,
         SelectOptionInput,
-        NumberInput
+        NumberInput,
+        ButtonWithIcon,
+        ERecipePurchaseModal,
+        ModalOpener
     },
 
     data: function() {
