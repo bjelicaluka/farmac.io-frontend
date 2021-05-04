@@ -26,7 +26,8 @@
     "vue-router": "^3.2.0",
     "vue-star-rating": "^1.7.0",
     "vue2-leaflet": "^2.6.0",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "webcam-easy": "^1.0.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
