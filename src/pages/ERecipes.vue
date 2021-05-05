@@ -63,7 +63,7 @@ export default {
         SelectOptionInput
     },
 
-    data: function(){
+    data: function() {
         return {
             eRecipes: [],
             sortOptions: sortOptions,
@@ -81,24 +81,13 @@ export default {
 
     watch: {
         getERecipes(eRecipes) {
-            console.log(eRecipes.length)
             this.eRecipes = eRecipes;
         },
         selectedSort() {
-            this.fetchERecipes({
-                patientId: getUserIdFromToken(), 
-                sortCriteria: this.selectedSort.split("-")[0],
-                isAsc: this.selectedSort.split("-")[1] == 'asc',
-                isUsed: this.selectedFilter === 0 ? true : false,
-            })
+            this.fetchERecipes(this.getSortFilterParams());
         },
         selectedFilter() {
-            this.fetchERecipes({
-                patientId: getUserIdFromToken(), 
-                sortCriteria: this.selectedSort.split("-")[0],
-                isAsc: this.selectedSort.split("-")[1] == 'asc',
-                isUsed: this.selectedFilter === 0 ? true : false,
-            })
+            this.fetchERecipes(this.getSortFilterParams());
         }
     },
 
@@ -106,6 +95,19 @@ export default {
         ...mapActions({
             fetchERecipes: 'eRecipes/fetchERecipes'
         }),
+        getSortFilterParams() {
+            let isUsed = this.selectedFilter;
+            if(this.selectedFilter !== null) {
+                isUsed = this.selectedFilter === 0 ? true : false;
+            }
+            
+            return {
+                patientId: getUserIdFromToken(), 
+                sortCriteria: this.selectedSort.split("-")[0],
+                isAsc: this.selectedSort.split("-")[1] == 'asc',
+                isUsed: isUsed,
+            };
+        }
     },
 
     mounted() {

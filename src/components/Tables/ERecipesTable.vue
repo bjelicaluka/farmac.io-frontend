@@ -5,7 +5,7 @@
             <TableBody>
                 <TableRow v-for="(eRecipe, index) in eRecipes" :key="index" :id="eRecipe.id" :values="[eRecipe.uniqueId, formatDate(eRecipe.issuingDate), 
                 eRecipe.isUsed ? 'Yes' : 'No']">
-                    <RoundButton @click="clickHandle(eRecipe.id)" iconName="local_pharmacy"></RoundButton>
+                    <RoundButton @click="seeMedicines(eRecipe.id)" iconName="medication"></RoundButton>
                 </TableRow>
         </TableBody>
     </Table>
@@ -22,7 +22,6 @@ import RoundButton from '../Form/RoundButton.vue'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 
-const $ = window.$;
 
 export default {
     props: ['eRecipes'],
@@ -50,8 +49,8 @@ export default {
         ...mapActions({
 
         }),
-        clickHandle(eRecipeId){
-            this.$emit('seeMedicines', eRecipeId);
+        seeMedicines(eRecipeId){
+            
         },
         formatDate(date){
             return moment(date).format("DD-MMM-YYYY HH:mm");
@@ -59,10 +58,7 @@ export default {
     },
 
     watch: {
-    },
-
-    mounted() {
-
+        
     }
 
 }
