@@ -51,38 +51,38 @@ export default {
     },
 
     watch: {
-        getMedicines(allMedicines){
+        getMedicines(allMedicines) {
             this.medicines = allMedicines.filter(medicine => {
                 return this.allergies.filter(allergy => allergy.id == medicine.id).length == 0;
             });
         },
-        getMedicine(medicine){
+        getMedicine(medicine) {
             this.addedMedicines.push(medicine.medicine);
             this.addedMedicinesIds.push(medicine.medicine.id)
         },
-        result({label, ok, message}){
+        result({label, ok, message}) {
             if(label === 'addAllergies'){
-                if(ok){
+                if(ok) {
                     toastr.success(message);
                     this.fetchAllergies(getAccountIdFromToken())
                     this.addedMedicines = []
                     this.addedMedicinesIds = []
                 }
-                else{
+                else {
                     toastr.error(message);
                 }
             }
-            else if(label === 'deleteAllergy'){
-                if(ok){
+            else if(label === 'deleteAllergy') {
+                if(ok) {
                     toastr.success(message);
                     this.fetchAllergies(getAccountIdFromToken());
                 }
-                else{
+                else {
                     toastr.error(message);
                 }
             }
         },
-        getAllergies(allergies){
+        getAllergies(allergies) {
             this.fetchMedicines();
             this.allergies = allergies;
             this.medicines = this.medicines.filter(medicine => {
@@ -117,7 +117,7 @@ export default {
             this.addedMedicines = this.addedMedicines.filter(item => item.id !== medicineId);
             this.addedMedicinesIds = this.addedMedicinesIds.filter(item => item !== medicineId);
         },
-        addAllergies(){
+        addAllergies() {
             if(this.addedMedicinesIds.length != 0) {
                 let request = {
                     medicineIds : this.addedMedicinesIds,
