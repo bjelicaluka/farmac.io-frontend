@@ -28,6 +28,9 @@
                             <ModalOpener modalBoxId="supplierOfferModal" >
                                 <DropDownItem @click="handleEditClick(supplierOffer)">Update Offer</DropDownItem>
                             </ModalOpener>
+
+                            <DropDownItem v-if="isAfterNow(supplierOffer.pharmacyOrder.offersDeadline)" @click="handleRemoveClick(supplierOffer.id)">Remove Offer</DropDownItem>
+
                         </DropDownMenu>
                         
                         <RoundButton
@@ -124,7 +127,7 @@ export default {
         },
         
         result({label, ok, message}) {
-            if(label !== 'delete' && label !== 'accept')
+            if(label !== 'delete' && label !== 'accept' && label !== 'cancel')
                 return;
 
             if(ok) {
@@ -141,7 +144,8 @@ export default {
 
     methods: {
         ...mapActions({
-            acceptSupplierOffer: 'supplierOffers/acceptSupplierOffer'
+            acceptSupplierOffer: 'supplierOffers/acceptSupplierOffer',
+            cancelSupplierOffer: 'supplierOffers/cancelOfferFromSupplier'
         }),
 
          handleEditClick(supplierOffer) {
@@ -160,6 +164,17 @@ export default {
             const descriptiveStatuses = ['Accepted', 'Refused', 'Waiting for answer'];
 
             return descriptiveStatuses[status]
+        },
+
+        isAfterNow(date) {
+            return moment() < moment(date).toDate();
+        },
+
+        handleRemoveClick(offerId) {
+            this.cancelSupplierOffer({
+                supplierId: this.user.id,
+                offerId 
+            });
         }
     },
     
