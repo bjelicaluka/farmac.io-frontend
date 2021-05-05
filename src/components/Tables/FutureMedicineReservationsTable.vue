@@ -36,6 +36,8 @@ import ModalOpener from '../Modal/ModalOpener.vue'
 import Card from '../Card/Card.vue'
 import RoundButton from '../Form/RoundButton.vue'
 import ReservedMedicinesTable from '../Tables/ReservedMedicinesTable.vue'
+
+import { getUserIdFromToken } from '../../utils/token'
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
@@ -114,7 +116,7 @@ export default {
             
             if(ok) {
                 toastr.success(message);
-                this.fetchMedicineReservations("08d8f850-724b-4236-8fd9-6cd7d952f120");
+                this.fetchMedicineReservations(getUserIdFromToken());
             } else {
                 toastr.error(message);
             }
@@ -134,7 +136,7 @@ export default {
     },
 
     mounted() {
-        this.fetchMedicineReservations("08d8f850-724b-4236-8fd9-6cd7d952f120");
+        this.fetchMedicineReservations(getUserIdFromToken());
         this.getAllPharmacies();
     }
 

@@ -37,6 +37,24 @@ const actions = {
                 message: error.response.data.ErrorMessage
             });
         });
+    },
+
+    createReservationFromERecipe(context, request) {
+        axios.post(`/e-recipes/to-reservation`, request)
+        .then(response => {
+            context.commit('setResult', {
+                label: 'reservation',
+                ok: true,
+                message: `You have successfully reserved medicines.`
+            });
+        }).
+        catch(error => {
+            context.commit('setResult', {
+                label: 'reservation',
+                ok: false,
+                message: error.response.data.ErrorMessage
+            });
+        });
     }
 };
 

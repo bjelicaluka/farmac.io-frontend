@@ -102,8 +102,8 @@ export default {
     },
 
     watch: {
-        result({ok}) {
-            if(!ok) {
+        result({label, ok}) {
+            if(!ok && label === 'fetch') {
                 toastr.error(`Given QR Code does not contain valid eRecipe.`);
             }
         }
