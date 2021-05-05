@@ -23,6 +23,7 @@ import pharmacyPriceLists from './modules/pharmacyPriceLists'
 import followings from './modules/followings'
 import complaints from './modules/complaints'
 import loyaltyPoints from './modules/loyaltyPoints'
+import eRecipes from './modules/eRecipes'
 
 Vue.use(Vuex)
 
@@ -50,6 +51,7 @@ export default new Vuex.Store({
     pharmacyPriceLists,
     followings,
     complaints,
-    loyaltyPoints
+    loyaltyPoints,
+    eRecipes
   }
 });
