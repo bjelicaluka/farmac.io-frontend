@@ -1,6 +1,6 @@
 <template>
     <div>
-        <MedicinesTable :medicines="allergies" iconName='' />
+        <MedicinesTable :medicines="allergies" iconName='clear' @clickButton="removeAllergyFromSystem" />
         <Modal modalBoxId="addAllergiesModal" title="Add allergies">
             <div slot="body">
                 <MedicinesTable :medicines="addedMedicines" iconName='clear' @clickButton='removeAllergy' title="Remove allergy" />
@@ -72,8 +72,18 @@ export default {
                     toastr.error(message);
                 }
             }
+            else if(label === 'deleteAllergy'){
+                if(ok){
+                    toastr.success(message);
+                    this.fetchAllergies(getAccountIdFromToken());
+                }
+                else{
+                    toastr.error(message);
+                }
+            }
         },
         getAllergies(allergies){
+            this.fetchMedicines();
             this.allergies = allergies;
             this.medicines = this.medicines.filter(medicine => {
                 return this.allergies.filter(allergy => allergy.id == medicine.id).length == 0;
@@ -86,7 +96,8 @@ export default {
             fetchMedicines: 'medicines/fetchMedicines',
             fetchMedicine: 'medicines/fetchMedicineById',
             addPatientsAllergies: 'patient/addAllergies',
-            fetchAllergies: 'patient/fetchAllergies'
+            fetchAllergies: 'patient/fetchAllergies',
+            deleteAllergy: 'patient/deleteAllergy'
         }),
         addAllergy(medicineId) {
             let check = false;
@@ -102,20 +113,25 @@ export default {
                 toastr.info("Allergy is already added.");
             }
         },
-        removeAllergy(medicineId){
+        removeAllergy(medicineId) {
             this.addedMedicines = this.addedMedicines.filter(item => item.id !== medicineId);
             this.addedMedicinesIds = this.addedMedicinesIds.filter(item => item !== medicineId);
         },
         addAllergies(){
-            if(this.addedMedicinesIds.length != 0){
+            if(this.addedMedicinesIds.length != 0) {
                 let request = {
                     medicineIds : this.addedMedicinesIds,
                     patientId : getAccountIdFromToken()
                 }
                 this.addPatientsAllergies(request);
             }
+        },
+        removeAllergyFromSystem(medicineId) {
+            this.deleteAllergy({
+                patientId: getAccountIdFromToken(),
+                medicineId: medicineId
+            });
         }
-
     },
 
     mounted() {
