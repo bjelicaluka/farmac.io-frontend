@@ -31,6 +31,7 @@ import Answers from '../pages/Answers.vue'
 import LoyaltyPoints from '../pages/LoyaltyPoints'
 import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
 import ERecipes from '../pages/ERecipes'
+import AbsenceRequest from '../pages/AbsenceRequest'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -359,7 +360,16 @@ const routes = [
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Patient]
     }
-  }
+  },
+  {
+    path: '/vacation-request',
+    name: 'AbsenceRequest',
+    component: AbsenceRequest,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
+    }
+  },
 ]
     
 const router = new VueRouter({
