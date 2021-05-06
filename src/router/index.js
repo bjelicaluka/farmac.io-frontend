@@ -30,6 +30,7 @@ import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
 import Answers from '../pages/Answers.vue'
 import LoyaltyPoints from '../pages/LoyaltyPoints'
 import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
+import ERecipes from '../pages/ERecipes'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -345,6 +346,15 @@ const routes = [
     path: '/history-pharmacists-visits',
     name: 'HistoryOfVisitingPharmacists',
     component: HistoryOfVisitingPharmacists,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
+    }
+  },
+  {
+    path: '/eRecipes',
+    name: 'ERecipes',
+    component: ERecipes,
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Patient]
