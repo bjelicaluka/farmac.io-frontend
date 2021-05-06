@@ -36,12 +36,12 @@ export default {
     props: ['pharmacies'],
     computed: {
         ...mapGetters({
-            getResult: 'pharmacies/getResult'
+            getResult: 'grade/getResult'
         })
     },
     methods: {
         ...mapActions({
-            ratePharmacy: 'pharmacies/ratePharmacy'
+            ratePharmacy: 'grade/ratePharmacy'
         }),
         formAddress(pharmacy) {
             return `${pharmacy.address.streetName} ${pharmacy.address.streetNumber}, ${pharmacy.address.city}`;
@@ -57,7 +57,7 @@ export default {
     },
     watch: {
         getResult({label, ok, message}) {
-            if(label === 'grade') {
+            if(label === 'gradePharmacy') {
                 if(ok) {
                     toastr.success(message);
                 }

@@ -148,43 +148,6 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    fetchCanBeRatedDermatologists: (context, patientId) => {
-        axios.get(`/dermatologists/${patientId}/can-rate`)
-        .then(resp => {
-            context.commit('setCanBeRatedDermatologists', resp.data);
-            context.commit('setResult', {label: 'fetch', ok: true, message: ""});
-        })
-        .catch(err => {
-            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
-        })
-    },
-    fetchRatedDermatologists: (context, patientId) => {
-        axios.get(`/dermatologists/${patientId}/rated`)
-        .then(resp => {
-            context.commit('setRatedDermatologists', resp.data);
-        })
-        .catch(err => {
-            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
-        })
-    },
-    fetchDermatologistGrade: (context, { patientId, dermatologistId }) => {
-        axios.get(`/dermatologists/${dermatologistId}/grade/${patientId}`)
-        .then(resp => {
-            context.commit('setDermatologistGrade', resp.data);
-        })
-        .catch(err => {
-            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
-        })
-    },
-    rateDermatologist: (context, {patientId, medicalStaffId, grade}) => {
-        axios.post(`/dermatologists/rate`, {patientId, medicalStaffId, grade})
-        .then(resp => {
-            context.commit('setResult', {label: 'grade', ok: true, message: "You have successfully rated a dermatologist."});
-        })
-        .catch(err => {
-            context.commit('setResult', {label: 'grade', ok: false, message: err.response.data.ErrorMessage});
-        })
-    }
 };
 
 const mutations = {

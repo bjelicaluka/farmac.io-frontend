@@ -20,8 +20,7 @@ import TableRow from '../Table/TableRow.vue'
 import { mapActions, mapGetters } from 'vuex'
 import { getUserIdFromToken } from '../../utils/token'
 import StarRating from 'vue-star-rating'
-
-const $ = window.$;
+import toastr from 'toastr'
 
 export default {
     props: ['medicines'],
@@ -33,21 +32,15 @@ export default {
         StarRating
     },
 
-    data: function(){
-        return{
-
-        }
-    },
-
     computed: {
         ...mapGetters({
-           getResultMedicine: 'medicines/getResult'
+           getResultMedicine: 'grade/getResult'
         })
     },
 
     methods: {
         ...mapActions({
-            rateMedicine: 'medicines/rateMedicine'
+            rateMedicine: 'grade/rateMedicine'
         }),
         selectedGrade(medicine) {
             let requestObject = {
@@ -60,6 +53,16 @@ export default {
     },
 
     watch: {
+        getResultMedicine({label, ok, message}){
+            if(label === 'gradeMedicine') {
+                if(ok) {
+                    toastr.success(message);
+                }
+                else{
+                    toastr.error(message);
+                }
+            }
+        }
     },
 
     mounted() {

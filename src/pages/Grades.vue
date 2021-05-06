@@ -44,21 +44,33 @@ export default {
     },
     computed: {
         ...mapGetters({
-            getCanBeRatedDermatologists: 'dermatologist/getCanBeRatedDermatologists',
-            getMedicinesThatCanBeRated: 'medicines/getSmallMedicines',
-            getResultDermatologist: 'dermatologist/getResult',
-            getResultMedicine: 'medicines/getResult',
-            getResultPharmacy: 'pharmacies/getResult',
-            getPharmaciesThatCanBeRated: 'pharmacies/getPharmacies',
-            getResultPharmacist: 'pharmacist/getResult',
-            getPharmacistsThatCanBeRated: 'pharmacist/getPharmacists'
+            getCanBeRatedDermatologists: 'grade/getDermatologistsToRate',
+            getMedicinesThatCanBeRated: 'grade/getMedicinesToRate',
+            getResult: 'grade/getResult',
+            getPharmaciesThatCanBeRated: 'grade/getPharmaciesToRate',
+            getPharmacistsThatCanBeRated: 'grade/getPharmacistsToRate'
         }),
     },
     watch: {
-        getResultDermatologist({label, ok, message}) {
-            if(label === 'grade') {
+        getResult({label, ok, message}) {
+            if(label === 'gradeDermatologist') {
                 if(ok) {
                     this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
+                }
+            }
+            else if(label === 'gradePharmacist') {
+                if(ok) {
+                    this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
+                }
+            }
+            else if(label === 'gradeMedicine') {
+                if(ok) {
+                    this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
+                }
+            }
+            else if(label === 'gradePharmacy') {
+                if(ok) {
+                    this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
                 }
             }
         },
@@ -71,50 +83,25 @@ export default {
                 medicine['grade'] = 0;
             });
         },
-        getResultMedicine({label, ok, message}) {
-            if(label === 'grade') {
-                if(ok) {
-                    toastr.success(message)
-                    this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
-                }
-                else {
-                    toastr.error(message);
-                }
-            }
-        },
         getPharmaciesThatCanBeRated(pharmacies) {
             this.pharmaciesThatCanBeRated = pharmacies;
             this.pharmaciesThatCanBeRated.forEach(pharmacy => {
                 pharmacy['grade'] = 0;
             });
         },
-        getResultPharmacy({label, ok, message}) {
-            if(label === 'grade') {
-                if(ok) {
-                    this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
-                }
-            }
-        },
         getPharmacistsThatCanBeRated(pharmacists) {
             this.pharmacistsThatCanBeRated = pharmacists;
             this.pharmacistsThatCanBeRated.forEach(pharmacist => {
                 pharmacist['grade'] = 0;
             });
-        },
-        getResultPharmacist({label, ok, message}) {
-            if(label === 'grade') {
-                if(ok) {
-                    this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
-                }
-            }
         }
     },
     methods: {
         ...mapActions({
-            fetchCanBeRatedDermatologists: 'dermatologist/fetchCanBeRatedDermatologists',
-            fetchMedicinesThatCanBeRated: 'medicines/fetchMedicinesThatCanRate',
-            fetchPharmaciesThatCanBeRated: 'pharmacies/fetchPharmaciesThatCanRate',
-            fetchPharmacistsThatPatientCanRate: 'pharmacist/fetchPharmacistsThatPatientCanRate',
+            fetchCanBeRatedDermatologists: 'grade/fetchCanBeRatedDermatologists',
+            fetchMedicinesThatCanBeRated: 'grade/fetchMedicinesThatCanRate',
+            fetchPharmaciesThatCanBeRated: 'grade/fetchPharmaciesThatCanRate',
+            fetchPharmacistsThatPatientCanRate: 'grade/fetchPharmacistsThatPatientCanRate',
         }), 
     },
     mounted() {

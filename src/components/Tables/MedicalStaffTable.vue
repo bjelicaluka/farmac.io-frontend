@@ -8,7 +8,7 @@
                         :key="index"
                         :values="getValues(staff)"
                     >
-                    <StarRating v-model="staff.grade" @rating-selected="rateMedicalStaff(staff)" :star-size="20"></StarRating>
+                    <StarRating v-model="staff.grade" @rating-selected="rate(staff)" :star-size="20"></StarRating>
                     </TableRow>
             </TableBody>
         </Table>
@@ -39,25 +39,25 @@ export default {
 
     computed: {
         ...mapGetters({
-            getResultDermatologist: 'dermatologist/getResult',
-            getResultPharmacist: 'pharmacist/getResult'
+            getResult: 'grade/getResult',
         })
     },
 
     methods: {
         ...mapActions({
-            rateDermatologist: 'dermatologist/rateDermatologist',
-            ratePharmacist: 'pharmacist/ratePharmacist'
+            rateMedicalStaff: 'grade/rateMedicalStaff',
         }),
-        rateMedicalStaff(staff) {
+        rate(staff) {
             let medicalStaffId = staff.userId;
             let grade = staff.grade;
             let patientId = getAccountIdFromToken();
             if(this.medicalStaffType  === 'Dermatologist') {
-                this.rateDermatologist({patientId, medicalStaffId, grade});
+                let medicalStaffType = 'Dermatologist';
+                this.rateMedicalStaff({patientId, medicalStaffId, grade, medicalStaffType});
             }
             else {
-                this.ratePharmacist({patientId, medicalStaffId, grade});
+                let medicalStaffType = 'Pharmacist';
+                this.rateMedicalStaff({patientId, medicalStaffId, grade, medicalStaffType});
             }
         },
 
@@ -66,7 +66,7 @@ export default {
         },
 
         handleUpdateMessage(label, ok, message) {
-            if(label === 'grade') {
+            if(label === 'gradeDermatologist' || label === 'gradePharmacist') {
                 if(ok) {
                     toastr.success(message);
                 }
@@ -78,10 +78,7 @@ export default {
     },
 
     watch: {
-        getResultDermatologist({label, ok, message}) {
-            this.handleUpdateMessage(label, ok, message);
-        },
-        getResultPharmacist({label, ok, message}) {
+        getResult({label, ok, message}) {
             this.handleUpdateMessage(label, ok, message);
         }
     }
