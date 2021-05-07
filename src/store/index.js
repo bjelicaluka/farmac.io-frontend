@@ -24,6 +24,7 @@ import followings from './modules/followings'
 import complaints from './modules/complaints'
 import loyaltyPoints from './modules/loyaltyPoints'
 import eRecipes from './modules/eRecipes'
+import loyaltyPrograms from './modules/loyaltyPrograms'
 
 Vue.use(Vuex)
 
@@ -52,6 +53,7 @@ export default new Vuex.Store({
     followings,
     complaints,
     loyaltyPoints,
-    eRecipes
+    eRecipes,
+    loyaltyPrograms
   }
 });

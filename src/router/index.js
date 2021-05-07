@@ -29,6 +29,7 @@ import Complaints from '../pages/Complaints.vue'
 import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
 import Answers from '../pages/Answers.vue'
 import LoyaltyPoints from '../pages/LoyaltyPoints'
+import LoyaltyPrograms from '../pages/LoyaltyPrograms'
 import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
 import ERecipes from '../pages/ERecipes'
 
@@ -337,6 +338,15 @@ const routes = [
     path: '/loyalty-points',
     name: 'LoyaltyPoints',
     component: LoyaltyPoints,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin]
+    }
+  },
+  {
+    path: '/loyalty-programs',
+    name: 'LoyaltyPrograms',
+    component: LoyaltyPrograms,
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.SystemAdmin]
