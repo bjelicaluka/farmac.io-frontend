@@ -7,6 +7,9 @@ const state = {
     medicinesToRate: [],
     grade: null,
     ratedDermatologists: [],
+    ratedPharmacists: [],
+    ratedMedicines: [],
+    ratedPharmacies: [],
     result: null
 };
 
@@ -17,6 +20,9 @@ const getters = {
     getMedicinesToRate: state => state.medicinesToRate,
     getGrade: state => state.grade,
     getRatedDermatologists: state => state.ratedDermatologists,
+    getRatedPharmacists: state => state.ratedPharmacists,
+    getRatedMedicines: state => state.ratedMedicines,
+    getRatedPharmacies: state => state.ratedPharmacies,
     getResult: state => state.result
 };
 
@@ -127,6 +133,60 @@ const actions = {
                 message: error.response.data.ErrorMessage
             })
         })
+    },
+    fetchRatedPharmacists: (context, patientId) => {
+        axios.get(`/grades/${patientId}/rated-pharmacists`)
+        .then(resp => {
+            context.commit('setRatedPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchRatedMedicines: (context, patientId) => {
+        axios.get(`/grades/${patientId}/rated-medicines`)
+        .then(resp => {
+            context.commit('setRatedMedicines', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchRatedPharmacies: (context, patientId) => {
+        axios.get(`/grades/${patientId}/rated-pharmacies`)
+        .then(resp => {
+            context.commit('setRatedPharmacies', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        })
+    },
+    changeGradeToMedicalStaff: (context, {gradeId, value}) => {
+        axios.post(`/grades/change-medicalStaff-grade`, {gradeId, value})
+        .then(resp => {
+            context.commit('setResult', {label: 'changeGradeMedicalStaff', ok: true, message: "The grade was successfully changed."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'changeGradeMedicalStaff', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    changeGradeToMedicine: (context, {gradeId, value}) => {
+        axios.post(`/grades/change-medicine-grade`, {gradeId, value})
+        .then(resp => {
+            context.commit('setResult', {label: 'changeGradeMedicine', ok: true, message: "The grade was successfully changed."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'changeGradeMedicine', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    changeGradeToPharmacy: (context, {gradeId, value}) => {
+        axios.post(`grades/change-pharmacy-grade`, {gradeId, value})
+        .then(resp => {
+            context.commit('setResult', {label: 'changeGradePharmacy', ok: true, message: "The grade was successfully changed."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'changeGradePharmacy', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
@@ -153,6 +213,18 @@ const mutations = {
 
     setRatedDermatologists: (state, dermatologists) => {
         state.ratedDermatologists = dermatologists;
+    },
+
+    setRatedPharmacists: (state, pharmacists) => {
+        state.ratedPharmacists = pharmacists;
+    },
+
+    setRatedMedicines: (state, medicines) => {
+        state.ratedMedicines = medicines;
+    },
+
+    setRatedPharmacies: (state, pharmacies) => {
+        state.ratedPharmacies = pharmacies;
     },
 
     setResult: (state, result) => {

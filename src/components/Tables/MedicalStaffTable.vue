@@ -2,13 +2,22 @@
     <div>
         <Table>
             <TableHead :columnNames="columnNames"></TableHead>
-                <TableBody>
+            <TableBody v-if="!isRated">
+                <TableRow
+                    v-for="(staff, index) in medicalStaffs"
+                    :key="index"
+                    :values="[`${staff.user.firstName} ${staff.user.lastName}`, parseFloat(staff.user.averageGrade).toFixed(2)]"
+                >
+                <StarRating v-model="staff.grade" @rating-selected="rate(staff)" :star-size="20"></StarRating>
+                </TableRow>
+            </TableBody>
+            <TableBody v-else>
                     <TableRow
-                        v-for="(staff, index) in medicalStaff"
+                        v-for="(staff, index) in medicalStaffs"
                         :key="index"
-                        :values="getValues(staff)"
+                        :values="[`${staff.medicalStaff.user.firstName} ${staff.medicalStaff.user.lastName}`, parseFloat(staff.medicalStaff.user.averageGrade).toFixed(2)]"
                     >
-                    <StarRating v-model="staff.grade" @rating-selected="rate(staff)" :star-size="20"></StarRating>
+                        <StarRating v-model="staff.grade" @rating-selected="changeGrade(staff)" :star-size="20"></StarRating>
                     </TableRow>
             </TableBody>
         </Table>
@@ -27,7 +36,7 @@ import { getAccountIdFromToken, getUserIdFromToken } from '../../utils/token'
 import toastr from 'toastr'
 
 export default {
-    props: ['medicalStaff', 'columnNames', 'canRate', 'medicalStaffType'],
+    props: ['medicalStaffs', 'columnNames', 'isRated', 'medicalStaffType'],
 
     components: {
         Table,
@@ -46,6 +55,7 @@ export default {
     methods: {
         ...mapActions({
             rateMedicalStaff: 'grade/rateMedicalStaff',
+            changeGradeMedicalStaff: 'grade/changeGradeToMedicalStaff'
         }),
         rate(staff) {
             let medicalStaffId = staff.userId;
@@ -61,12 +71,8 @@ export default {
             }
         },
 
-        getValues(staff){
-            return [`${staff.user.firstName} ${staff.user.lastName}`, parseFloat(staff.user.averageGrade).toFixed(2)];
-        },
-
         handleUpdateMessage(label, ok, message) {
-            if(label === 'gradeDermatologist' || label === 'gradePharmacist') {
+            if(label === 'gradeDermatologist' || label === 'gradePharmacist' || label === 'changeGradeMedicalStaff') {
                 if(ok) {
                     toastr.success(message);
                 }
@@ -74,6 +80,12 @@ export default {
                     toastr.error(message);
                 }
             }
+        },
+
+        changeGrade(staff) {
+            let gradeId = staff.gradeId;
+            let value = staff.grade;
+            this.changeGradeMedicalStaff({gradeId, value});
         }
     },
 
@@ -81,6 +93,6 @@ export default {
         getResult({label, ok, message}) {
             this.handleUpdateMessage(label, ok, message);
         }
-    }
+    },
 }
 </script>
