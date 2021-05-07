@@ -61,11 +61,11 @@ export default {
         ...mapActions({
             fetchMedicinesInERecipes: 'eRecipes/fetchMedicinesInERecipes'
         }),
-        seeMedicines(eRecipeId){
+        seeMedicines(eRecipeId) {
             this.fetchMedicinesInERecipes(eRecipeId);
             document.getElementById('medicinesInERecipeOpener').click();
         },
-        formatDate(date){
+        formatDate(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         }
     },

@@ -23,7 +23,7 @@ const actions = {
         })
     },
     fetchMedicinesInERecipes: (context, eRecipeId) => {
-        axios.get(`/medicines/${eRecipeId}/medicines`)
+        axios.get(`/medicines/in-eRecipe/${eRecipeId}`)
         .then(resp => {
             context.commit('setMedicinesInERecipe', resp.data);
         })
