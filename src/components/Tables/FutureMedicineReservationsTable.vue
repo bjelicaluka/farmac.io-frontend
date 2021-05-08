@@ -11,18 +11,27 @@
         </Modal>
         <ModalOpener id="displayMedicinesModalOpener" class="d-none" modalBoxId="displayMedicinesModal" />
         <Table>
-            <TableHead :columnNames="['Name of pharmacy', 'Address of pharmacy', 'Pickup deadline', 'Price', '', ' ']"></TableHead>
+            <TableHead :columnNames="['Code', 'Name of pharmacy', 'Address of pharmacy', 'Pickup deadline', 'Price', '', ' ']"></TableHead>
             <TableBody v-if="pharmacies.length > 0">
                 <TableRow v-for="reservation in futureMedicineReservations" :key="reservation.reservationId"
-                    :values="[foundPharmacy(reservation.pharmacyId).name, foundPharmacy(reservation.pharmacyId).address.streetName + ' ' + 
-                    foundPharmacy(reservation.pharmacyId).address.streetNumber + ', ' + foundPharmacy(reservation.pharmacyId).address.city, 
-                    formatDateTime(reservation.pickupDeadline), reservation.price]">
-                    <RoundButton :title="'Cancel reservation'" :iconName="'clear'" @click="handleCancelReservation(reservation.reservationId)"></RoundButton>
-                    <RoundButton title="See reserved medicines" @click="displayReservedMedicines(reservation.reservationId)" :iconName="'medical_services'">
-                    </RoundButton>
+                    :values="[reservation.uniqueId, foundPharmacy(reservation.pharmacyId).name,
+                            `${pharmacy.address.streetName} ${pharmacy.address.streetNumber} ${pharmacy.address.city}`, 
+                            formatDateTime(reservation.pickupDeadline), reservation.price]">
+                    <ModalOpener modalBoxId="cancelModal">
+                        <RoundButton :title="'Cancel reservation'" @click="reservationId=reservation.reservationId" :iconName="'clear'"/>
+                    </ModalOpener>
+                    <RoundButton title="See reserved medicines" @click="displayReservedMedicines(reservation.reservationId)" :iconName="'medical_services'"/>
                 </TableRow>
             </TableBody>  
         </Table>
+        <Modal title="Cancel reservation" modalBoxId="cancelModal">
+            <div slot="body">
+                Are you sure that you want to cancel this reservation?
+            </div>
+            <div slot="buttons">
+                <OptionModalButtons @yes="handleCancelReservation"/>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -37,8 +46,10 @@ import Card from '../Card/Card.vue'
 import RoundButton from '../Form/RoundButton.vue'
 import ReservedMedicinesTable from '../Tables/ReservedMedicinesTable.vue'
 import { mapActions, mapGetters } from 'vuex'
+import { getUserIdFromToken } from '../../utils/token'
 import toastr from 'toastr'
 import moment from 'moment'
+import OptionModalButtons from '../Modal/OptionModalButtons.vue'
 
 export default {
     components: {
@@ -50,15 +61,18 @@ export default {
         ModalOpener,
         Card,
         RoundButton, 
-        ReservedMedicinesTable
+        ReservedMedicinesTable,
+        OptionModalButtons
     },
 
     data: function() {
-    return {
-        futureMedicineReservations: [],
-        pharmacies: [],
-        reservedMedicines: [],
-        medicines: []
+        return {
+            futureMedicineReservations: [],
+            pharmacies: [],
+            pharmacy: {},
+            reservedMedicines: [],
+            medicines: [],
+            reservationId: null
         }
     },
 
@@ -80,8 +94,8 @@ export default {
             fetchMedicines: 'medicines/fetchMedicinesForHomePage'
         }),
 
-        handleCancelReservation(reservationId){
-            this.cancelReservation(reservationId);
+        handleCancelReservation(){
+            this.cancelReservation(this.reservationId);
         },
 
         formatDateTime(date) {
@@ -89,9 +103,10 @@ export default {
         },
 
         foundPharmacy(pharmacyId){
-            for(let i = 0; i < this.pharmacies.length; i++){
-                if(this.pharmacies[i].id == pharmacyId){
-                    return this.pharmacies[i];
+            for(let i = 0; i < this.pharmacies.length; i++) {
+                if(this.pharmacies[i].id == pharmacyId) {
+                    this.pharmacy = this.pharmacies[i]
+                    return this.pharmacy;
                 }
             }
         },
@@ -114,7 +129,7 @@ export default {
             
             if(ok) {
                 toastr.success(message);
-                this.fetchMedicineReservations("08d8f850-724b-4236-8fd9-6cd7d952f120");
+                this.fetchMedicineReservations(getUserIdFromToken());
             } else {
                 toastr.error(message);
             }
@@ -134,7 +149,7 @@ export default {
     },
 
     mounted() {
-        this.fetchMedicineReservations("08d8f850-724b-4236-8fd9-6cd7d952f120");
+        this.fetchMedicineReservations(getUserIdFromToken());
         this.getAllPharmacies();
     }
 
