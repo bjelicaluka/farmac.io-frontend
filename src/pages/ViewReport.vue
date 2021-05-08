@@ -12,7 +12,7 @@
             <Card :title="'Notes'">
                 {{appointment.report.notes}}
             </Card>
-            <Card v-if="appointment.report.eRecipe.medicines.length>0" :title="'eRecipe'">
+            <Card v-if="hasERecipe()" :title="'eRecipe'">
                 <Table>
                     <TableHead :columnNames="['Prescribed medicines', 'Quantity']"></TableHead>
                     <TableBody>
@@ -67,6 +67,11 @@ export default {
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
+        hasERecipe() {
+            if (!this.appointment.report.eRecipe)
+                return false;
+            return this.appointment.report.eRecipe.medicines.length > 0;
+        }
     },
 
     mounted() {

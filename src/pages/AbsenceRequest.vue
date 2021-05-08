@@ -28,7 +28,7 @@
       </work-calendar>
     </div>
   </Card>
-  <Modal modalBoxId="requestModal">
+  <Modal :title="'Request'" modalBoxId="requestModal">
     <div slot="body">
       Are you sure that you want to request {{type==='0'?"absence":"vacation"}} for the period
        from {{formatDate(fromDate)}} to {{formatDate(toDate)}}?
