@@ -9,7 +9,7 @@
           <sidebar-item name="Work calendar" icon="event" to="/work-calendar"></sidebar-item>
           <sidebar-item name="Vacation request" icon="holiday_village" to="/vacation_request"></sidebar-item>
           <sidebar-item name="New appointment" icon="book_online" to="/new_appointment"></sidebar-item>
-          <sidebar-item name="Issue medicine" icon="medication" to="/issue_medicine"></sidebar-item>
+          <sidebar-item name="Issue medicine" icon="medication" to="/issue-reserved"></sidebar-item>
         </ul>
         <ul class="nav" v-else-if="user.role === Roles.Dermatologist">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>

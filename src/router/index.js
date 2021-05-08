@@ -31,6 +31,7 @@ import Answers from '../pages/Answers.vue'
 import LoyaltyPoints from '../pages/LoyaltyPoints'
 import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
 import ERecipes from '../pages/ERecipes'
+import IssueReserved from '../pages/IssueReserved'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -358,6 +359,15 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Patient]
+    }
+  },
+  {
+    path: '/issue-reserved',
+    name: 'IssueReserved',
+    component: IssueReserved,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Pharmacist]
     }
   }
 ]
