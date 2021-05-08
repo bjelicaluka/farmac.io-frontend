@@ -3,39 +3,47 @@
         <div class="container-fluid">
             <div class="center align-items-center col-4">
                 <SelectOptionInput
-                label="Select entity to rate"
+                label="Select what you will rate"
                 v-model="selectedValue"
                 :show-label="false"
                 :options="selectOptions"
                 >
                     </SelectOptionInput>
             </div>
-            <Card v-if="selectedValue===0" :description="`You can rate the dermatologist which you visited.`" title="Rate dermatologists">
-                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaffs="canBeRatedDermatologists" 
-                            :medicalStaffType ="'Dermatologist'" :isRated="false"/>
-            </Card>
-            <Card v-if="selectedValue===0"  title="Change your grade for dermatologist">
-                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Change your grade']" :medicalStaffs="ratedDermatologists" :medicalStaffType="'Dermatologist'" :isRated="true"/>
-            </Card>
-            <Card v-if="selectedValue===1"  :description="`You can rate the pharmacists which you visited.`" title="Rate pharmacists">
-                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaffs="pharmacistsThatCanBeRated" 
-                                            :medicalStaffType ="'Pharmacist'" :isRated="false"/>
-            </Card>
-            <Card v-if="selectedValue===1"  title="Change your grade for pharmacist">
-                <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Change your grade']" :medicalStaffs="ratedPharmacists" :medicalStaffType="'Pharmacist'" :isRated="true"/>
-            </Card>
-            <Card v-if="selectedValue===2"  :description="`You can rate the medicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
-                <RateMedicineTable :medicines="medicinesThatCanBeRated" :isRated="false"/>
-            </Card>
-            <Card v-if="selectedValue===2"  title="Change your grade for medicine">
-                <RateMedicineTable :medicines="ratedMedicines" :isRated="true"/>
-            </Card>
-            <Card v-if="selectedValue===3"  :description="`You can rate the pharmacy which services you consumed in the past.`" title="Rate pharmacy">
-                <RatePharmacyTable :pharmacies="pharmaciesThatCanBeRated" :isRated="false"/>
-            </Card>
-            <Card v-if="selectedValue===3"  title="Change your grade for pharmacy">
-                <RatePharmacyTable :pharmacies="ratedPharmacies" :isRated="true"/>
-            </Card>
+            <div v-if="selectedValue===0">
+                <Card :description="`You can rate the dermatologist which you visited.`" title="Rate dermatologists">
+                    <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaffs="canBeRatedDermatologists" 
+                                :medicalStaffType ="'Dermatologist'" :isRated="false"/>
+                </Card>
+                <Card  title="Change your grade for dermatologist">
+                    <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Change your grade']" :medicalStaffs="ratedDermatologists" :medicalStaffType="'Dermatologist'" :isRated="true"/>
+                </Card>
+            </div>
+            <div v-if="selectedValue===1">
+                <Card :description="`You can rate the pharmacists which you visited.`" title="Rate pharmacists">
+                    <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaffs="pharmacistsThatCanBeRated" 
+                                                :medicalStaffType ="'Pharmacist'" :isRated="false"/>
+                </Card>
+                <Card title="Change your grade for pharmacist">
+                    <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Change your grade']" :medicalStaffs="ratedPharmacists" :medicalStaffType="'Pharmacist'" :isRated="true"/>
+                </Card>
+            </div>
+            <div v-if="selectedValue===2">
+                <Card :description="`You can rate the medicine which you reserved and taken or which was prescribed to you.`" title="Rate medicine">
+                    <RateMedicineTable :medicines="medicinesThatCanBeRated" :isRated="false"/>
+                </Card>
+                <Card title="Change your grade for medicine">
+                    <RateMedicineTable :medicines="ratedMedicines" :isRated="true"/>
+                </Card>
+            </div>
+            <div v-if="selectedValue===3">
+                <Card :description="`You can rate the pharmacy which services you consumed in the past.`" title="Rate pharmacy">
+                    <RatePharmacyTable :pharmacies="pharmaciesThatCanBeRated" :isRated="false"/>
+                </Card>
+                <Card title="Change your grade for pharmacy">
+                    <RatePharmacyTable :pharmacies="ratedPharmacies" :isRated="true"/>
+                </Card>
+            </div>
         </div> 
     </div>
 </template>

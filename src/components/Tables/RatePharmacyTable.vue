@@ -50,7 +50,7 @@ export default {
     methods: {
         ...mapActions({
             ratePharmacy: 'grade/ratePharmacy',
-            changeGrade: 'grade/changeGradeToPharmacy'
+            changeGrade: 'grade/changeGradeForPharmacy'
         }),
         formAddress(pharmacy) {
             return `${pharmacy.address.streetName} ${pharmacy.address.streetNumber}, ${pharmacy.address.city}`;

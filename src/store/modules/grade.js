@@ -161,28 +161,28 @@ const actions = {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         })
     },
-    changeGradeToMedicalStaff: (context, {gradeId, value}) => {
+    changeGradeForMedicalStaff: (context, {gradeId, value}) => {
         axios.post(`/grades/change-medicalStaff-grade`, {gradeId, value})
         .then(resp => {
-            context.commit('setResult', {label: 'changeGradeMedicalStaff', ok: true, message: "The grade was successfully changed."});
+            context.commit('setResult', {label: 'changeGradeMedicalStaff', ok: true, message: "The grade is successfully changed."});
         })
         .catch(err => {
             context.commit('setResult', {label: 'changeGradeMedicalStaff', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    changeGradeToMedicine: (context, {gradeId, value}) => {
+    changeGradeForMedicine: (context, {gradeId, value}) => {
         axios.post(`/grades/change-medicine-grade`, {gradeId, value})
         .then(resp => {
-            context.commit('setResult', {label: 'changeGradeMedicine', ok: true, message: "The grade was successfully changed."});
+            context.commit('setResult', {label: 'changeGradeMedicine', ok: true, message: "The grade is successfully changed."});
         })
         .catch(err => {
             context.commit('setResult', {label: 'changeGradeMedicine', ok: false, message: err.response.data.ErrorMessage});
         });
     },
-    changeGradeToPharmacy: (context, {gradeId, value}) => {
+    changeGradeForPharmacy: (context, {gradeId, value}) => {
         axios.post(`grades/change-pharmacy-grade`, {gradeId, value})
         .then(resp => {
-            context.commit('setResult', {label: 'changeGradePharmacy', ok: true, message: "The grade was successfully changed."});
+            context.commit('setResult', {label: 'changeGradePharmacy', ok: true, message: "The grade is successfully changed."});
         })
         .catch(err => {
             context.commit('setResult', {label: 'changeGradePharmacy', ok: false, message: err.response.data.ErrorMessage});

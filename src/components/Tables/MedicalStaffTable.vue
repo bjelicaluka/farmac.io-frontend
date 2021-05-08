@@ -15,7 +15,7 @@
                     <TableRow
                         v-for="(staff, index) in medicalStaffs"
                         :key="index"
-                        :values="[`${staff.medicalStaff.user.firstName} ${staff.medicalStaff.user.lastName}`, parseFloat(staff.medicalStaff.user.averageGrade).toFixed(2)]"
+                        :values="[`${staff.medicalStaff.firstName} ${staff.medicalStaff.lastName}`, parseFloat(staff.medicalStaff.averageGrade).toFixed(2)]"
                     >
                         <StarRating v-model="staff.grade" @rating-selected="changeGrade(staff)" :star-size="20"></StarRating>
                     </TableRow>
@@ -55,10 +55,10 @@ export default {
     methods: {
         ...mapActions({
             rateMedicalStaff: 'grade/rateMedicalStaff',
-            changeGradeMedicalStaff: 'grade/changeGradeToMedicalStaff'
+            changeGradeForMedicalStaff: 'grade/changeGradeForMedicalStaff'
         }),
         rate(staff) {
-            let medicalStaffId = staff.userId;
+            let medicalStaffId = staff.id;
             let grade = staff.grade;
             let patientId = getAccountIdFromToken();
             if(this.medicalStaffType  === 'Dermatologist') {
@@ -85,7 +85,7 @@ export default {
         changeGrade(staff) {
             let gradeId = staff.gradeId;
             let value = staff.grade;
-            this.changeGradeMedicalStaff({gradeId, value});
+            this.changeGradeForMedicalStaff({gradeId, value});
         }
     },
 

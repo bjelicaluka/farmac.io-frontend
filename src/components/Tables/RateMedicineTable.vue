@@ -47,7 +47,7 @@ export default {
     methods: {
         ...mapActions({
             rateMedicine: 'grade/rateMedicine',
-            changeGrade: 'grade/changeGradeToMedicine'
+            changeGrade: 'grade/changeGradeForMedicine'
         }),
         selectedGrade(medicine) {
             let requestObject = {
