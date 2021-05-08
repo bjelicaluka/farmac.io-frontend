@@ -8,7 +8,7 @@
     v-model="currentPharmacy"
   />
   <FullCalendar :options="calendarOptions" ref="calendar" />
-  <modal modalBoxId="selectedEvent" title="Appointment">
+  <Modal modalBoxId="selectedEvent" title="Appointment">
     <div slot="body">
       <Table>
         <TableRow :values="['Patient', `${selectedEvent.title}`]"></TableRow>
@@ -27,8 +27,8 @@
         </ButtonWithIcon>
       </ModalCloser>
     </div>
-  </modal>
-  <modal-opener id="opener" modalBoxId="selectedEvent">Last selectedEvent</modal-opener>
+  </Modal>
+  <ModalOpener id="opener" modalBoxId="selectedEvent"/>
 </div>
 </template>
 
@@ -74,7 +74,7 @@ export default {
         selectable: this.selectable,
         select: this.select,
         selectAllow: this.allow,
-        selectMinDistance: 100
+        selectMinDistance: 10
       },
       selectedEvent: {
         extendedProps: {}
@@ -154,10 +154,6 @@ a.fc-event:hover {
 .fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
   background-color: #5c005c;
   border-color: #5c005c;
-}
-
-#opener {
-  display: none;
 }
 
 .fc-highlight {
