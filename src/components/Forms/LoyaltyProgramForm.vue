@@ -33,7 +33,7 @@
                         v-model="loyaltyProgram.discount"
                         :isValid="!isNaN(loyaltyProgram.discount)"
                         :showErrorMessage="showErrorMessage"
-                        errorMessage="Minimum points must be between 0 and 100."
+                        errorMessage="Discount must be between 0 and 100."
                         :min="0"
                         :max="100"
                     />
