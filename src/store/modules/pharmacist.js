@@ -111,25 +111,6 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'delete', ok: false, message: err.response.data.ErrorMessage});
         });
-    },
-    ratePharmacist: (context, {patientId, medicalStaffId, grade}) => {
-        axios.post(`/pharmacists/rate`, {patientId, medicalStaffId, grade})
-        .then(resp => {
-            context.commit('setResult', {label: 'grade', ok: true, message: "You have successfully rated a pharmacist."});
-        })
-        .catch(err => {
-            context.commit('setResult', {label: 'grade', ok: false, message: err.response.data.ErrorMessage});
-        })
-    },
-    fetchPharmacistsThatPatientCanRate: (context, patientId) => {
-        axios.get(`/pharmacists/${patientId}/can-rate`)
-        .then(resp => {
-            context.commit('setPharmacists', resp.data);
-            context.commit('setResult', {label: 'fetch', ok: true, message: ""});
-        })
-        .catch(err => {
-            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
-        })
     }
 };
 
