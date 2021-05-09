@@ -159,7 +159,7 @@ export default {
             createReservationFromERecipe: 'eRecipes/createReservationFromERecipe'
         }),
 
-        formAddress(pharmacy){
+        formAddress(pharmacy) {
             return `${pharmacy.address.streetName} ${pharmacy.address.streetNumber}, ${pharmacy.address.city}`;
         },
      
