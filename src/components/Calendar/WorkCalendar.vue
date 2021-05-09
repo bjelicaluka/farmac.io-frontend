@@ -8,33 +8,32 @@
     v-model="currentPharmacy"
   />
   <FullCalendar :options="calendarOptions" ref="calendar" />
-  <modal modalBoxId="selectedEvent" title="Appointment">
+  <Modal modalBoxId="selectedEvent" title="Appointment">
     <div slot="body">
       <Table>
-        <TableRow :values="['Patient', `${selected.title}`]"></TableRow>
-        <TableRow :values="['Pharmacy', `${selected.extendedProps.pharmacyName}`]"></TableRow>
-        <TableRow :values="['Time', formatDateTime(selected.start)]"></TableRow>
-        <TableRow :values="['Duration', `${selected.duration} minutes`]"></TableRow>
+        <TableRow :values="['Patient', `${selectedEvent.title}`]"></TableRow>
+        <TableRow :values="['Pharmacy', `${selectedEvent.extendedProps.pharmacyName}`]"></TableRow>
+        <TableRow :values="['Time', formatDateTime(selectedEvent.start)]"></TableRow>
+        <TableRow :values="['Duration', `${selectedEvent.duration} minutes`]"></TableRow>
       </Table>
     </div>
     <div slot="buttons">
       <ModalCloser>
-        <ButtonWithIcon v-if="selected.title!=' '"
+        <ButtonWithIcon v-if="selectedEvent.title!=' '"
           @click="handleReport"
           :iconName="'assignment'"
           class="pull-right">
-          {{selected.extendedProps.isReported?'View report':'Write report'}}
+          {{selectedEvent.extendedProps.isReported?'View report':'Write report'}}
         </ButtonWithIcon>
       </ModalCloser>
     </div>
-  </modal>
-  <modal-opener id="opener" modalBoxId="selectedEvent">Last selected</modal-opener>
+  </Modal>
+  <ModalOpener id="opener" modalBoxId="selectedEvent"/>
 </div>
 </template>
 
 <script>
 import moment from 'moment'
-import toastr from 'toastr'
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -58,7 +57,7 @@ export default {
     ModalCloser,
     SelectOptionInput
   },
-  props: ['appointments', 'pharmacies'],
+  props: ['appointments', 'pharmacies', 'selectable'],
   data() {
     return {
       calendarOptions: {
@@ -66,36 +65,47 @@ export default {
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,dayGridWeek,timeGridWeek,timeGridDay'
+          right: this.selectable?'':'dayGridMonth,dayGridWeek,timeGridWeek,timeGridDay'
         },
         initialView: 'dayGridMonth',
-        dateClick: this.handleDateClick,
+        dateClick: this.dateClick,
         eventClick: this.handleEventClick,
-        events: this.appointments
+        events: this.appointments,
+        selectable: this.selectable,
+        select: this.select,
+        selectAllow: this.allow,
+        selectMinDistance: 10
       },
-      selected: {
+      selectedEvent: {
         extendedProps: {}
       },
       currentPharmacy: null
     }
   },
   methods: {
-    handleDateClick(arg) {
-      toastr.info('Date: ' + this.formatDateTime(arg.dateStr));
+    dateClick(arg) {
+      this.$emit('dateClick', arg);
+    },
+    select(arg) {
+      this.$emit('select', arg);
     },
     handleEventClick(clickInfo) {
-      this.selected = clickInfo.event;
-      this.selected.duration = (this.selected.end-this.selected.start)/60000;
+      if (this.selectable) return;
+      this.selectedEvent = clickInfo.event;
+      this.selectedEvent.duration = (this.selectedEvent.end-this.selectedEvent.start)/60000;
       document.getElementById("opener").click();
+    },
+    allow(selectInfo) {
+      return moment(selectInfo.start)>moment();
     },
     formatDateTime(date) {
       return moment(date).format("DD-MMM-YYYY HH:mm");
     },
     handleReport() {
-      if (this.selected.extendedProps.isReported)
-        this.$router.push(`/view-report/${this.selected.id}`);
+      if (this.selectedEvent.extendedProps.isReported)
+        this.$router.push(`/view-report/${this.selectedEvent.id}`);
       else
-        this.$router.push(`/report/${this.selected.id}`);
+        this.$router.push(`/report/${this.selectedEvent.id}`);
     }
   },
   watch: {
@@ -146,8 +156,8 @@ a.fc-event:hover {
   border-color: #5c005c;
 }
 
-#opener {
-  display: none;
+.fc-highlight {
+  background-color: blue !important;
 }
 
 </style>
