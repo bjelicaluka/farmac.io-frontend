@@ -2,7 +2,7 @@
     <Table>
         <TableHead :columnNames="['Medicine name', 'Quantity', 'Price']"></TableHead>
         <TableBody>
-            <TableRow v-for="(medicine, index) in reservedMedicines" :key="index" :values="[getMedicineName(medicine.medicineId), 
+            <TableRow v-for="(medicine, index) in reservedMedicines" :key="index" :values="[getMedicineName(medicine), 
             medicine.quantity, medicine.price*medicine.quantity + ' RSD']"></TableRow>
         </TableBody>
     </Table>
@@ -15,6 +15,7 @@ import TableHead from '../Table/TableHead.vue'
 import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
 import { mapActions, mapGetters } from 'vuex'
+import medicines from '../../store/modules/medicines'
 
 export default {
     props: ['reservedMedicines'],
@@ -35,13 +36,16 @@ export default {
         ...mapActions({
             fetchMedicines: 'medicines/fetchMedicines'
         }),
-        getMedicineName(medicineId){
-            return this.medicines?.find(m => m.id === medicineId)?.name;
+        getMedicineName(medicine){
+            if (!medicine.name)
+                return this.medicines?.find(m => m.id === medicine.medicineId)?.name;
+            return medicine.name;
         }
     },
 
     mounted() {
-        this.fetchMedicines();
+        if (!this.reservedMedicines[0].name)
+            this.fetchMedicines();
     }
 
 }

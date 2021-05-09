@@ -3,13 +3,15 @@ import axios from 'axios';
 const state = {
     futureMedicineReservations: {},
     result: null,
-    reservedMedicines: []
+    reservedMedicines: [],
+    reservation: null
 }
 
 const getters = {
     getFutureMedicineReservations: state => state.futureMedicineReservations,
     getResult: state => state.result,
-    getReservedMedicines: state => state.reservedMedicines
+    getReservedMedicines: state => state.reservedMedicines,
+    getReservation: state => state.reservation
 };
 
 
@@ -50,6 +52,26 @@ const actions = {
         .catch(error => {
             context.commit('setResult', { ok: false });
         });
+    },
+
+    fetchReservationInPharmacy(context, {uniqueId, pharmacyId}) {
+        axios.get(`/reservations/in-pharmacy/${pharmacyId}/by-uniqueid/${uniqueId}`)
+        .then(resp => {
+            context.commit('setReservation', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+
+    issueReserved(context, reservationId) {
+        axios.put(`/reservations/issue-medicines/${reservationId}`)
+        .then(resp => {
+            context.commit('setResult', {label: 'issue', ok: true, message: 'Reservation is marked as done.'});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'issue', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
@@ -64,6 +86,10 @@ const mutations = {
     
     setReservedMedicines: (state, reservedMedicines) =>{
         state.reservedMedicines = reservedMedicines;
+    },
+
+    setReservation: (state, reservation) => {
+        state.reservation = reservation;
     }
 };
 

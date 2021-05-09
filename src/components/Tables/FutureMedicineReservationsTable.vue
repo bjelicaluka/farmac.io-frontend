@@ -14,8 +14,7 @@
             <TableHead :columnNames="['Code', 'Name of pharmacy', 'Address of pharmacy', 'Pickup deadline', 'Price', '', ' ']"></TableHead>
             <TableBody v-if="pharmacies.length > 0">
                 <TableRow v-for="reservation in futureMedicineReservations" :key="reservation.reservationId"
-                    :values="[reservation.uniqueId, foundPharmacy(reservation.pharmacyId).name,
-                            `${pharmacy.address.streetName} ${pharmacy.address.streetNumber} ${pharmacy.address.city}`, 
+                    :values="[reservation.uniqueId, ...formatPharmacy(reservation.pharmacyId),
                             formatDateTime(reservation.pickupDeadline), reservation.price]">
                     <ModalOpener modalBoxId="cancelModal">
                         <RoundButton :title="'Cancel reservation'" @click="reservationId=reservation.reservationId" :iconName="'clear'"/>
@@ -69,7 +68,6 @@ export default {
         return {
             futureMedicineReservations: [],
             pharmacies: [],
-            pharmacy: {},
             reservedMedicines: [],
             medicines: [],
             reservationId: null
@@ -102,11 +100,11 @@ export default {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
 
-        foundPharmacy(pharmacyId){
+        formatPharmacy(pharmacyId){
             for(let i = 0; i < this.pharmacies.length; i++) {
                 if(this.pharmacies[i].id == pharmacyId) {
-                    this.pharmacy = this.pharmacies[i]
-                    return this.pharmacy;
+                    let pharmacy = this.pharmacies[i]
+                    return [pharmacy.name, `${pharmacy.address.streetName} ${pharmacy.address.streetNumber} ${pharmacy.address.city}`];
                 }
             }
         },
