@@ -118,6 +118,7 @@ export default {
             pharmacyOrder: 'pharmacyOrders/getPharmacyOrder',
             followingResult: 'followings/getResult',
             isFollowing: 'followings/isFollowing',
+            absenceRequestResult: 'medicalStaff/getResult'
         })
     },
     watch: {
@@ -181,7 +182,13 @@ export default {
             } else {
                 toastr.error(message);
             }
-        }
+        },
+
+        absenceRequestResult({label}) {
+            if(label === 'acceptAbsenceRequest' || label === 'declineAbsenceRequest') {
+                this.fetchAbsenceRequestsForPharmacy(this.pharmacyId);
+            }
+        },
 
     },
     methods: {

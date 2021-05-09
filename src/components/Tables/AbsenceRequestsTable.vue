@@ -6,7 +6,7 @@
                 <TableRow 
                     v-for="(absenceRequest, i) in absenceRequests" 
                     :key="i" 
-                    :values="[getFullNameOfRequester(absenceRequest.requester), formatDate(absenceRequest.fromDate), formatDate(absenceRequest.toDate), absenceRequest.status]"
+                    :values="[getFullNameOfRequester(absenceRequest.requester), formatDate(absenceRequest.fromDate), formatDate(absenceRequest.toDate), formatStatus(absenceRequest.status)]"
                 >
                     <div class="pull-right text-gray">
                         <DropDownMenu v-if="user.role === Roles.PharmacyAdmin">
@@ -50,9 +50,26 @@
         >
             <div slot="body">
                 <p v-if="selectedAbsenceRequest">Are you sure that you want to decline absence request from {{getFullNameOfRequester(selectedAbsenceRequest.requester)}}?</p>
+                <TextArea
+                    label="Reason"
+                    rows="4"
+                    v-model="reason"
+                    :isValid="isReasonValid()"
+                    :showErrorMessage="showErrorMessage"
+                    errorMessage="Please provide a reason that is longer than 5 characters."
+                />
             </div>
 
             <div slot="buttons">
+                <ModalCloser id="declineAbsenceRequestModalCloser">
+                    <Button className="btn btn-secondary">
+                        No
+                    </Button>
+                </ModalCloser>
+
+                <Button @click="onDeclineSubmit">
+                    Yes
+                </Button>
             </div>
         </Modal>
     </div>
@@ -65,6 +82,7 @@ import TableHead from '../Table/TableHead.vue'
 import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
 import ModalOpener from '../Modal/ModalOpener.vue'
+import ModalCloser from '../Modal/ModalCloser.vue'
 import Modal from '../Modal/Modal.vue'
 import {Roles} from '../../constants'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
@@ -74,6 +92,8 @@ import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import TextArea from '../Form/TextArea.vue'
+import Button from '../Form/Button.vue'
 
 export default {
     props: {
@@ -83,7 +103,10 @@ export default {
         return {
             Roles,
             user: {},
-            selectedAbsenceRequest: null
+            selectedAbsenceRequest: null,
+            reason: null,
+            
+            showErrorMessage: false
         }
     },
     mounted() {
@@ -102,6 +125,9 @@ export default {
         DropDownItem,
         DropDownMenu,
         OptionModalButtons,
+        TextArea,
+        ModalCloser,
+        Button
     },
     computed: {
         ...mapGetters({
@@ -110,7 +136,7 @@ export default {
     },
     watch: {
         result({label, ok, message}) {
-            if(label !== 'acceptAbsenceRequest') {
+            if(label !== 'acceptAbsenceRequest' && label !== 'declineAbsenceRequest') {
                 return;
             }
             if(ok) {
@@ -123,12 +149,28 @@ export default {
     methods: {
         ...mapActions({
             acceptAbsenceRequest: 'medicalStaff/acceptAbsenceRequest',
+            declineAbsenceRequest: 'medicalStaff/declineAbsenceRequest',
         }),
         formatDate(d) {
             return moment(d).format('ll');
         },
+        formatStatus(status) {
+            const statuses = ['Accepted', 'Declined', 'Waiting for Response']
+            return statuses[status];
+        },
+        isReasonValid() {
+            return !!this.reason && this.reason.length >= 5;
+        },
         onAcceptSubmit() {
             this.acceptAbsenceRequest(this.selectedAbsenceRequest.id);
+        },
+        onDeclineSubmit() {
+            this.showErrorMessage = true;
+            
+            if(this.isReasonValid()) {
+                this.declineAbsenceRequest({absenceRequestId: this.selectedAbsenceRequest.id, reason: this.reason});
+                document.getElementById('declineAbsenceRequestModalCloser').click();
+            }
         },
         getFullNameOfRequester(requester) {
             return `${requester.firstName} ${requester.lastName}`

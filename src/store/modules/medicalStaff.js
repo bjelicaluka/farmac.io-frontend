@@ -31,6 +31,16 @@ const actions = {
         });
     },
 
+    declineAbsenceRequest: (context, {absenceRequestId, reason}) => {
+        axios.post(`/medical-staff/absence-requests/${absenceRequestId}/decline`, {reason})
+        .then(resp => {
+            context.commit('setResult', {label: 'declineAbsenceRequest', ok: true, message: "Successfully declined absence request."});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'declineAbsenceRequest', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+
     addAbsenceRequest: (context, absenceRequest) => {
         axios.post(`/medical-staff/absence-requests`, absenceRequest)
         .then(resp => {
