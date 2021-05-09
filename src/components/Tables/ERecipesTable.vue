@@ -9,6 +9,12 @@
                 </TableRow>
         </TableBody>
     </Table>
+    <Modal modalBoxId="medicinesInERecipe" title="Medicines in eRecipe">
+        <div slot="body">
+            <MedicinesInERecipeTable :medicines="medicinesInERecipe" />
+        </div>
+    </Modal>
+    <ModalOpener id="medicinesInERecipeOpener" class="d-none" modalBoxId="medicinesInERecipe" />
     </div>
 </template>
 
@@ -19,6 +25,9 @@ import TableHead from '../Table/TableHead.vue'
 import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
 import RoundButton from '../Form/RoundButton.vue'
+import Modal from '../Modal/Modal'
+import ModalOpener from '../Modal/ModalOpener'
+import MedicinesInERecipeTable from '../Tables/MedicinesInERecipeTable'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 
@@ -30,35 +39,41 @@ export default {
         TableHead,
         TableBody,
         TableRow,
-        RoundButton
+        RoundButton,
+        Modal,
+        ModalOpener,
+        MedicinesInERecipeTable
     },
 
-    data: function(){
+    data: function() {
         return{
-
+            medicinesInERecipe: []
         }
     },
 
     computed: {
         ...mapGetters({
-
+            getMedicinesInERecipe: 'eRecipes/getMedicinesInERecipe'
         })
     },
 
     methods: {
         ...mapActions({
-
+            fetchMedicinesInERecipes: 'eRecipes/fetchMedicinesInERecipes'
         }),
-        seeMedicines(eRecipeId){
-            
+        seeMedicines(eRecipeId) {
+            this.fetchMedicinesInERecipes(eRecipeId);
+            document.getElementById('medicinesInERecipeOpener').click();
         },
-        formatDate(date){
+        formatDate(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         }
     },
 
     watch: {
-        
+        getMedicinesInERecipe(medicines) {
+            this.medicinesInERecipe = medicines;
+        }
     }
 
 }
