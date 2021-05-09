@@ -3,12 +3,14 @@ import axios from "axios";
 const state = {
     pharmaciesForERecipe: null,
     eRecipes: [],
+    medicinesInERecipe: [],
     result: null
 };
 
 const getters = {
     getPharmaciesForERecipe: state => state.pharmaciesForERecipe,
     getERecipes: state => state.eRecipes,
+    getMedicinesInERecipe: state => state.medicinesInERecipe,
     getResult: state => state.result
 };
 
@@ -66,6 +68,15 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    fetchMedicinesInERecipes: (context, eRecipeId) => {
+        axios.get(`/medicines/in-eRecipe/${eRecipeId}`)
+        .then(resp => {
+            context.commit('setMedicinesInERecipe', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
@@ -78,6 +89,10 @@ const mutations = {
         state.eRecipes = eRecipes
     },
 
+    setMedicinesInERecipe: (state, medicines) => {
+        state.medicinesInERecipe = medicines;
+    },
+  
     setResult: (state, result) => {
         state.result = result;
     }

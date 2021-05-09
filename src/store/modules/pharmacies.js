@@ -131,36 +131,6 @@ const actions = {
         .catch(err => {
             context.commit('setResult', { label: 'fetch', ok: false })
         })
-    },
-    fetchPharmaciesThatCanRate: (context, patientId) => {
-        axios.get(`/pharmacies/${patientId}/can-rate`)
-        .then(response => {
-            context.commit('setPharmacies', response.data);
-        })
-        .catch(error => {
-            context.commit('setResult', {
-                label: 'fetch',
-                ok: false,
-                message: error.response.data.ErrorMessage
-            })
-        })
-    },
-    ratePharmacy: (context, {value, patientId, pharmacyId}) => {
-        axios.post(`/pharmacies/rate`, {value, patientId, pharmacyId})
-        .then(response => {
-            context.commit('setResult', { 
-                label: 'grade',
-                ok: true,
-                message: "You have successfully rated the pharmacy."
-            })
-        })
-        .catch(error => {
-            context.commit('setResult', {
-                label: 'grade',
-                ok: false,
-                message: error.response.data.ErrorMessage
-            })
-        })
     }
 };
 
