@@ -42,7 +42,10 @@
                 <PharmacyPromotionsTable :pharmacyPromotions="pharmacyPromotions" :pharmacyId="pharmacyId" />
             </Card>
             <Card title='Absence Requests' :description="`Absence Requests for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
-                <AbsenceRequestsTable :absenceRequests="absenceRequests" :pharmacyId="pharmacyId" />
+                <AbsenceRequestsTable :absenceRequests="absenceRequests" />
+            </Card>
+            <Card title='Not In Stock Records' :description="`Not In Stock Records for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
+                <NotInStockRecordsTable :notInStockRecords="notInStockRecords" />
             </Card>
         </div> 
     </div>
@@ -68,6 +71,7 @@ import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
 import PharmacyPromotionsTable from '../components/Tables/PharmacyPromotionsTable.vue';
 import AbsenceRequestsTable from '../components/Tables/AbsenceRequestsTable.vue';
+import NotInStockRecordsTable from '../components/Tables/NotInStockRecordsTable.vue';
 
 
 export default {
@@ -83,8 +87,9 @@ export default {
         UnfollowPharmacyModal,
         ModalOpener,
         PharmacyOrdersTable,
-          PharmacyPromotionsTable,
-          AbsenceRequestsTable
+        PharmacyPromotionsTable,
+        AbsenceRequestsTable,
+        NotInStockRecordsTable
     },
 
     data: () => {
@@ -107,6 +112,7 @@ export default {
             pharmacyOrdersResult: 'pharmacyOrders/getResult',
             pharmacyPromotionsResult: 'pharmacyPromotions/getResult',
             absenceRequests: 'medicalStaff/getAbsenceRequests',
+            notInStockRecords: 'notInStockRecords/getNotInStockRecords',
 
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
@@ -118,7 +124,8 @@ export default {
             pharmacyOrder: 'pharmacyOrders/getPharmacyOrder',
             followingResult: 'followings/getResult',
             isFollowing: 'followings/isFollowing',
-            absenceRequestResult: 'medicalStaff/getResult'
+            absenceRequestResult: 'medicalStaff/getResult',
+            notInStockRecordResult: 'notInStockRecords/getResult'
         })
     },
     watch: {
@@ -190,6 +197,12 @@ export default {
             }
         },
 
+        notInStockRecordResult({label, ok, message}) {
+            if(label === 'markSeen') {
+                this.fetchNotInStockRecordsForPharmacy(this.pharmacyId);
+            }
+        },
+
     },
     methods: {
         ...mapActions({
@@ -204,6 +217,7 @@ export default {
             filterPharmacyOrders: 'pharmacyOrders/filterPharmacyOrders',
             fetchPharmacyPromotions: 'pharmacyPromotions/fetchPharmacyPromotions',
             fetchAbsenceRequestsForPharmacy: 'medicalStaff/fetchAbsenceRequestsForPharmacy',
+            fetchNotInStockRecordsForPharmacy: 'notInStockRecords/fetchNotInStockRecordsForPharmacy',
             fetchPatientFollowings: 'followings/fetchPatientFollowings',
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
@@ -246,6 +260,7 @@ export default {
         this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
         this.fetchPharmacyPromotions(this.pharmacyId);
         this.fetchAbsenceRequestsForPharmacy(this.pharmacyId);
+        this.fetchNotInStockRecordsForPharmacy(this.pharmacyId);
 
         this.user = {
             id: getAccountIdFromToken(),
