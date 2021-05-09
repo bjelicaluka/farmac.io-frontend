@@ -111,6 +111,15 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetchAllergies', ok: false, message: err.response.data.ErrorMessage});
         })
+    },
+    deleteAllergy: (context, {medicineId, patientId}) => {
+        axios.delete(`patients/${patientId}/allergy/${medicineId}`)
+        .then(resp => {
+            context.commit('setResult', {label: 'deleteAllergy', ok: true, message: 'Allergy is successfully deleted'});
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'deleteAllergy', ok: false, message: err.response.data.ErrorMessage});
+        })
     }
 };
 

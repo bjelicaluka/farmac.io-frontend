@@ -80,6 +80,25 @@ const actions = {
         })
     },
 
+    cancelOfferFromSupplier: (context, {supplierId, offerId}) => {
+        axios.delete(`/suppliers/${supplierId}/offers/${offerId}`)
+        .then(response => {
+            context.commit('setResult', {
+                label: 'cancel',
+                ok: true,
+                message: `You have successfully deleted your offer.`
+            });
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'cancel',
+                ok: false,
+                message: error.response.data.ErrorMessage
+                
+            });
+        })
+    },
+
     acceptSupplierOffer: (context, supplierOfferId) => {
         axios.post(`/suppliers/offers/${supplierOfferId}`, {})
         .then(response => {
