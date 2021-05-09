@@ -1,12 +1,12 @@
 <template>
     <div>
         <Table>
-            <TableHead :columnNames="['Requester', 'Date From', 'Date To', '']"></TableHead>
+            <TableHead :columnNames="['Requester', 'Date From', 'Date To', 'Status', '']"></TableHead>
             <TableBody>
                 <TableRow 
                     v-for="(absenceRequest, i) in absenceRequests" 
                     :key="i" 
-                    :values="[getFullNameOfRequester(absenceRequest.requester), formatDate(absenceRequest.fromDate), formatDate(absenceRequest.toDate)]"
+                    :values="[getFullNameOfRequester(absenceRequest.requester), formatDate(absenceRequest.fromDate), formatDate(absenceRequest.toDate), absenceRequest.status]"
                 >
                     <div class="pull-right text-gray">
                         <DropDownMenu v-if="user.role === Roles.PharmacyAdmin">
@@ -105,12 +105,12 @@ export default {
     },
     computed: {
         ...mapGetters({
-            result: 'pharmacies/getResult'
+            result: 'medicalStaff/getResult'
         })
     },
     watch: {
         result({label, ok, message}) {
-            if(label !== '') {
+            if(label !== 'acceptAbsenceRequest') {
                 return;
             }
             if(ok) {
@@ -122,13 +122,13 @@ export default {
     },
     methods: {
         ...mapActions({
-            acceptAbsenceRequest: 'pharmacies/removeMedicineFromPharmacy',
+            acceptAbsenceRequest: 'medicalStaff/acceptAbsenceRequest',
         }),
         formatDate(d) {
             return moment(d).format('ll');
         },
         onAcceptSubmit() {
-            this.acceptAbsenceRequest({pharmacyId: this.adminPharmacyId, medicineId: this.selectedAbsenceRequest.id});
+            this.acceptAbsenceRequest(this.selectedAbsenceRequest.id);
         },
         getFullNameOfRequester(requester) {
             return `${requester.firstName} ${requester.lastName}`
