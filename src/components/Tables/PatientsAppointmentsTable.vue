@@ -10,6 +10,7 @@
             formatDate(appointment.dateTime), formatTime(appointment.dateTime), formatDuration(appointment.duration), appointment.price + ' RSD']"
           >
           <RoundButton v-if="isCancelEnabled" :title="'Cancel appointment'" :iconName="'clear'" @click="handleCancelAppointment(appointment.id)"></RoundButton>
+          <RoundButton v-else :title="'View report'" :iconName="'info'" @click="displayReport(appointment.id)"></RoundButton>
           </TableRow>
         </TableBody>
     </Table>
@@ -54,22 +55,25 @@ export default {
     formatDuration(min) {
       return moment.utc(moment.duration(min, "minutes").asMilliseconds()).format("HH:mm");
     },
-    handleCancelAppointment(appointmentId){
-      if(this.cancelDermatologistAppointment){
+    handleCancelAppointment(appointmentId) {
+      if(this.cancelDermatologistAppointment) {
         this.cancelAppointmentWithDermatologist(appointmentId);
       }
-      else{
+      else {
         this.cancelAppointmentWithPharmacist(appointmentId);
       }
+    },
+    displayReport(appointmentId) {
+      window.location.href=`/view-report/${appointmentId}`;
     }
   },
   watch: {
-    getResult({label, ok, message}){
+    getResult({label, ok, message}) {
       if(label === 'cancel'){
-        if(ok){
+        if(ok) {
           toastr.success(message);
         }
-        else{
+        else {
           toastr.error(message);
         }
       }
