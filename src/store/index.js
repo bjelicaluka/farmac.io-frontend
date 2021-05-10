@@ -24,6 +24,7 @@ import followings from './modules/followings'
 import complaints from './modules/complaints'
 import loyaltyPoints from './modules/loyaltyPoints'
 import eRecipes from './modules/eRecipes'
+import loyaltyPrograms from './modules/loyaltyPrograms'
 import grade from './modules/grade'
 import notInStockRecords from './modules/notInStockRecords'
 
@@ -55,7 +56,8 @@ export default new Vuex.Store({
     complaints,
     loyaltyPoints,
     eRecipes,
-    grade,
     notInStockRecords,
+    loyaltyPrograms,
+    grade
   }
 });
