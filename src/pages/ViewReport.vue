@@ -13,17 +13,10 @@
                 {{appointment.report.notes}}
             </Card>
             <Card v-if="hasERecipe()" :title="'eRecipe'">
-                <Table>
-                    <TableHead :columnNames="['Prescribed medicines', 'Quantity']"></TableHead>
-                    <TableBody>
-                    <TableRow
-                        v-for="m in appointment.report.eRecipe.medicines" 
-                        :key="m.medicineId"
-                        :values="[m.medicine.name, m.quantity]"
-                    >
-                    </TableRow>
-                    </TableBody>
-                </Table>
+                <div class="col-9 pull-left">
+                    <MedicinesInERecipeTable :medicines="appointment.report.eRecipe.medicines"/>
+                </div>
+                <vue-qrcode :value="`${appointment.report.eRecipe.id}`"/>
             </Card>
         </Card>
     </div> 
@@ -37,9 +30,9 @@ import { getRoleFromToken } from '../utils/token'
 import { Roles } from '../constants'
 import Card from '../components/Card/Card.vue'
 import Table from '../components/Table/Table.vue'
-import TableBody from '../components/Table/TableBody.vue'
-import TableHead from '../components/Table/TableHead.vue'
 import TableRow from '../components/Table/TableRow.vue'
+import VueQrcode from 'vue-qrcode'
+import MedicinesInERecipeTable from '../components/Tables/MedicinesInERecipeTable.vue'
 
 export default {
     data: function() {
@@ -50,9 +43,9 @@ export default {
     components: {
         Card,
         Table,
-        TableBody,
-        TableHead,
         TableRow,
+        VueQrcode,
+        MedicinesInERecipeTable
     },
     computed: {
         ...mapGetters({

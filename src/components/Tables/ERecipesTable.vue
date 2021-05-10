@@ -11,6 +11,7 @@
     </Table>
     <Modal modalBoxId="medicinesInERecipe" title="Medicines in eRecipe">
         <div slot="body">
+            <vue-qrcode :value="`${selectedERecipeId}`"/>
             <MedicinesInERecipeTable :medicines="medicinesInERecipe" />
         </div>
     </Modal>
@@ -30,7 +31,7 @@ import ModalOpener from '../Modal/ModalOpener'
 import MedicinesInERecipeTable from '../Tables/MedicinesInERecipeTable'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-
+import VueQrcode from 'vue-qrcode'
 
 export default {
     props: ['eRecipes'],
@@ -42,12 +43,14 @@ export default {
         RoundButton,
         Modal,
         ModalOpener,
-        MedicinesInERecipeTable
+        MedicinesInERecipeTable,
+        VueQrcode
     },
 
     data: function() {
         return{
-            medicinesInERecipe: []
+            medicinesInERecipe: [],
+            selectedERecipeId: null
         }
     },
 
@@ -62,6 +65,7 @@ export default {
             fetchMedicinesInERecipes: 'eRecipes/fetchMedicinesInERecipes'
         }),
         seeMedicines(eRecipeId) {
+            this.selectedERecipeId = eRecipeId;
             this.fetchMedicinesInERecipes(eRecipeId);
             document.getElementById('medicinesInERecipeOpener').click();
         },
