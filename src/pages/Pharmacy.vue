@@ -41,6 +41,9 @@
             <Card title='Promotions' :description="`Promotions for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
                 <PharmacyPromotionsTable :pharmacyPromotions="pharmacyPromotions" :pharmacyId="pharmacyId" />
             </Card>
+            <Card title='Absence Requests' :description="`Absence Requests for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
+                <AbsenceRequestsTable :absenceRequests="absenceRequests" :pharmacyId="pharmacyId" />
+            </Card>
         </div> 
     </div>
 </template>
@@ -64,6 +67,7 @@ import ModalOpener from '../components/Modal/ModalOpener'
 import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
 import PharmacyPromotionsTable from '../components/Tables/PharmacyPromotionsTable.vue';
+import AbsenceRequestsTable from '../components/Tables/AbsenceRequestsTable.vue';
 
 
 export default {
@@ -79,7 +83,8 @@ export default {
         UnfollowPharmacyModal,
         ModalOpener,
         PharmacyOrdersTable,
-          PharmacyPromotionsTable
+          PharmacyPromotionsTable,
+          AbsenceRequestsTable
     },
 
     data: () => {
@@ -101,6 +106,7 @@ export default {
             pharmacistResult: 'pharmacist/getResult',
             pharmacyOrdersResult: 'pharmacyOrders/getResult',
             pharmacyPromotionsResult: 'pharmacyPromotions/getResult',
+            absenceRequests: 'medicalStaff/getAbsenceRequests',
 
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
@@ -112,6 +118,7 @@ export default {
             pharmacyOrder: 'pharmacyOrders/getPharmacyOrder',
             followingResult: 'followings/getResult',
             isFollowing: 'followings/isFollowing',
+            absenceRequestResult: 'medicalStaff/getResult'
         })
     },
     watch: {
@@ -175,7 +182,13 @@ export default {
             } else {
                 toastr.error(message);
             }
-        }
+        },
+
+        absenceRequestResult({label}) {
+            if(label === 'acceptAbsenceRequest' || label === 'declineAbsenceRequest') {
+                this.fetchAbsenceRequestsForPharmacy(this.pharmacyId);
+            }
+        },
 
     },
     methods: {
@@ -190,6 +203,7 @@ export default {
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
             filterPharmacyOrders: 'pharmacyOrders/filterPharmacyOrders',
             fetchPharmacyPromotions: 'pharmacyPromotions/fetchPharmacyPromotions',
+            fetchAbsenceRequestsForPharmacy: 'medicalStaff/fetchAbsenceRequestsForPharmacy',
             fetchPatientFollowings: 'followings/fetchPatientFollowings',
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
@@ -231,6 +245,7 @@ export default {
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
         this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
         this.fetchPharmacyPromotions(this.pharmacyId);
+        this.fetchAbsenceRequestsForPharmacy(this.pharmacyId);
 
         this.user = {
             id: getAccountIdFromToken(),

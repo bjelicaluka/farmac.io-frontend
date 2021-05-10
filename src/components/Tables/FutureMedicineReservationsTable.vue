@@ -44,6 +44,8 @@ import ModalOpener from '../Modal/ModalOpener.vue'
 import Card from '../Card/Card.vue'
 import RoundButton from '../Form/RoundButton.vue'
 import ReservedMedicinesTable from '../Tables/ReservedMedicinesTable.vue'
+
+import { getUserIdFromToken } from '../../utils/token'
 import { mapActions, mapGetters } from 'vuex'
 import { getUserIdFromToken } from '../../utils/token'
 import toastr from 'toastr'

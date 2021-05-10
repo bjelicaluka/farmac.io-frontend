@@ -29,9 +29,11 @@ import Complaints from '../pages/Complaints.vue'
 import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
 import Answers from '../pages/Answers.vue'
 import LoyaltyPoints from '../pages/LoyaltyPoints'
+import LoyaltyPrograms from '../pages/LoyaltyPrograms'
 import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
 import ERecipes from '../pages/ERecipes'
 import IssueReserved from '../pages/IssueReserved'
+import AbsenceRequest from '../pages/AbsenceRequest'
 
 import { Roles } from '../constants'
 import store from '../store/index'
@@ -344,6 +346,15 @@ const routes = [
     }
   },
   {
+    path: '/loyalty-programs',
+    name: 'LoyaltyPrograms',
+    component: LoyaltyPrograms,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.SystemAdmin]
+    }
+  },
+  {
     path: '/history-pharmacists-visits',
     name: 'HistoryOfVisitingPharmacists',
     component: HistoryOfVisitingPharmacists,
@@ -369,7 +380,16 @@ const routes = [
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Pharmacist]
     }
-  }
+  },
+  {
+    path: '/vacation-request',
+    name: 'AbsenceRequest',
+    component: AbsenceRequest,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Dermatologist, Roles.Pharmacist]
+    }
+  },
 ]
     
 const router = new VueRouter({
