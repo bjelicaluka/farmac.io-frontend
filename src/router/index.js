@@ -32,6 +32,7 @@ import LoyaltyPoints from '../pages/LoyaltyPoints'
 import LoyaltyPrograms from '../pages/LoyaltyPrograms'
 import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
 import ERecipes from '../pages/ERecipes'
+import IssueReserved from '../pages/IssueReserved'
 import AbsenceRequest from '../pages/AbsenceRequest'
 
 import { Roles } from '../constants'
@@ -369,6 +370,15 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Patient]
+    }
+  },
+  {
+    path: '/issue-reserved',
+    name: 'IssueReserved',
+    component: IssueReserved,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Pharmacist]
     }
   },
   {

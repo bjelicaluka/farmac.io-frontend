@@ -44,6 +44,7 @@ import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener'
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import { mapActions, mapGetters } from 'vuex'
+import { getUserIdFromToken } from '../../utils/token'
 
 const $ = window.$;
 
@@ -85,7 +86,7 @@ export default {
             this.removeItem({pharmacyId, medicineId, quantity});
         },
         reserveMedicinesForPharmacy() {
-            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: this.selectedDate})
+            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: this.selectedDate, patientId: getUserIdFromToken()})
         }
     },
 

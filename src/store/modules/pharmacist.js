@@ -3,12 +3,14 @@ import axios from "axios";
 const state = {
     pharmacist: null,
     pharmacists: null,
+    pharmacy: null,
     result: null
 };
 
 const getters = {
     getPharmacist: state => state.pharmacist,
     getPharmacists: state => state.pharmacists,
+    getPharmacy: state => state.pharmacy,
     getResult: state => state.result,
 };
 
@@ -111,6 +113,15 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'delete', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    fetchPharmacistWorkPlace: (context, pharmacistId) => {
+        axios.get(`/pharmacists/${pharmacistId}/work-place`)
+        .then(resp => {
+            context.commit('setPharmacy', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'workPlace', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 
@@ -120,6 +131,9 @@ const mutations = {
     },
     setPharmacists: (state, pharmacists) => {
         state.pharmacists = pharmacists;
+    },
+    setPharmacy: (state, pharmacy) => {
+        state.pharmacy = pharmacy;
     },
     setResult: (state, result) => {
         state.result = result;

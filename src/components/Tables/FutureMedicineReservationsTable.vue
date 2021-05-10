@@ -11,18 +11,26 @@
         </Modal>
         <ModalOpener id="displayMedicinesModalOpener" class="d-none" modalBoxId="displayMedicinesModal" />
         <Table>
-            <TableHead :columnNames="['Name of pharmacy', 'Address of pharmacy', 'Pickup deadline', 'Price', '', ' ']"></TableHead>
+            <TableHead :columnNames="['Code', 'Name of pharmacy', 'Address of pharmacy', 'Pickup deadline', 'Price', '', ' ']"></TableHead>
             <TableBody v-if="pharmacies.length > 0">
                 <TableRow v-for="reservation in futureMedicineReservations" :key="reservation.reservationId"
-                    :values="[foundPharmacy(reservation.pharmacyId).name, foundPharmacy(reservation.pharmacyId).address.streetName + ' ' + 
-                    foundPharmacy(reservation.pharmacyId).address.streetNumber + ', ' + foundPharmacy(reservation.pharmacyId).address.city, 
-                    formatDateTime(reservation.pickupDeadline), reservation.price]">
-                    <RoundButton :title="'Cancel reservation'" :iconName="'clear'" @click="handleCancelReservation(reservation.reservationId)"></RoundButton>
-                    <RoundButton title="See reserved medicines" @click="displayReservedMedicines(reservation.reservationId)" :iconName="'medical_services'">
-                    </RoundButton>
+                    :values="[reservation.uniqueId, ...formatPharmacy(reservation.pharmacyId),
+                            formatDateTime(reservation.pickupDeadline), reservation.price]">
+                    <ModalOpener modalBoxId="cancelModal">
+                        <RoundButton :title="'Cancel reservation'" @click="reservationId=reservation.reservationId" :iconName="'clear'"/>
+                    </ModalOpener>
+                    <RoundButton title="See reserved medicines" @click="displayReservedMedicines(reservation.reservationId)" :iconName="'medical_services'"/>
                 </TableRow>
             </TableBody>  
         </Table>
+        <Modal title="Cancel reservation" modalBoxId="cancelModal">
+            <div slot="body">
+                Are you sure that you want to cancel this reservation?
+            </div>
+            <div slot="buttons">
+                <OptionModalButtons @yes="handleCancelReservation"/>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -39,8 +47,10 @@ import ReservedMedicinesTable from '../Tables/ReservedMedicinesTable.vue'
 
 import { getUserIdFromToken } from '../../utils/token'
 import { mapActions, mapGetters } from 'vuex'
+import { getUserIdFromToken } from '../../utils/token'
 import toastr from 'toastr'
 import moment from 'moment'
+import OptionModalButtons from '../Modal/OptionModalButtons.vue'
 
 export default {
     components: {
@@ -52,15 +62,17 @@ export default {
         ModalOpener,
         Card,
         RoundButton, 
-        ReservedMedicinesTable
+        ReservedMedicinesTable,
+        OptionModalButtons
     },
 
     data: function() {
-    return {
-        futureMedicineReservations: [],
-        pharmacies: [],
-        reservedMedicines: [],
-        medicines: []
+        return {
+            futureMedicineReservations: [],
+            pharmacies: [],
+            reservedMedicines: [],
+            medicines: [],
+            reservationId: null
         }
     },
 
@@ -82,18 +94,19 @@ export default {
             fetchMedicines: 'medicines/fetchMedicinesForHomePage'
         }),
 
-        handleCancelReservation(reservationId){
-            this.cancelReservation(reservationId);
+        handleCancelReservation(){
+            this.cancelReservation(this.reservationId);
         },
 
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
         },
 
-        foundPharmacy(pharmacyId){
-            for(let i = 0; i < this.pharmacies.length; i++){
-                if(this.pharmacies[i].id == pharmacyId){
-                    return this.pharmacies[i];
+        formatPharmacy(pharmacyId){
+            for(let i = 0; i < this.pharmacies.length; i++) {
+                if(this.pharmacies[i].id == pharmacyId) {
+                    let pharmacy = this.pharmacies[i]
+                    return [pharmacy.name, `${pharmacy.address.streetName} ${pharmacy.address.streetNumber} ${pharmacy.address.city}`];
                 }
             }
         },

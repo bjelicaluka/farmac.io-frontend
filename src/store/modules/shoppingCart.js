@@ -17,11 +17,11 @@ const actions = {
     removeItem: (context, reservation) => {
         context.commit('removeReservation', reservation);
     },
-    reserveMedicines: (context, {pharmacyId, pickupDeadline}) => {
+    reserveMedicines: (context, {pharmacyId, pickupDeadline, patientId}) => {
         let items = state.reservations[pharmacyId];
         axios.post('/reservations', {
           pharmacyId: pharmacyId,
-          patientId: '08d8f850-7248-4675-8202-d6a0d260fe40',
+          patientId: patientId,
           pickupDeadline: pickupDeadline,
           medicines: items
         }).then(response =>  {
