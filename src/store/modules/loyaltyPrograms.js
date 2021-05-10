@@ -28,6 +28,8 @@ const actions = {
     },
 
     fetchDiscountForPatient: (context, patientId) => {
+        if(patientId === undefined)
+            return;
         axios.get(`loyalty-programs/discount-for/${patientId}`)
         .then(response => {
             context.commit('setDiscount', response.data);
