@@ -22,7 +22,7 @@ const actions = {
     },
 
     markNotInStockRecordAsSeen: (context, notInStockRecordId) => {
-        axios.post(`/not-in-stocks/${notInStockRecordId}/seen`, {})
+        axios.put(`/not-in-stocks/${notInStockRecordId}/seen`, {})
         .then(resp => {
             context.commit('setResult', {label: 'markSeen', ok: true, message: "Successfully marked not in stock record as seen."});
         })
