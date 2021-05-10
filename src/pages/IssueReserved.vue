@@ -66,6 +66,7 @@ export default {
         },
         handleIssueReservation() {
             this.issueReserved(this.reservation.id);
+            this.message = '';
             this.reservation = null;
         }
     },

@@ -8,7 +8,7 @@
     v-model="currentPharmacy"
   />
   <FullCalendar :options="calendarOptions" ref="calendar" />
-  <Modal modalBoxId="selectedEvent" title="Appointment">
+  <Modal modalBoxId="selectedEventModal" title="Appointment">
     <div slot="body">
       <Table>
         <TableRow :values="['Patient', `${selectedEvent.title}`]"></TableRow>
@@ -28,7 +28,7 @@
       </ModalCloser>
     </div>
   </Modal>
-  <ModalOpener id="opener" modalBoxId="selectedEvent"/>
+  <ModalOpener id="opener" modalBoxId="selectedEventModal">Last selected</ModalOpener>
 </div>
 </template>
 
@@ -55,7 +55,7 @@ export default {
     TableRow,
     ButtonWithIcon,
     ModalCloser,
-    SelectOptionInput
+    SelectOptionInput,
   },
   props: ['appointments', 'pharmacies', 'selectable'],
   data() {
@@ -103,9 +103,9 @@ export default {
     },
     handleReport() {
       if (this.selectedEvent.extendedProps.isReported)
-        this.$router.push(`/view-report/${this.selectedEvent.id}`);
+        window.location.href=`/view-report/${this.selectedEvent.id}`;
       else
-        this.$router.push(`/report/${this.selectedEvent.id}`);
+        window.location.href=`/report/${this.selectedEvent.id}`;
     }
   },
   watch: {
@@ -154,6 +154,10 @@ a.fc-event:hover {
 .fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
   background-color: #5c005c;
   border-color: #5c005c;
+}
+
+#opener {
+  display: none;
 }
 
 .fc-highlight {

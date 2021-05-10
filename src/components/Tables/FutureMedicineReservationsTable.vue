@@ -105,7 +105,7 @@ export default {
             for(let i = 0; i < this.pharmacies.length; i++) {
                 if(this.pharmacies[i].id == pharmacyId) {
                     let pharmacy = this.pharmacies[i]
-                    return [pharmacy.name, `${pharmacy.address.streetName} ${pharmacy.address.streetNumber} ${pharmacy.address.city}`];
+                    return [pharmacy.name, `${pharmacy.address.streetName} ${pharmacy.address.streetNumber}, ${pharmacy.address.city}`];
                 }
             }
         },
