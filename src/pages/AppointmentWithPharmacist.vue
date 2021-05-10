@@ -57,6 +57,8 @@ import Card from '../components/Card/Card'
 import PharmaciesTable from '../components/Tables/PharmaciesTable'
 import SelectOptionInput from '../components/Form/SelectOptionInput'
 import {mapGetters, mapActions} from 'vuex'
+import { getUserIdFromToken } from '../utils/token'
+import { applyDiscount } from '../utils/discount'
 import moment from 'moment'
 import toastr from 'toastr'
 
@@ -111,13 +113,15 @@ export default {
 
     computed: {
         ...mapGetters({
-            getPharmacies: 'pharmacies/getPharmacies'
+            getPharmacies: 'pharmacies/getPharmacies',
+            discount: 'loyaltyPrograms/getDiscount'
         })
     },
     
     methods: {
         ...mapActions({
-            searchPharmaciesForAppointments: 'pharmacies/searchPharmaciesForAppointments'
+            searchPharmaciesForAppointments: 'pharmacies/searchPharmaciesForAppointments',
+            fetchDiscountForPatient: 'loyaltyPrograms/fetchDiscountForPatient'
         }),
         searchPharmacies(){
             if(this.selectedDate === ''){
@@ -149,9 +153,13 @@ export default {
 
     watch: {
         getPharmacies(pharmacies){
-            console.log(pharmacies.length);
+            pharmacies.forEach(pharmacy => pharmacy.consultationPrice = parseFloat(applyDiscount(pharmacy.consultationPrice, this.discount).toFixed(2)));
             this.pharmacies = pharmacies;
         }
+    },
+
+    mounted() {
+        this.fetchDiscountForPatient(getUserIdFromToken());
     }
 }
 </script>

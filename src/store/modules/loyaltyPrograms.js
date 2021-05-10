@@ -2,11 +2,13 @@ import axios from "axios";
 
 const state = {
     loyaltyPrograms: null,
+    discount: 0,
     result: null
 };
 
 const getters = {
     getLoyaltyPrograms: state => state.loyaltyPrograms,
+    getDiscount: state => state.discount,
     getResult: state => state.result
 };
 
@@ -22,6 +24,15 @@ const actions = {
                 ok: false,
                 message: error.response.data.ErrorMessage
             });
+        });
+    },
+
+    fetchDiscountForPatient: (context, patientId) => {
+        axios.get(`loyalty-programs/discount-for/${patientId}`)
+        .then(response => {
+            context.commit('setDiscount', response.data);
+        })
+        .catch(error => {
         });
     },
 
@@ -84,6 +95,10 @@ const actions = {
 const mutations = {
     setLoyaltyPrograms: (state, loyaltyPrograms) => {
         state.loyaltyPrograms = loyaltyPrograms;
+    },
+
+    setDiscount: (state, discount) => {
+        state.discount = discount
     },
 
     setResult: (state, result) => {
