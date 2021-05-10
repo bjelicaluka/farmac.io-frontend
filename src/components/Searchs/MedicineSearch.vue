@@ -39,7 +39,7 @@
                 />
             </div>
 
-            <div class="col-1">
+            <div v-if="isLoggedIn()" class="col-1">
                 <ModalOpener modalBoxId="eRecipePurchaseModal">
                     <ButtonWithIcon className="btn btn-primary btn-sm" iconName="qr_code_scanner" />
                 </ModalOpener>
@@ -59,7 +59,7 @@ import ERecipePurchaseModal from '../Modals/ERecipePurchaseModal'
 import ModalOpener from '../Modal/ModalOpener.vue'
 
 import { mapGetters, mapActions } from 'vuex'
-
+import { isUserLoggedIn } from '../../utils/token'
 export default {
     components: {
         Search,
@@ -100,6 +100,10 @@ export default {
                 }
             );
         },
+
+        isLoggedIn() {
+            return isUserLoggedIn();
+        }
 
     },
 

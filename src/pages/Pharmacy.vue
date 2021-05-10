@@ -67,8 +67,9 @@ import FollowPharmacyModal from '../components/Modals/FollowPharmacyModal'
 import UnfollowPharmacyModal from '../components/Modals/UnfollowPharmacyModal'
 import ModalOpener from '../components/Modal/ModalOpener'
 
-import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
+import { getRoleFromToken, getUserIdFromToken, getAccountIdFromToken } from '../utils/token'
 import { Roles } from '../constants'
+import { applyDiscount } from '../utils/discount'
 import PharmacyPromotionsTable from '../components/Tables/PharmacyPromotionsTable.vue';
 import AbsenceRequestsTable from '../components/Tables/AbsenceRequestsTable.vue';
 import NotInStockRecordsTable from '../components/Tables/NotInStockRecordsTable.vue';
@@ -96,6 +97,7 @@ export default {
         return {
             pharmacyId: null,
             user: {},
+            dermatologistAppointments: [],
             dermatologistSearchName: null,
             pharmacistSearchName: null,
             isPharmacyOrderEdit: false,
@@ -116,7 +118,7 @@ export default {
 
             dermatologists: 'dermatologist/getDermatologists',
             dermatologistResult: 'dermatologist/getResult',
-            dermatologistAppointments: 'appointments/getDermatologistAppointments',
+            getDermatologistAppointments: 'appointments/getDermatologistAppointments',
             appointmentsResult: 'appointments/getResult',
             medicines: 'medicines/getMedicines',
             pharmacyOrders: 'pharmacyOrders/getPharmacyOrders',
@@ -125,10 +127,16 @@ export default {
             followingResult: 'followings/getResult',
             isFollowing: 'followings/isFollowing',
             absenceRequestResult: 'medicalStaff/getResult',
-            notInStockRecordResult: 'notInStockRecords/getResult'
+            notInStockRecordResult: 'notInStockRecords/getResult',
+            discount: 'loyaltyPrograms/getDiscount'
         })
     },
     watch: {
+        getDermatologistAppointments(dermatologistAppointments) {
+            dermatologistAppointments.forEach(da => da.isReserved ? da.price : da.price = parseFloat(applyDiscount(da.price, this.discount).toFixed(2)));
+            this.dermatologistAppointments = dermatologistAppointments;
+        },
+
         dermatologistResult({label, ok, message}) {
             if(label === 'removeFromPharmacy') {
                 if(ok) {
@@ -221,7 +229,8 @@ export default {
             fetchPatientFollowings: 'followings/fetchPatientFollowings',
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
-            setCurrentPharmacy: 'followings/setCurrentPharmacy'
+            setCurrentPharmacy: 'followings/setCurrentPharmacy',
+            fetchDiscountForPatient: 'loyaltyPrograms/fetchDiscountForPatient'
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -251,7 +260,20 @@ export default {
         }
     },
     mounted() {
+        
         this.pharmacyId = this.$route.params.id;
+        this.user = {
+            id: getAccountIdFromToken(),
+            userId: getUserIdFromToken(),
+            role: getRoleFromToken()
+        }
+
+        if(this.user.role === Roles.Patient) {
+            this.fetchDiscountForPatient(this.user.userId);
+            this.fetchPatientFollowings(this.user.id);
+            this.setCurrentPharmacy(this.pharmacyId);
+        }
+
         this.fetchPharmacy(this.pharmacyId);
         this.fetchPharmacyPharmacists(this.pharmacyId);
         this.fetchPharmacyDermatologists(this.pharmacyId);
@@ -261,16 +283,6 @@ export default {
         this.fetchPharmacyPromotions(this.pharmacyId);
         this.fetchAbsenceRequestsForPharmacy(this.pharmacyId);
         this.fetchNotInStockRecordsForPharmacy(this.pharmacyId);
-
-        this.user = {
-            id: getAccountIdFromToken(),
-            role: getRoleFromToken()
-        }
-
-        if(this.user.role === Roles.Patient) {
-            this.fetchPatientFollowings(this.user.id);
-            this.setCurrentPharmacy(this.pharmacyId);
-        }
     }
 }
 </script>

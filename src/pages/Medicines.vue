@@ -97,8 +97,9 @@ import RoundButton from '../components/Form/RoundButton.vue'
 import { mapGetters, mapActions } from 'vuex'
 import toastr from 'toastr'
 
+import { applyDiscount } from '../utils/discount'
 import { Roles } from '../constants'
-import { getRoleFromToken } from '../utils/token'
+import { getRoleFromToken, getUserIdFromToken } from '../utils/token'
 
 export default {
     components: {
@@ -134,7 +135,8 @@ export default {
             getMedicines: 'medicines/getMedicines',
             getMedicine: 'medicines/getMedicine',
             getPharmaciesForMedicines: 'medicines/getPharmaciesForMedicine',
-            result: 'medicines/getResult'
+            result: 'medicines/getResult',
+            discount: 'loyaltyPrograms/getDiscount'
         })
     },
 
@@ -146,7 +148,8 @@ export default {
             fetchMedicinePdf: 'medicines/fetchMedicinePdf',
             fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
             reserveMedicine: 'shoppingCart/addReservation',
-            deleteMedicine: 'medicines/deleteMedicine'
+            deleteMedicine: 'medicines/deleteMedicine',
+            fetchDiscountForPatient: 'loyaltyPrograms/fetchDiscountForPatient'
         }), 
 
         onDownloadSpecification(id, name) {
@@ -217,6 +220,8 @@ export default {
         },
 
         getPharmaciesForMedicines(pharmaciesForMedicines){
+            pharmaciesForMedicines.forEach(pharmacyForMedicine => pharmacyForMedicine.price = parseFloat(applyDiscount(pharmacyForMedicine.price, this.discount).toFixed(2)));
+
             this.pharmaciesForMedicines = pharmaciesForMedicines;
         },
 
@@ -242,6 +247,7 @@ export default {
     mounted() {
         this.role = getRoleFromToken();
         this.fetchMedicines();
+        this.fetchDiscountForPatient(getUserIdFromToken());
     }
 };
 

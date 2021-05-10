@@ -68,6 +68,8 @@ import Button from '../Form/Button'
 import PharmaciesForERecipeTable from '../Tables/PharmaciesForERecipeTable'
 
 import { mapActions, mapGetters } from 'vuex'
+import { getUserIdFromToken } from '../../utils/token'
+import { applyDiscount } from '../../utils/discount'
 import QrcodeDecoder from 'qrcode-decoder';
 import Webcam from 'webcam-easy';
 import toastr from 'toastr'
@@ -89,19 +91,26 @@ export default {
         return { 
             camera: null,
             qrDecoder: new QrcodeDecoder(),
-            eRecipeId: ''
+            eRecipeId: '',
+            pharmacies: []
         }
     },
 
 
     computed: {
         ...mapGetters({
-            pharmacies: 'eRecipes/getPharmaciesForERecipe',
-            result: 'eRecipes/getResult'
+            getPharmacies: 'eRecipes/getPharmaciesForERecipe',
+            result: 'eRecipes/getResult',
+            discount: 'loyaltyPrograms/getDiscount'
         }),
     },
 
     watch: {
+        getPharmacies(pharmacies) {
+            pharmacies.forEach(pharmacy => pharmacy.totalPriceOfMedicines = parseFloat(applyDiscount(pharmacy.totalPriceOfMedicines, this.discount).toFixed(2)));
+            this.pharmacies = pharmacies;
+        },
+
         result({label, ok}) {
             if(!ok && label === 'fetch') {
                 toastr.error(`Given QR Code does not contain valid eRecipe.`);
@@ -111,7 +120,8 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchPharmaciesForERecipe: 'eRecipes/fetchPharmaciesForERecipe'
+            fetchPharmaciesForERecipe: 'eRecipes/fetchPharmaciesForERecipe',
+            fetchDiscountForPatient: 'loyaltyPrograms/fetchDiscountForPatient'
         }),
 
         switchedToUpload() {
@@ -158,6 +168,10 @@ export default {
                 toastr.error(`Given image does not contain valid QR Code.`);
             }
         }
+    },
+
+    mounted() {
+        this.fetchDiscountForPatient(getUserIdFromToken());
     }
 }
 
