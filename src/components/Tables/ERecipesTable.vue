@@ -11,7 +11,9 @@
     </Table>
     <Modal modalBoxId="medicinesInERecipe" title="Medicines in eRecipe">
         <div slot="body">
-            <vue-qrcode :value="`${selectedERecipeId}`"/>
+            <div class="row justify-content-center align-items-center">
+                <vue-qrcode :value="`${selectedERecipeId}`"/>
+            </div>
             <MedicinesInERecipeTable :medicines="medicinesInERecipe" />
         </div>
     </Modal>
