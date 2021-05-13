@@ -1,6 +1,8 @@
 import axios from "axios";
 import store from '@/store'
 
+const PAGE_SIZE = 5;
+
 const state = {
     appointments: null,
     appointment: null,
@@ -29,6 +31,15 @@ const actions = {
     },
     fetchDermatologistAppointmentsInPharmacy: (context, pharmacyId) => {
         axios.get(`/pharmacies/${pharmacyId}/dermatologists/appointments`)
+        .then(resp => {
+            context.commit('setDermatologistAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchDermatologistAppointmentsPageInPharmacy: (context, {pharmacyId, page}) => {
+        axios.get(`/pharmacies/${pharmacyId}/dermatologists/appointments/page`, {params: {number: page, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setDermatologistAppointments', resp.data);
         })

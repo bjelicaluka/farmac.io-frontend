@@ -51,6 +51,7 @@
                         </DropDownMenu>
                     </div>
                 </TableRow>
+                <Pagination @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
 
@@ -114,6 +115,7 @@ import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
+import Pagination from '../Table/Pagination.vue'
 
 export default {
     props: {
@@ -147,7 +149,8 @@ export default {
         PharmacyOrderForm,
         SupplierOfferForm,
         SelectOptionInput,
-        SupplierOffersTable
+        SupplierOffersTable,
+        Pagination
     },
     watch: {
         pharmacyOrderStatusFilter() {
