@@ -36,6 +36,7 @@
               </drop-down-menu>
             </div>
           </TableRow>
+          <pagination />
         </TableBody>
     </Table>
 
@@ -67,6 +68,7 @@ import toastr from 'toastr'
 import moment from 'moment'
 import { getAccountIdFromToken, getRoleFromToken, getUserIdFromToken } from '../../utils/token'
 import { Roles } from '../../constants'
+import Pagination from '../Table/Pagination.vue'
 
 let selectOptions = [
   {
@@ -99,6 +101,7 @@ export default {
     Modal,
     SelectOptionInput,
     FormRow,
+    Pagination
   },
   props: ['appointments', 'pharmacyId'],
   data() {
