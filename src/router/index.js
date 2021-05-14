@@ -13,6 +13,7 @@ import SupplierOffers from '../pages/SupplierOffers'
 import Dermatologists from '../pages/Dermatologists.vue'
 import Pharmacists from '../pages/Pharmacists.vue'
 import Medicines from '../pages/Medicines.vue'
+import QrScan from '../pages/QrScan.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
@@ -119,6 +120,15 @@ const routes = [
     component: Medicines,
     meta: {
       layout: 'AppLayoutMain'
+    }
+  },
+  {
+    path: '/qr-scan',
+    name: 'QrScan',
+    component: QrScan,
+    meta: {
+      layout: 'AppLayoutMain',
+      authorizedRoles: [Roles.Patient]
     }
   },
   {

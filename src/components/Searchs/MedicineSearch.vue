@@ -38,12 +38,6 @@
                     :max=5
                 />
             </div>
-
-            <div v-if="isLoggedIn()" class="col-1">
-                <ModalOpener modalBoxId="eRecipePurchaseModal">
-                    <ButtonWithIcon className="btn btn-primary btn-sm" iconName="qr_code_scanner" />
-                </ModalOpener>
-            </div>
         </div>
     </div>
 </template>
@@ -54,20 +48,14 @@
 import Search from '../Search/Search'
 import SelectOptionInput from '../Form/SelectOptionInput'
 import NumberInput from '../Form/NumberInput'
-import ButtonWithIcon from '../Form/ButtonWithIcon.vue'
-import ERecipePurchaseModal from '../Modals/ERecipePurchaseModal'
-import ModalOpener from '../Modal/ModalOpener.vue'
 
 import { mapGetters, mapActions } from 'vuex'
-import { isUserLoggedIn } from '../../utils/token'
+
 export default {
     components: {
         Search,
         SelectOptionInput,
-        NumberInput,
-        ButtonWithIcon,
-        ERecipePurchaseModal,
-        ModalOpener
+        NumberInput
     },
 
     data: function() {
@@ -99,12 +87,7 @@ export default {
                 gradeTo: !isNaN(this.gradeTo) ? this.gradeTo : 5
                 }
             );
-        },
-
-        isLoggedIn() {
-            return isUserLoggedIn();
         }
-
     },
 
     watch: {
