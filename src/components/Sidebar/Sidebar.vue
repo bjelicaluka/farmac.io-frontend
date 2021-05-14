@@ -44,6 +44,7 @@
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
           <sidebar-item name="Shopping cart" icon="shopping_cart" to="/shoppingCart"></sidebar-item>
+          <sidebar-item name="Qr Scan" icon="qr_code_scanner" to="/qr-scan"></sidebar-item>
           <sidebar-item name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
           <sidebar-item name="Pharmacists" icon="people" to="/pharmacists"></sidebar-item>
           <sidebar-item name="Medicine reservations" icon="medical_services" to="/medicineReservations"></sidebar-item>

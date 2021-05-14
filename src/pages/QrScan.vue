@@ -1,7 +1,6 @@
 <template>
-
-    <Modal sizeClass="modal-lg" title="Scan QR Code" :modalBoxId="modalBoxId">
-        <div slot="body">
+    <div class="content">
+        <div class="container-fluid">
             <div class="card">
                 <div class="card card-nav-tabs card-plain" >
                     <div class="card-header card-header-primary">
@@ -49,27 +48,17 @@
                 <PharmaciesForERecipeTable :pharmacies="pharmacies" :eRecipeId="eRecipeId" />
             </div>
         </div>
-
-        <div slot="buttons">
-            <ModalCloser>
-                <Button>Close</Button>
-            </ModalCloser>            
-        </div>
-
-    </Modal>
-    
+    </div>
 </template>
 
 <script>
 
-import Modal from '../Modal/Modal'
-import ModalCloser from '../Modal/ModalCloser'
-import Button from '../Form/Button'
-import PharmaciesForERecipeTable from '../Tables/PharmaciesForERecipeTable'
+import Button from '../components/Form/Button'
+import PharmaciesForERecipeTable from '../components/Tables/PharmaciesForERecipeTable'
 
 import { mapActions, mapGetters } from 'vuex'
-import { getUserIdFromToken } from '../../utils/token'
-import { applyDiscount } from '../../utils/discount'
+import { getUserIdFromToken } from '../utils/token'
+import { applyDiscount } from '../utils/discount'
 import QrcodeDecoder from 'qrcode-decoder';
 import Webcam from 'webcam-easy';
 import toastr from 'toastr'
@@ -77,8 +66,6 @@ import toastr from 'toastr'
 export default {
     
     components: {
-        Modal,
-        ModalCloser,
         Button,
         PharmaciesForERecipeTable
     },
