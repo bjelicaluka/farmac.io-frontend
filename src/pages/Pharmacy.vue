@@ -1,9 +1,8 @@
 <template>
     <div class="content">
+        <PharmacyPromotionCard :pharmacyId="pharmacyId" v-if="user && (!user.role || user.role === roles.Patient)" />
         <div class="container-fluid">
             <Card :title="pharmacy && pharmacy.name" :description="pharmacy && pharmacy.description">
-                
-
                 <div v-if="user && user.role === roles.Patient"> 
                     <div v-if="!isFollowing">
                         <FollowPharmacyModal modalBoxId="confirmFollowModal" :pharmacyName="pharmacy && pharmacy.name" @yes="handleFollow" />
@@ -73,6 +72,7 @@ import { applyDiscount } from '../utils/discount'
 import PharmacyPromotionsTable from '../components/Tables/PharmacyPromotionsTable.vue';
 import AbsenceRequestsTable from '../components/Tables/AbsenceRequestsTable.vue';
 import NotInStockRecordsTable from '../components/Tables/NotInStockRecordsTable.vue';
+import PharmacyPromotionCard from '../components/Card/PharmacyPromotionCard.vue';
 
 
 export default {
@@ -90,7 +90,8 @@ export default {
         PharmacyOrdersTable,
         PharmacyPromotionsTable,
         AbsenceRequestsTable,
-        NotInStockRecordsTable
+        NotInStockRecordsTable,
+          PharmacyPromotionCard
     },
 
     data: () => {

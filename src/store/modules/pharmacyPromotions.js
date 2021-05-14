@@ -3,12 +3,14 @@ import axios from "axios";
 const state = {
     pharmacyPromotion: null,
     pharmacyPromotions: null,
+    activePharmacyPromotions: null,
     result: null
 };
 
 const getters = {
     getPharmacyPromotion: state => state.pharmacyPromotion,
     getPharmacyPromotions: state => state.pharmacyPromotions,
+    getActivePharmacyPromotions: state => state.activePharmacyPromotions,
     getResult: state => state.result
 };
 
@@ -26,7 +28,7 @@ const actions = {
     fetchActivePharmacyPromotions: (context, pharmacyId) => {
         axios.get(`/pharmacy/${pharmacyId}/promotions/active`)
         .then(response => {
-            context.commit('setPharmacyPromotions', response.data);
+            context.commit('setActivePharmacyPromotions', response.data);
         })
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
@@ -116,6 +118,9 @@ const mutations = {
     },
     setPharmacyPromotions: (state, pharmacyPromotions) => {
         state.pharmacyPromotions = pharmacyPromotions;
+    },
+    setActivePharmacyPromotions: (state, activePharmacyPromotions) => {
+        state.activePharmacyPromotions = activePharmacyPromotions;
     },
     setResult: (state, result) => {
         state.result = result;
