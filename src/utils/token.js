@@ -25,7 +25,7 @@ export function setUnauthorizedHeaderInterceptor(store) {
 	axios.interceptors.response.use(function (response) {
 		return response;
 	}, function (error) {
-		if (401 === error.response.status && localStorage.getItem('token')) {
+		if ((401 === error.response.status || 403 == error.response.status) && localStorage.getItem('token')) {
 			store.dispatch('authentication/logOut');
 			router.push('/auth')
 		} else {
