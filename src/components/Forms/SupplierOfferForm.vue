@@ -11,14 +11,14 @@
         <FormGroup>
             <FormRow>
                 <div class="col-12">
-                    <DateTimePicker
-                        label="Delivery date"
+                    <NumberInput
+                        label="Delivery deadline time"
                         v-model="offer.deliveryDeadline"
-                        :isValid="validateDeliveryDate()"
+                        :isValid="offer.deliveryDeadline > 0"
                         :showErrorMessage="showErrorMessage"
-                        errorMessage="Delivery date must be provided and at least 1 hour from now."
-                        type="datetime"
-                        id="deliveryDate"
+                        errorMessage="Delivery deadline time must be greater than 0."
+                        :min=1
+                        :max=999
                     />
                 </div>
             </FormRow>
@@ -32,7 +32,7 @@
                         :showErrorMessage="showErrorMessage"
                         errorMessage="Total price must be greater than 0."
                         :min=1
-                        :max=99999999999999
+                        :max=9999999999
                     />
                 </div>
             </FormRow>
@@ -50,15 +50,13 @@ import FormGroup from '../Form/FormGroup.vue'
 import FormRow from '../Form/FormRow.vue'
 import NumberInput from '../Form/NumberInput.vue'
 import Button from '../Form/Button.vue'
-import DateTimePicker from '../Form/DateTimePicker.vue'
 
 import { mapActions, mapGetters } from 'vuex'
 import { getAccountIdFromToken } from '../../utils/token'
 import toastr from 'toastr'
-import moment from 'moment'
 
 const initialOffer = {
-    deliveryDeadline: null,
+    deliveryDeadline: 1,
     totalPrice: 0
 }
 
@@ -69,7 +67,6 @@ export default {
         FormGroup,
         FormRow,
         NumberInput,
-        DateTimePicker,
         Button
     },
 
@@ -134,19 +131,17 @@ export default {
 
         if(this.existingSupplierOffer) {
             this.offer = {...this.existingSupplierOffer};
-            this.offer.deliveryDeadline = moment(this.existingSupplierOffer.deliveryDeadline).toDate()
         }
 
     },
 
     onSubmit(e) {
         e.preventDefault();
-
         if(!this.isEdit) {
             this.addOfferFromSupplier({
                 supplierId: getAccountIdFromToken(),
                 totalPrice: this.offer.totalPrice,
-                deliveryDeadline: this.offer.deliveryDeadline.format(),
+                deliveryDeadline: this.offer.deliveryDeadline,
                 pharmacyOrderId: this.existingPharmacyOrder.id
             });
         } else {
@@ -154,15 +149,9 @@ export default {
                 id: this.offer.id,
                 supplierId: this.offer.supplierId,
                 totalPrice: this.offer.totalPrice,
-                deliveryDeadline: this.offer.deliveryDeadline.format()
+                deliveryDeadline: this.offer.deliveryDeadline
             });
         }
-    },
-
-    validateDeliveryDate() {
-        const oneHourFromNow = moment().add(moment.duration(1, 'hours'));
-
-        return this.offer.deliveryDeadline > oneHourFromNow;
     }
 
   }
