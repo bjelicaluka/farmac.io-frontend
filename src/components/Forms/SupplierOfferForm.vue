@@ -16,7 +16,7 @@
                         v-model="offer.deliveryDeadline"
                         :isValid="offer.deliveryDeadline > 0"
                         :showErrorMessage="showErrorMessage"
-                        errorMessage="Delivery deadline time must be greater than 0."
+                        errorMessage="Delivery deadline time must be at least 1h."
                         :min=1
                         :max=999
                     />
