@@ -1,5 +1,11 @@
 <template>
     <div>
+        <SelectOptionInput
+            class="pull-right"
+            label="All Records"
+            v-model="notInStockRecordSeenFilter"
+            :options="[{label: 'Seen', value: true}, {label: 'Not Seen', value: false}]"
+        />
         <Table>
             <TableHead :columnNames="['Medicine', 'Date', 'Seen', '']"></TableHead>
             <TableBody>
@@ -19,6 +25,7 @@
                         </DropDownMenu>
                     </div>
                 </TableRow>
+                <Pagination @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
 
@@ -54,6 +61,8 @@ import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import Pagination from '../Table/Pagination.vue'
+import SelectOptionInput from '../Form/SelectOptionInput.vue'
 
 export default {
     props: {
@@ -64,6 +73,7 @@ export default {
             Roles,
             user: {},
             selectedNotInStockRecord: null,
+            notInStockRecordSeenFilter: null,
         }
     },
     mounted() {
@@ -81,7 +91,9 @@ export default {
         Modal,
         DropDownItem,
         DropDownMenu,
-        OptionModalButtons
+        OptionModalButtons,
+        Pagination,
+        SelectOptionInput
     },
     computed: {
         ...mapGetters({
@@ -99,6 +111,9 @@ export default {
                 toastr.error(message);
             }
         },
+        notInStockRecordSeenFilter() {
+            this.$emit('filter', this.notInStockRecordSeenFilter);
+        }
     },
     methods: {
         ...mapActions({

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     result: null,
     notInStockRecords: null
@@ -13,6 +15,16 @@ const getters = {
 const actions = {
     fetchNotInStockRecordsForPharmacy: (context, pharmacyId) => {
         axios.get(`/pharmacies/${pharmacyId}/not-in-stocks`)
+        .then(resp => {
+            context.commit('setNotInStockRecords', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+
+    filterNotInStockRecordsPageForPharmacy: (context, {pharmacyId, isSeen, page}) => {
+        axios.get(`/pharmacies/${pharmacyId}/not-in-stocks/page`, {params: {isSeen, number: page, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setNotInStockRecords', resp.data);
         })

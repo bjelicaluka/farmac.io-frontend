@@ -26,6 +26,7 @@
                         </DropDownMenu>
                     </div>
                 </TableRow>
+                <Pagination @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
 
@@ -94,6 +95,7 @@ import moment from 'moment'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 import TextArea from '../Form/TextArea.vue'
 import Button from '../Form/Button.vue'
+import Pagination from '../Table/Pagination.vue'
 
 export default {
     props: {
@@ -127,7 +129,8 @@ export default {
         OptionModalButtons,
         TextArea,
         ModalCloser,
-        Button
+        Button,
+        Pagination
     },
     computed: {
         ...mapGetters({

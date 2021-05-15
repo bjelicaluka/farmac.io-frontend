@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FormRow>
+    <FormRow v-if="sortComponent">
       <div class="col-3">
         <SelectOptionInput
           label="Select sort criteria"
@@ -36,6 +36,7 @@
               </drop-down-menu>
             </div>
           </TableRow>
+          <Pagination @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
 
@@ -67,6 +68,7 @@ import toastr from 'toastr'
 import moment from 'moment'
 import { getAccountIdFromToken, getRoleFromToken, getUserIdFromToken } from '../../utils/token'
 import { Roles } from '../../constants'
+import Pagination from '../Table/Pagination.vue'
 
 let selectOptions = [
   {
@@ -99,8 +101,15 @@ export default {
     Modal,
     SelectOptionInput,
     FormRow,
+    Pagination
   },
-  props: ['appointments', 'pharmacyId'],
+  props: {
+    appointments: {}, 
+    pharmacyId: {},
+    sortComponent: {
+      default: true
+    }
+  },
   data() {
     return {
       selectedAppointment: null,

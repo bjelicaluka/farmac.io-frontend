@@ -38,6 +38,7 @@
                         </DropDownMenu>
                     </div>
                 </TableRow>
+                <Pagination @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
 
@@ -91,6 +92,7 @@ import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
 import OptionModalButtons from '../Modal/OptionModalButtons.vue'
+import Pagination from '../Table/Pagination.vue'
 
 export default {
     props: {
@@ -122,6 +124,7 @@ export default {
         DropDownMenu,
         PharmacyPromotionForm,
         OptionModalButtons,
+        Pagination,
     },
     watch: {
         result({ok, label, message}) {

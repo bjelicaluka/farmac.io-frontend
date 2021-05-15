@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     pharmacyOrder: null,
     pharmacyOrders: null,
@@ -29,6 +31,16 @@ const actions = {
 
     filterPharmacyOrders: (context, {pharmacyId, isProcessed}) => {
         axios.get(`/pharmacy/${pharmacyId}/pharmacy-orders/filter`, {params: {isProcessed}})
+        .then(response => {
+            context.commit('setPharmacyOrders', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
+    filterPharmacyOrdersPage: (context, {pharmacyId, isProcessed, page}) => {
+        axios.get(`/pharmacy/${pharmacyId}/pharmacy-orders/filter/page`, {params: {isProcessed, number: page, size: PAGE_SIZE}})
         .then(response => {
             context.commit('setPharmacyOrders', response.data);
         })

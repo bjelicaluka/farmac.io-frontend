@@ -30,22 +30,22 @@
                 <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :adminPharmacyId="pharmacyId" />
             </Card>
             <Card title='Dermatologist Appointments' :description="`${pharmacy && pharmacy.name}'s dermatologist appointments.`">
-                <AppointmentsTable :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />
+                <AppointmentsTable :sortComponent="false" @pageChange="handleAppointmentsPageChange($event)" :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />
             </Card>
             <Card title='Medicines' :description="`${pharmacy && pharmacy.name}'s medicines that are in stock.`">
                 <MedicineListTable @search="handleSearchPharmacyMedicines" :medicines="medicines" :adminPharmacyId="pharmacyId" />
             </Card>
             <Card title='Medicine Orders' :description="`Medicine orders for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin || user.role === roles.Supplier">
-                <PharmacyOrdersTable :pharmacyOrders="pharmacyOrders" :pharmacyId="pharmacyId" @filter="pharmacyOrderProcessedFilter = $event" />
+                <PharmacyOrdersTable @pageChange="handlePharmacyOrdersPageChange($event)" :pharmacyOrders="pharmacyOrders" :pharmacyId="pharmacyId" @filter="pharmacyOrderProcessedFilter = $event" />
             </Card>
             <Card title='Promotions' :description="`Promotions for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
-                <PharmacyPromotionsTable :pharmacyPromotions="pharmacyPromotions" :pharmacyId="pharmacyId" />
+                <PharmacyPromotionsTable @pageChange="handlePromotionsPageChange($event)" :pharmacyPromotions="pharmacyPromotions" :pharmacyId="pharmacyId" />
             </Card>
             <Card title='Absence Requests' :description="`Absence Requests for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
-                <AbsenceRequestsTable :absenceRequests="absenceRequests" />
+                <AbsenceRequestsTable @pageChange="handleAbsenceRequestsPageChange($event)" :absenceRequests="absenceRequests" />
             </Card>
             <Card title='Not In Stock Records' :description="`Not In Stock Records for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
-                <NotInStockRecordsTable :notInStockRecords="notInStockRecords" />
+                <NotInStockRecordsTable @filter="notInStockRecordSeenFilter = $event" @pageChange="handleNotInStockRecordsPageChange($event)" :notInStockRecords="notInStockRecords" />
             </Card>
         </div> 
     </div>
@@ -101,8 +101,14 @@ export default {
             dermatologistSearchName: null,
             pharmacistSearchName: null,
             isPharmacyOrderEdit: false,
-            pharmacyOrderProcessedFilter: false,
-            roles: Roles
+            pharmacyOrderProcessedFilter: null,
+            notInStockRecordSeenFilter: null,
+            roles: Roles,
+            appointmentsPage: 1,
+            promotionsPage: 1,
+            absenceRequestsPage: 1,
+            pharmacyOrdersPage: 1,
+            notInStockRecordsPage: 1,
         }
     },
     computed: {
@@ -171,12 +177,12 @@ export default {
         },
         appointmentsResult({ok, label}){
             if(label==='reserveAppointment' && ok) {
-                this.fetchDermatologistAppointments(this.pharmacyId);
+                this.fetchDermatologistAppointmentsPage({pharmacyId: this.pharmacyId, page: this.appointmentsPage});
             }
         },
         pharmacyOrdersResult({ok, label}){
             if(label === 'add' || label === 'update') {
-                ok && this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
+                ok && this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, page: this.pharmacyOrdersPage});
             }
         },
         pharmacyPromotionsResult({ok, label}){
@@ -185,7 +191,7 @@ export default {
             }
         },
         pharmacyOrderProcessedFilter() {
-            this.filterPharmacyOrders({pharmacyId: this.pharmacyId, isProcessed: this.pharmacyOrderProcessedFilter});
+            this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, isProcessed: this.pharmacyOrderProcessedFilter, page: this.pharmacyOrdersPage});
         },
         followingResult({label, ok, message}) {
             if(label !== 'follow' && label !== 'unfollow')
@@ -207,9 +213,13 @@ export default {
 
         notInStockRecordResult({label, ok, message}) {
             if(label === 'markSeen') {
-                this.fetchNotInStockRecordsForPharmacy(this.pharmacyId);
+                this.filterNotInStockRecordsPageForPharmacy({pharmacyId: this.pharmacyId, isSeen: this.notInStockRecordSeenFilter, page: this.notInStockRecordsPage});
             }
         },
+
+        notInStockRecordSeenFilter() {
+            this.filterNotInStockRecordsPageForPharmacy({pharmacyId: this.pharmacyId, isSeen: this.notInStockRecordSeenFilter, page: this.notInStockRecordsPage});
+        }
 
     },
     methods: {
@@ -219,13 +229,13 @@ export default {
             searchPharmacyPharmacists: 'pharmacist/searchPharmacyPharmacistsByName',
             fetchPharmacyDermatologists: 'dermatologist/fetchPharmacyDermatologists',
             searchPharmacyDermatologists: 'dermatologist/searchPharmacyDermatologistsByName',
-            fetchDermatologistAppointments: 'appointments/fetchDermatologistAppointmentsInPharmacy',
+            fetchDermatologistAppointmentsPage: 'appointments/fetchDermatologistAppointmentsPageInPharmacy',
             fetchPharmacyMedicinesInStock: 'medicines/fetchPharmacyMedicinesInStock',
             searchPharmacyMedicinesInStock: 'medicines/searchPharmacyMedicinesInStock',
-            filterPharmacyOrders: 'pharmacyOrders/filterPharmacyOrders',
-            fetchPharmacyPromotions: 'pharmacyPromotions/fetchPharmacyPromotions',
-            fetchAbsenceRequestsForPharmacy: 'medicalStaff/fetchAbsenceRequestsForPharmacy',
-            fetchNotInStockRecordsForPharmacy: 'notInStockRecords/fetchNotInStockRecordsForPharmacy',
+            filterPharmacyOrdersPage: 'pharmacyOrders/filterPharmacyOrdersPage',
+            fetchPharmacyPromotionsPage: 'pharmacyPromotions/fetchPharmacyPromotionsPage',
+            fetchAbsenceRequestsPageForPharmacy: 'medicalStaff/fetchAbsenceRequestsPageForPharmacy',
+            filterNotInStockRecordsPageForPharmacy: 'notInStockRecords/filterNotInStockRecordsPageForPharmacy',
             fetchPatientFollowings: 'followings/fetchPatientFollowings',
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
@@ -243,6 +253,31 @@ export default {
         handleSearchPharmacyMedicines(name) {
             this.pharmacyMedicineSearchName = name;
             this.searchPharmacyMedicinesInStock({pharmacyId: this.pharmacyId, name});
+        },
+
+        handleAppointmentsPageChange(num) {
+            this.appointmentsPage = num;
+            this.fetchDermatologistAppointmentsPage({pharmacyId: this.pharmacyId, page: this.appointmentsPage});
+        },
+
+        handlePromotionsPageChange(num) {
+            this.promotionsPage = num;
+            this.fetchPharmacyPromotionsPage({pharmacyId: this.pharmacyId, page: this.promotionsPage});
+        },
+
+        handleAbsenceRequestsPageChange(num) {
+            this.absenceRequestsPage = num;
+            this.fetchAbsenceRequestsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.absenceRequestsPage});
+        },
+
+        handlePharmacyOrdersPageChange(num) {
+            this.pharmacyOrdersPage = num;
+            this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, isProcessed: this.pharmacyOrderProcessedFilter, page: this.pharmacyOrdersPage});
+        },
+
+        handleNotInStockRecordsPageChange(num) {
+            this.notInStockRecordsPage = num;
+            this.filterNotInStockRecordsPageForPharmacy({pharmacyId: this.pharmacyId, isSeen: this.notInStockRecordSeenFilter, page: this.notInStockRecordsPage});
         },
 
         handleFollow() {
@@ -277,12 +312,12 @@ export default {
         this.fetchPharmacy(this.pharmacyId);
         this.fetchPharmacyPharmacists(this.pharmacyId);
         this.fetchPharmacyDermatologists(this.pharmacyId);
-        this.fetchDermatologistAppointments(this.pharmacyId);
+        this.fetchDermatologistAppointmentsPage({pharmacyId: this.pharmacyId, page: this.appointmentsPage});
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
-        this.filterPharmacyOrders({pharmacyId: this.pharmacyId});
-        this.fetchPharmacyPromotions(this.pharmacyId);
-        this.fetchAbsenceRequestsForPharmacy(this.pharmacyId);
-        this.fetchNotInStockRecordsForPharmacy(this.pharmacyId);
+        this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, page: this.pharmacyOrdersPage});
+        this.fetchPharmacyPromotionsPage({pharmacyId: this.pharmacyId, page: this.promotionsPage});
+        this.fetchAbsenceRequestsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.absenceRequestsPage});
+        this.filterNotInStockRecordsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.notInStockRecordsPage});
     }
 }
 </script>
