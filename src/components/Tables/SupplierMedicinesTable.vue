@@ -28,6 +28,7 @@
                         </DropDownMenu>
                     </div>
                 </TableRow>
+                <Pagination @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
 
@@ -65,6 +66,7 @@ import SupplierMedicineForm from '../Forms/SupplierMedicineForm'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
 import OptionModalButtons from '../Modal/OptionModalButtons.vue'
+import Pagination from '../Table/Pagination.vue'
 
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
@@ -94,7 +96,8 @@ export default {
         SupplierMedicineForm,
         DropDownItem,
         DropDownMenu,
-        OptionModalButtons
+        OptionModalButtons,
+        Pagination
     },
     
     computed: {

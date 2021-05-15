@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title="Pharmacy administrators">
-                <PharmacyAdminsTable :pharmacyAdmins="pharmacyAdmins" />
+                <PharmacyAdminsTable :pharmacyAdmins="pharmacyAdmins" @pageChange="handlePageChange" />
             </Card>
         </div>
     </div>
@@ -13,12 +13,19 @@
 
 import Card from '../components/Card/Card'
 import PharmacyAdminsTable from '../components/Tables/PharmacyAdminsTable'
-import {mapGetters, mapActions} from 'vuex'
+
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     components: {
         Card,
         PharmacyAdminsTable
+    },
+
+    data: function() {
+        return {
+            page: 1
+        }
     },
 
     computed: {
@@ -31,20 +38,23 @@ export default {
     watch: {
         result({label, ok}) {
             if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
-                this.fetchPharmacyAdmins();
+                this.fetchPharmacyAdminsPage(this.page);
         }
     },
 
     methods: {
         ...mapActions({
-            fetchPharmacyAdmins: 'pharmacyAdmins/fetchPharmacyAdmins'
-        })
+            fetchPharmacyAdminsPage: 'pharmacyAdmins/fetchPharmacyAdminsPage'
+        }),
+
+        handlePageChange(page) {
+            this.page = page;
+            this.fetchPharmacyAdminsPage(this.page);
+        }
     },
 
     mounted() {
-        this.fetchPharmacyAdmins();
+        this.fetchPharmacyAdminsPage(this.page);
     }
-
-    
 }
 </script>

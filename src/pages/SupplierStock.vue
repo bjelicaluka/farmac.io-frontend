@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title="Your medicines from the stock">
-                <SupplierMedicinesTable :supplierMedicines="supplierMedicines" />
+                <SupplierMedicinesTable :supplierMedicines="supplierMedicines" @pageChange="handlePageChange" />
             </Card>
         </div>
     </div>
@@ -25,7 +25,8 @@ export default {
 
     data: function() {
         return {
-            supplierId: null
+            supplierId: null,
+            page: 1
         }
     },
 
@@ -39,20 +40,25 @@ export default {
     watch: {
         result({label, ok}) {
             if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
-                this.fetchMedicinesFor(this.supplierId);
+                this.fetchPageOfMedicinesForSupplier({ supplierId: this.supplierId, page: this.page });
         }
     },
 
     methods: {
         ...mapActions({
-            fetchMedicinesFor: 'supplierStock/fetchMedicinesForSupplier'
-        })
+            fetchPageOfMedicinesForSupplier: 'supplierStock/fetchPageOfMedicinesForSupplier'
+        }),
+
+        handlePageChange(page) {
+            this.page = page;
+            this.fetchPageOfMedicinesForSupplier({ supplierId: this.supplierId, page: this.page });
+        }
     },
 
     mounted() {
         this.supplierId = getAccountIdFromToken();
 
-        this.fetchMedicinesFor(this.supplierId);
+        this.fetchPageOfMedicinesForSupplier({ supplierId: this.supplierId, page: this.page });
     }
 
     

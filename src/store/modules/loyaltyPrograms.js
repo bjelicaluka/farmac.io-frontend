@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     loyaltyPrograms: null,
     discount: 0,
@@ -15,6 +17,20 @@ const getters = {
 const actions = {
     fetchLoyaltyPrograms: (context) => {
         axios.get(`loyalty-programs`)
+        .then(response => {
+            context.commit('setLoyaltyPrograms', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {
+                label: 'fetch',
+                ok: false,
+                message: error.response.data.ErrorMessage
+            });
+        });
+    },
+
+    fetchLoyaltyProgramsPage: (context, page) => {
+        axios.get(`loyalty-programs/page`, {params: { number: page, size: PAGE_SIZE }})
         .then(response => {
             context.commit('setLoyaltyPrograms', response.data);
         })

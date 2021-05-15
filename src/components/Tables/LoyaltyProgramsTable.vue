@@ -15,17 +15,18 @@
                             loyaltyProgram.minPoints,
                             loyaltyProgram.discount + '%'
                 ]">
-                            <div class="pull-right text-gray">
-                                <DropdownMenu>
-                                    <ModalOpener modalBoxId="loyaltyProgramModal">
-                                        <DropdownItem @click="handleEditClick(loyaltyProgram)">Edit</DropdownItem>
-                                    </ModalOpener>
-                                    <ModalOpener modalBoxId="deleteLoyaltyProgramModal">
-                                        <DropdownItem @click="handleDeleteClick(loyaltyProgram)">Delete</DropdownItem>
-                                    </ModalOpener>
-                                </DropdownMenu>
-                            </div>
+                    <div class="pull-right text-gray">
+                        <DropdownMenu>
+                            <ModalOpener modalBoxId="loyaltyProgramModal">
+                                <DropdownItem @click="handleEditClick(loyaltyProgram)">Edit</DropdownItem>
+                            </ModalOpener>
+                            <ModalOpener modalBoxId="deleteLoyaltyProgramModal">
+                                <DropdownItem @click="handleDeleteClick(loyaltyProgram)">Delete</DropdownItem>
+                            </ModalOpener>
+                        </DropdownMenu>
+                    </div>
                 </TableRow>
+                <Pagination @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
 
@@ -72,6 +73,7 @@ import ModalOpener from '../Modal/ModalOpener'
 import OptionModalButtons from '../Modal/OptionModalButtons'
 import LoyaltyProgramForm from '../Forms/LoyaltyProgramForm'
 import Button from '../Form/Button'
+import Pagination from '../Table/Pagination.vue'
 
 import { mapActions, mapGetters } from 'vuex'
 import toastr from 'toastr'
@@ -90,7 +92,8 @@ export default {
         ModalOpener,
         OptionModalButtons,
         Button,
-        LoyaltyProgramForm
+        LoyaltyProgramForm,
+        Pagination
     },
 
     data: function() {
