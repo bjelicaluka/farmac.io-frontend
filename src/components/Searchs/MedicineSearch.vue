@@ -1,6 +1,5 @@
 <template>
     <div>
-        <ERecipePurchaseModal modalBoxId="eRecipePurchaseModal" />
         <Search searchFieldClass="col-5" wrapperClass="row justify-content-center align-items-center" @search="handleSearch" />
 
         <div class="row justify-content-center align-items-center">

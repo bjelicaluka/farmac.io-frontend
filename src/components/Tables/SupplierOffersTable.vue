@@ -10,7 +10,7 @@
         </div>
 
         <Table>
-            <TableHead :columnNames="['For', 'Deadline', 'Delivery date', 'Total price', 'Status', ...(user.role === Roles.PharmacyAdmin ? [''] : [])]"></TableHead>
+            <TableHead :columnNames="['For', 'Deadline', 'Delivery deadline time', 'Total price', 'Status', ...(user.role === Roles.PharmacyAdmin ? [''] : [])]"></TableHead>
             <TableBody>
                 <TableRow 
                     v-for="(supplierOffer, i) in supplierOffers" 
@@ -18,13 +18,13 @@
                     :values="[
                         supplierOffer.pharmacyOrder && supplierOffer.pharmacyOrder.pharmacy.name,
                         supplierOffer.pharmacyOrder && formatDateTime(supplierOffer.pharmacyOrder.offersDeadline),
-                        formatDateTime(supplierOffer.deliveryDeadline),
+                        supplierOffer.deliveryDeadline + 'h',
                         supplierOffer.totalPrice + ' RSD',
                         formatStatus(supplierOffer.status)
                     ]"
                 >
                     <div class="pull-right text-gray">
-                        <DropDownMenu v-if="supplierOffer.status === 2 && user.role === Roles.Supplier">
+                        <DropDownMenu v-if="supplierOffer.status === 2 && user.role === Roles.Supplier && isAfterNow(supplierOffer.pharmacyOrder.offersDeadline)">
                             <ModalOpener modalBoxId="supplierOfferModal" >
                                 <DropDownItem @click="handleEditClick(supplierOffer)">Update Offer</DropDownItem>
                             </ModalOpener>
