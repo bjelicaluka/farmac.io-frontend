@@ -200,7 +200,7 @@ const routes = [
     component: Dermatologists,
     meta: {
       layout: 'AppLayoutMain',
-      authorizedRoles: [Roles.Patient, Roles.SystemAdmin]
+      authorizedRoles: [Roles.Patient, Roles.SystemAdmin, Roles.PharmacyAdmin]
     }
   },
   {

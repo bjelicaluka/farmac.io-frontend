@@ -23,6 +23,8 @@
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
+          <sidebar-item name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
+          <sidebar-item name="Pharmacists" icon="people" to="/pharmacists"></sidebar-item>
           <sidebar-item name="PharmacyAdmins" icon="people" to="/pharmacy-admins"></sidebar-item>
           <sidebar-item name="SystemAdmins" icon="people" to="/system-admins"></sidebar-item>
           <sidebar-item name="Suppliers" icon="people" to="/suppliers"></sidebar-item>
@@ -62,6 +64,7 @@
         <ul class="nav"  v-else-if="user.role === Roles.PharmacyAdmin">
           <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
+          <sidebar-item name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
           <sidebar-item name="Pharmacy Reports" icon="local_pharmacy" to="/pharmacy-reports"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
         </ul>
