@@ -74,12 +74,11 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchTypes: 'medicines/fetchTypes',
-            fetchMedicinesByParams: 'medicines/fetchMedicinesByParams'
+            fetchTypes: 'medicines/fetchTypes'
         }), 
 
         handleSearch(name) {
-            this.fetchMedicinesByParams({
+            this.$emit('search', {
                 name,
                 type: this.selectedType,
                 gradeFrom: !isNaN(this.gradeFrom) ? this.gradeFrom : 0,

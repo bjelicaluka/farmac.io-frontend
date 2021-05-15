@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     supplierOffers: null,
     result: null
@@ -23,6 +25,17 @@ const actions = {
 
     fetchFilteredOffersForSupplier: (context, {supplierId, filterBy}) => {
         axios.get(`/suppliers/${supplierId}/offers/filter`, {params: {status: filterBy}})
+        .then(response => {
+            context.commit('setSupplierOffers', response.data);
+            context.commit('setResult', { label: 'fetch', ok: true });
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        })
+    },
+
+    fetchFilteredOffersForSupplierPage: (context, {supplierId, filterBy, page}) => {
+        axios.get(`/suppliers/${supplierId}/offers/filter/page`, {params: {status: filterBy, number: page, size: PAGE_SIZE}})
         .then(response => {
             context.commit('setSupplierOffers', response.data);
             context.commit('setResult', { label: 'fetch', ok: true });

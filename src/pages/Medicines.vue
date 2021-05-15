@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
 
-        <MedicineSearch />
+        <MedicineSearch @search="handleSearch"/>
 
         <Modal
             v-if="role == roles.SystemAdmin"
@@ -59,6 +59,7 @@
                     </RotatingCard>
                 </template>
             </div>
+            <Button class="pull-right" @click="handleLoadMore">Load More</Button>
         </div>
 
         <Modal
@@ -126,7 +127,14 @@ export default {
             pharmaciesForMedicines: [],
             isEdit: false,
             role: null,
-            roles: Roles
+            roles: Roles,
+            searchParams: {
+                name: '',
+                selectedType: '',
+                gradeFrom: 0,
+                gradeTo: 5
+            },
+            page: 1
         }
     },
 
@@ -142,7 +150,7 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchMedicines: 'medicines/fetchMedicinesForHomePage',
+            fetchMedicinesByParamsPagesTo: 'medicines/fetchMedicinesByParamsPagesTo',
             fetchMedicinesByName: 'medicines/fetchMedicinesByName',
             fetchMedicine: 'medicines/fetchMedicineById',
             fetchMedicinePdf: 'medicines/fetchMedicinePdf',
@@ -156,10 +164,6 @@ export default {
             this.fetchMedicinePdf({id, name});
         },
         
-        handleSearch(name) {
-            this.fetchMedicinesByName(name);
-        },
-
         onDisplaySelected(id, name){
             if(this.selectedMedicineId != id){
                 this.selectedMedicineId = id;
@@ -203,6 +207,16 @@ export default {
         onEditSelected(medicineId) {
             this.isEdit = true;
             this.fetchMedicine(medicineId);
+        },
+
+        handleLoadMore() {
+            this.page++;
+            this.fetchMedicinesByParamsPagesTo({ ...this.searchParams, page: this.page });
+        },
+
+        handleSearch(searchParams) {
+            this.searchParams = searchParams;
+            this.fetchMedicinesByParamsPagesTo({ ...this.searchParams, page: this.page });
         }
     },
 
@@ -229,7 +243,7 @@ export default {
             if(label === 'delete') {
                 if(ok) {
                     toastr.success(message);
-                    this.fetchMedicines();
+                    this.fetchMedicinesByParamsPagesTo({ ...this.searchParams, page: this.page });
                 } else {
                     toastr.error(message);
                 }
@@ -237,7 +251,7 @@ export default {
 
             if(label === 'add' || label === 'update') {
                 if(ok) {
-                    this.fetchMedicines();
+                    this.fetchMedicinesByParamsPagesTo({ ...this.searchParams, page: this.page });
                 }
             }
         }
@@ -246,7 +260,7 @@ export default {
 
     mounted() {
         this.role = getRoleFromToken();
-        this.fetchMedicines();
+        this.fetchMedicinesByParamsPagesTo({ ...this.searchParams, page: this.page });
         this.fetchDiscountForPatient(getUserIdFromToken());
     }
 };
