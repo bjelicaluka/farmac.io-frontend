@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <PharmacySearch />
+        <PharmacySearch @search="handleSearch"/>
 
         <Modal
             v-if="role == roles.SystemAdmin"
@@ -25,6 +25,7 @@
                     </div>
                 </div>
             </div>
+            <Button class="pull-right" @click="handleLoadMore">Load More</Button>
 
             <Modal
                 v-if="role == roles.SystemAdmin"
@@ -74,7 +75,20 @@ export default {
             selectedPharmacyName: '',
             selectedPharmacyId: null,
             role: null,
-            roles: Roles
+            roles: Roles,
+            page: 1,
+            searchParams: {
+                name: '',
+                city: '',
+                sortCriteria: '',
+                isAscending: true,
+                gradeFrom: 0,
+                gradeTo: 5,
+                distanceFrom: 0,
+                distanceTo: 9999,
+                userLat: 200,
+                userLon: 200
+            }
         }
     },
 
@@ -104,7 +118,8 @@ export default {
   methods: {
     ...mapActions({
         fetchPharmacies: 'pharmacies/fetchPharmacies',
-        deletePharmacy: 'pharmacies/deletePharmacy'
+        deletePharmacy: 'pharmacies/deletePharmacy',
+        searchPharmacies: 'pharmacies/searchPharmacies'
     }),
 
     onDeleteSelected(e, id, name) {
@@ -117,12 +132,22 @@ export default {
     handleDelete(e) {
         e.preventDefault();
         this.deletePharmacy(this.selectedPharmacyId);
+    },
+
+    handleLoadMore() {
+        this.page++;
+        this.searchPharmacies({ ...this.searchParams, page: this.page });
+    },
+
+    handleSearch(searchParams) {
+        this.searchParams = searchParams;
+        this.searchPharmacies({ ...this.searchParams, page: this.page });
     }
   },
 
   mounted() {
       this.role = getRoleFromToken();
-      this.fetchPharmacies();
+      this.fetchPharmacies(this.page);
   }
 }
 

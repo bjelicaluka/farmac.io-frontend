@@ -40,7 +40,8 @@
                                 class="col-4"
                     />
                 </FormRow>
-                <PharmaciesTable :pharmacies='pharmacies' :dateTime="selectedDate" :duration="duration" :isAsc="selectedIsAsc" :sortCriteria="selectedSortCriteria"></PharmaciesTable>
+                <PharmaciesTable :pharmacies='pharmacies' :dateTime="selectedDate" :duration="duration" :isAsc="selectedIsAsc" 
+                        :sortCriteria="selectedSortCriteria" @pageChange="fetchForOtherPage" />
             </Card>
         </div>
     </div>
@@ -107,7 +108,8 @@ export default {
             sortBy: sortCriteria,
             sortOrder: isAsc,
             selectedSortCriteria: '',
-            selectedIsAsc: null
+            selectedIsAsc: null,
+            page: 1
         }
     },
 
@@ -120,7 +122,7 @@ export default {
     
     methods: {
         ...mapActions({
-            searchPharmaciesForAppointments: 'pharmacies/searchPharmaciesForAppointments',
+            searchPharmaciesForAppointments: 'pharmacies/searchPharmaciesForAppointmentsPageTo',
             fetchDiscountForPatient: 'loyaltyPrograms/fetchDiscountForPatient'
         }),
         searchPharmacies(){
@@ -145,10 +147,15 @@ export default {
                     consultationDateTime: moment(this.selectedDate).format(),
                     duration: this.duration,
                     isAsc: isAscending,
-                    sortCriteria: sortCriteria
+                    sortCriteria: sortCriteria,
+                    number: this.page
                 }
             );
         },
+        fetchForOtherPage(page) {
+            this.page = page;
+            this.searchPharmacies();
+        }
     },
 
     watch: {

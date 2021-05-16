@@ -111,7 +111,7 @@ export default {
             gradeFrom: 0,
             gradeTo: 5,
             distanceFrom: 0,
-            distanceTo: 0
+            distanceTo: 9999
         }
     },
     components: {
@@ -122,10 +122,6 @@ export default {
     },
 
     methods: {
-        ...mapActions({
-            searchPharmacies: 'pharmacies/searchPharmacies'
-        }), 
-
         handleSearch(name, city) {
             let sortCriteria = this.sortCriteria.filter(item => item.value == this.selectedSortCriteria)[0]
             sortCriteria = this.selectedSortCriteria ? sortCriteria['label'].toLowerCase() : '';
@@ -134,18 +130,18 @@ export default {
             let gradeTo = this.gradeTo;
             let distanceFrom = this.distanceFrom;
             let distanceTo = this.distanceTo;
-            var callSearch = (request) => {
-                this.searchPharmacies(request);
+            var emitSearch = (params) => {
+                this.$emit('search', params);
             }
             window.navigator.geolocation.getCurrentPosition(function(position){
                 let userLat = position.coords.latitude;
                 let userLon = position.coords.longitude;
-                callSearch({name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
+                emitSearch( {name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
                 }, 
                 function(){
                     let userLat = 200;
                     let userLon = 200;
-                    callSearch({name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
+                    emitSearch({name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
                 })
         },
 

@@ -19,6 +19,7 @@
                     >
                         <StarRating v-model="staff.grade" @rating-selected="changeGrade(staff)" :star-size="20"></StarRating>
                     </TableRow>
+                    <Pagination @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
     </div>
@@ -32,6 +33,7 @@ import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
 import { mapActions, mapGetters} from 'vuex'
 import StarRating from 'vue-star-rating'
+import Pagination from '../Table/Pagination'
 import { getAccountIdFromToken, getUserIdFromToken } from '../../utils/token'
 import toastr from 'toastr'
 
@@ -43,7 +45,8 @@ export default {
         TableHead,
         TableBody,
         TableRow,
-        StarRating
+        StarRating,
+        Pagination
     },
 
     computed: {

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     pharmacy: null,
     pharmacies: null,
@@ -13,8 +15,8 @@ const getters = {
 };
 
 const actions = {
-    fetchPharmacies: (context) => {
-        axios.get(`/pharmacies/home`)
+    fetchPharmacies: (context, pageNumber) => {
+        axios.get(`/pharmacies/page-to`, {params: {number: pageNumber, size: PAGE_SIZE}})
         .then(response => {
             context.commit('setPharmacies', response.data);
         })
@@ -87,8 +89,8 @@ const actions = {
         });
     },
 
-    searchPharmacies: (context, paramsObject) => {
-        axios.get(`/pharmacies/search`, {params: paramsObject})
+    searchPharmacies: (context, {name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon, page}) => {
+        axios.get(`/pharmacies/search/pages-to`, {params: {name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon, number: page, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setPharmacies', resp.data)
         })
@@ -131,7 +133,16 @@ const actions = {
         .catch(err => {
             context.commit('setResult', { label: 'fetch', ok: false })
         })
-    }
+    },
+    searchPharmaciesForAppointmentsPageTo: (context, paramsObject) => {
+        axios.get(`/pharmacies/available/pages-to`, {params: { ...paramsObject, size: PAGE_SIZE}})
+        .then(resp => {
+            context.commit('setPharmacies', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', { label: 'fetch', ok: false })
+        })
+    },
 };
 
 const mutations = {
