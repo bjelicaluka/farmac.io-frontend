@@ -44,8 +44,6 @@ export default {
     }
   },
   mounted() {
-    this.display = false;
-    this.totalDiscount = 0;
     this.pharmacyId && this.fetchActivePharmacyPromotions(this.pharmacyId);
   }
 }
@@ -53,10 +51,10 @@ export default {
 
 <style>
 .display-6 {
-  font-size: 150%;
+  font-size: 100%;
 }
 
 .display-big {
-  font-size: 200%;
+  font-size: 150%;
 }
 </style>
