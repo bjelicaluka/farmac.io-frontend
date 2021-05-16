@@ -1,4 +1,6 @@
 import axios from "axios";
+ 
+const PAGE_SIZE = 5;
 
 const state = {
     supplierMedicines: null,
@@ -13,6 +15,16 @@ const getters = {
 const actions = {
     fetchMedicinesForSupplier: (context, supplierId) => {
         axios.get(`/suppliers/${supplierId}/medicines-in-stock`)
+        .then(response => {
+            context.commit('setSupplierMedicines', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
+    fetchPageOfMedicinesForSupplier: (context, { supplierId, page }) => {
+        axios.get(`/suppliers/${supplierId}/medicines-in-stock/page`, {params: {number: page, size: PAGE_SIZE }})
         .then(response => {
             context.commit('setSupplierMedicines', response.data);
         })

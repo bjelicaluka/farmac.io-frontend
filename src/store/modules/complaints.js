@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     complaints: [],
     complaint: null,
@@ -31,6 +33,16 @@ const actions = {
         })
     },
 
+    fetchComplaintsPagesTo: (context, page) => {
+        axios.get(`/complaints/pages-to`, {params: {number: page, size: PAGE_SIZE}})
+        .then(response => {
+            context.commit('setComplaints', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
+        })
+    },
+
     fetchComplaintsByWriter: (context, writerId) => {
         axios.get(`/complaints/by/${writerId}`)
         .then(response => {
@@ -40,6 +52,17 @@ const actions = {
             context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
         })
     },
+
+    fetchComplaintsByWriterPagesTo: (context, { writerId, page }) => {
+        axios.get(`/complaints/by/${writerId}/pages-to`, {params: {number: page, size: PAGE_SIZE}})
+        .then(response => {
+            context.commit('setComplaints', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
+        })
+    },
+    
 
     fetchComplaintById: (context, complaintId) => {
         axios.get(`/complaints/${complaintId}`)
@@ -125,6 +148,16 @@ const actions = {
 
     fetchAnswersByWriter: (context, writerId) => {
         axios.get(`/complaints/answered-by/${writerId}`)
+        .then(response => {
+            context.commit('setAnswers', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', {label:'fetch', ok: false, message: error.response.data.ErrorMessage });
+        })
+    },
+
+    fetchAnswersByWriterPagesTo: (context, { writerId, page }) => {
+        axios.get(`/complaints/answered-by/${writerId}/pages-to`, {params: { number: page, size: PAGE_SIZE }})
         .then(response => {
             context.commit('setAnswers', response.data);
         })

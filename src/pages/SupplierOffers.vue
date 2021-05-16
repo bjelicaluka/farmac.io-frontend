@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title="Your offers for pharmacy orders">
-                <SupplierOffersTable :supplierOffers="supplierOffers" @filterChanged="handleFiltering" />
+                <SupplierOffersTable :supplierOffers="supplierOffers" @filterChanged="handleFiltering" @pageChange="handleChangePage" />
             </Card>
         </div>
     </div>
@@ -25,7 +25,9 @@ export default {
 
     data: function() {
         return {
-            supplierId: null
+            supplierId: null,
+            page: 1,
+            status: ''
         }
     },
 
@@ -39,20 +41,37 @@ export default {
     watch: {
         result({label, ok}) {
             if(['add', 'update', 'delete', 'cancel'].indexOf(label) !== -1 && ok)
-                this.fetchOffersFor(this.supplierId);
+                this.fetchPageOfFilteredOffersFor({
+                supplierId: this.supplierId,
+                filterBy: this.status,
+                page: this.page
+            });
         }
     },
 
     methods: {
         ...mapActions({
             fetchOffersFor: 'supplierOffers/fetchOffersForSupplier',
-            fetchFilteredOffersFor: 'supplierOffers/fetchFilteredOffersForSupplier'
+            fetchPageOfFilteredOffersFor: 'supplierOffers/fetchFilteredOffersForSupplierPage'
         }),
 
         handleFiltering(filterOption) {
-            this.fetchFilteredOffersFor({
+            this.status = filterOption;
+
+            this.fetchPageOfFilteredOffersFor({
                 supplierId: this.supplierId,
-                filterBy: filterOption
+                filterBy: this.status,
+                page: this.page
+            });
+        },
+
+        handleChangePage(page) {
+            this.page = page;
+
+            this.fetchPageOfFilteredOffersFor({
+                supplierId: this.supplierId,
+                filterBy: this.status,
+                page: this.page
             });
         }
     },
@@ -60,7 +79,11 @@ export default {
     mounted() {
         this.supplierId = getAccountIdFromToken();
 
-        this.fetchOffersFor(this.supplierId);
+        this.fetchPageOfFilteredOffersFor({
+                supplierId: this.supplierId,
+                filterBy: this.status,
+                page: this.page
+            });
     }
 
     

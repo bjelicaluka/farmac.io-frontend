@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title="Suppliers">
-                <SuppliersTable :suppliers="suppliers" />
+                <SuppliersTable :suppliers="suppliers" @pageChange="handlePageChange" />
             </Card>
         </div>
     </div>
@@ -21,6 +21,12 @@ export default {
         SuppliersTable
     },
 
+    data: function() {
+        return {
+            page: 1
+        }
+    },
+
     computed: {
         ...mapGetters({
             suppliers: 'suppliers/getSuppliers',
@@ -31,18 +37,23 @@ export default {
     watch: {
         result({label, ok}) {
             if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
-                this.fetchSuppliers();
+                this.fetchSuppliersPage(this.page);
         }
     },
 
     methods: {
         ...mapActions({
-            fetchSuppliers: 'suppliers/fetchSuppliers'
-        })
+            fetchSuppliersPage: 'suppliers/fetchSuppliersPage'
+        }),
+
+        handlePageChange(page) {
+            this.page = page;
+            this.fetchSuppliersPage(this.page);
+        }
     },
 
     mounted() {
-        this.fetchSuppliers();
+        this.fetchSuppliersPage(this.page);
     }
 
     

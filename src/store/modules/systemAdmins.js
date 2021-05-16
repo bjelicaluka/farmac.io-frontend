@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     systemAdmin: null,
     systemAdmins: null,
@@ -15,6 +17,16 @@ const getters = {
 const actions = {
     fetchSystemAdmins: (context) => {
         axios.get(`/system-admins`)
+        .then(response => {
+            context.commit('setSystemAdmins', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
+    fetchSystemAdminsPage: (context, page) => {
+        axios.get(`/system-admins/page`, {params: {number: page, size: PAGE_SIZE}})
         .then(response => {
             context.commit('setSystemAdmins', response.data);
         })

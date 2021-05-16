@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title="System administrators">
-                <SystemAdminsTable :systemAdmins="systemAdmins" />
+                <SystemAdminsTable :systemAdmins="systemAdmins" @pageChange="handlePageChange" />
             </Card>
         </div>
     </div>
@@ -21,6 +21,12 @@ export default {
         SystemAdminsTable
     },
 
+    data: function() {
+        return {
+            page: 1
+        }
+    },
+
     computed: {
         ...mapGetters({
             systemAdmins: 'systemAdmins/getSystemAdmins',
@@ -31,18 +37,23 @@ export default {
     watch: {
         result({label, ok}) {
             if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
-                this.fetchSystemAdmins();
+                this.fetchSystemAdminsPage(this.page);
         }
     },
 
     methods: {
         ...mapActions({
-            fetchSystemAdmins: 'systemAdmins/fetchSystemAdmins'
-        })
+            fetchSystemAdminsPage: 'systemAdmins/fetchSystemAdminsPage'
+        }),
+
+        handlePageChange(page) {
+            this.page = page;
+            this.fetchSystemAdminsPage(this.page);
+        }
     },
 
     mounted() {
-        this.fetchSystemAdmins();
+        this.fetchSystemAdminsPage(this.page);
     }
 
     

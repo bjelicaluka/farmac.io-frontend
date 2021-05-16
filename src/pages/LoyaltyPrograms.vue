@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title="Loyalty Programs">
-                <LoyaltyProgramsTable :loyaltyPrograms="loyaltyPrograms" />
+                <LoyaltyProgramsTable :loyaltyPrograms="loyaltyPrograms" @pageChange="handlePageChange" />
             </Card>
         </div>
     </div>
@@ -21,6 +21,12 @@ export default {
         LoyaltyProgramsTable
     },
 
+    data: function() {
+        return {
+            page: 1
+        }
+    },
+
     computed: {
         ...mapGetters({
             loyaltyPrograms: 'loyaltyPrograms/getLoyaltyPrograms',
@@ -31,18 +37,23 @@ export default {
     watch: {
         result({label, ok}) {
             if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
-                this.fetchLoyaltyPrograms();
+                this.fetchLoyaltyProgramsPage(this.page);
         }
     },
 
     methods: {
         ...mapActions({
-            fetchLoyaltyPrograms: 'loyaltyPrograms/fetchLoyaltyPrograms'
-        })
+            fetchLoyaltyProgramsPage: 'loyaltyPrograms/fetchLoyaltyProgramsPage'
+        }),
+
+        handlePageChange(page) {
+            this.page = page;
+            this.fetchLoyaltyProgramsPage(this.page);
+        }
     },
 
     mounted() {
-        this.fetchLoyaltyPrograms();
+        this.fetchLoyaltyProgramsPage(this.page);
     }
 
     

@@ -8,6 +8,8 @@
                     </div>
                 </div>
             </div>
+
+            <Button @click="handleLoadMore" class="pull-right">Load more</Button>
         </div>
     </div>
 
@@ -16,13 +18,21 @@
 <script>
 
 import ComplaintAnswerCard from '../components/Card/ComplaintAnswerCard'
+import Button from '../components/Form/Button'
 
 import { mapActions, mapGetters } from 'vuex'
 import { getUserIdFromToken } from '../utils/token'
 
 export default {
     components: {
-        ComplaintAnswerCard
+        ComplaintAnswerCard,
+        Button
+    },
+
+    data: function() {
+        return {
+            page: 1
+        }
     },
 
     computed: {
@@ -33,13 +43,19 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchAnswersByWriter: 'complaints/fetchAnswersByWriter'
-        })
+            fetchAnswersByWriterPagesTo: 'complaints/fetchAnswersByWriterPagesTo'
+        }),
+
+        handleLoadMore() {
+            this.page++;
+            const userId = getUserIdFromToken();
+            this.fetchAnswersByWriterPagesTo({ writerId: userId, page: this.page });
+        }
     },
 
     mounted() {
         const userId = getUserIdFromToken();
-        this.fetchAnswersByWriter(userId);
+        this.fetchAnswersByWriterPagesTo({ writerId: userId, page: this.page });
         
     }
 

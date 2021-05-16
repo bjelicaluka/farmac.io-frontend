@@ -5,7 +5,9 @@
                 <div class="col-md-6 ml-auto mr-auto">
                     <ComplaintsTable :complaints="complaints" />
                 </div>
+                
             </div>
+            <Button @click="handleLoadMore" class="pull-right">Load more</Button>
         </div>
     </div>
 
@@ -14,6 +16,7 @@
 <script>
 
 import ComplaintsTable from '../components/Tables/ComplaintsTable'
+import Button from '../components/Form/Button'
 
 import { mapActions, mapGetters } from 'vuex'
 import { getRoleFromToken, getUserIdFromToken } from '../utils/token'
@@ -21,7 +24,8 @@ import { Roles } from '../constants'
 
 export default {
     components: {
-        ComplaintsTable
+        ComplaintsTable,
+        Button
     },
 
     data: function() {
@@ -30,7 +34,8 @@ export default {
                 id: null,
                 role: null
             },
-            roles: Roles
+            roles: Roles,
+            page: 1
         }
     },
 
@@ -42,9 +47,19 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchComplaints: 'complaints/fetchComplaints',
-            fetchComplaintsByWriter: 'complaints/fetchComplaintsByWriter'
-        })
+            fetchComplaintsPagesTo: 'complaints/fetchComplaintsPagesTo',
+            fetchComplaintsByWriterPagesTo: 'complaints/fetchComplaintsByWriterPagesTo'
+        }),
+
+        handleLoadMore() {
+            this.page++;
+
+            if(this.user.role === this.roles.SystemAdmin) {
+                this.fetchComplaintsPagesTo(this.page);
+            } else if(this.user.role === this.roles.Patient) {
+                this.fetchComplaintsByWriterPagesTo({ writerId: this.user.id, page: this.page });
+            }
+        }
     },
 
     mounted() {
@@ -54,9 +69,9 @@ export default {
         };
 
         if(this.user.role === this.roles.SystemAdmin) {
-            this.fetchComplaints();
+            this.fetchComplaintsPagesTo(this.page);
         } else if (this.user.role === this.roles.Patient) {
-            this.fetchComplaintsByWriter(this.user.id);
+            this.fetchComplaintsByWriterPagesTo({ writerId: this.user.id, page: this.page });
         }
     }
 

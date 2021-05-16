@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     supplier: null,
     suppliers: null,
@@ -15,6 +17,16 @@ const getters = {
 const actions = {
     fetchSuppliers: (context) => {
         axios.get(`/suppliers`)
+        .then(response => {
+            context.commit('setSuppliers', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    },
+
+    fetchSuppliersPage: (context, page) => {
+        axios.get(`/suppliers/page`, {params: {number: page, size: PAGE_SIZE}})
         .then(response => {
             context.commit('setSuppliers', response.data);
         })

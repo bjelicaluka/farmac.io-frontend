@@ -41,6 +41,7 @@
                         />
                     </div>
                 </TableRow>
+                <Pagination @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
 
@@ -68,6 +69,7 @@ import SupplierOfferForm from '../Forms/SupplierOfferForm'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
 import SelectOptionInput from '../Form/SelectOptionInput'
+import Pagination from '../Table/Pagination.vue'
 
 import moment from 'moment'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
@@ -118,7 +120,8 @@ export default {
         DropDownMenu,
         DropDownItem,
         SelectOptionInput,
-        RoundButton
+        RoundButton,
+        Pagination
     },
 
     watch: {
