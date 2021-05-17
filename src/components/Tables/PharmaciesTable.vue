@@ -11,6 +11,7 @@
               <RoundButton :title="'See pharmacists'" :iconName="'people'" @click="selectPharmacy(pharmacy)"></RoundButton>
             </ModalOpener>
           </TableRow>
+          <Pagination @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
     <Modal modalBoxId="pharmacistsModal" title="">
@@ -40,6 +41,7 @@ import ModalOpener from '../Modal/ModalOpener'
 import Card from '../Card/Card'
 import SchedulingPharmacists from '../Tables/SchedulingPharmacists'
 import SelectOptionInput from '../Form/SelectOptionInput'
+import Pagination from '../Table/Pagination'
 import {mapGetters, mapActions} from 'vuex'
 import moment from 'moment'
 import { getUserIdFromToken } from '../../utils/token'
@@ -68,7 +70,8 @@ export default {
     ModalOpener,
     Card,
     SchedulingPharmacists,
-    SelectOptionInput
+    SelectOptionInput,
+    Pagination
   },
   props: ['pharmacies', 'dateTime', 'duration', 'sortCriteria', 'isAsc'],
   data: function() {

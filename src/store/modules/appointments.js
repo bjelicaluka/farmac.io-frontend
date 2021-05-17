@@ -208,6 +208,42 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    fetchHistoryOfVisitingDermatologistToPage: (context, { patientId, pageNumber }) => {
+        axios.get(`/appointments/history-with-dermatologists/${patientId}/page-to`, { params: { number: pageNumber, size: PAGE_SIZE }})
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchHistoryOfVisitingPharmacistsToPage: (context, { patientId, pageNumber }) => {
+        axios.get(`/appointments/history-visit-pharmacists/${patientId}/page-to`, { params: { number: pageNumber, size: PAGE_SIZE }})
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    sortHistoryVisitingPharmacistsToPage: (context, {patientId, criteria, isAsc, pageNumber}) => {
+        axios.get(`/appointments/history-visit-pharmacists/${patientId}/sort/page-to`, {params: {criteria, isAsc, number: pageNumber, size: PAGE_SIZE}})
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    sortHistoryVisitingDermatologistToPage: (context, {patientId, criteria, isAsc, pageNumber}) => {
+        axios.get(`/appointments/history-with-dermatologists/${patientId}/sort/page-to`, {params: {criteria, isAsc, number: pageNumber, size: PAGE_SIZE}})
+        .then(resp => {
+            context.commit('setAppointments', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
     }
 };
 

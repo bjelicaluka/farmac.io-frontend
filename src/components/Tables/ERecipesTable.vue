@@ -7,6 +7,7 @@
                 eRecipe.isUsed ? 'Yes' : 'No']">
                     <RoundButton @click="seeMedicines(eRecipe.id)" iconName="medication"></RoundButton>
                 </TableRow>
+                <Pagination @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
     <Modal modalBoxId="medicinesInERecipe" title="Medicines in eRecipe">
@@ -31,6 +32,7 @@ import RoundButton from '../Form/RoundButton.vue'
 import Modal from '../Modal/Modal'
 import ModalOpener from '../Modal/ModalOpener'
 import MedicinesInERecipeTable from '../Tables/MedicinesInERecipeTable'
+import Pagination from '../Table/Pagination'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import VueQrcode from 'vue-qrcode'
@@ -46,7 +48,8 @@ export default {
         Modal,
         ModalOpener,
         MedicinesInERecipeTable,
-        VueQrcode
+        VueQrcode,
+        Pagination
     },
 
     data: function() {

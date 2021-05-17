@@ -2,7 +2,7 @@
     <div class="content">
         <div class="container-fluid">
             <Card title='Appointments in future' :description="`You cannot cancel an appointment if there are less than 24 left.`">
-                <PatientsAppointmentsTable :appointments="patientsAppointments" isCancelEnabled="true" :cancelDermatologistAppointment="true"/>
+                <PatientsAppointmentsTable :appointments="patientsAppointments" isCancelEnabled="true" :cancelDermatologistAppointment="true" :pagination="false" />
             </Card>
         </div>
     </div>

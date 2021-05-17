@@ -12,6 +12,7 @@
           <RoundButton v-if="isCancelEnabled" :title="'Cancel appointment'" :iconName="'clear'" @click="handleCancelAppointment(appointment.id)"></RoundButton>
           <RoundButton v-else :title="'View report'" :iconName="'info'" @click="displayReport(appointment.id)"></RoundButton>
           </TableRow>
+          <Pagination v-if="pagination" @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
   </div>
@@ -23,6 +24,7 @@ import TableHead from '../Table/TableHead'
 import TableBody from '../Table/TableBody'
 import TableRow from '../Table/TableRow'
 import RoundButton from '../Form/RoundButton'
+import Pagination from '../Table/Pagination'
 import {mapGetters, mapActions} from 'vuex'
 import toastr from 'toastr'
 import moment from 'moment'
@@ -33,9 +35,10 @@ export default {
     TableBody,
     TableRow,
     TableHead,
-    RoundButton
+    RoundButton,
+    Pagination
   },
-  props: ['appointments', 'isCancelEnabled', 'cancelDermatologistAppointment'],
+  props: ['appointments', 'isCancelEnabled', 'cancelDermatologistAppointment', 'pagination'],
   computed: {
     ...mapGetters({
         getResult: 'appointments/getResult'
