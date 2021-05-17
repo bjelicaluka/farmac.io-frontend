@@ -89,7 +89,7 @@ export default {
                 'criteria' : criteria,
                 'isAsc' : isAsc
             });
-    }
+        }
     },
 
     mounted() {
