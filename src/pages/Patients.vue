@@ -89,13 +89,11 @@ export default {
         }),
         handleSearchPatients(name) {
             this.params.name = name;
-            this.params.pageNumber = 1;
             this.fetchPatients(this.params);
         },
         handleChangeSort(){
-            this.params.criteria = this.selectedValue.split("-")[0]
+            this.params.sortCriteria = this.selectedValue.split("-")[0]
             this.params.isAscending = this.selectedValue.split("-")[1] == 'asc';
-            this.params.pageNumber = 1;
             this.fetchPatients(this.params);
         },
         handlePageChange(page) {
