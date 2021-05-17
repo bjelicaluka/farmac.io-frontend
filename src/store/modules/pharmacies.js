@@ -135,7 +135,7 @@ const actions = {
         })
     },
     searchPharmaciesForAppointmentsPageTo: (context, paramsObject) => {
-        axios.get(`/pharmacies/available/pages-to`, {params: { ...paramsObject, size: PAGE_SIZE}})
+        axios.get(`/pharmacies/available/page`, {params: { ...paramsObject, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setPharmacies', resp.data);
         })

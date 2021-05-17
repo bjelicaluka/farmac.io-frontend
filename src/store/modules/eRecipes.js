@@ -81,7 +81,7 @@ const actions = {
         });
     },
     fetchERecipesPageTo: (context, {patientId, sortCriteria, isAsc, isUsed, pageNumber}) => {
-        axios.get(`/patients/${patientId}/eRecipes/sort/pages-to`, {params: {sortCriteria, isAsc, isUsed, number: pageNumber, size: PAGE_SIZE}})
+        axios.get(`/patients/${patientId}/eRecipes/sort/page`, {params: {sortCriteria, isAsc, isUsed, number: pageNumber, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setERecipes', resp.data);
         })
