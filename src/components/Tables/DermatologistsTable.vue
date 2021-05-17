@@ -10,46 +10,47 @@
     <Table>
         <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Grade', 'Address', '']"></TableHead>
         <TableBody>
-        <TableRow 
-          v-for="d in dermatologists" 
-          :key="d.id" 
-          :values="getTableRow(d)"
-        >
-          <div class="pull-right text-gray" v-if="user.role === Roles.PharmacyAdmin || user.role === Roles.SystemAdmin">
-            <drop-down-menu>
-              <modal-opener
-                v-if="user.role === Roles.PharmacyAdmin && !dermatologistWorksForPharmacy(d)"
-                :modalBoxId="'addDermatologistToPharmacyModal'"
-              >
-                <drop-down-item @click="handleAddToPharmacyClick(d.dermatologistAccount)">Add to Pharmacy</drop-down-item>
-              </modal-opener>
-              <modal-opener
-                v-if="user.role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
-                :modalBoxId="'removeDermatologistFromPharmacyModal'"
-              >
-                <drop-down-item @click="handleRemoveFromPharmacyClick(d.dermatologistAccount)">Remove from Pharmacy</drop-down-item>
-              </modal-opener>
-              <modal-opener
-                v-if="user.role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
-                :modalBoxId="'defineDermatologistAppointmentModal'"
-              >
-                <drop-down-item @click="handleDefineAppointmentClick(d.dermatologistAccount)">Define Appointment</drop-down-item>
-              </modal-opener>
-              <modal-opener
-                :modalBoxId="'dermatologistModal'"
-                v-if="user.role === Roles.SystemAdmin"
-              >
-                <drop-down-item @click="handleEditClick(d.dermatologistAccount)">Edit</drop-down-item>
-              </modal-opener>
-              <modal-opener
-                :modalBoxId="'deleteDermatologistModal'"
-                v-if="user.role === Roles.SystemAdmin"
-              >
-                <drop-down-item @click="handleDeleteClick(d.dermatologistAccount)">Delete</drop-down-item>
-              </modal-opener>
-            </drop-down-menu>
-          </div>
-        </TableRow>
+          <TableRow 
+            v-for="d in dermatologists" 
+            :key="d.id" 
+            :values="getTableRow(d)"
+          >
+            <div class="pull-right text-gray" v-if="user.role === Roles.PharmacyAdmin || user.role === Roles.SystemAdmin">
+              <drop-down-menu>
+                <modal-opener
+                  v-if="user.role === Roles.PharmacyAdmin && !dermatologistWorksForPharmacy(d)"
+                  :modalBoxId="'addDermatologistToPharmacyModal'"
+                >
+                  <drop-down-item @click="handleAddToPharmacyClick(d.dermatologistAccount)">Add to Pharmacy</drop-down-item>
+                </modal-opener>
+                <modal-opener
+                  v-if="user.role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
+                  :modalBoxId="'removeDermatologistFromPharmacyModal'"
+                >
+                  <drop-down-item @click="handleRemoveFromPharmacyClick(d.dermatologistAccount)">Remove from Pharmacy</drop-down-item>
+                </modal-opener>
+                <modal-opener
+                  v-if="user.role === Roles.PharmacyAdmin && dermatologistWorksForPharmacy(d)"
+                  :modalBoxId="'defineDermatologistAppointmentModal'"
+                >
+                  <drop-down-item @click="handleDefineAppointmentClick(d.dermatologistAccount)">Define Appointment</drop-down-item>
+                </modal-opener>
+                <modal-opener
+                  :modalBoxId="'dermatologistModal'"
+                  v-if="user.role === Roles.SystemAdmin"
+                >
+                  <drop-down-item @click="handleEditClick(d.dermatologistAccount)">Edit</drop-down-item>
+                </modal-opener>
+                <modal-opener
+                  :modalBoxId="'deleteDermatologistModal'"
+                  v-if="user.role === Roles.SystemAdmin"
+                >
+                  <drop-down-item @click="handleDeleteClick(d.dermatologistAccount)">Delete</drop-down-item>
+                </modal-opener>
+              </drop-down-menu>
+            </div>
+          </TableRow>
+          <Pagination v-if="pagination" @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
   
@@ -135,6 +136,7 @@ import {Roles} from '../../constants';
 import DefineAppointmentForm from '../Forms/DefineAppointmentForm';
 import toastr from 'toastr'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import Pagination from '../Table/Pagination.vue'
 
 export default {
   components: {
@@ -151,11 +153,15 @@ export default {
     DermatologistForm,
     DermatologistPharmacyForm,
     DefineAppointmentForm,
-    Button
+    Button,
+    Pagination
   },
   props: {
     dermatologists: {},
     adminPharmacyId: {},
+    pagination: {
+      default: false
+    },
     searchField: {
       default: true
     }

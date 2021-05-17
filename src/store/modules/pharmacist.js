@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     pharmacist: null,
     pharmacists: null,
@@ -80,6 +82,15 @@ const actions = {
     },
     filterPharmacists: (context, params) => {
         axios.get(`/pharmacists/filter`, {params})
+        .then(resp => {
+            context.commit('setPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    filterPharmacistsPage: (context, params) => {
+        axios.get(`/pharmacists/filter/page`, {params: {...params, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setPharmacists', resp.data);
         })

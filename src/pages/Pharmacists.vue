@@ -5,7 +5,7 @@
                 <MedicalStaffSearch @search="handleSearch" />
             </Card>
             <Card title='Pharmacists' :description="`All pharmacists in the system.`">
-                <PharmacistsTable :searchField="false" :pharmacists="pharmacists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
+                <PharmacistsTable :searchField="false" :pagination="true" @pageChange="handlePageChange($event)" :pharmacists="pharmacists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
             </Card>
         </div> 
     </div>
@@ -23,7 +23,9 @@ export default {
     components: { Card, PharmacistsTable, MedicalStaffSearch },
     data: () => {
         return {
-            searchParams: {}
+            searchParams: {
+                number: 1
+            }
         }
     },
     computed: {
@@ -51,16 +53,21 @@ export default {
     },
     methods: {
         ...mapActions({
-            filterPharmacists: 'pharmacist/filterPharmacists',
+            filterPharmacists: 'pharmacist/filterPharmacistsPage',
         }), 
 
         handleSearch(params) {
-            this.searchParams = params;
+            this.searchParams = {...this.searchParams, ...params};
             this.filterPharmacists(params);
         },
+
+        handlePageChange(page) {
+            this.searchParams.number = page;
+            this.handleSearch(this.searchParams);
+        }
     },
     mounted() {
-        this.handleSearch();
+        this.handleSearch({});
     }
 }
 </script>

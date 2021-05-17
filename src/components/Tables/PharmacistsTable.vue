@@ -13,22 +13,23 @@
     <Table>
         <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Grade', 'Address', '']"></TableHead>
         <TableBody>
-        <TableRow 
-          v-for="p in pharmacists" 
-          :key="p.id" 
-          :values="[p.username, `${p.user.firstName} ${p.user.lastName}`, p.email, p.user.pid, p.user.phoneNumber, parseFloat(p.user.averageGrade).toFixed(2) + ' / 5.0', formatAddress(p.user.address)]"
-        >
-          <div class="pull-right text-gray">
-            <drop-down-menu v-if="user.role === Roles.PharmacyAdmin && adminPharmacyId === p.user.pharmacyId">
-              <modal-opener :modalBoxId="'pharmacistModal'">
-                <drop-down-item @click="handleEditClick(p)">Edit</drop-down-item>
-              </modal-opener>
-              <modal-opener :modalBoxId="'deletePharmacistModal'">
-                <drop-down-item @click="handleDeleteClick(p)">Delete</drop-down-item>
-              </modal-opener>
-            </drop-down-menu>
-          </div>
-        </TableRow>
+          <TableRow 
+            v-for="p in pharmacists" 
+            :key="p.id" 
+            :values="[p.username, `${p.user.firstName} ${p.user.lastName}`, p.email, p.user.pid, p.user.phoneNumber, parseFloat(p.user.averageGrade).toFixed(2) + ' / 5.0', formatAddress(p.user.address)]"
+          >
+            <div class="pull-right text-gray">
+              <drop-down-menu v-if="user.role === Roles.PharmacyAdmin && adminPharmacyId === p.user.pharmacyId">
+                <modal-opener :modalBoxId="'pharmacistModal'">
+                  <drop-down-item @click="handleEditClick(p)">Edit</drop-down-item>
+                </modal-opener>
+                <modal-opener :modalBoxId="'deletePharmacistModal'">
+                  <drop-down-item @click="handleDeleteClick(p)">Delete</drop-down-item>
+                </modal-opener>
+              </drop-down-menu>
+            </div>
+          </TableRow>
+          <Pagination v-if="pagination" @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
 
@@ -80,6 +81,7 @@ import toastr from 'toastr'
 import Search from '../Search/Search.vue'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 import { Roles } from '../../constants'
+import Pagination from '../Table/Pagination.vue'
 
 export default {
   components: {
@@ -94,11 +96,15 @@ export default {
     PharmacistForm,
     OptionModalButtons,
     Button,
-    Search
+    Search,
+    Pagination
   },
   props: {
     pharmacists: {},
     adminPharmacyId: {},
+    pagination: {
+      default: false
+    },
     searchField: {
       default: true
     }

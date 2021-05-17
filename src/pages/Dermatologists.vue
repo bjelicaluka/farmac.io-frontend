@@ -5,7 +5,7 @@
                 <MedicalStaffSearch @search="handleSearch" />
             </Card>
             <Card title='Dermatologists' :description="`All dermatologists in the system.`">
-                <DermatologistsTable :searchField="false" :dermatologists="dermatologists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
+                <DermatologistsTable :searchField="false" :pagination="true" @pageChange="handlePageChange($event)" :dermatologists="dermatologists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
             </Card>
         </div> 
     </div>
@@ -23,7 +23,9 @@ export default {
     components: { Card, DermatologistsTable, MedicalStaffSearch },
     data: () => {
         return {
-            searchParams: {}
+            searchParams: {
+                number: 1
+            }
         }
     },
     computed: {
@@ -51,16 +53,21 @@ export default {
     },
     methods: {
         ...mapActions({
-            filterDermatologists: 'dermatologist/filterDermatologistsWithWorkPlaces',
+            filterDermatologists: 'dermatologist/filterDermatologistsWithWorkPlacesPage',
         }), 
 
         handleSearch(params) {
-            this.searchParams = params;
+            this.searchParams = {...this.searchParams, ...params};
             this.filterDermatologists(params);
         },
+
+        handlePageChange(page) {
+            this.searchParams.number = page;
+            this.handleSearch(this.searchParams);
+        }
     },
     mounted() {
-        this.handleSearch();
+        this.handleSearch({});
     }
 }
 </script>

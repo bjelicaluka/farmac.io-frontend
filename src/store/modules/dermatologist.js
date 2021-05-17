@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     dermatologist: null,
     dermatologists: null,
@@ -86,6 +88,15 @@ const actions = {
     },
     filterDermatologistsWithWorkPlaces: (context, params) => {
         axios.get(`/dermatologists/with-work-places/filter`, {params})
+        .then(resp => {
+            context.commit('setDermatologists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'search', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    filterDermatologistsWithWorkPlacesPage: (context, params) => {
+        axios.get(`/dermatologists/with-work-places/filter/page`, {params: {...params, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setDermatologists', resp.data);
         })
