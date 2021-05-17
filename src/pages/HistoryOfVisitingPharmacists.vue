@@ -10,7 +10,7 @@
                     >
                     </SelectOptionInput>
                 </div>
-                <PatientsAppointmentsTable :appointments="patientsAppointments" :isCancelEnabled="false"/>
+                <PatientsAppointmentsTable :appointments="patientsAppointments" :isCancelEnabled="false" :pagination="true" @pageChange="loadOtherPage" />
             </Card>
         </div>
     </div>
@@ -60,7 +60,8 @@ export default {
     data: function() {
         return {
             options: selectOptions,
-            selectedValue: ''
+            selectedValue: '',
+            page:  1
         }
     },
 
@@ -71,29 +72,34 @@ export default {
     },
 
     watch: {
-        selectedValue(){
+        selectedValue() {
             this.handleChangeSort();
         }
     },
 
     methods: {
         ...mapActions({
-            fetchHistoryOfVisitingPharmacists: 'appointments/fetchHistoryOfVisitingPharmacists',
-            sortAppointments: 'appointments/sortHistoryVisitingPharmacists'
+            fetchHistoryOfVisitingPharmacists: 'appointments/fetchHistoryOfVisitingPharmacistsToPage',
+            sortAppointments: 'appointments/sortHistoryVisitingPharmacistsToPage'
         }),
-        handleChangeSort(){
+        handleChangeSort() {
             let criteria = this.selectedValue.split("-")[0]
             const isAsc = this.selectedValue.split("-")[1] == 'asc';
             this.sortAppointments({
-                'patientId' : getUserIdFromToken(),  
-                'criteria' : criteria,
-                'isAsc' : isAsc
+                patientId : getUserIdFromToken(),  
+                criteria : criteria,
+                isAsc : isAsc,
+                pageNumber: this.page
             });
-    }
+        },
+        loadOtherPage(page) {
+            this.page = page;
+            this.handleChangeSort();
+        }
     },
 
     mounted() {
-        this.fetchHistoryOfVisitingPharmacists(getUserIdFromToken());  
+        this.fetchHistoryOfVisitingPharmacists({ patientId: getUserIdFromToken(), pageNumber: this.page });  
     },
 }
 </script>

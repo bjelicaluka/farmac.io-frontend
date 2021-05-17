@@ -13,10 +13,11 @@
             <div v-if="selectedValue===0">
                 <Card :description="`You can rate the dermatologist which you visited.`" title="Rate dermatologists">
                     <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Rate']" :canRate=true :medicalStaffs="canBeRatedDermatologists" 
-                                :medicalStaffType ="'Dermatologist'" :isRated="false"/>
+                                :medicalStaffType ="'Dermatologist'" :isRated="false" />
                 </Card>
                 <Card  title="Change your grade for dermatologist">
-                    <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Change your grade']" :medicalStaffs="ratedDermatologists" :medicalStaffType="'Dermatologist'" :isRated="true"/>
+                    <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Change your grade']" :medicalStaffs="ratedDermatologists" 
+                    :medicalStaffType="'Dermatologist'" :isRated="true" @pageChange="loadOtherPageForRatedDermatologists" />
                 </Card>
             </div>
             <div v-if="selectedValue===1">
@@ -25,7 +26,8 @@
                                                 :medicalStaffType ="'Pharmacist'" :isRated="false"/>
                 </Card>
                 <Card title="Change your grade for pharmacist">
-                    <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Change your grade']" :medicalStaffs="ratedPharmacists" :medicalStaffType="'Pharmacist'" :isRated="true"/>
+                    <MedicalStaffTable :columnNames="['Medical stuff', 'Average grade', 'Change your grade']" :medicalStaffs="ratedPharmacists" 
+                    :medicalStaffType="'Pharmacist'" :isRated="true" @pageChange="loadOtherPageForRatedPharmacists" />
                 </Card>
             </div>
             <div v-if="selectedValue===2">
@@ -33,7 +35,7 @@
                     <RateMedicineTable :medicines="medicinesThatCanBeRated" :isRated="false"/>
                 </Card>
                 <Card title="Change your grade for medicine">
-                    <RateMedicineTable :medicines="ratedMedicines" :isRated="true"/>
+                    <RateMedicineTable :medicines="ratedMedicines" :isRated="true" @pageChange="loadOtherPageForRatedMedicines"/>
                 </Card>
             </div>
             <div v-if="selectedValue===3">
@@ -41,7 +43,7 @@
                     <RatePharmacyTable :pharmacies="pharmaciesThatCanBeRated" :isRated="false"/>
                 </Card>
                 <Card title="Change your grade for pharmacy">
-                    <RatePharmacyTable :pharmacies="ratedPharmacies" :isRated="true"/>
+                    <RatePharmacyTable :pharmacies="ratedPharmacies" :isRated="true" @pageChange="loadOtherPageForRatedPharmacies"/>
                 </Card>
             </div>
         </div> 
@@ -97,7 +99,11 @@ export default {
             ratedMedicines: [],
             ratedPharmacies: [],
             selectOptions: selectOptions,
-            selectedValue: null
+            selectedValue: null,
+            pageDermatologist: 1,
+            pagePharmacist: 1,
+            pageMedicine: 1,
+            pagePharmacy: 1
         }
     },
     computed: {
@@ -118,7 +124,7 @@ export default {
             if(label === 'gradeDermatologist') {
                 if(ok) {
                     this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
-                    this.fetchRatedDermatilogists(getAccountIdFromToken());
+                    this.fetchRatedDermatilogists({ patientId: getAccountIdFromToken(), pageNumber: this.pageDermatologist});
                 }
             }
             else if(label === 'gradePharmacist') {
@@ -130,18 +136,18 @@ export default {
             else if(label === 'gradeMedicine' || label === 'changeGradeMedicine') {
                 if(ok) {
                     this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
-                    this.fetchRatedMedicines(getUserIdFromToken());
+                    this.fetchRatedMedicines({ patientId: getUserIdFromToken(), pageNumber: this.pageMedicine });
                 }
             }
             else if(label === 'gradePharmacy' || label === 'changeGradePharmacy') {
                 if(ok) {
                     this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
-                    this.fetchRatedPharmacies(getUserIdFromToken());
+                    this.fetchRatedPharmacies({ patientId: getUserIdFromToken(), pageNumber: this.pagePharmacy });
                 }
             }
             else if(label === 'changeGradeMedicalStaff') {
-                this.fetchRatedDermatilogists(getAccountIdFromToken());
-                this.fetchRatedPharmacists(getAccountIdFromToken());
+                this.fetchRatedDermatilogists({ patientId: getAccountIdFromToken(), pageNumber: this.pageDermatologist});
+                this.fetchRatedPharmacists({ patientId: getAccountIdFromToken(), pageNumber: this.pagePharmacist});
             }
         },
         getCanBeRatedDermatologists(canBeRatedDermatologists) {
@@ -184,21 +190,37 @@ export default {
             fetchMedicinesThatCanBeRated: 'grade/fetchMedicinesThatCanRate',
             fetchPharmaciesThatCanBeRated: 'grade/fetchPharmaciesThatCanRate',
             fetchPharmacistsThatPatientCanRate: 'grade/fetchPharmacistsThatPatientCanRate',
-            fetchRatedDermatilogists: 'grade/fetchRatedDermatologists',
-            fetchRatedPharmacists: 'grade/fetchRatedPharmacists',
-            fetchRatedMedicines: 'grade/fetchRatedMedicines',
-            fetchRatedPharmacies: 'grade/fetchRatedPharmacies'
+            fetchRatedDermatilogists: 'grade/fetchRatedDermatologistsToPage',
+            fetchRatedPharmacists: 'grade/fetchRatedPharmacistsToPage',
+            fetchRatedMedicines: 'grade/fetchRatedMedicinesToPage',
+            fetchRatedPharmacies: 'grade/fetchRatedPharmaciesToPage'
         }), 
+        loadOtherPageForRatedDermatologists(page) {
+            this.pageDermatologist = page;
+            this.fetchRatedDermatilogists({ patientId: getAccountIdFromToken(), pageNumber: this.pageDermatologist});
+        },
+        loadOtherPageForRatedPharmacists(page) {
+            this.pagePharmacist = page;
+            this.fetchRatedPharmacists({ patientId: getAccountIdFromToken(), pageNumber: this.pagePharmacist});
+        },
+        loadOtherPageForRatedMedicines(page) {
+            this.pageMedicine = page;
+            this.fetchRatedMedicines({ patientId: getUserIdFromToken(), pageNumber: this.pageMedicine});
+        },
+        loadOtherPageForRatedPharmacies(page) {
+            this.pagePharmacy = page;
+            this.fetchRatedPharmacies({ patientId: getUserIdFromToken(), pageNumber: this.pagePharmacy});
+        }
     },
     mounted() {
         this.fetchCanBeRatedDermatologists(getAccountIdFromToken());
         this.fetchMedicinesThatCanBeRated(getUserIdFromToken());
         this.fetchPharmaciesThatCanBeRated(getUserIdFromToken());
         this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
-        this.fetchRatedDermatilogists(getAccountIdFromToken());
-        this.fetchRatedPharmacists(getAccountIdFromToken());
-        this.fetchRatedMedicines(getUserIdFromToken());
-        this.fetchRatedPharmacies(getUserIdFromToken());
+        this.fetchRatedDermatilogists({ patientId: getAccountIdFromToken(), pageNumber: 1} );
+        this.fetchRatedPharmacists({ patientId: getAccountIdFromToken(), pageNumber: 1} );
+        this.fetchRatedMedicines({ patientId: getUserIdFromToken(), pageNumber: 1} );
+        this.fetchRatedPharmacies({ patientId: getUserIdFromToken(), pageNumber: 1} );
     }
 }
 </script>

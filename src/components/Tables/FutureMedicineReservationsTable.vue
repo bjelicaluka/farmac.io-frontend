@@ -15,7 +15,7 @@
             <TableBody v-if="pharmacies.length > 0">
                 <TableRow v-for="reservation in futureMedicineReservations" :key="reservation.reservationId"
                     :values="[reservation.uniqueId, ...formatPharmacy(reservation.pharmacyId),
-                            formatDateTime(reservation.pickupDeadline), reservation.price]">
+                            formatDateTime(reservation.pickupDeadline), reservation.price + ' RSD']">
                     <ModalOpener modalBoxId="cancelModal">
                         <RoundButton :title="'Cancel reservation'" @click="reservationId=reservation.reservationId" :iconName="'clear'"/>
                     </ModalOpener>

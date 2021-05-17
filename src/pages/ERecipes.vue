@@ -18,7 +18,7 @@
                         >
                     </SelectOptionInput>
                 </div>
-                <ERecipesTable :eRecipes="eRecipes"/>
+                <ERecipesTable :eRecipes="eRecipes" @pageChange="fetchForOtherPage"/>
             </Card>
         </div>
     </div>
@@ -69,7 +69,8 @@ export default {
             sortOptions: sortOptions,
             filterOptions: filterOptions,
             selectedSort: "",
-            selectedFilter: null
+            selectedFilter: null,
+            page: 1
         }
     },
 
@@ -93,7 +94,7 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchERecipes: 'eRecipes/fetchERecipes'
+            fetchERecipes: 'eRecipes/fetchERecipesPageTo'
         }),
         getSortFilterParams() {
             let isUsed = this.selectedFilter;
@@ -106,7 +107,12 @@ export default {
                 sortCriteria: this.selectedSort.split("-")[0],
                 isAsc: this.selectedSort.split("-")[1] == 'asc',
                 isUsed: isUsed,
+                pageNumber: this.page
             };
+        },
+        fetchForOtherPage(page) {
+            this.page = page;
+            this.fetchERecipes(this.getSortFilterParams());
         }
     },
 
@@ -116,6 +122,7 @@ export default {
             sortCriteria: "",
             isAsc: false,
             isUsed: null,
+            pageNumber: this.page
         })
     }
 

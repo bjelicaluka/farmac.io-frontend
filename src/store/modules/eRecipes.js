@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     pharmaciesForERecipe: null,
     eRecipes: [],
@@ -73,6 +75,15 @@ const actions = {
         axios.get(`/medicines/in-eRecipe/${eRecipeId}`)
         .then(resp => {
             context.commit('setMedicinesInERecipe', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchERecipesPageTo: (context, {patientId, sortCriteria, isAsc, isUsed, pageNumber}) => {
+        axios.get(`/patients/${patientId}/eRecipes/sort/page`, {params: {sortCriteria, isAsc, isUsed, number: pageNumber, size: PAGE_SIZE}})
+        .then(resp => {
+            context.commit('setERecipes', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
