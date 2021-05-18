@@ -2,7 +2,7 @@
     <div>
         <ModalOpener
             modalBoxId="addMedicineToPharmacyModal"
-            v-if="user.role === Roles.PharmacyAdmin"
+            v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy"
         >
             <Button class="pull-right">Add Medicine</Button>
         </ModalOpener>
@@ -20,7 +20,7 @@
                         pharmacyMedicine.quantity, pharmacyMedicine.medicine && parseFloat(pharmacyMedicine.medicine.averageGrade).toFixed(2) + ' / 5.0']"
                 >
                     <div class="pull-right text-gray">
-                        <DropDownMenu v-if="user.role === Roles.PharmacyAdmin">
+                        <DropDownMenu v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy">
                             <ModalOpener
                                 v-if="user.role === Roles.PharmacyAdmin"
                                 :modalBoxId="'removeMedicineFromPharmacyModal'"
@@ -84,6 +84,9 @@ export default {
         adminPharmacyId: {},
         searchField: {
             default: true
+        },
+        isAdminOfPharmacy: {
+            default: false
         }
     },
     data: () => {

@@ -20,30 +20,30 @@
                     </div>
                 </div>
 
-                <PharmacyInfo :pharmacy="pharmacy" />
+                <PharmacyInfo :pharmacy="pharmacy" :isAdminOfPharmacy="isAdminOfPharmacy" />
             </Card>
             <Card title='Pharmacists' :description="`${pharmacy && pharmacy.name}'s pharmacist employees.`">
-                <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :adminPharmacyId="pharmacyId" />
+                <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :adminPharmacyId="pharmacyAdmin && pharmacyAdmin.user.pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy"/>
             </Card>
             <Card title='Dermatologists' :description="`${pharmacy && pharmacy.name}'s dermatologist employees.`">
-                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :adminPharmacyId="pharmacyId" />
+                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :adminPharmacyId="pharmacyAdmin && pharmacyAdmin.user.pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy" />
             </Card>
             <Card title='Dermatologist Appointments' :description="`${pharmacy && pharmacy.name}'s dermatologist appointments.`">
-                <AppointmentsTable :sortComponent="false" @pageChange="handleAppointmentsPageChange($event)" :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" />
+                <AppointmentsTable :sortComponent="false" @pageChange="handleAppointmentsPageChange($event)" :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy" />
             </Card>
             <Card title='Medicines' :description="`${pharmacy && pharmacy.name}'s medicines that are in stock.`">
-                <MedicineListTable @search="handleSearchPharmacyMedicines" :medicines="medicines" :adminPharmacyId="pharmacyId" />
+                <MedicineListTable @search="handleSearchPharmacyMedicines" :medicines="medicines" :adminPharmacyId="pharmacyAdmin && pharmacyAdmin.user.pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy" />
             </Card>
-            <Card title='Medicine Orders' :description="`Medicine orders for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin || user.role === roles.Supplier">
+            <Card title='Medicine Orders' :description="`Medicine orders for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin && isAdminOfPharmacy || user.role === roles.Supplier">
                 <PharmacyOrdersTable @pageChange="handlePharmacyOrdersPageChange($event)" :pharmacyOrders="pharmacyOrders" :pharmacyId="pharmacyId" @filter="pharmacyOrderProcessedFilter = $event" />
             </Card>
-            <Card title='Promotions' :description="`Promotions for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
+            <Card title='Promotions' :description="`Promotions for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin && isAdminOfPharmacy">
                 <PharmacyPromotionsTable @pageChange="handlePromotionsPageChange($event)" :pharmacyPromotions="pharmacyPromotions" :pharmacyId="pharmacyId" />
             </Card>
-            <Card title='Absence Requests' :description="`Absence Requests for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
+            <Card title='Absence Requests' :description="`Absence Requests for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin && isAdminOfPharmacy">
                 <AbsenceRequestsTable @pageChange="handleAbsenceRequestsPageChange($event)" :absenceRequests="absenceRequests" />
             </Card>
-            <Card title='Not In Stock Records' :description="`Not In Stock Records for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin">
+            <Card title='Not In Stock Records' :description="`Not In Stock Records for ${pharmacy && pharmacy.name} pharmacy.`" v-if="user.role === roles.PharmacyAdmin && isAdminOfPharmacy">
                 <NotInStockRecordsTable @filter="notInStockRecordSeenFilter = $event" @pageChange="handleNotInStockRecordsPageChange($event)" :notInStockRecords="notInStockRecords" />
             </Card>
         </div> 
@@ -91,7 +91,7 @@ export default {
         PharmacyPromotionsTable,
         AbsenceRequestsTable,
         NotInStockRecordsTable,
-          PharmacyPromotionCard
+        PharmacyPromotionCard
     },
 
     data: () => {
@@ -110,6 +110,7 @@ export default {
             absenceRequestsPage: 1,
             pharmacyOrdersPage: 1,
             notInStockRecordsPage: 1,
+            isAdminOfPharmacy: false
         }
     },
     computed: {
@@ -135,10 +136,21 @@ export default {
             isFollowing: 'followings/isFollowing',
             absenceRequestResult: 'medicalStaff/getResult',
             notInStockRecordResult: 'notInStockRecords/getResult',
-            discount: 'loyaltyPrograms/getDiscount'
+            discount: 'loyaltyPrograms/getDiscount',
+            pharmacyAdmin: 'pharmacyAdmins/getPharmacyAdmin'
         })
     },
     watch: {
+        pharmacyAdmin() {
+            if(this.pharmacyId == this.pharmacyAdmin.user.pharmacyId) {
+                this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, page: this.pharmacyOrdersPage});
+                this.fetchAbsenceRequestsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.absenceRequestsPage});
+                this.filterNotInStockRecordsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.notInStockRecordsPage});
+                this.fetchPharmacyPromotionsPage({pharmacyId: this.pharmacyId, page: this.promotionsPage});
+                this.isAdminOfPharmacy = true;
+            }
+        },
+
         getDermatologistAppointments(dermatologistAppointments) {
             dermatologistAppointments.forEach(da => da.isReserved ? da.price : da.price = parseFloat(applyDiscount(da.price, this.discount).toFixed(2)));
             this.dermatologistAppointments = dermatologistAppointments;
@@ -241,7 +253,8 @@ export default {
             followPharmacy: 'followings/followPharmacy',
             unfollowPharmacy: 'followings/unfollowPharmacy',
             setCurrentPharmacy: 'followings/setCurrentPharmacy',
-            fetchDiscountForPatient: 'loyaltyPrograms/fetchDiscountForPatient'
+            fetchDiscountForPatient: 'loyaltyPrograms/fetchDiscountForPatient',
+            fetchPharmacyAdminById: 'pharmacyAdmins/fetchPharmacyAdminById'
         }),
         handleSearchPharmacists(name) {
             this.pharmacistSearchName = name;
@@ -308,6 +321,8 @@ export default {
             this.fetchDiscountForPatient(this.user.userId);
             this.fetchPatientFollowings(this.user.id);
             this.setCurrentPharmacy(this.pharmacyId);
+        } else if(this.user.role == Roles.PharmacyAdmin) {
+            this.fetchPharmacyAdminById(this.user.id);
         }
 
         this.fetchPharmacy(this.pharmacyId);
@@ -315,10 +330,6 @@ export default {
         this.fetchPharmacyDermatologists(this.pharmacyId);
         this.fetchDermatologistAppointmentsPage({pharmacyId: this.pharmacyId, page: this.appointmentsPage});
         this.fetchPharmacyMedicinesInStock(this.pharmacyId);
-        this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, page: this.pharmacyOrdersPage});
-        this.fetchPharmacyPromotionsPage({pharmacyId: this.pharmacyId, page: this.promotionsPage});
-        this.fetchAbsenceRequestsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.absenceRequestsPage});
-        this.filterNotInStockRecordsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.notInStockRecordsPage});
     }
 }
 </script>

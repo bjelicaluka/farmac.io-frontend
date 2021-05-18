@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ModalOpener modalBoxId="dermatologistModal" v-if="user.role === Roles.PharmacyAdmin">
+    <ModalOpener modalBoxId="dermatologistModal" v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy || user.role === Roles.SystemAdmin">
       <Button @click="handleRegisterClick" class="pull-right">Register dermatologist</Button>
     </ModalOpener>
 
@@ -15,7 +15,7 @@
             :key="d.id" 
             :values="getTableRow(d)"
           >
-            <div class="pull-right text-gray" v-if="user.role === Roles.PharmacyAdmin || user.role === Roles.SystemAdmin">
+            <div class="pull-right text-gray" v-if="(user.role === Roles.PharmacyAdmin && isAdminOfPharmacy) || user.role === Roles.SystemAdmin">
               <drop-down-menu>
                 <modal-opener
                   v-if="user.role === Roles.PharmacyAdmin && !dermatologistWorksForPharmacy(d)"
@@ -158,6 +158,9 @@ export default {
   },
   props: {
     dermatologists: {},
+    isAdminOfPharmacy: {
+      default: false
+    },
     adminPharmacyId: {},
     pagination: {
       default: false
