@@ -2,7 +2,7 @@
   <div>
     <ModalOpener
       modalBoxId="pharmacistModal"
-      v-if="user.role === Roles.PharmacyAdmin"
+      v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy || user.role === Roles.SystemAdmin"
     >
       <Button @click="handleRegisterClick" class="pull-right">Register Pharmacist</Button>
     </ModalOpener>
@@ -19,7 +19,7 @@
             :values="[p.username, `${p.user.firstName} ${p.user.lastName}`, p.email, p.user.pid, p.user.phoneNumber, parseFloat(p.user.averageGrade).toFixed(2) + ' / 5.0', formatAddress(p.user.address)]"
           >
             <div class="pull-right text-gray">
-              <drop-down-menu v-if="user.role === Roles.PharmacyAdmin && adminPharmacyId === p.user.pharmacyId">
+              <drop-down-menu v-if="user.role === Roles.PharmacyAdmin && (adminPharmacyId === p.user.pharmacyId || isAdminOfPharmacy)">
                 <modal-opener :modalBoxId="'pharmacistModal'">
                   <drop-down-item @click="handleEditClick(p)">Edit</drop-down-item>
                 </modal-opener>
@@ -107,6 +107,9 @@ export default {
     },
     searchField: {
       default: true
+    },
+    isAdminOfPharmacy: {
+      default: false
     }
   },
   data() {

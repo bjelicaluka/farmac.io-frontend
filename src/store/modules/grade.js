@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const PAGE_SIZE = 5;
+
 const state = {
     dermatologistsToRate: [],
     pharmacistsToRate: [],
@@ -187,6 +189,42 @@ const actions = {
         .catch(err => {
             context.commit('setResult', {label: 'changeGradePharmacy', ok: false, message: err.response.data.ErrorMessage});
         });
+    },
+    fetchRatedDermatologistsToPage: (context, {patientId, pageNumber}) => {
+        axios.get(`/grades/${patientId}/rated-dermatologists/page-to`, { params: {number: pageNumber, size: PAGE_SIZE }})
+        .then(resp => {
+            context.commit('setRatedDermatologists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        })
+    },
+    fetchRatedPharmacistsToPage: (context, {patientId, pageNumber}) => {
+        axios.get(`/grades/${patientId}/rated-pharmacists/page-to`, { params: {number: pageNumber, size: PAGE_SIZE }})
+        .then(resp => {
+            context.commit('setRatedPharmacists', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchRatedMedicinesToPage: (context, {patientId, pageNumber}) => {
+        axios.get(`/grades/${patientId}/rated-medicines/pages-to`, { params: {number: pageNumber, size: PAGE_SIZE }})
+        .then(resp => {
+            context.commit('setRatedMedicines', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        });
+    },
+    fetchRatedPharmaciesToPage: (context, {patientId, pageNumber}) => {
+        axios.get(`/grades/${patientId}/rated-pharmacies/page-to`, { params: {number: pageNumber, size: PAGE_SIZE }})
+        .then(resp => {
+            context.commit('setRatedPharmacies', resp.data);
+        })
+        .catch(err => {
+            context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
+        })
     }
 };
 

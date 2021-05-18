@@ -12,6 +12,7 @@
                 parseFloat(medicine.medicine.averageGrade).toFixed(2)]">
                 <StarRating v-model="medicine.grade" @rating-selected="changeMedicineGrade(medicine)" :star-size="20"></StarRating>
             </TableRow>
+            <Pagination @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
     </div>
@@ -23,6 +24,7 @@ import Table from '../Table/Table.vue'
 import TableHead from '../Table/TableHead.vue'
 import TableBody from '../Table/TableBody.vue'
 import TableRow from '../Table/TableRow.vue'
+import Pagination from '../Table/Pagination.vue'
 import { mapActions, mapGetters } from 'vuex'
 import { getUserIdFromToken } from '../../utils/token'
 import StarRating from 'vue-star-rating'
@@ -36,6 +38,7 @@ export default {
         TableBody,
         TableRow,
         StarRating,
+        Pagination
     },
 
     computed: {

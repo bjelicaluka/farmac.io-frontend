@@ -1,11 +1,12 @@
 import axios from "axios"
 
+const PAGE_SIZE = 2;
+
 const state = {
     result: null,
     patient: null,
     patients: null,
-    allergies: null,
-    sortCrit: "", isAsc: true,
+    allergies: null
 };
 
 const getters = {
@@ -61,32 +62,8 @@ const actions = {
              });
          })
     },
-
-    fetchMedicalStaffsPatients: (context, medicalId) => {
-        axios.get(`/patients/my-patients/${medicalId}`)
-        .then(resp => {
-            context.commit('setPatients', resp.data);
-        })
-        .catch(err => {
-            context.commit('setResult', {label: 'fetchPatients', ok: false, message: err.response.data.ErrorMessage});
-        });
-    },
-
-    fetchSortedMedicalStaffsPatients: (context, {medicalId, sortCrit}) => {
-        if (sortCrit === state.sortCrit)
-            state.isAsc = !state.isAsc;
-        state.sortCrit = sortCrit;
-        axios.get(`/patients/my-patients/${medicalId}/sort?crit=${state.sortCrit}&isAsc=${state.isAsc}`)
-        .then(resp => {
-            context.commit('setPatients', resp.data);
-        })
-        .catch(err => {
-            context.commit('setResult', {label: 'fetchPatients', ok: false, message: err.response.data.ErrorMessage});
-        });
-    },
-
-    searchPatients: (context, {medicalId, name}) => {
-        axios.get(`/patients/my-patients/${medicalId}/search?name=${name}`)
+    fetchMedicalStaffsPatients: (context, {medicalAccountId, name, sortCriteria, isAscending, pageNumber}) => {
+        axios.get(`/patients/my-patients/${medicalAccountId}/page`, {params: {name, sortCriteria, isAscending, number: pageNumber, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setPatients', resp.data);
         })

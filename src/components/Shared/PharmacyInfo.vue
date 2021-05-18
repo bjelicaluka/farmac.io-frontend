@@ -5,11 +5,11 @@
       <ModalOpener 
         class="ml-auto mr-1 mb-2" 
         modalBoxId="pharmacyModal"
-        v-if="user.role === Roles.PharmacyAdmin"
+        v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy"
       >
         <Button>Edit Pharmacy General Info</Button>
       </ModalOpener>
-      <div class="mr-3 mb-2" v-if="user.role === Roles.PharmacyAdmin">
+      <div class="mr-3 mb-2" v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy">
         <Button @click="changeRoutePriceList" class="pull-right">Edit prices</Button>
       </div>
     </div>
@@ -52,6 +52,9 @@ export default {
   props: {
     pharmacy: {
       type: Object,
+    },
+    isAdminOfPharmacy: {
+      default: false
     }
   },
   data: () => {

@@ -2,7 +2,15 @@
 <div class="content">
     <div class="container-fluid">
         <Card title='Patients' :description="'my patients'">
-            <PatientsTable @search="handleSearchPatients" @sort="handleSortPatients" :patients="patients" />
+            <div class="col-3">
+                <SelectOptionInput
+                label="Select sort criteria"
+                v-model="selectedValue"
+                :options="options"
+                >
+                </SelectOptionInput>
+            </div>
+            <PatientsTable @search="handleSearchPatients" @pageChange="handlePageChange" :patients="patients" />
         </Card>
     </div> 
 </div>
@@ -13,18 +21,53 @@ import { mapGetters, mapActions } from 'vuex'
 import { getAccountIdFromToken } from '../utils/token'
 import Card from '../components/Card/Card.vue'
 import PatientsTable from '../components/Tables/PatientsTable.vue'
+import SelectOptionInput from '../components/Form/SelectOptionInput.vue'
+
+let selectOptions = [
+  {
+    value: 'firstName-asc',
+    label: 'First name - Ascending'
+  },
+  {
+    value: 'firstName-desc',
+    label: 'First name - Descending'
+  },
+  {
+    value: 'lastName-asc',
+    label: 'Last name - Ascending'
+  },
+  {
+    value: 'lastName-desc',
+    label: 'Last name - Descending'
+  },
+    {
+    value: 'appointmentDate-asc',
+    label: 'Appointment date - Ascending'
+  },
+    {
+    value: 'appointmentDate-desc',
+    label: 'Appointment date - Descending'
+  }
+];
 
 export default {
     components: {
         Card,
-        PatientsTable
+        PatientsTable,
+        SelectOptionInput
     },
 
     data: () => {
         return {
-            searchName: null,
-            sortCrit: '',
-            medicalId: getAccountIdFromToken()
+            options: selectOptions,
+            selectedValue: '',
+            params: {
+                medicalAccountId: getAccountIdFromToken(), 
+                name: null, 
+                sortCriteria: 'appointmentDate', 
+                isAscending: false, 
+                pageNumber: 1
+            }
         }
     },
 
@@ -33,25 +76,34 @@ export default {
             patients: 'patient/getPatients'
         })
     },
+    
+    watch: {
+        selectedValue(){
+            this.handleChangeSort();
+        }
+    },
 
     methods: {
         ...mapActions({
             fetchPatients: 'patient/fetchMedicalStaffsPatients',
-            sortPatients: 'patient/fetchSortedMedicalStaffsPatients',
-            searchPatients: 'patient/searchPatients'
         }),
         handleSearchPatients(name) {
-            this.searchName = name;
-            this.searchPatients({medicalId:this.medicalId, name});
+            this.params.name = name;
+            this.fetchPatients(this.params);
         },
-        handleSortPatients(crit) {
-            this.sortCrit = crit;
-            this.sortPatients({medicalId:this.medicalId, sortCrit:crit});
-        }
+        handleChangeSort(){
+            this.params.sortCriteria = this.selectedValue.split("-")[0]
+            this.params.isAscending = this.selectedValue.split("-")[1] == 'asc';
+            this.fetchPatients(this.params);
+        },
+        handlePageChange(page) {
+            this.params.pageNumber = page;
+            this.fetchPatients(this.params);
+        },
     },
 
     mounted() {
-        this.fetchPatients(this.medicalId);
+        this.fetchPatients(this.params);
     }
 }
 

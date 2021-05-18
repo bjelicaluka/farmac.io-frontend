@@ -22,7 +22,7 @@
               <drop-down-menu>
                 <modal-opener 
                   :modalBoxId="'appointmentModal'"
-                  v-if="user.role === Roles.PharmacyAdmin"
+                  v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy"
                 >
                   <drop-down-item @click="handleDeleteClick(a)">Delete</drop-down-item>
                 </modal-opener>
@@ -108,6 +108,9 @@ export default {
     pharmacyId: {},
     sortComponent: {
       default: true
+    },
+    isAdminOfPharmacy: {
+      default: false
     }
   },
   data() {

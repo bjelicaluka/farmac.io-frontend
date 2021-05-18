@@ -5,7 +5,7 @@
                 <MedicalStaffSearch @search="handleSearch" />
             </Card>
             <Card title='Pharmacists' :description="`All pharmacists in the system.`">
-                <PharmacistsTable :searchField="false" :pagination="true" @pageChange="handlePageChange($event)" :pharmacists="pharmacists" :adminPharmacyId="'08d8f514-5790-438f-88f7-09089846f3d2'" />
+                <PharmacistsTable :searchField="false" :pagination="true" @pageChange="handlePageChange($event)" :pharmacists="pharmacists" :adminPharmacyId="pharmacyAdmin && pharmacyAdmin.user.pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy" />
             </Card>
         </div> 
     </div>
@@ -19,22 +19,31 @@ import PharmacistsTable from '../components/Tables/PharmacistsTable.vue';
 import toastr from 'toastr';
 import MedicalStaffSearch from '../components/Searchs/MedicalStaffSearch.vue';
 
+import { Roles } from '../constants'
+import { getRoleFromToken, getAccountIdFromToken } from '../utils/token'
+
 export default {
     components: { Card, PharmacistsTable, MedicalStaffSearch },
     data: () => {
         return {
             searchParams: {
                 number: 1
-            }
+            },
+            isAdminOfPharmacy: false
         }
     },
     computed: {
         ...mapGetters({
             pharmacists: 'pharmacist/getPharmacists',
             result: 'pharmacist/getResult',
+            pharmacyAdmin: 'pharmacyAdmins/getPharmacyAdmin'
         }),
     },
     watch: {
+        pharmacyAdmin() {
+            this.isAdminOfPharmacy = true;
+        },
+
         result({label, ok, message}) {
             if(['add', 'update', 'delete'].indexOf(label) !== -1 && ok)
                 this.handleSearch(this.searchParams);
@@ -54,6 +63,7 @@ export default {
     methods: {
         ...mapActions({
             filterPharmacists: 'pharmacist/filterPharmacistsPage',
+            fetchPharmacyAdminById: 'pharmacyAdmins/fetchPharmacyAdminById'
         }), 
 
         handleSearch(params) {
@@ -67,6 +77,10 @@ export default {
         }
     },
     mounted() {
+        if(getRoleFromToken() === Roles.PharmacyAdmin) {
+            this.fetchPharmacyAdminById(getAccountIdFromToken());
+        } 
+
         this.handleSearch({});
     }
 }

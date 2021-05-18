@@ -17,6 +17,7 @@
             :values="[pharmacy.pharmacy.name, formAddress(pharmacy.pharmacy), parseFloat(pharmacy.pharmacy.averageGrade).toFixed(2)]">
                 <StarRating v-model="pharmacy.grade" @rating-selected="changePharmacyGrade(pharmacy)" :star-size="20"></StarRating>
           </TableRow>
+          <Pagination @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
   </div>
@@ -27,6 +28,7 @@ import Table from '../Table/Table'
 import TableHead from '../Table/TableHead'
 import TableBody from '../Table/TableBody'
 import TableRow from '../Table/TableRow'
+import Pagination from '../Table/Pagination'
 import {mapGetters, mapActions} from 'vuex'
 import StarRating from 'vue-star-rating'
 import { getAccountIdFromToken, getUserIdFromToken } from '../../utils/token'
@@ -39,7 +41,8 @@ export default {
         TableBody,
         TableRow,
         TableHead,
-        StarRating
+        StarRating,
+        Pagination
     },
     props: ['pharmacies', 'isRated'],
     computed: {
