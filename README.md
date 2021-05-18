@@ -1,6 +1,8 @@
 # farmac.io-frontend
 Projekat za ISA + MRS.
 
+[![Build Status](https://jenkins.bjelicaluka.com/buildStatus/icon?job=farmac.io-backend)](https://jenkins.bjelicaluka.com/job/farmac.io-backend/)
+
 ## Članovi tima:
 <ul>
 <li><a href="https://github.com/jojev">Jevtić Jovana</a></li>
