@@ -5,22 +5,6 @@
         <MedicineSearch @search="handleSearch"/>
 
         <Modal
-            v-if="role == roles.SystemAdmin"
-            modalBoxId="deleteMedicineModal"
-            title="Confirmation"
-        >
-            <div slot="body">
-                <p>Are you sure that you want to delete {{this.selectedMedicineName}} medicine?</p>
-            </div>
-            <div slot="buttons">
-                <OptionModalButtons @yes="handleDelete">
-                </OptionModalButtons>
-            </div>
-        </Modal>
-        <ModalOpener id="deleteMedicineModalOpener" class="d-none" modalBoxId="deleteMedicineModal" />
-
-
-        <Modal
             modalBoxId="displayPharmaciesModal"
             title="Choose pharmacy"
         >
@@ -49,10 +33,8 @@
                             
                             <template v-if="role == roles.SystemAdmin">
                                 <ModalOpener modalBoxId="medicineModal">
-                                <RoundButton title="Edit medicine" iconName="edit" type="btn-warning" @click="onEditSelected(medicine.id)"></RoundButton>
+                                    <RoundButton title="Edit medicine" iconName="edit" type="btn-warning" @click="onEditSelected(medicine.id)"></RoundButton>
                                 </ModalOpener>
-                                
-                                <RoundButton title="Delete medicine" iconName="delete" type="btn-danger" @click="onDeleteSelected(medicine.id, medicine.name)"></RoundButton>
                             </template>
 
                              </div>
@@ -91,7 +73,6 @@ import RotatingCard from '../components/Card/RotatingCard.vue';
 import Stars from '../components/Rating/Stars'
 import Modal from '../components/Modal/Modal.vue'
 import ModalOpener from '../components/Modal/ModalOpener.vue'
-import OptionModalButtons from '../components/Modal/OptionModalButtons'
 import ShopingCartCard from '../components/Card/ShoppingCartCard.vue'
 import Card from '../components/Card/Card.vue'
 import RoundButton from '../components/Form/RoundButton.vue'
@@ -112,7 +93,6 @@ export default {
         Stars,
         Modal,
         ModalOpener,
-        OptionModalButtons,
         ShopingCartCard,
         Card,
         RoundButton
@@ -156,7 +136,6 @@ export default {
             fetchMedicinePdf: 'medicines/fetchMedicinePdf',
             fetchPharmaciesForMedicine: 'medicines/fetchPharmaciesForMedicineById',
             reserveMedicine: 'shoppingCart/addReservation',
-            deleteMedicine: 'medicines/deleteMedicine',
             fetchDiscountForPatient: 'loyaltyPrograms/fetchDiscountForPatient'
         }), 
 
@@ -187,17 +166,7 @@ export default {
             this.reserveMedicine(reservation);
             toastr.success("You have successfully added the medicine to the shopping cart.")
         },
-
-        onDeleteSelected(id, name) {
-            this.selectedMedicineId = id;
-            this.selectedMedicineName = name
-            document.getElementById('deleteMedicineModalOpener').click();
-        },
-
-        handleDelete(e) {
-            e.preventDefault();
-            this.deleteMedicine(this.selectedMedicineId);
-        },
+   
 
         handleRegisterClick() {
             this.isEdit = false;
