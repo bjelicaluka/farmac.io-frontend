@@ -20,13 +20,6 @@
           >
             <div class="pull-right text-gray">
               <drop-down-menu>
-                <modal-opener 
-                  :modalBoxId="'appointmentModal'"
-                  v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy"
-                >
-                  <drop-down-item @click="handleDeleteClick(a)">Delete</drop-down-item>
-                </modal-opener>
-
                   <drop-down-item
                     v-if="!a.isReserved && user.role === Roles.Patient" 
                     @click="handleMakeAppointmentClick(a)"
@@ -39,16 +32,6 @@
           <Pagination @pageChange="$emit('pageChange', $event)" />
         </TableBody>
     </Table>
-
-    <Modal
-      modalBoxId="appointmentModal"
-      title="Appointment"
-      sizeClass="modal-lg"
-    >
-      <div slot="body">
-        JIK
-      </div>
-    </Modal>
   </div>
 </template>
 
@@ -59,8 +42,6 @@ import TableBody from '../Table/TableBody'
 import TableRow from '../Table/TableRow'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
-import ModalOpener from '../Modal/ModalOpener.vue'
-import Modal from '../Modal/Modal.vue'
 import SelectOptionInput from '../Form/SelectOptionInput.vue'
 import FormRow from '../Form/FormRow.vue'
 import {mapGetters, mapActions} from 'vuex'
@@ -97,8 +78,6 @@ export default {
     TableHead,
     DropDownItem,
     DropDownMenu,
-    ModalOpener,
-    Modal,
     SelectOptionInput,
     FormRow,
     Pagination

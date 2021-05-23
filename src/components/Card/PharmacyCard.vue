@@ -5,11 +5,6 @@
                 <img src="https://i.ibb.co/tb2GmTN/pharmacy-Logo-2.png"/>
             </div>
             <div class="card-body">
-                <div v-if="role == roles.SystemAdmin" class="card-actions">
-                    <Button @click="onDeleteSelected" class="btn btn-danger btn-link" rel="tooltip" data-placement="bottom" title="Delete">
-                        <i class="material-icons">delete</i>
-                    </Button>
-                </div>
                 <h4 class="card-title">{{pharmacy.name}}</h4>
                 <p class="card-category">{{pharmacy.description}}</p>
                 <p class="card-title">{{pharmacy.address.streetName}} {{pharmacy.address.streetNumber}}, {{pharmacy.address.city}}</p>
@@ -29,9 +24,6 @@
 import Button from '../Form/Button'
 import Stars from '../Rating/Stars'
 
-import { Roles } from '../../constants'
-import { getRoleFromToken } from '../../utils/token'
-
 export default {
     components: {
         Button,
@@ -39,28 +31,13 @@ export default {
     },
 
     props: ['pharmacy'],
-  
-    data: function() {
-        return {
-            role: null,
-            roles: Roles
-        }
-    },
 
     methods: {
-        onDeleteSelected: function(e) {
-            e.preventDefault();
-            this.$emit('onDeleteSelected', e, this.pharmacy.id, this.pharmacy.name);
-        },
 
         changeRoute(e) {
             e.preventDefault();
             this.$router.push(`/pharmacies/${this.pharmacy.id}`);
         }
-    },
-
-    mounted() {
-        this.role = getRoleFromToken();
     }
 }
 </script>
