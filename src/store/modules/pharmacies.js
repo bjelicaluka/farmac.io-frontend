@@ -15,6 +15,15 @@ const getters = {
 };
 
 const actions = {
+    fetchAllPharmacies: (context) => {
+        axios.get(`/pharmacies`)
+        .then(response => {
+            context.commit('setPharmacies', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { label: 'fetch', ok: false });
+        });
+    }, 
     fetchPharmacies: (context, pageNumber) => {
         axios.get(`/pharmacies/page-to`, {params: {number: pageNumber, size: PAGE_SIZE}})
         .then(response => {
