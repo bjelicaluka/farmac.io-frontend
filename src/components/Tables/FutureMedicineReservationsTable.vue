@@ -88,7 +88,7 @@ export default {
         ...mapActions({
             fetchMedicineReservations: 'medicineReservations/fetchFutureMedicineReservations',
             cancelReservation: 'medicineReservations/cancelReservation',
-            getAllPharmacies: 'pharmacies/fetchPharmacies',
+            getAllPharmacies: 'pharmacies/fetchAllPharmacies',
             fetchReservedMedicines: 'medicineReservations/fetchReservedMedicines',
             fetchMedicines: 'medicines/fetchMedicinesForHomePage'
         }),
