@@ -15,7 +15,7 @@ const getters = {
 };
 
 const actions = {
-    fetchAllPharmacies: (context, pageNumber) => {
+    fetchAllPharmacies: (context) => {
         axios.get(`/pharmacies`)
         .then(response => {
             context.commit('setPharmacies', response.data);
