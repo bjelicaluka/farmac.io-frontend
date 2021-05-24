@@ -61,7 +61,7 @@ export default {
             changeGradeForMedicalStaff: 'grade/changeGradeForMedicalStaff'
         }),
         rate(staff) {
-            let medicalStaffId = staff.id;
+            let medicalStaffId = staff.userId;
             let grade = staff.grade;
             let patientId = getAccountIdFromToken();
             if(this.medicalStaffType  === 'Dermatologist') {
