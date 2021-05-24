@@ -130,7 +130,7 @@ export default {
             else if(label === 'gradePharmacist') {
                 if(ok) {
                     this.fetchPharmacistsThatPatientCanRate(getAccountIdFromToken());
-                    this.fetchRatedPharmacists(getAccountIdFromToken());
+                    this.fetchRatedPharmacists({ patientId: getAccountIdFromToken(), pageNumber: this.pagePharmacist});
                 }
             }
             else if(label === 'gradeMedicine' || label === 'changeGradeMedicine') {
