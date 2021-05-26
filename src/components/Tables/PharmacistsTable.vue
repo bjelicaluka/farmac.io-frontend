@@ -2,7 +2,7 @@
   <div>
     <ModalOpener
       modalBoxId="pharmacistModal"
-      v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy || user.role === Roles.SystemAdmin"
+      v-if="user.role === Roles.PharmacyAdmin && isAdminOfPharmacy"
     >
       <Button @click="handleRegisterClick" class="pull-right">Register Pharmacist</Button>
     </ModalOpener>

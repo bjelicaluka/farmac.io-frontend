@@ -167,7 +167,7 @@ export default {
             this.createReservationFromERecipe({
                 eRecipeId: this.eRecipeId,
                 pharmacyId: this.selectedPharmacyId,
-                pickupDeadline: this.selectedDate
+                pickupDeadline: this.selectedDate.format()
             });
         }
     }

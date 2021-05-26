@@ -151,7 +151,12 @@ export default {
           ...this.account
         },
         user: {
-          ...this.user
+          ...this.user,
+          dateOfBirth: this.user.dateOfBirth.format(),
+          workTime: {
+            from: this.user.workTime.from.format(),
+            to: this.user.workTime.to.format()
+          }
         }
       };
 

@@ -13,7 +13,7 @@
 <script>
 import Card from '../components/Card/Card.vue'
 import ShoppingCartTable from '../components/Tables/ShoppingCartTable.vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import toastr from 'toastr'
 
 const $ = window.$;
@@ -48,15 +48,7 @@ export default {
                 toastr.error(message);
             }
         }
-    },
-
-    methods: {
-        ...mapActions({
-            removeItem: 'shoppingCart/removeItem',
-            reserveMedicines: 'shoppingCart/reserveMedicines'
-        }),
-    },
-
+    }
 }
 
 </script>

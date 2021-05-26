@@ -34,7 +34,14 @@ export default {
     onSubmit(e) {
       e.preventDefault();
       this.showErrorMessage = true;
-      this.addDermatologistToPharmacy({dermatologistId: this.dermatologist.id, pharmacyId: this.pharmacyId, workTime: {...this.workTime}});
+      this.addDermatologistToPharmacy({
+          dermatologistId: this.dermatologist.id,
+          pharmacyId: this.pharmacyId,
+          workTime: {
+           from: this.workTime.from.format(),
+           to: this.workTime.to.format() 
+          }
+        });
     },
   }
 }
