@@ -86,7 +86,7 @@ export default {
             this.removeItem({pharmacyId, medicineId, quantity});
         },
         reserveMedicinesForPharmacy() {
-            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: this.selectedDate, patientId: getUserIdFromToken()})
+            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: this.selectedDate.format(), patientId: getUserIdFromToken()})
         }
     },
 

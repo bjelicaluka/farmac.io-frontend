@@ -153,7 +153,8 @@ export default {
           ...this.account
         },
         user: {
-          ...this.user
+          ...this.user,
+          dateOfBirth: this.user.dateOfBirth.format()
         }
       };
       if(!this.isEdit) {
