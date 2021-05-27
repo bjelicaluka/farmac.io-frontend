@@ -20,6 +20,7 @@
     <div slot="buttons">
       <ModalCloser>
         <ButtonWithIcon v-if="selectedEvent.title!=' '"
+          :disabled="isTooEarlyToWrite()"
           @click="handleReport"
           :iconName="'assignment'"
           class="pull-right">
@@ -79,7 +80,7 @@ export default {
       selectedEvent: {
         extendedProps: {}
       },
-      currentPharmacy: null
+      currentPharmacy: null,
     }
   },
   methods: {
@@ -102,10 +103,15 @@ export default {
       return moment(date).format("DD-MMM-YYYY HH:mm");
     },
     handleReport() {
-      if (this.selectedEvent.extendedProps.isReported)
-        window.location.href=`/view-report/${this.selectedEvent.id}`;
-      else
-        window.location.href=`/report/${this.selectedEvent.id}`;
+      setTimeout(() => {
+        if (this.selectedEvent.extendedProps.isReported)
+          this.$router.push(`/view-report/${this.selectedEvent.id}`);
+        else
+          this.$router.push(`/report/${this.selectedEvent.id}`);
+      }, 500);
+    },
+    isTooEarlyToWrite() {
+      return !this.selectedEvent.extendedProps.isReported && this.selectedEvent.start > moment().add(15, 'minutes');
     }
   },
   watch: {
