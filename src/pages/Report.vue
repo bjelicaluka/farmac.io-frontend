@@ -12,7 +12,7 @@
                 <TableRow :values="['Time', formatDateTime(appointment.dateTime)]"></TableRow>
             </Table>
             <TextArea 
-                :label="'Notes (info, diagnosis, etc.)'"
+                label="Notes (info, diagnosis, etc.)"
                 v-model="report.notes"
                 :isValid="!!report.notes"
                 :showErrorMessage="showErrorMessage"
@@ -21,8 +21,14 @@
             </TextArea>
             <div class="col-2">
                 <div class="form-group">
-                    <label class="bmd-label-floating">Therapy duration in days: </label>
-                    <input type="number" v-model="report.therapyDurationInDays" min="0" max="60" class="form-control"/>
+                    <number-input
+                        label="Therapy duration in days:"
+                        v-model="report.therapyDurationInDays"
+                        :min="0" :max="60"
+                        :isValid="validDays()"
+                        :showErrorMessage="showErrorMessage"
+                        errorMessage="Must be a whole number from 0 to 60."
+                    />
                 </div>
             </div>
 
@@ -43,12 +49,12 @@
 
             <div>
                 <ModalOpener modalBoxId="prescribeModal">
-                    <Button @click="handleFetchMedicineNames">Prescibe medicine</Button>
+                    <ButtonWithIcon iconName="medication" @click="handleFetchMedicineNames"> Prescibe medicine</ButtonWithIcon>
                 </ModalOpener>
             </div>
             <div>
                 <ModalOpener modalBoxId="newAppointmentModal">
-                    <Button>New appointment</Button>
+                    <ButtonWithIcon iconName="book_online"> New appointment</ButtonWithIcon>
                 </ModalOpener>
             </div>
             <ModalOpener modalBoxId="saveReportModal">
@@ -137,6 +143,8 @@ import TableRow from '../components/Table/TableRow.vue'
 import OptionModalButtons from '../components/Modal/OptionModalButtons.vue'
 import DefineAppointmentForm from '../components/Forms/DefineAppointmentForm.vue'
 import RoundButton from '../components/Form/RoundButton.vue'
+import ButtonWithIcon from '../components/Form/ButtonWithIcon.vue'
+import NumberInput from '../components/Form/NumberInput.vue'
 
 export default {
     data: function() {
@@ -171,6 +179,8 @@ export default {
         OptionModalButtons,
         DefineAppointmentForm,
         RoundButton,
+        ButtonWithIcon,
+        NumberInput,
     },
     computed: {
         ...mapGetters({
@@ -233,6 +243,10 @@ export default {
                     return;
                 }
             });
+        },
+        validDays() {
+            const d = this.report.therapyDurationInDays;
+            return !isNaN(d) && d <= 60 && d >= 0;
         }
     },
 
@@ -250,7 +264,6 @@ export default {
                     toastr.success(message);
                 else
                     toastr.error(message);
-                this.$router.go(-1);
             }
         }
     }
