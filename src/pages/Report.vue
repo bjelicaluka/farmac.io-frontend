@@ -25,9 +25,9 @@
                         label="Therapy duration in days:"
                         v-model="report.therapyDurationInDays"
                         :min="0" :max="60"
-                        :isValid="validDays()"
+                        :isValid="validTherapyDuration()"
                         :showErrorMessage="showErrorMessage"
-                        errorMessage="Must be a whole number from 0 to 60."
+                        errorMessage="Must be a whole number between 0 and 60."
                     />
                 </div>
             </div>
@@ -244,7 +244,7 @@ export default {
                 }
             });
         },
-        validDays() {
+        validTherapyDuration() {
             const d = this.report.therapyDurationInDays;
             return !isNaN(d) && d <= 60 && d >= 0;
         }
