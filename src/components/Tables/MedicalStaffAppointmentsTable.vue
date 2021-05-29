@@ -9,7 +9,11 @@
             :values="[`${appointment.patient.firstName} ${appointment.patient.lastName}`, 
             formatDate(appointment.dateTime), formatTime(appointment.dateTime), formatDuration(appointment.duration), appointment.pharmacy.name]"
           >
-          <RoundButton :title="'Write report'" :iconName="'assignment'" @click="handleStart(appointment.id)"></RoundButton>
+          <RoundButton :title="'Write report'" :iconName="'assignment'"
+            @click="handleStart(appointment.id)"
+            :disabled="isTooEarlyToWrite(appointment.dateTime)"
+          >
+          </RoundButton>
           </TableRow>
         </TableBody>
     </Table>
@@ -45,6 +49,9 @@ export default {
     },
     handleStart(appointmentId) {
       this.$router.push(`/report/${appointmentId}`);
+    },
+    isTooEarlyToWrite(dateTime) {
+      return dateTime > moment().add(15, 'minutes');
     }
   },
 }
