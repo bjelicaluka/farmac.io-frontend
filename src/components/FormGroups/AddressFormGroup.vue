@@ -23,7 +23,7 @@
           <text-input
             label="Street Name"
             v-model="address.streetName"
-            :isValid="validateText(address.streetName)"
+            :isValid="address.streetName"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid street name."
           />
@@ -38,7 +38,10 @@
           />
         </div>
       </form-row>
-      <Map :height="250" @click="onMapClick($event)" :center="address || null" :modalBoxId="modalBoxId">
+      <div>
+        <button-with-icon iconName="location_on" class="btn-round btn-sm" @click="findOnMap"> Find on map</button-with-icon>
+      </div>
+      <Map :height="250" :center="address || null" :modalBoxId="modalBoxId">
         <div slot="markers">
           <MapMarker :v-if="address.lat !== null && address.lng !== null" :lat="address.lat" :lng="address.lng">
             <div>
@@ -67,6 +70,9 @@ import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
 import { validateText } from '../../utils/validation'
+import axios from "axios";
+import toastr from 'toastr'
+import ButtonWithIcon from '../Form/ButtonWithIcon.vue'
 
 export default {
     components: {
@@ -75,7 +81,8 @@ export default {
         TextInput,
         Map,
         MapMarker,
-        InputErrorMessage
+        InputErrorMessage,
+        ButtonWithIcon
     },
 
     props: {
@@ -103,15 +110,25 @@ export default {
             default: ''
         }
     },
-    watch: {
-      address() {
-        console.log(this.address.lat)
-      }
-    },
     methods: {
-        onMapClick(e) {
-            this.address.lat = e.latlng.lat;
-            this.address.lng = e.latlng.lng;
+        findOnMap() {
+          var addressQuery = `${this.address.state} ${this.address.city} ${this.address.streetName} ${this.address.streetNumber}`
+          axios.get(`https://nominatim.openstreetmap.org/search.php`, {params: {format: 'json', addressdetails: 1, limit: 1, q: addressQuery}})
+          .then(resp => {
+            if (resp.data.length > 0) this.processMapResponse(resp.data[0]);
+            else toastr.warning('Invalid address');
+          })
+          .catch(err => toastr.error(err.response.data.ErrorMessage));
+        },
+
+        processMapResponse(locationData) {
+          this.address.lat = parseFloat(locationData.lat);
+          this.address.lng = parseFloat(locationData.lon);
+
+          this.address.streetNumber = locationData.address.house_number;
+          this.address.streetName = locationData.address.road;
+          this.address.city = locationData.address.city;
+          this.address.state = locationData.address.country;
         },
 
         validateText(text) {
