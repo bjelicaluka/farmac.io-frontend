@@ -19,8 +19,8 @@
       </Table>
     </div>
     <div class="col-6 pull-left">
-      <work-calendar v-if="!!appointments"
-        :appointments="appointments"
+      <work-calendar v-if="!!workCalendarEvents"
+        :workCalendarEvents="workCalendarEvents"
         :selectable="true"
         @select="handleSelect"
         @dateClick="handleDateClick"
@@ -44,7 +44,7 @@
 import moment from 'moment'
 import toastr from 'toastr'
 import { mapActions, mapGetters } from 'vuex'
-import { getUserIdFromToken, getRoleFromToken } from '../utils/token'
+import { getUserIdFromToken } from '../utils/token'
 import WorkCalendar from '../components/Calendar/WorkCalendar.vue'
 import Card from '../components/Card/Card.vue'
 import Table from '../components/Table/Table.vue'
@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      appointments: 'appointments/getCalendarEvents',
+      workCalendarEvents: 'appointments/getCalendarEvents',
       result: 'medicalStaff/getResult'
     }),
   },

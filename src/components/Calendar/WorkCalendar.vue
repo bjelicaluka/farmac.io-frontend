@@ -8,18 +8,23 @@
     v-model="currentPharmacy"
   />
   <FullCalendar :options="calendarOptions" ref="calendar" />
-  <Modal modalBoxId="selectedEventModal" title="Appointment">
+  <Modal modalBoxId="selectedEventModal" :title="selectedEvent.extendedProps.isAppointment?'Appointment':selectedEvent.title">
     <div slot="body">
-      <Table>
+      <Table v-if="selectedEvent.extendedProps.isAppointment">
         <TableRow :values="['Patient', `${selectedEvent.title}`]"></TableRow>
         <TableRow :values="['Pharmacy', `${selectedEvent.extendedProps.pharmacyName}`]"></TableRow>
         <TableRow :values="['Time', formatDateTime(selectedEvent.start)]"></TableRow>
         <TableRow :values="['Duration', `${selectedEvent.duration} minutes`]"></TableRow>
       </Table>
+      <Table v-else>
+        <TableRow :values="['Pharmacy', `${selectedEvent.extendedProps.pharmacyName}`]"></TableRow>
+        <TableRow :values="['Start', formatDateTime(selectedEvent.start)]"></TableRow>
+        <TableRow :values="['End', formatDateTime(selectedEvent.end)]"></TableRow>
+      </Table>
     </div>
     <div slot="buttons">
       <ModalCloser>
-        <ButtonWithIcon v-if="selectedEvent.title!=' '"
+        <ButtonWithIcon v-if="selectedEvent.title!=' ' && selectedEvent.extendedProps.isAppointment"
           :disabled="isTooEarlyToWrite()"
           @click="handleReport"
           :iconName="'assignment'"
@@ -58,7 +63,7 @@ export default {
     ModalCloser,
     SelectOptionInput,
   },
-  props: ['appointments', 'pharmacies', 'selectable'],
+  props: ['workCalendarEvents', 'pharmacies', 'selectable'],
   data() {
     return {
       calendarOptions: {
@@ -71,7 +76,7 @@ export default {
         initialView: 'dayGridMonth',
         dateClick: this.dateClick,
         eventClick: this.handleEventClick,
-        events: this.appointments,
+        events: this.workCalendarEvents.map(e => ({...e, classNames:[e.isAppointment?'appointment-event':'absence-event']})),
         selectable: this.selectable,
         select: this.select,
         selectAllow: this.allow,
@@ -130,21 +135,28 @@ export default {
 <style>
 
 .fc-daygrid-event, .fc-timegrid-event {
-    background-color: purple;
-    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(128 0 128 / 40%);
+  box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(128 0 128 / 40%);
 }
 
 a.fc-event:hover {
-  background-color: #5c005c;
   cursor: pointer;
 }
 
 .fc-event-title, .fc-event-time {
-    color: white;
+  color: white;
 }
 
-.fc-daygrid-event-dot {
-  border: 4px solid white;
+.appointment-event {
+  background-color: purple;
+}
+.absence-event {
+  background-color: #0064ff;
+}
+.appointment-event:hover {
+  background-color: #5c005c;
+}
+.absence-event:hover {
+  background-color: #0050c8;
 }
 
 .fc .fc-button:hover, .fc .fc-button[disabled]:hover {

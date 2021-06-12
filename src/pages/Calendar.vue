@@ -1,7 +1,7 @@
 <template>
 <div class="content">
-    <work-calendar v-if="!!appointments"
-      :appointments="appointments"
+    <work-calendar v-if="!!workCalendarEvents"
+      :workCalendarEvents="workCalendarEvents"
       :pharmacies="pharmaciesAsOptions"
     >
     </work-calendar>
@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      appointments: 'appointments/getCalendarEvents',
+      workCalendarEvents: 'appointments/getCalendarEvents',
       pharmacyNames: 'dermatologist/getPharmacyNames'
     }),
   },
