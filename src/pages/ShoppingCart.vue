@@ -6,8 +6,6 @@
             </Card>
         </div>
     </div>
-
-    
 </template>
 
 <script>
@@ -15,8 +13,6 @@ import Card from '../components/Card/Card.vue'
 import ShoppingCartTable from '../components/Tables/ShoppingCartTable.vue'
 import { mapGetters } from 'vuex'
 import toastr from 'toastr'
-
-const $ = window.$;
 
 export default {
     components: {
@@ -42,7 +38,6 @@ export default {
                 return;
 
             if(ok) {
-                $('#enterDateModal').modal('hide');
                 toastr.success(message);
             } else {
                 toastr.error(message);

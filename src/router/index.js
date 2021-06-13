@@ -40,6 +40,8 @@ import { Roles } from '../constants'
 import store from '../store/index'
 import * as tokenUtils from '../utils/token'
 
+const $ = window.$;
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -431,6 +433,12 @@ router.beforeEach((to, from, next) => {
 
   next();
 })
+
+router.afterEach((to, from) => {
+  setTimeout(() => {
+    $('.selectpicker').selectpicker('refresh');
+  }, 100);
+});
 
 
 export default router
