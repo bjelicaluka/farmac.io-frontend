@@ -27,6 +27,7 @@ import eRecipes from './modules/eRecipes'
 import loyaltyPrograms from './modules/loyaltyPrograms'
 import grade from './modules/grade'
 import notInStockRecords from './modules/notInStockRecords'
+import address from './modules/address'
 
 Vue.use(Vuex)
 
@@ -58,6 +59,7 @@ export default new Vuex.Store({
     eRecipes,
     notInStockRecords,
     loyaltyPrograms,
-    grade
+    grade,
+    address
   }
 });

@@ -23,7 +23,8 @@ const actions = {
         .catch(error => {
             context.commit('setResult', { label: 'fetch', ok: false });
         });
-    }, 
+    },
+
     fetchPharmacies: (context, pageNumber) => {
         axios.get(`/pharmacies/page-to`, {params: {number: pageNumber, size: PAGE_SIZE}})
         .then(response => {
@@ -121,6 +122,7 @@ const actions = {
             context.commit('setResult', { label: 'addMedicineToPharmacy', message: err.response.data.ErrorMessage, ok: false });
         })
     },
+
     removeMedicineFromPharmacy: (context, {pharmacyId, medicineId}) => {
         axios.delete(`/pharmacies/${pharmacyId}/medicines/${medicineId}`)
         .then(resp => {
@@ -134,6 +136,7 @@ const actions = {
             context.commit('setResult', { label: 'removeMedicineFromPharmacy', message: err.response.data.ErrorMessage, ok: false });
         })
     },
+
     searchPharmaciesForAppointments: (context, paramsObject) => {
         axios.get(`/pharmacies/available`, {params: paramsObject})
         .then(resp => {
@@ -143,6 +146,7 @@ const actions = {
             context.commit('setResult', { label: 'fetch', ok: false })
         })
     },
+
     searchPharmaciesForAppointmentsPageTo: (context, paramsObject) => {
         axios.get(`/pharmacies/available/page`, {params: { ...paramsObject, size: PAGE_SIZE}})
         .then(resp => {
@@ -152,6 +156,8 @@ const actions = {
             context.commit('setResult', { label: 'fetch', ok: false })
         })
     },
+
+
 };
 
 const mutations = {
