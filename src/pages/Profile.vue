@@ -76,6 +76,13 @@
                 </div>
             </div>
         </div>
+
+        <div>
+            <p class="text-center">
+                <router-link to="/">Back to home page</router-link>
+            </p>
+        </div>
+
     </div>
 </template>
 

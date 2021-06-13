@@ -23,13 +23,10 @@
         <Button @click="handleLoginClick">Sign In</Button>
 
         <div class="row mt-4">
-            <p class="text-left col-4">
+            <p class="text-left col-6">
                 <router-link to="/patient-registration">Registration</router-link>
             </p>
-            <p class="text-center col-4">
-                <router-link to="/forgot-password">Forgot password</router-link>
-            </p>
-            <p class="text-right col-4">
+            <p class="text-right col-6">
                 <router-link to="/email-verification">Email verification</router-link>
             </p>
         </div>

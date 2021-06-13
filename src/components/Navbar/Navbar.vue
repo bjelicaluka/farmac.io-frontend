@@ -15,15 +15,6 @@
             </router-link>
           </navbar-item>
           <navbar-item>
-            <dropdown-menu name="Notifications" icon="notifications">
-              <dropdown-item>Mike John responded to your email</dropdown-item>
-              <dropdown-item>You have 5 new tasks</dropdown-item>
-              <dropdown-item>You're now friend with Andrew</dropdown-item>
-              <dropdown-item>Another Notification</dropdown-item>
-              <dropdown-item>Another One</dropdown-item>
-            </dropdown-menu>
-          </navbar-item>
-          <navbar-item>
             <dropdown-menu name="Account" icon="person">
               <div v-if="!role">
                 <dropdown-item :to="'/auth'">Login</dropdown-item>

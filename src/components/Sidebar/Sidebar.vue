@@ -3,7 +3,7 @@
       <sidebar-logo></sidebar-logo>
       <div class="sidebar-wrapper">
         <ul class="nav" v-if="user.role === Roles.Pharmacist">
-          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Home" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="My patients" icon="contacts" to="/patients_list"></sidebar-item>
           <sidebar-item name="Consultation report" icon="assignment" to="/report"></sidebar-item>
           <sidebar-item name="Work calendar" icon="event" to="/work-calendar"></sidebar-item>
@@ -11,14 +11,14 @@
           <sidebar-item name="Issue medicine" icon="medication" to="/issue-reserved"></sidebar-item>
         </ul>
         <ul class="nav" v-else-if="user.role === Roles.Dermatologist">
-          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Home" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="My patients" icon="contacts" to="/patients_list"></sidebar-item>
           <sidebar-item name="Examination report" icon="assignment" to="/report"></sidebar-item>
           <sidebar-item name="Work calendar" icon="event" to="/work-calendar"></sidebar-item>
           <sidebar-item name="Vacation request" icon="holiday_village" to="/vacation-request"></sidebar-item>
         </ul>
         <ul class="nav" v-else-if="user.role === Roles.SystemAdmin">
-          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Home" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
           <sidebar-item name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
@@ -33,14 +33,14 @@
         </ul>
 
         <ul class="nav" v-else-if="user.role === Roles.Supplier">
-          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Home" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
           <sidebar-item name="Stock" icon="inventory_2" to="/suppliers/my-stock"></sidebar-item>
           <sidebar-item name="Offers" icon="local_offer" to="/suppliers/my-offers"></sidebar-item>
         </ul>
         <ul class="nav" v-else-if="user.role === Roles.Patient">
-          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Home" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
           <sidebar-item name="Shopping cart" icon="shopping_cart" to="/shoppingCart"></sidebar-item>
@@ -60,7 +60,7 @@
         </ul>
 
         <ul class="nav"  v-else-if="user.role === Roles.PharmacyAdmin">
-          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Home" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Dermatologists" icon="people" to="/dermatologists"></sidebar-item>
           <sidebar-item name="Pharmacy Reports" icon="local_pharmacy" to="/pharmacy-reports"></sidebar-item>
@@ -68,7 +68,7 @@
         </ul>
 
         <ul class="nav" v-else>
-          <sidebar-item name="Dashboard" icon="dashboard" to="/"></sidebar-item>
+          <sidebar-item name="Home" icon="dashboard" to="/"></sidebar-item>
           <sidebar-item name="Pharmacies" icon="local_pharmacy" to="/pharmacies"></sidebar-item>
           <sidebar-item name="Medicines" icon="medication" to="/medicines"></sidebar-item>
         </ul>
