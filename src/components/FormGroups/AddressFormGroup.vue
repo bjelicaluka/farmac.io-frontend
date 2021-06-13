@@ -23,7 +23,7 @@
           <text-input
             label="Street Name"
             v-model="address.streetName"
-            :isValid="validateText(address.streetName)"
+            :isValid="!!address.streetName"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid street name."
           />
@@ -38,7 +38,10 @@
           />
         </div>
       </form-row>
-      <Map :height="250" @click="onMapClick($event)" :center="address || null" :modalBoxId="modalBoxId">
+      <div>
+        <button-with-icon iconName="location_on" class="btn-round btn-sm" @click="findOnMap"> Find on map</button-with-icon>
+      </div>
+      <Map :height="250" :center="address || null" :modalBoxId="modalBoxId">
         <div slot="markers">
           <MapMarker :v-if="address.lat !== null && address.lng !== null" :lat="address.lat" :lng="address.lng">
             <div>
@@ -67,6 +70,9 @@ import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
 import { validateText } from '../../utils/validation'
+import toastr from 'toastr'
+import ButtonWithIcon from '../Form/ButtonWithIcon.vue'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     components: {
@@ -75,7 +81,8 @@ export default {
         TextInput,
         Map,
         MapMarker,
-        InputErrorMessage
+        InputErrorMessage,
+        ButtonWithIcon
     },
 
     props: {
@@ -103,17 +110,35 @@ export default {
             default: ''
         }
     },
+    computed: {
+        ...mapGetters({
+            locationData: 'address/getLocationData',
+            result: 'address/getResult'
+        })
+    },
     watch: {
-      address() {
-        console.log(this.address.lat)
-      }
+      locationData(data) {
+          this.address.lat = parseFloat(data.lat);
+          this.address.lng = parseFloat(data.lon);
+          this.address.streetNumber = data.address.house_number;
+          this.address.streetName = data.address.road;
+          this.address.city = data.address.city;
+          this.address.state = data.address.country;
+      },
+      result({label, ok, message}) {
+          if(label === 'addressWarn')
+              toastr.warning(message);
+          else
+              toastr.error(message);
+      },
     },
     methods: {
-        onMapClick(e) {
-            this.address.lat = e.latlng.lat;
-            this.address.lng = e.latlng.lng;
+        ...mapActions({ 
+            fetchLocationData: 'address/fetchLocationData'
+        }),
+        findOnMap() {
+            this.fetchLocationData(`${this.address.state} ${this.address.city} ${this.address.streetName} ${this.address.streetNumber}`);
         },
-
         validateText(text) {
             return validateText(text);
         }
