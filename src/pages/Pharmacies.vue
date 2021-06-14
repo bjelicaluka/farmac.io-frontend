@@ -82,7 +82,7 @@ export default {
     watch: {
       result({label, ok}) {
         if(['add', 'update'].indexOf(label) !== -1 && ok)
-            this.fetchPharmacies();
+            this.searchPharmacies({ ...this.searchParams, page: this.page });
       }
   },
 
