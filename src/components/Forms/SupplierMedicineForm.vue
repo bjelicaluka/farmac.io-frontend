@@ -25,7 +25,7 @@
       />
     </FormRow>
 
-    <Button @click="showErrorMessage = true" class="btn btn-small btn-sm pull-right" type="submit">Add To Stock</Button>
+    <Button @click="showErrorMessage = true" class="btn btn-small btn-sm pull-right" type="submit">{{!isEdit ? 'Add To' : 'Update'}} Stock</Button>
   </Form>
 </template>
 
