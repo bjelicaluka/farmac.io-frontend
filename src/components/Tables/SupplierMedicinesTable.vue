@@ -14,7 +14,7 @@
                         supplierMedicine.medicine && supplierMedicine.medicine.name,
                         supplierMedicine.medicine && supplierMedicine.medicine.manufacturer,
                         supplierMedicine.quantity,
-                        supplierMedicine.medicine && supplierMedicine.medicine.averageGrade
+                        supplierMedicine.medicine && parseFloat(supplierMedicine.medicine.averageGrade).toFixed(2) + ' / 5.0'
                     ]"
                 >
                     <div class="pull-right text-gray">
@@ -32,7 +32,7 @@
             </TableBody>
         </Table>
 
-        <Modal modalBoxId="supplierMedicineModal" title="Add Medicine To Stock" >
+        <Modal modalBoxId="supplierMedicineModal" :title="(!isEdit ? 'Add Medicine To Stock' : 'Update Medicine From Stock')" >
             <div slot="body">
                 <SupplierMedicineForm
                     :isEdit="isEdit"
