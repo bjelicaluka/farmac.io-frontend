@@ -69,7 +69,6 @@ export default {
     watch: {
         selectedComplaintOption() {
             this.showAll = this.selectedComplaintOption === '';
-            console.log(this.showAll)
             this.fetchComplaintsPagesTo({ showAll: this.showAll, page: this.page });
         }
     },
