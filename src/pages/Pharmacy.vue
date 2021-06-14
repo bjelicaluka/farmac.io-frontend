@@ -197,7 +197,7 @@ export default {
             }
         },
         appointmentsResult({ok, label}){
-            if(label==='reserveAppointment' && ok) {
+            if(label === 'reserveAppointment' || label === 'addDermatologist' && ok) {
                 this.fetchDermatologistAppointmentsPage({pharmacyId: this.pharmacyId, page: this.appointmentsPage});
             }
         },
@@ -208,7 +208,7 @@ export default {
         },
         pharmacyPromotionsResult({ok, label}){
             if(['add', 'update', 'delete'].find(l => l === label)) {
-                ok && this.fetchPharmacyPromotions(this.pharmacyId);
+                ok && this.fetchPharmacyPromotionsPage({pharmacyId: this.pharmacyId, page: this.promotionsPage});
             }
         },
         pharmacyOrderProcessedFilter() {
@@ -228,7 +228,7 @@ export default {
 
         absenceRequestResult({label}) {
             if(label === 'acceptAbsenceRequest' || label === 'declineAbsenceRequest') {
-                this.fetchAbsenceRequestsForPharmacy(this.pharmacyId);
+                this.fetchAbsenceRequestsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.absenceRequestsPage});
             }
         },
 
