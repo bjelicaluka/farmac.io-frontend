@@ -9,19 +9,13 @@
         </TableBody>
     </Table>
     <ModalOpener id="reserveMedicine" modalBoxId="enterDateModal">
-        <Button class="pull-right">Reserve medicines</Button>
+        <Button class="pull-right" @click="openingModal">Reserve medicines</Button>
     </ModalOpener>
     <Modal modalBoxId="enterDateModal" title="Reservation">
         <div slot="body">
             <Card title="Enter the date by which you will take the medicine">
                 <Form @submit="reserveMedicinesForPharmacy">
-                    <DateTimePicker
-                        v-model="selectedDate"
-                        :isValid="!!selectedDate"
-                        :showErrorMessage="showErrorMessage"
-                        errorMessage="You have to select date."
-                        type="datetime"
-                    />
+                    <DateTimePicker type="datetime" />
                     <Button @click="showErrorMessage = true" type="submit" class="pull-right">Reserve medicines</Button>
                 </Form>
             </Card>
@@ -43,6 +37,7 @@ import Card from '../Card/Card.vue'
 import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener'
 import DateTimePicker from '../Form/DateTimePicker.vue'
+import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import { getUserIdFromToken } from '../../utils/token'
 
@@ -86,16 +81,25 @@ export default {
             this.removeItem({pharmacyId, medicineId, quantity});
         },
         reserveMedicinesForPharmacy() {
-            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: this.selectedDate.format(), patientId: getUserIdFromToken()})
+            $('#enterDateModal').modal('hide');
+            this.selectedDate =  $('.datetimepicker').val();
+            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: moment(this.selectedDate).format(), patientId: getUserIdFromToken()})
+        },
+        openingModal() {
+            $('.datetimepicker').datetimepicker({
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-chevron-up",
+                    down: "fa fa-chevron-down",
+                    previous: 'fa fa-chevron-left',
+                    next: 'fa fa-chevron-right',
+                    today: 'fa fa-screenshot',
+                    clear: 'fa fa-trash',
+                    close: 'fa fa-remove'
+                }
+            });
         }
-    },
-
-    watch: {
-    },
-
-    mounted() {
-
     }
-
 }
 </script>
