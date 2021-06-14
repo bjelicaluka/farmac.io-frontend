@@ -5,7 +5,7 @@
           <text-input
             label="State"
             v-model="address.state"
-            :isValid="validateText(address.state)"
+            :isValid="!!address.state"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid state."
           />
@@ -14,7 +14,7 @@
           <text-input
             label="City"
             v-model="address.city"
-            :isValid="validateText(address.city)"
+            :isValid="!!address.city"
             :showErrorMessage="showErrorMessage"
             errorMessage="Please insert valid city."
           />
@@ -56,7 +56,7 @@
       <InputErrorMessage
         :isValid="showErrorMessage ? !!address.lat && !!address.lng : true"
       >
-        Please pick a location on the map.
+        Please find location on the map.
       </InputErrorMessage>
     </form-group>
 </template>
@@ -69,7 +69,6 @@ import TextInput from '../Form/TextInput.vue'
 import Map from '../Map/Map.vue'
 import MapMarker from '../Map/MapMarker.vue'
 import InputErrorMessage from '../Form/InputErrorMessage.vue'
-import { validateText } from '../../utils/validation'
 import toastr from 'toastr'
 import ButtonWithIcon from '../Form/ButtonWithIcon.vue'
 import { mapActions, mapGetters } from 'vuex'
@@ -120,7 +119,7 @@ export default {
       locationData(data) {
           this.address.lat = parseFloat(data.lat);
           this.address.lng = parseFloat(data.lon);
-          this.address.streetNumber = data.address.house_number;
+          this.address.streetNumber = data.address.house_number || this.address.streetNumber;
           this.address.streetName = data.address.road;
           this.address.city = data.address.city;
           this.address.state = data.address.country;
@@ -138,9 +137,6 @@ export default {
         }),
         findOnMap() {
             this.fetchLocationData(`${this.address.state} ${this.address.city} ${this.address.streetName} ${this.address.streetNumber}`);
-        },
-        validateText(text) {
-            return validateText(text);
         }
     }
 }

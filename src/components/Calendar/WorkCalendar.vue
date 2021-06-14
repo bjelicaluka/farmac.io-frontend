@@ -8,7 +8,7 @@
     v-model="currentPharmacy"
   />
   <FullCalendar :options="calendarOptions" ref="calendar" />
-  <Modal modalBoxId="selectedEventModal" :title="selectedEvent.extendedProps.isAppointment?'Appointment':selectedEvent.title">
+  <Modal modalBoxId="selectedEventModal" :title="selectedEvent.extendedProps.isAppointment?'Appointment':selectedEvent.title+''">
     <div slot="body">
       <Table v-if="selectedEvent.extendedProps.isAppointment">
         <TableRow :values="['Patient', `${selectedEvent.title}`]"></TableRow>
