@@ -333,6 +333,10 @@ export default {
             this.fetchPharmacyAdminById(this.user.id);
         }
 
+        if(this.user.role === Roles.Supplier) {
+            this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, page: this.pharmacyOrdersPage});
+        }
+
         this.fetchPharmacy(this.pharmacyId);
         this.fetchPharmacyPharmacists(this.pharmacyId);
         this.fetchPharmacyDermatologists(this.pharmacyId);
