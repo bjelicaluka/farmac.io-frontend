@@ -22,13 +22,13 @@
                     :values="[
                         formatOrderedMedicines(pharmacyOrder),
                         formatDateTime(pharmacyOrder.offersDeadline),
-                        pharmacyOrder.isProcessed ? 'Processed' : 'Waiting to be processed'
+                        pharmacyOrder.isProcessed ? 'Processed' : (hasDatePassed(pharmacyOrder.offersDeadline) ? 'Waiting to be processed' : 'Waiting for offers')
                     ]"
                 >
                     <div class="pull-right text-gray">
-                        <DropDownMenu>
+                        <DropDownMenu v-if="user.role === Roles.PharmacyAdmin || (user.role === Roles.Supplier && !pharmacyOrder.isProcessed && !hasDatePassed(pharmacyOrder.offersDeadline))">
                             <ModalOpener
-                                v-if="user.role === Roles.PharmacyAdmin"
+                                v-if="user.role === Roles.PharmacyAdmin && !pharmacyOrder.isProcessed && !hasDatePassed(pharmacyOrder.offersDeadline)"
                                 modalBoxId="pharmacyOrderModal"
                             >
                                 <DropDownItem @click="selectedPharmacyOrder = pharmacyOrder">Edit</DropDownItem>
@@ -177,6 +177,10 @@ export default {
             const string = pharmacyOrder.orderedMedicines.map(({medicine, quantity}) => `${medicine.name}: ${quantity}`).join(', ');
             return string.length >= maxLength ? string.substring(0, maxLength - 3) + '...' : string;
         },
+
+        hasDatePassed(date) {
+            return moment().isAfter(date);
+        }
     },
 }
 </script>
