@@ -230,6 +230,10 @@ export default {
             if(label === 'acceptAbsenceRequest' || label === 'declineAbsenceRequest') {
                 this.fetchAbsenceRequestsPageForPharmacy({pharmacyId: this.pharmacyId, page: this.absenceRequestsPage});
             }
+
+            if(label === 'acceptAbsenceRequest') {
+                this.fetchDermatologistAppointmentsPage({pharmacyId: this.pharmacyId, page: this.appointmentsPage});
+            }
         },
 
         notInStockRecordResult({label, ok, message}) {
