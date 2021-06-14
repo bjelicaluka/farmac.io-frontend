@@ -122,7 +122,7 @@ export default {
     },
 
     methods: {
-        handleSearch(name, city) {
+        handleSearch(name, streetAndCity) {
             let sortCriteria = this.sortCriteria.filter(item => item.value == this.selectedSortCriteria)[0]
             sortCriteria = this.selectedSortCriteria ? sortCriteria['label'].toLowerCase() : '';
             let isAscending =  this.selectedIsAsc == 1 ? true : false
@@ -136,12 +136,12 @@ export default {
             window.navigator.geolocation.getCurrentPosition(function(position){
                 let userLat = position.coords.latitude;
                 let userLon = position.coords.longitude;
-                emitSearch( {name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
+                emitSearch( {name, streetAndCity, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
                 }, 
                 function(){
                     let userLat = 200;
                     let userLon = 200;
-                    emitSearch({name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
+                    emitSearch({name, streetAndCity, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon})
                 })
         },
 
