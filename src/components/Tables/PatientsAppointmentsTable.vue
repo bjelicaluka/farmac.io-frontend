@@ -72,7 +72,7 @@ export default {
   },
   watch: {
     getResult({label, ok, message}) {
-      if(label === 'cancel'){
+      if(label === 'cancelWithDermatologist' || label === "cancelWithPharmacist"){
         if(ok) {
           toastr.success(message);
         }
