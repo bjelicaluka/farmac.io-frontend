@@ -6,7 +6,7 @@
           <TableRow 
             v-for="pharmacy in pharmacies" 
             :key="pharmacy.id" 
-            :values="[pharmacy.name, pharmacy.averageGrade, formAddress(pharmacy), pharmacy.consultationPrice]">
+            :values="[pharmacy.name, parseFloat(pharmacy.averageGrade).toFixed(2) + ' / 5.00', formAddress(pharmacy), pharmacy.consultationPrice]">
             <ModalOpener id="pharmacists" modalBoxId="pharmacistsModal">
               <RoundButton :title="'See pharmacists'" :iconName="'people'" @click="selectPharmacy(pharmacy)"></RoundButton>
             </ModalOpener>
