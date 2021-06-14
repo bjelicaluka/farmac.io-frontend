@@ -33,12 +33,12 @@ let selectOptions = [
     label: 'Date - Descending'
   },
   {
-    value: '-asc',
-    label: ' - Ascending'
+    value: 'price-asc',
+    label: 'Price - Ascending'
   },
   {
-    value: '-desc',
-    label: ' - Descending'
+    value: 'price-desc',
+    label: 'Price - Descending'
   },
     {
     value: 'duration-asc',
