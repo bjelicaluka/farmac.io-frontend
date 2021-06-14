@@ -66,7 +66,7 @@
                     :isEdit="!!selectedPharmacyOrder" 
                     :existingPharmacyOrder="selectedPharmacyOrder" 
                     :pharmacyId="pharmacyId"
-                    pharmacyAdminId="08d8f514-5921-423d-852c-694311688aa2"
+                    :pharmacyAdminId="user && user.userId"
                 />
             </div>
         </Modal>
@@ -111,7 +111,7 @@ import Modal from '../Modal/Modal.vue'
 import {Roles} from '../../constants'
 import DropDownMenu from '../DropdownMenu/DropdownMenu'
 import DropDownItem from '../DropdownMenu/DropdownItem'
-import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
+import { getAccountIdFromToken, getRoleFromToken, getUserIdFromToken } from '../../utils/token'
 
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
@@ -133,6 +133,7 @@ export default {
     mounted() {
         this.user = {
             id: getAccountIdFromToken(),
+            userId: getUserIdFromToken(),
             role: getRoleFromToken()
         }
     },

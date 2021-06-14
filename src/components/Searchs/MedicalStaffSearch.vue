@@ -72,7 +72,7 @@ export default {
 
     methods: {
         ...mapActions({
-            fetchPharmacies: 'pharmacies/fetchPharmacies',
+            fetchPharmacies: 'pharmacies/fetchAllPharmacies',
         }),
 
         handleSearch(name) {

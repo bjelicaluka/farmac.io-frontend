@@ -18,10 +18,9 @@
             :key="a.id" 
             :values="[`${a.medicalStaff.firstName} ${a.medicalStaff.lastName} (${parseFloat(a.medicalStaff.averageGrade).toFixed(2)})`, a.isReserved ? 'Yes' : 'No', formatDate(a.dateTime), formatTime(a.dateTime), formatDuration(a.duration), a.price + ' RSD']"
           >
-            <div class="pull-right text-gray">
+            <div v-if="!a.isReserved && user.role === Roles.Patient" class="pull-right text-gray">
               <drop-down-menu>
                   <drop-down-item
-                    v-if="!a.isReserved && user.role === Roles.Patient" 
                     @click="handleMakeAppointmentClick(a)"
                   >
                     Make appointment
