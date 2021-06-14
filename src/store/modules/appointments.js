@@ -5,6 +5,8 @@ const PAGE_SIZE = 5;
 
 const state = {
     appointments: null,
+    appointmentsWithPharmacists: null,
+    appointmentsWithDermatologists: null,
     appointment: null,
     dermatologistAppointments: null,
     calendarEvents: null,
@@ -13,6 +15,8 @@ const state = {
 
 const getters = {
     getAppointments: state => state.appointments,
+    getAppointmentsWithPharmacists: state => state.appointmentsWithPharmacists,
+    getAppointmentsWithDermatologists: state => state.appointmentsWithDermatologists,
     getAppointment: state => state.appointment,
     getDermatologistAppointments: state => state.dermatologistAppointments,
     getCalendarEvents: state => state.calendarEvents,
@@ -77,7 +81,7 @@ const actions = {
     fetchPatientsFutureAppointments: (context, patientId) => {
         axios.get(`/appointments/future-appointments/${patientId}`)
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithDermatologists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -86,7 +90,7 @@ const actions = {
     fetchPatientsFutureAppointmentsWithPharmacists: (context, patientId) => {
         axios.get(`/appointments/future-with-pharmacists/${patientId}`)
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithPharmacists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -95,10 +99,10 @@ const actions = {
     cancelAppointment: (context, appointmentId) => {
         axios.delete(`/appointments/cancel-appointment/${appointmentId}`)
         .then(resp => {
-            context.commit('setResult', {label: 'cancel', message: 'You have successfully cancelled your appointment.', ok: true})
+            context.commit('setResult', {label: 'cancelWithDermatologist', message: 'You have successfully cancelled your appointment.', ok: true})
         })
         .catch(err => {
-            context.commit('setResult', {label: 'cancel', message: err.response.data.ErrorMessage, ok: false})
+            context.commit('setResult', {label: 'cancelWithDermatologist', message: err.response.data.ErrorMessage, ok: false})
         });
     },
     fetchMedicalStaffAppointmentsToReport: (context, medicalStaffId) => {
@@ -131,7 +135,7 @@ const actions = {
     sortHistoryVisitingDermatologist: (context, {patientId, criteria, isAsc}) => {
         axios.get(`/appointments/history/${patientId}/sort?criteria=${criteria}&isAsc=${isAsc}`)
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithDermatologists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -176,10 +180,10 @@ const actions = {
     cancelAppointmentWithPharmacist: (context, appointmentId) => {
         axios.delete(`/appointments/pharmacist/${appointmentId}`)
         .then(res => {
-            context.commit('setResult', {label: 'cancel', message: 'You have successfully cancelled your appointment.', ok: true})
+            context.commit('setResult', {label: 'cancelWithPharmacist', message: 'You have successfully cancelled your appointment.', ok: true})
         })
         .catch(err => {
-            context.commit('setResult', {label: 'cancel', message: err.response.data.ErrorMessage, ok: false})
+            context.commit('setResult', {label: 'cancelWithPharmacist', message: err.response.data.ErrorMessage, ok: false})
         });
     },
     fetchAppointmentsAsEvents: (context, medicalStaffId) => {
@@ -194,7 +198,7 @@ const actions = {
     fetchHistoryOfVisitingPharmacists: (context, patientId) => {
         axios.get(`/appointments/history-visit-pharmacists/${patientId}`)
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithPharmacists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -203,7 +207,7 @@ const actions = {
     sortHistoryVisitingPharmacists: (context, {patientId, criteria, isAsc}) => {
         axios.get(`/appointments/history-visit-pharmacists/${patientId}/sort`, {params: {criteria, isAsc}})
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithPharmacists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -212,7 +216,7 @@ const actions = {
     fetchHistoryOfVisitingDermatologistToPage: (context, { patientId, pageNumber }) => {
         axios.get(`/appointments/history-with-dermatologists/${patientId}/page-to`, { params: { number: pageNumber, size: PAGE_SIZE }})
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithDermatologists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -221,7 +225,7 @@ const actions = {
     fetchHistoryOfVisitingPharmacistsToPage: (context, { patientId, pageNumber }) => {
         axios.get(`/appointments/history-visit-pharmacists/${patientId}/page-to`, { params: { number: pageNumber, size: PAGE_SIZE }})
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithPharmacists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -230,7 +234,7 @@ const actions = {
     sortHistoryVisitingPharmacistsToPage: (context, {patientId, criteria, isAsc, pageNumber}) => {
         axios.get(`/appointments/history-visit-pharmacists/${patientId}/sort/page-to`, {params: {criteria, isAsc, number: pageNumber, size: PAGE_SIZE}})
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithPharmacists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -239,7 +243,7 @@ const actions = {
     sortHistoryVisitingDermatologistToPage: (context, {patientId, criteria, isAsc, pageNumber}) => {
         axios.get(`/appointments/history-with-dermatologists/${patientId}/sort/page-to`, {params: {criteria, isAsc, number: pageNumber, size: PAGE_SIZE}})
         .then(resp => {
-            context.commit('setAppointments', resp.data);
+            context.commit('setAppointmentsWithDermatologists', resp.data);
         })
         .catch(err => {
             context.commit('setResult', {label: 'fetch', ok: false, message: err.response.data.ErrorMessage});
@@ -250,6 +254,12 @@ const actions = {
 const mutations = {
     setAppointments: (state, appointments) => {
         state.appointments = appointments;
+    },
+    setAppointmentsWithPharmacists: (state, appointments) => {
+        state.appointmentsWithPharmacists = appointments;
+    },
+    setAppointmentsWithDermatologists: (state, appointments) => {
+        state.appointmentsWithDermatologists = appointments;
     },
     setAppointment: (state, appointment) => {
         state.appointment = appointment;
