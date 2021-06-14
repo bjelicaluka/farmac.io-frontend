@@ -33,8 +33,8 @@ const actions = {
         })
     },
 
-    fetchComplaintsPagesTo: (context, page) => {
-        axios.get(`/complaints/pages-to`, {params: {number: page, size: PAGE_SIZE}})
+    fetchComplaintsPagesTo: (context, { showAll, page }) => {
+        axios.get(`/complaints/pages-to`, {params: {showAll: showAll, number: page, size: PAGE_SIZE}})
         .then(response => {
             context.commit('setComplaints', response.data);
         })
