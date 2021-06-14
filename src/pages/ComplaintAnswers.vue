@@ -10,7 +10,7 @@
                         </div>
                     </div>
 
-                    <Form v-if="role === roles.SystemAdmin" @submit="handleSubmit">
+                    <Form v-if="role === roles.SystemAdmin && complaint && complaint.answers.length === 0" @submit="handleSubmit">
                         <FormGroup>
                             <TextArea
                                 label="Answer text"
