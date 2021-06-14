@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const state = {
     futureMedicineReservations: {},
+    pastMedicineReservations: {},
     result: null,
     reservedMedicines: [],
     reservation: null
@@ -9,6 +10,7 @@ const state = {
 
 const getters = {
     getFutureMedicineReservations: state => state.futureMedicineReservations,
+    getPastMedicineReservations: state => state.pastMedicineReservations,
     getResult: state => state.result,
     getReservedMedicines: state => state.reservedMedicines,
     getReservation: state => state.reservation
@@ -20,6 +22,16 @@ const actions = {
         axios.get(`/reservations/futureReservations/${patientId}`)
         .then(response => {
             context.commit('setFutureMedicineReservations', response.data);
+        })
+        .catch(error => {
+            context.commit('setResult', { ok: false });
+        });
+    },
+
+    fetchPastMedicineReservations(context, patientId){
+        axios.get(`/reservations/pastReservations/${patientId}`)
+        .then(response => {
+            context.commit('setPastMedicineReservations', response.data);
         })
         .catch(error => {
             context.commit('setResult', { ok: false });
@@ -78,6 +90,10 @@ const actions = {
 const mutations = {
     setFutureMedicineReservations: (state, futureMedicineReservations) => {
         state.futureMedicineReservations = futureMedicineReservations;
+    },
+
+    setPastMedicineReservations: (state, pastMedicineReservations) => {
+        state.pastMedicineReservations = pastMedicineReservations;
     },
 
     setResult: (state, result) => {

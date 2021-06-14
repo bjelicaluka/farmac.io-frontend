@@ -2,7 +2,10 @@
     <div class="content">
         <div class="container-fluid">
             <Card :title="'Medicine reservations'" :description="'You can cancel your reservation 24 hours before pickup.'">
-                <FutureMedicineReservationsTable />
+                <FutureMedicineReservationsTable :canCancel="true"/>
+            </Card>
+            <Card :title="'Medicine reservations that you picked up.'">
+                <FutureMedicineReservationsTable :canCancel="false"/>
             </Card>
         </div>
     </div>

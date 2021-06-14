@@ -13,10 +13,10 @@
         <Table>
             <TableHead :columnNames="['Code', 'Name of pharmacy', 'Address of pharmacy', 'Pickup deadline', 'Price', '', ' ']"></TableHead>
             <TableBody v-if="pharmacies.length > 0">
-                <TableRow v-for="reservation in futureMedicineReservations" :key="reservation.reservationId"
+                <TableRow v-for="reservation in medicineReservations" :key="reservation.reservationId"
                     :values="[reservation.uniqueId, ...formatPharmacy(reservation.pharmacyId),
                             formatDateTime(reservation.pickupDeadline), reservation.price + ' RSD']">
-                    <ModalOpener modalBoxId="cancelModal">
+                    <ModalOpener modalBoxId="cancelModal" v-if="canCancel">
                         <RoundButton :title="'Cancel reservation'" @click="reservationId=reservation.reservationId" :iconName="'clear'"/>
                     </ModalOpener>
                     <RoundButton title="See reserved medicines" @click="displayReservedMedicines(reservation.reservationId)" :iconName="'medical_services'"/>
@@ -65,9 +65,11 @@ export default {
         OptionModalButtons
     },
 
+    props: ['canCancel'],
+
     data: function() {
         return {
-            futureMedicineReservations: [],
+            medicineReservations: [],
             pharmacies: [],
             reservedMedicines: [],
             medicines: [],
@@ -78,6 +80,7 @@ export default {
     computed: {
         ...mapGetters({
             getFutureMedicineReservations: 'medicineReservations/getFutureMedicineReservations',
+            getPastMedicineReservations: 'medicineReservations/getPastMedicineReservations',
             result: 'medicineReservations/getResult',
             getPharmacies: 'pharmacies/getPharmacies',
             getReservedMedicines: 'medicineReservations/getReservedMedicines',
@@ -87,6 +90,7 @@ export default {
     methods: {
         ...mapActions({
             fetchMedicineReservations: 'medicineReservations/fetchFutureMedicineReservations',
+            fetchPastMedicineReservations: 'medicineReservations/fetchPastMedicineReservations',
             cancelReservation: 'medicineReservations/cancelReservation',
             getAllPharmacies: 'pharmacies/fetchAllPharmacies',
             fetchReservedMedicines: 'medicineReservations/fetchReservedMedicines',
@@ -119,7 +123,15 @@ export default {
 
     watch: {
         getFutureMedicineReservations(reservations) {
-            this.futureMedicineReservations = reservations;
+            if(this.canCancel){
+                this.medicineReservations = reservations;
+            }
+        },
+
+        getPastMedicineReservations(reservations) {
+            if(!this.canCancel){
+                this.medicineReservations = reservations;
+            }
         },
 
         result({label, ok, message}) {
@@ -134,21 +146,26 @@ export default {
             }
         },
 
-        getPharmacies(pharmacies){
+        getPharmacies(pharmacies) {
             this.pharmacies = pharmacies;
         },
 
-        getReservedMedicines(reservedMedicines){
+        getReservedMedicines(reservedMedicines) {
             this.reservedMedicines = reservedMedicines;
         },
 
-        getMedicines(medicines){
+        getMedicines(medicines) {
             this.medicines = medicines;
         }
     },
 
     mounted() {
-        this.fetchMedicineReservations(getUserIdFromToken());
+        if(this.canCancel) {
+            this.fetchMedicineReservations(getUserIdFromToken());
+        }
+        else {
+            this.fetchPastMedicineReservations(getUserIdFromToken());
+        }
         this.getAllPharmacies();
     }
 
