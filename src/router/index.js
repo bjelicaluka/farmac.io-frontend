@@ -17,12 +17,11 @@ import QrScan from '../pages/QrScan.vue'
 import ShoppingCart from '../pages/ShoppingCart.vue'
 import Patients from '../pages/Patients.vue'
 import FutureMedicineReservations from '../pages/FutureMedicineReservations.vue'
-import FutureDermatologistAppointments from '../pages/FutureDermatologistAppointments.vue'
+import FutureAppointments from '../pages/FutureAppointments.vue'
 import AppointmentsToReport from '../pages/AppointmentsToReport.vue'
 import Report from '../pages/Report.vue'
 import ViewReport from '../pages/ViewReport.vue'
-import HistoryOfVisitingDermatologist from '../pages/HistoryOfVisitingDermatologist.vue'
-import FuturePharmacistsAppointments from '../pages/FuturePharmacistsAppointments.vue'
+import AppointmentsHistory from '../pages/AppointmentsHistory.vue'
 import AppointmentWithPharmacist from '../pages/AppointmentWithPharmacist.vue'
 import Grades from '../pages/Grades.vue'
 import WriteComplaint from '../pages/WriteComplaint.vue'
@@ -31,7 +30,6 @@ import ComplaintAnswers from '../pages/ComplaintAnswers.vue'
 import Answers from '../pages/Answers.vue'
 import LoyaltyPoints from '../pages/LoyaltyPoints'
 import LoyaltyPrograms from '../pages/LoyaltyPrograms'
-import HistoryOfVisitingPharmacists from '../pages/HistoryOfVisitingPharmacists'
 import ERecipes from '../pages/ERecipes'
 import IssueReserved from '../pages/IssueReserved'
 import AbsenceRequest from '../pages/AbsenceRequest'
@@ -240,9 +238,9 @@ const routes = [
     }
   },
   {
-    path: '/dermatologist-appointments',
-    name: 'FutureDermatologistAppointments',
-    component: FutureDermatologistAppointments,
+    path: '/future-appointments',
+    name: 'FutureAppointments',
+    component: FutureAppointments,
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Patient]
@@ -258,19 +256,10 @@ const routes = [
     }
   },
   {
-    path: '/history-dermatologist-appointments',
-    name: 'HistoryOfVisitingDermatologist',
-    component: HistoryOfVisitingDermatologist,
+    path: '/appointments-history',
+    name: 'AppointmentsHistory',
+    component: AppointmentsHistory,
     meta: {
-      layout: 'AppLayoutMain',
-      authorizedRoles: [Roles.Patient]
-    }
-  },
-  {
-    path: '/pharmacists-appointments',
-    name: 'FuturePharmacistsAppointments',
-    component: FuturePharmacistsAppointments,
-      meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.Patient]
     }
@@ -362,15 +351,6 @@ const routes = [
     meta: {
       layout: 'AppLayoutMain',
       authorizedRoles: [Roles.SystemAdmin]
-    }
-  },
-  {
-    path: '/history-pharmacists-visits',
-    name: 'HistoryOfVisitingPharmacists',
-    component: HistoryOfVisitingPharmacists,
-    meta: {
-      layout: 'AppLayoutMain',
-      authorizedRoles: [Roles.Patient]
     }
   },
   {
