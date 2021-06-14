@@ -351,6 +351,7 @@ export default {
             
             if(this.existingMedicine) {
                 this.medicine = this.existingMedicine;
+                this.medicines = this.medicines.filter(m => m.value != this.existingMedicine.id);
             }
         },
 
