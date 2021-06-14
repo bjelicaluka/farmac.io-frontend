@@ -6,7 +6,7 @@
           <TableRow 
             v-for="pharmacy in pharmacies" 
             :key="pharmacy.id" 
-            :values="[pharmacy.name, formAddress(pharmacy), parseFloat(pharmacy.averageGrade).toFixed(2)]">
+            :values="[pharmacy.name, formAddress(pharmacy), parseFloat(pharmacy.averageGrade).toFixed(2) + ' / 5.00']">
             <StarRating v-model="pharmacy.grade" @rating-selected="selectedGrade(pharmacy)" :star-size="20"></StarRating>
           </TableRow>
         </TableBody>
@@ -14,7 +14,7 @@
           <TableRow 
             v-for="pharmacy in pharmacies" 
             :key="pharmacy.id" 
-            :values="[pharmacy.pharmacy.name, formAddress(pharmacy.pharmacy), parseFloat(pharmacy.pharmacy.averageGrade).toFixed(2)]">
+            :values="[pharmacy.pharmacy.name, formAddress(pharmacy.pharmacy), parseFloat(pharmacy.pharmacy.averageGrade).toFixed(2) + ' / 5.00']">
                 <StarRating v-model="pharmacy.grade" @rating-selected="changePharmacyGrade(pharmacy)" :star-size="20"></StarRating>
           </TableRow>
           <Pagination @pageChange="$emit('pageChange', $event)" />

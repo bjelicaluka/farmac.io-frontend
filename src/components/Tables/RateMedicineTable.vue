@@ -3,13 +3,13 @@
     <Table>
         <TableHead :columnNames="['Medicine name', 'Manufacturer', 'Average grade', !isRated ? 'Rate' : 'Changeyour grade']"></TableHead>
         <TableBody v-if="!isRated">
-            <TableRow v-for="(medicine, index) in medicines" :key="index" :id="medicine.id" :values="[medicine.name, medicine.manufacturer, parseFloat(medicine.averageGrade).toFixed(2)]">
+            <TableRow v-for="(medicine, index) in medicines" :key="index" :id="medicine.id" :values="[medicine.name, medicine.manufacturer, parseFloat(medicine.averageGrade).toFixed(2) + ' / 5.00']">
                 <StarRating v-model="medicine.grade" @rating-selected="selectedGrade(medicine)" :star-size="20"></StarRating>
             </TableRow>
         </TableBody>
         <TableBody v-else>
             <TableRow v-for="(medicine, index) in medicines" :key="index" :id="medicine.id" :values="[medicine.medicine.name, medicine.medicine.manufacturer, 
-                parseFloat(medicine.medicine.averageGrade).toFixed(2)]">
+                parseFloat(medicine.medicine.averageGrade).toFixed(2) + ' / 5.00']">
                 <StarRating v-model="medicine.grade" @rating-selected="changeMedicineGrade(medicine)" :star-size="20"></StarRating>
             </TableRow>
             <Pagination @pageChange="$emit('pageChange', $event)" />

@@ -6,7 +6,7 @@
                     <TableRow
                         v-for="(pharmacist, index) in pharmacists"
                         :key="index"
-                        :values="[pharmacist.firstName, pharmacist.lastName, pharmacist.averageGrade]"
+                        :values="[pharmacist.firstName, pharmacist.lastName, parseFloat(pharmacist.averageGrade).toFixed(2) + ' / 5.00']"
                     >
                         <RoundButton title="Book appointment" iconName="schedule"  @click="handleBookAppointment(pharmacist.id)"></RoundButton>
                     </TableRow>

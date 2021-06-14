@@ -34,7 +34,7 @@
                 :key="pharmacy.id" 
                 :values="[
                     pharmacy.name,
-                    parseFloat(pharmacy.averageGrade).toFixed(2),
+                    parseFloat(pharmacy.averageGrade).toFixed(2) + ' / 5.00',
                     formAddress(pharmacy),
                     pharmacy.totalPriceOfMedicines + ' RSD',
                 ]"

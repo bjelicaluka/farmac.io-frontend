@@ -14,7 +14,7 @@
                         supplierMedicine.medicine && supplierMedicine.medicine.name,
                         supplierMedicine.medicine && supplierMedicine.medicine.manufacturer,
                         supplierMedicine.quantity,
-                        supplierMedicine.medicine && parseFloat(supplierMedicine.medicine.averageGrade).toFixed(2) + ' / 5.0'
+                        supplierMedicine.medicine && parseFloat(supplierMedicine.medicine.averageGrade).toFixed(2) + ' / 5.00'
                     ]"
                 >
                     <div class="pull-right text-gray">

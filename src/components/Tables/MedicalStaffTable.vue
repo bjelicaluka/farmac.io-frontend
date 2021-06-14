@@ -15,7 +15,7 @@
                     <TableRow
                         v-for="(staff, index) in medicalStaffs"
                         :key="index"
-                        :values="[`${staff.medicalStaff.firstName} ${staff.medicalStaff.lastName}`, parseFloat(staff.medicalStaff.averageGrade).toFixed(2)]"
+                        :values="[`${staff.medicalStaff.firstName} ${staff.medicalStaff.lastName}`, parseFloat(staff.medicalStaff.averageGrade).toFixed(2) + ' / 5.00']"
                     >
                         <StarRating v-model="staff.grade" @rating-selected="changeGrade(staff)" :star-size="20"></StarRating>
                     </TableRow>
