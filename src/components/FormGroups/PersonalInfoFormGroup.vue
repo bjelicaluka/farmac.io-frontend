@@ -25,7 +25,7 @@
                 :isValid="validateDateOfBirth()"
                 :showErrorMessage="showErrorMessage"
                 label="Date of Birth"
-                errorMessage="You must be at least 13 years old."
+                :errorMessage="dateOfBirthErrorMessage"
                 type="date"
                 id="patientDateOfBirth"
             />
@@ -92,12 +92,29 @@ export default {
         }
     },
 
+    data: function() {
+        return {
+            dateOfBirthErrorMessage: ''
+        }
+    },
+
     methods: {
         validateText(text) {
             return validateText(text);
         },
         validateDateOfBirth() {
-            return !!this.user.dateOfBirth && moment().diff(this.user.dateOfBirth, 'years', false) >= 13;
+            if(!this.user.dateOfBirth || moment().diff(this.user.dateOfBirth, 'years', false) < 13) {
+                this.dateOfBirthErrorMessage = "You must be at least 13 years old.";
+                return false;
+            }
+
+            if(moment('01 01 1900').isAfter(moment(this.user.dateOfBirth))) {
+                this.dateOfBirthErrorMessage = "Date of birth must be after 1900.";
+                return false;
+
+            }
+            this.dateOfBirthErrorMessage = '';
+            return true;
         }
     }
 }
