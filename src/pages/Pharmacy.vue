@@ -168,6 +168,14 @@ export default {
                     :
                     this.fetchPharmacyDermatologists(this.pharmacyId);
             }
+
+            if(['update', 'delete'].indexOf(label) !== -1 && ok) {
+                this.dermatologistSearchName ? 
+                    this.handleSearchDermatologists(this.dermatologistSearchName)
+                    :
+                    this.fetchPharmacyDermatologists(this.pharmacyId);
+            }
+
         },
         pharmacistResult({label}) {
             if(label === 'delete' || label === 'add') {
