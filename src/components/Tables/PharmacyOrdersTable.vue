@@ -88,6 +88,7 @@
         >
             <div slot="body">
                 <SupplierOffersTable
+                    :forPharmacyAdmin=true
                     :supplierOffers="supplierOffers || []"
                 />
             </div>

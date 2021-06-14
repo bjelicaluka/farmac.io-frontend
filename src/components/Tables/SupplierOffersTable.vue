@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="col-3">
-        <SelectOptionInput class="justify-content-center align-items-center"
+        <SelectOptionInput 
+            v-if="!forPharmacyAdmin"
+            class="justify-content-center align-items-center"
             label="Filter by"
             :showLabel=false
             v-model="selectedFilterOption"
@@ -41,7 +43,7 @@
                         />
                     </div>
                 </TableRow>
-                <Pagination @pageChange="$emit('pageChange', $event)" />
+                <Pagination v-if="!forPharmacyAdmin" @pageChange="$emit('pageChange', $event)" />
             </TableBody>
         </Table>
 
@@ -95,7 +97,10 @@ let filterOptions = [
 
 export default {
     props: {
-        supplierOffers: {}
+        supplierOffers: {},
+        forPharmacyAdmin: {
+            default: false
+        }
     },
 
     data: () => {
