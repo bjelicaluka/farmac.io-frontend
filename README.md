@@ -3,6 +3,9 @@ Projekat za ISA + MRS.
 
 [![Build Status](https://jenkins.bjelicaluka.com/buildStatus/icon?job=farmac.io-frontend)](https://jenkins.bjelicaluka.com/job/farmac.io-frontend/)
 
+Poslednja verzija projekta se može naći na: <a href="http://farmac-io.bjelicaluka.com/">Ovde</a><br/>
+Vreme na live verziji je 2 sata unazad tako da će 16pm biti zapravo 14pm.
+
 ## Članovi tima:
 <ul>
 <li><a href="https://github.com/jojev">Jevtić Jovana</a></li>
