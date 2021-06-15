@@ -3,6 +3,7 @@
     <work-calendar v-if="!!workCalendarEvents"
       :workCalendarEvents="workCalendarEvents"
       :pharmacies="pharmaciesAsOptions"
+      :isForDerm="isForDerm"
     >
     </work-calendar>
 </div>
@@ -18,7 +19,8 @@ export default {
   components: { WorkCalendar },
   data() {
     return {
-      pharmaciesAsOptions: []
+      pharmaciesAsOptions: [],
+      isForDerm: getRoleFromToken() === Roles.Dermatologist
     }
   },
   computed: {
@@ -35,16 +37,13 @@ export default {
   },
   watch: {
     pharmacyNames() {
-      let names = [];
-      this.pharmacyNames.forEach(pn => names.push({label:pn, value:pn}))
-      this.pharmaciesAsOptions = names;
+      this.pharmaciesAsOptions = this.pharmacyNames.map(pharmacyName => ({label: pharmacyName, value: pharmacyName}));
     }
   },
   mounted() {
     const userId = getUserIdFromToken();
-    const userRole = getRoleFromToken();
     this.fetchAppointmentsAsEvents(userId);
-    if (userRole === Roles.Dermatologist)
+    if (this.isForDerm)
       this.fetchDermatologistsWorkPlaceNames(userId);
   }
 }

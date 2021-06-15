@@ -12,8 +12,7 @@
           <RoundButton :title="'Write report'" :iconName="'assignment'"
             @click="handleStart(appointment.id)"
             :disabled="isTooEarlyToWrite(appointment.dateTime)"
-          >
-          </RoundButton>
+          />
           </TableRow>
         </TableBody>
     </Table>
@@ -51,7 +50,7 @@ export default {
       this.$router.push(`/report/${appointmentId}`);
     },
     isTooEarlyToWrite(dateTime) {
-      return dateTime > moment().add(15, 'minutes');
+      return moment(dateTime) > moment().add(15, 'minutes');
     }
   },
 }

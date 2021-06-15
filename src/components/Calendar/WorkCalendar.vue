@@ -1,6 +1,6 @@
 <template>
 <div>
-  <SelectOptionInput v-if="!!pharmacies && userRole === Roles.Dermatologist"
+  <SelectOptionInput v-if="isForDerm"
     class="col-4"
     :label="'ALL PHARMACIES'"
     :showLabel="false"
@@ -52,9 +52,6 @@ import ButtonWithIcon from '../Form/ButtonWithIcon.vue'
 import ModalCloser from '../Modal/ModalCloser.vue'
 import SelectOptionInput from '../Form/SelectOptionInput.vue'
 
-import { getRoleFromToken } from '../../utils/token'
-import { Roles } from '../../constants'
-
 export default {
   components: {
     FullCalendar,
@@ -66,11 +63,9 @@ export default {
     ModalCloser,
     SelectOptionInput,
   },
-  props: ['workCalendarEvents', 'pharmacies', 'selectable'],
+  props: ['workCalendarEvents', 'pharmacies', 'selectable', 'isForDerm'],
   data() {
     return {
-      userRole: null,
-      Roles,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         headerToolbar: {
@@ -132,12 +127,12 @@ export default {
           a.setProp('display','auto')
         else a.setProp('display','none')
       });
+    },
+    workCalendarEvents() {
+      this.calendarOptions.events = this.workCalendarEvents.map(e => ({...e, classNames:[e.isAppointment?'appointment-event':'absence-event']}));
     }
-  },
-
-  mounted() {
-    this.userRole = getRoleFromToken();
   }
+
 }
 </script>
 
