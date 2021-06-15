@@ -8,15 +8,15 @@
                 </TableRow>
         </TableBody>
     </Table>
-    <ModalOpener id="reserveMedicine" modalBoxId="enterDateModal">
+    <ModalOpener id="reserveMedicine" :modalBoxId="'enterDateModal' + pharmacyId">
         <Button class="pull-right" @click="openingModal">Reserve medicines</Button>
     </ModalOpener>
-    <Modal modalBoxId="enterDateModal" title="Reservation">
-        <div slot="body">
+    <Modal :modalBoxId="'enterDateModal' + pharmacyId" title="Reservation">
+        <div slot="body"> 
             <Card title="Enter the date by which you will take the medicine">
                 <Form @submit="reserveMedicinesForPharmacy">
-                    <DateTimePicker type="datetime" />
-                    <Button @click="showErrorMessage = true" type="submit" class="pull-right">Reserve medicines</Button>
+                    <DateTimePicker type="datetime" :id="pharmacyId"/>
+                    <Button @click="showErrorMessage = true; " type="submit" class="pull-right">Reserve medicines</Button>
                 </Form>
             </Card>
         </div>
@@ -38,6 +38,7 @@ import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener'
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import moment from 'moment'
+import toastr from 'toastr'
 import { mapActions, mapGetters } from 'vuex'
 import { getUserIdFromToken } from '../../utils/token'
 
@@ -52,9 +53,9 @@ export default {
         TableRow,
         RoundButton,
         Button,
-        Form,
         Card,
         Modal,
+        Form,
         ModalOpener,
         DateTimePicker
     },
@@ -81,9 +82,14 @@ export default {
             this.removeItem({pharmacyId, medicineId, quantity});
         },
         reserveMedicinesForPharmacy() {
-            $('#enterDateModal').modal('hide');
-            this.selectedDate =  $('.datetimepicker').val();
-            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: moment(this.selectedDate).format(), patientId: getUserIdFromToken()})
+            $('#enterDateModal' + this.pharmacyId).modal('hide');
+            this.selectedDate =  $('#' + this.pharmacyId).val();
+            if(this.selectedDate === "" || this.selectedDate === null){
+                toastr.error("You have to select date.");
+            }
+            else {
+                this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: moment(this.selectedDate).format(), patientId: getUserIdFromToken()})
+            }
         },
         openingModal() {
             $('.datetimepicker').datetimepicker({
