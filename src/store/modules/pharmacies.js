@@ -99,8 +99,8 @@ const actions = {
         });
     },
 
-    searchPharmacies: (context, {name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon, page}) => {
-        axios.get(`/pharmacies/search/pages-to`, {params: {name, city, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon, number: page, size: PAGE_SIZE}})
+    searchPharmacies: (context, {name, streetAndCity, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon, page}) => {
+        axios.get(`/pharmacies/search/pages-to`, {params: {name, streetAndCity, sortCriteria, isAscending, gradeFrom, gradeTo, distanceFrom, distanceTo, userLat, userLon, number: page, size: PAGE_SIZE}})
         .then(resp => {
             context.commit('setPharmacies', resp.data)
         })
