@@ -8,15 +8,15 @@
                 </TableRow>
         </TableBody>
     </Table>
-    <ModalOpener id="reserveMedicine" modalBoxId="enterDateModal">
+    <ModalOpener id="reserveMedicine" :modalBoxId="'enterDateModal' + pharmacyId">
         <Button class="pull-right" @click="openingModal">Reserve medicines</Button>
     </ModalOpener>
-    <Modal modalBoxId="enterDateModal" title="Reservation">
-        <div slot="body">
+    <Modal :modalBoxId="'enterDateModal' + pharmacyId" title="Reservation">
+        <div slot="body"> 
             <Card title="Enter the date by which you will take the medicine">
                 <Form @submit="reserveMedicinesForPharmacy">
-                    <DateTimePicker type="datetime" />
-                    <Button @click="showErrorMessage = true" type="submit" class="pull-right">Reserve medicines</Button>
+                    <DateTimePicker type="datetime" :id="pharmacyId"/>
+                    <Button @click="showErrorMessage = true; " type="submit" class="pull-right">Reserve medicines</Button>
                 </Form>
             </Card>
         </div>
@@ -53,9 +53,9 @@ export default {
         TableRow,
         RoundButton,
         Button,
-        Form,
         Card,
         Modal,
+        Form,
         ModalOpener,
         DateTimePicker
     },
@@ -82,12 +82,12 @@ export default {
             this.removeItem({pharmacyId, medicineId, quantity});
         },
         reserveMedicinesForPharmacy() {
-            $('#enterDateModal').modal('hide');
-            this.selectedDate =  $('.datetimepicker').val();
+            $('#enterDateModal' + this.pharmacyId).modal('hide');
+            this.selectedDate =  $('#' + this.pharmacyId).val();
             if(this.selectedDate === "" || this.selectedDate === null){
                 toastr.error("You have to select date.");
             }
-            else{
+            else {
                 this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: moment(this.selectedDate).format(), patientId: getUserIdFromToken()})
             }
         },
