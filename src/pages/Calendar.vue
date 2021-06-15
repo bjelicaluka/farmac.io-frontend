@@ -37,7 +37,7 @@ export default {
   },
   watch: {
     pharmacyNames() {
-      this.pharmaciesAsOptions = this.pharmacyNames.map(pn => ({label:pn, value:pn}));
+      this.pharmaciesAsOptions = this.pharmacyNames.map(pharmacyName => ({label: pharmacyName, value: pharmacyName}));
     }
   },
   mounted() {
