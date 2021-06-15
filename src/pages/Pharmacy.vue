@@ -120,6 +120,7 @@ export default {
             pharmacists: 'pharmacist/getPharmacists',
             pharmacistResult: 'pharmacist/getResult',
             pharmacyOrdersResult: 'pharmacyOrders/getResult',
+            supplierOfferResult: 'supplierOffers/getResult',
             pharmacyPromotionsResult: 'pharmacyPromotions/getResult',
             absenceRequests: 'medicalStaff/getAbsenceRequests',
             notInStockRecords: 'notInStockRecords/getNotInStockRecords',
@@ -201,9 +202,19 @@ export default {
                 this.fetchDermatologistAppointmentsPage({pharmacyId: this.pharmacyId, page: this.appointmentsPage});
             }
         },
-        pharmacyOrdersResult({ok, label}){
+        pharmacyOrdersResult({ok, label}) {
             if(label === 'add' || label === 'update') {
                 ok && this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, page: this.pharmacyOrdersPage});
+            }
+        },
+        supplierOfferResult({ok, label}) {
+            console.log(ok + ' ' + label);
+            if(label === 'accept' && ok) {
+                this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, page: this.pharmacyOrdersPage});
+                this.pharmacyMedicineSearchName ? 
+                    this.searchPharmacyMedicinesInStock({pharmacyId: this.pharmacyId, name: this.pharmacyMedicineSearchName})
+                    :
+                    this.fetchPharmacyMedicinesInStock(this.pharmacyId);
             }
         },
         pharmacyPromotionsResult({ok, label}){

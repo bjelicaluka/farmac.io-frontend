@@ -45,7 +45,7 @@
                                 v-if="user.role === Roles.PharmacyAdmin"
                                 modalBoxId="supplierOffersModal"
                             >
-                                <DropDownItem @click="fetchSupplierOffersForPharmacyOrder(pharmacyOrder.id)">See offers</DropDownItem>
+                                <DropDownItem @click="fetchSupplierOffersFor(pharmacyOrder.id)">See offers</DropDownItem>
                             </ModalOpener>
 
                         </DropDownMenu>
@@ -128,6 +128,7 @@ export default {
             Roles,
             user: {},
             selectedPharmacyOrder: null,
+            selectedOrderId: null,
             pharmacyOrderStatusFilter: null,
         }
     },
@@ -157,17 +158,29 @@ export default {
     watch: {
         pharmacyOrderStatusFilter() {
             this.$emit('filter', this.pharmacyOrderStatusFilter);
+        },
+
+        supplierOffersResult({ok, label}) {
+            if(label === 'accept' && ok) {
+                this.fetchSupplierOffersForPharmacyOrder(this.selectedOrderId);
+            }
         }
     },
     computed: {
         ...mapGetters({
-            supplierOffers: 'supplierOffers/getSupplierOffers'
+            supplierOffers: 'supplierOffers/getSupplierOffers',
+            supplierOffersResult: 'supplierOffers/getResult'
         })
     },
     methods: {
         ...mapActions({
             fetchSupplierOffersForPharmacyOrder: 'supplierOffers/fetchOffersForPharmacyOrder'
         }),
+
+        fetchSupplierOffersFor(orderId) {
+            this.selectedOrderId = orderId;
+            this.fetchSupplierOffersForPharmacyOrder(this.selectedOrderId);
+        },
 
         formatDateTime(date) {
             return moment(date).format("DD-MMM-YYYY HH:mm");
