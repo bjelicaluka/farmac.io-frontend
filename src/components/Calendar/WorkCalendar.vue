@@ -1,6 +1,6 @@
 <template>
 <div>
-  <SelectOptionInput v-if="!!pharmacies"
+  <SelectOptionInput v-if="isForDerm"
     class="col-4"
     :label="'ALL PHARMACIES'"
     :showLabel="false"
@@ -63,7 +63,7 @@ export default {
     ModalCloser,
     SelectOptionInput,
   },
-  props: ['workCalendarEvents', 'pharmacies', 'selectable'],
+  props: ['workCalendarEvents', 'pharmacies', 'selectable', 'isForDerm'],
   data() {
     return {
       calendarOptions: {
@@ -127,6 +127,9 @@ export default {
           a.setProp('display','auto')
         else a.setProp('display','none')
       });
+    },
+    workCalendarEvents() {
+      this.calendarOptions.events = this.workCalendarEvents.map(e => ({...e, classNames:[e.isAppointment?'appointment-event':'absence-event']}));
     }
   }
 }
