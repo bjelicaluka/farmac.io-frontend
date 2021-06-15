@@ -1,6 +1,6 @@
 <template>
 <div>
-  <SelectOptionInput v-if="!!pharmacies"
+  <SelectOptionInput v-if="!!pharmacies && userRole === Roles.Dermatologist"
     class="col-4"
     :label="'ALL PHARMACIES'"
     :showLabel="false"
@@ -52,6 +52,9 @@ import ButtonWithIcon from '../Form/ButtonWithIcon.vue'
 import ModalCloser from '../Modal/ModalCloser.vue'
 import SelectOptionInput from '../Form/SelectOptionInput.vue'
 
+import { getRoleFromToken } from '../../utils/token'
+import { Roles } from '../../constants'
+
 export default {
   components: {
     FullCalendar,
@@ -66,6 +69,8 @@ export default {
   props: ['workCalendarEvents', 'pharmacies', 'selectable'],
   data() {
     return {
+      userRole: null,
+      Roles,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         headerToolbar: {
@@ -128,6 +133,10 @@ export default {
         else a.setProp('display','none')
       });
     }
+  },
+
+  mounted() {
+    this.userRole = getRoleFromToken();
   }
 }
 </script>
