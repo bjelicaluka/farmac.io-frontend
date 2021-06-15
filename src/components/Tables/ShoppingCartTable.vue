@@ -38,6 +38,7 @@ import Modal from '../Modal/Modal.vue'
 import ModalOpener from '../Modal/ModalOpener'
 import DateTimePicker from '../Form/DateTimePicker.vue'
 import moment from 'moment'
+import toastr from 'toastr'
 import { mapActions, mapGetters } from 'vuex'
 import { getUserIdFromToken } from '../../utils/token'
 
@@ -83,7 +84,12 @@ export default {
         reserveMedicinesForPharmacy() {
             $('#enterDateModal').modal('hide');
             this.selectedDate =  $('.datetimepicker').val();
-            this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: moment(this.selectedDate).format(), patientId: getUserIdFromToken()})
+            if(this.selectedDate === "" || this.selectedDate === null){
+                toastr.error("You have to select date.");
+            }
+            else{
+                this.reserveMedicines({pharmacyId: this.pharmacyId, pickupDeadline: moment(this.selectedDate).format(), patientId: getUserIdFromToken()})
+            }
         },
         openingModal() {
             $('.datetimepicker').datetimepicker({
