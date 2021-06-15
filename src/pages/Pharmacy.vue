@@ -208,7 +208,6 @@ export default {
             }
         },
         supplierOfferResult({ok, label}) {
-            console.log(ok + ' ' + label);
             if(label === 'accept' && ok) {
                 this.filterPharmacyOrdersPage({pharmacyId: this.pharmacyId, page: this.pharmacyOrdersPage});
                 this.pharmacyMedicineSearchName ? 
