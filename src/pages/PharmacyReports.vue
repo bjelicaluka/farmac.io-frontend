@@ -5,7 +5,7 @@
                 <ReportTimeIntervalPickerForm @intervalTypeChange="intervalType = $event" :pharmacyId="pharmacyId" /> 
             </Card>
             <Card
-                title="Examinations"
+                title="Examinations/Consultations"
                 v-if="examinationReportsChartData.length"
             >
                 <ExaminationsChart

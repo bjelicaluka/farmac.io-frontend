@@ -26,7 +26,7 @@ export default {
   data: () => {
     return {
       series: [{
-          name: "Examinations",
+          name: "Examinations/Consultations",
           data: []
       }],
       chartOptions: {
