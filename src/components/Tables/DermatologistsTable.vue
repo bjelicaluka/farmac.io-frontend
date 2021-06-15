@@ -8,7 +8,7 @@
       <Search @search="handleSearch($event)" />
     </div>
     <Table>
-        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Grade', 'Address', '']"></TableHead>
+        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Grade', forPharmacy ? 'Work time' : '', '']"></TableHead>
         <TableBody>
           <TableRow 
             v-for="d in dermatologists" 
@@ -137,6 +137,7 @@ import DefineAppointmentForm from '../Forms/DefineAppointmentForm';
 import toastr from 'toastr'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 import Pagination from '../Table/Pagination.vue'
+import moment from 'moment'
 
 export default {
   components: {
@@ -167,6 +168,9 @@ export default {
     },
     searchField: {
       default: true
+    },
+    forPharmacy: {
+      default: null
     }
   },
   data() {
@@ -211,13 +215,17 @@ export default {
       this.selectedDermatologist = null;
     },
     getTableRow(dermatologistWorkPlaces) {
+      const worktime = dermatologistWorkPlaces.workPlaces.filter(wt => wt.pharmacyId == this.forPharmacy)[0]?.workTime;
       const d = dermatologistWorkPlaces.dermatologistAccount;
-      return [d.username, `${d.user.firstName} ${d.user.lastName}`, d.email, d.user.pid, d.user.phoneNumber, parseFloat(d.user?.averageGrade).toFixed(2) + ' / 5.00', this.formatAddress(d.user.address)];
+      return [
+          d.username,
+          `${d.user.firstName} ${d.user.lastName}`,
+          d.email, d.user.pid,
+          d.user.phoneNumber,
+          parseFloat(d.user?.averageGrade).toFixed(2) + ' / 5.00',
+          this.forPharmacy ? moment(worktime?.from).format('H:mm') + ' - ' + moment(worktime?.to).format('H:mm') : ''];
     },
-    formatAddress(address) {
-      const {state, city, streetName, streetNumber} = address;
-      return `${state}, ${city}, ${streetName} - ${streetNumber}`
-    },
+
     handleSearch(value) {
       this.$emit('search', value);
     },

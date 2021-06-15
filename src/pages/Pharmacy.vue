@@ -26,7 +26,7 @@
                 <PharmacistsTable @search="handleSearchPharmacists" :pharmacists="pharmacists" :adminPharmacyId="pharmacyAdmin && pharmacyAdmin.user.pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy"/>
             </Card>
             <Card title='Dermatologists' :description="`${pharmacy && pharmacy.name}'s dermatologist employees.`">
-                <DermatologistsTable @search="handleSearchDermatologists" :dermatologists="dermatologists" :adminPharmacyId="pharmacyAdmin && pharmacyAdmin.user.pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy" />
+                <DermatologistsTable @search="handleSearchDermatologists" :forPharmacy=pharmacyId :dermatologists="dermatologists" :adminPharmacyId="pharmacyAdmin && pharmacyAdmin.user.pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy" />
             </Card>
             <Card title='Dermatologist Appointments' :description="`${pharmacy && pharmacy.name}'s dermatologist appointments.`">
                 <AppointmentsTable :sortComponent="false" @pageChange="handleAppointmentsPageChange($event)" :appointments="dermatologistAppointments" :pharmacyId="pharmacyId" :isAdminOfPharmacy="isAdminOfPharmacy" />

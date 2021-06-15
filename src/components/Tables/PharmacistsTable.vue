@@ -11,12 +11,12 @@
       <Search @search="handleSearch($event)" />
     </div>
     <Table>
-        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Grade', 'Address', '']"></TableHead>
+        <TableHead :columnNames="['Username', 'Name', 'Email', 'PID', 'Phone', 'Grade', 'Work Time', '']"></TableHead>
         <TableBody>
           <TableRow 
             v-for="p in pharmacists" 
             :key="p.id" 
-            :values="[p.username, `${p.user.firstName} ${p.user.lastName}`, p.email, p.user.pid, p.user.phoneNumber, parseFloat(p.user.averageGrade).toFixed(2) + ' / 5.00', formatAddress(p.user.address)]"
+            :values=getRow(p)
           >
             <div class="pull-right text-gray">
               <drop-down-menu v-if="user.role === Roles.PharmacyAdmin && (adminPharmacyId === p.user.pharmacyId || isAdminOfPharmacy)">
@@ -82,6 +82,7 @@ import Search from '../Search/Search.vue'
 import { getAccountIdFromToken, getRoleFromToken } from '../../utils/token'
 import { Roles } from '../../constants'
 import Pagination from '../Table/Pagination.vue'
+import moment from 'moment'
 
 export default {
   components: {
@@ -147,10 +148,6 @@ export default {
     ...mapActions({
       deletePharmacist: 'pharmacist/deletePharmacist'
     }),
-    formatAddress(address) {
-      const {state, city, streetName, streetNumber} = address;
-      return `${state}, ${city}, ${streetName} - ${streetNumber}`
-    },
     handleSearch(value) {
       this.$emit('search', value);
     },
@@ -169,6 +166,15 @@ export default {
       if(this.selectedPharmacist) {
         this.deletePharmacist(this.selectedPharmacist.id);
       }
+    },
+    getRow(p) {
+      return [
+        p.username,
+        `${p.user.firstName} ${p.user.lastName}`,
+        p.email, p.user.pid, p.user.phoneNumber,
+        parseFloat(p.user.averageGrade).toFixed(2) + ' / 5.00',
+        moment(p.user.workTime?.from).format('H:mm') + ' - ' + moment(p.user.workTime?.to).format('H:mm')
+      ]
     }
   },
 }
